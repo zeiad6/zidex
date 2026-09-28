@@ -1,0 +1,629 @@
+/* The shine border sweeps by animating a custom property. Without this
+   registration the browser treats it as a discrete value and the sweep
+   steps instead of rotating. */
+@property --shine-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@import 'tailwindcss';
+
+/* Zidex — design tokens.
+   Dashboard layout and palette follow the "Bloggo" Dribbble shot: neutral
+   gray surfaces, one indigo accent, a serif display face for greetings and
+   page titles. Tokens are semantic so light and dark share one source. */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /*
+   * Two families, two jobs. The previous setup listed Alexandria first with
+   * IBM Plex Arabic as its fallback, which meant Plex never rendered — one
+   * geometric family did all the work, including 45 uses of text-sm where a
+   * humanist face with a taller x-height holds up far better.
+   */
+  --font-sans: 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  /* Headings share the text family but sit heavier and tighter — splitting
+     them across two families doubled the font payload for no visible gain. */
+  --font-display: 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+
+  /* Neutral gray (the reference's surfaces) */
+  --color-ink-50: #f9fafb;
+  --color-ink-100: #f3f4f6;
+  --color-ink-200: #e5e7eb;
+  --color-ink-300: #d1d5db;
+  --color-ink-400: #9ca3af;
+  --color-ink-500: #6b7280;
+  --color-ink-600: #4b5563;
+  --color-ink-700: #374151;
+  --color-ink-800: #1f2937;
+  --color-ink-900: #111827;
+  --color-ink-950: #0b0f17;
+
+  /* Indigo accent */
+  --color-ghost-50: #eef2ff;
+  --color-ghost-100: #e0e7ff;
+  --color-ghost-200: #c7d2fe;
+  --color-ghost-300: #a5b4fc;
+  --color-ghost-400: #818cf8;
+  --color-ghost-500: #6366f1;
+  --color-ghost-600: #4f46e5;
+  --color-ghost-700: #4338ca;
+  --color-ghost-800: #3730a3;
+  --color-ghost-900: #312e81;
+
+  --color-veil-400: #c084fc;
+  --color-veil-500: #a855f7;
+  --color-veil-600: #9333ea;
+
+  --color-tiktok-400: #38e0d0;
+  --color-tiktok-500: #25f4ee;
+  --color-tiktok-600: #fe2c55;
+  --color-tiktok-700: #e2185b;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@layer base {
+  :root {
+    --bg: #ffffff;
+    --bg-elevated: #ffffff;
+    --bg-sunken: var(--color-ink-100);
+    --fg: var(--color-ink-900);
+    --fg-muted: var(--color-ink-600);
+    --fg-subtle: var(--color-ink-500);
+    --line: var(--color-ink-200);
+    --line-strong: var(--color-ink-300);
+    --accent: var(--color-ghost-600);
+    --accent-fg: #ffffff;
+    --accent-soft: color-mix(in oklab, var(--color-ghost-600) 12%, transparent);
+    --ring: color-mix(in oklab, var(--color-ghost-600) 45%, transparent);
+    --grid-dot: color-mix(in oklab, var(--color-ink-950) 13%, transparent);
+    --shadow-color: 220 40% 30%;
+  }
+
+  .dark {
+    --bg: var(--color-ink-950);
+    --bg-elevated: var(--color-ink-900);
+    --bg-sunken: #0f1420;
+    --fg: #f3f4f6;
+    --fg-muted: #b3b9c6;
+    --fg-subtle: #8b93a3;
+    --line: color-mix(in oklab, #ffffff 11%, transparent);
+    --line-strong: color-mix(in oklab, #ffffff 18%, transparent);
+    --accent: var(--color-ghost-400);
+    --accent-fg: #05060a;
+    --accent-soft: color-mix(in oklab, var(--color-ghost-400) 16%, transparent);
+    --ring: color-mix(in oklab, var(--color-ghost-400) 55%, transparent);
+    --grid-dot: color-mix(in oklab, #ffffff 13%, transparent);
+    --shadow-color: 240 60% 2%;
+  }
+
+  * {
+    border-color: var(--line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /*
+   * Arabic has no hyphenation, and a long token (a slug, a URL, a command)
+   * will not break at spaces. Without this it sets the min-content width of
+   * whatever grid or flex track contains it and pushes past the viewport.
+   * `anywhere` also breaks inside a token, unlike `break-word`, which only
+   * helps when the token is already at a break opportunity.
+   */
+  html {
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  /* Numerals, Latin runs and URLs inside RTL text still break cleanly. */
+  code,
+  kbd,
+  samp,
+  pre,
+  .font-mono {
+    overflow-wrap: anywhere;
+  }
+
+  /*
+   * A grid or flex item defaults to min-width:auto, i.e. it refuses to shrink
+   * below its content. That is the single most common cause of a column
+   * spilling out of a `container-app` on a narrow phone. The utility below is
+   * opt-in via the `min-w-0` class already used across the components.
+   */
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+  }
+
+  /* Horizontal overflow must be clipped, not just hidden from a scrollbar.
+     In an RTL document `overflow-x: hidden` still lets content bleed past the
+     inline-start (left) edge, because that side is not the scroll origin — the
+     band showed up there. `clip` has no scroll container and clips both edges
+     regardless of writing direction. */
+  html,
+  body {
+    overflow-x: clip;
+    max-width: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    transition:
+      background-color 0.4s var(--ease-out-expo),
+      color 0.4s var(--ease-out-expo);
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-fg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Slim, theme-aware scrollbar. */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border-radius: 99px;
+    border: 3px solid var(--bg);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--fg-subtle);
+  }
+
+  /* Direction-bearing icons are drawn for RTL (arrow-left = "forward").
+     In English they are mirrored here once instead of at every call site. */
+  [dir='ltr'] .lucide-arrow-left,
+  [dir='ltr'] .lucide-arrow-right,
+  [dir='ltr'] .lucide-arrow-up-left {
+    scale: -1 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+    font-family: var(--font-display);
+    font-weight: 700;
+    /* -0.02em fits Latin, but Arabic joins along the baseline and does not
+       like negative tracking; a hair of positive space stops the descenders
+       and the tail of ح/ج from colliding at large sizes. */
+    letter-spacing: -0.005em;
+  }
+
+  h1 {
+    font-weight: 800;
+    letter-spacing: -0.015em;
+  }
+
+  /* Arabic ascenders and diacritics need more vertical room than Latin. */
+  :where(h1, h2, h3, h4) {
+    line-height: 1.28;
+  }
+
+  /* Numerals inside Arabic sentences keep Latin digits and tabular width so
+     figures in tables and stat tiles line up. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* ------------------------------------------------------------------------- *
+ * Semantic colour tokens.
+ *
+ * These live in `@theme inline` rather than as hand-written rules on purpose:
+ * Tailwind only emits variants (`hover:border-accent`) and opacity modifiers
+ * (`bg-elevated/80`) for colours it knows about. A plain `.bg-elevated { … }`
+ * rule produces the unprefixed class and nothing else — which silently kills
+ * every hover affordance and every translucent surface in the app.
+ * `inline` keeps the value as `var(--…)` so the light/dark swap in `:root` and
+ * `.dark` still drives it.
+ * ------------------------------------------------------------------------- */
+@theme inline {
+  --color-elevated: var(--bg-elevated);
+  --color-sunken: var(--bg-sunken);
+  --color-muted: var(--fg-muted);
+  --color-subtle: var(--fg-subtle);
+  --color-line: var(--line);
+  --color-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-ring: var(--ring);
+}
+
+/* Three names whose Tailwind colour mapping cannot express the intent:
+   `bg-app` paints --bg while a `--color-app` entry would paint --fg, and
+   `border-app` paints --line. Functional utilities still support variants,
+   and none of these three is used with an opacity modifier. */
+@utility bg-app {
+  background-color: var(--bg);
+}
+@utility text-app {
+  color: var(--fg);
+}
+@utility border-app {
+  border-color: var(--line);
+}
+
+@utility shadow-app {
+  box-shadow:
+    0 1px 2px hsl(var(--shadow-color) / 0.06),
+    0 12px 32px -12px hsl(var(--shadow-color) / 0.16);
+}
+@utility shadow-app-lg {
+  box-shadow:
+    0 2px 4px hsl(var(--shadow-color) / 0.06),
+    0 32px 64px -24px hsl(var(--shadow-color) / 0.24);
+}
+
+/* Interactive dot-grid backdrop (21st.dev: n1m4mz/sonar-grid). */
+@utility dot-grid {
+  background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+@utility grid-lines {
+  background-image:
+    linear-gradient(to right, var(--grid-dot) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-dot) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+@utility mask-fade-b {
+  mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+}
+@utility mask-fade-radial {
+  mask-image: radial-gradient(ellipse 60% 60% at 50% 40%, black 0%, transparent 100%);
+}
+
+@utility gradient-text {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-ghost-500) 0%,
+    var(--color-veil-500) 45%,
+    var(--color-tiktok-600) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility tiktok-gradient {
+  background-image: linear-gradient(115deg, #25f4ee 0%, #fe2c55 52%, #a855f7 100%);
+}
+
+@utility glass {
+  /* 85%, not 72%: at 72% hero text behind the fixed navbar stayed legible
+     through it, which read as two layers of text on top of each other. */
+  background: color-mix(in oklab, var(--bg-elevated) 85%, transparent);
+  backdrop-filter: blur(18px) saturate(1.6);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Component classes are registered as utilities rather than left in
+   `@layer components`, so variant prefixes on them (`focus:ring-2` on .btn)
+   emit real rules instead of being dropped. */
+@utility container-app {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 78rem;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility btn {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    /* Tailark-style rounded-xl rather than a full pill. */
+    border-radius: 0.875rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.1;
+    text-align: center;
+    /* Wrapping is allowed so a long Arabic label can break, but the row
+       itself never wraps, so the leading icon is never orphaned. */
+    white-space: normal;
+    max-width: 100%;
+    transition:
+      transform 0.2s var(--ease-out-expo),
+      box-shadow 0.2s var(--ease-out-expo),
+      background-color 0.2s,
+      border-color 0.2s,
+      opacity 0.2s;
+  &:active {
+    transform: scale(0.97);
+  }
+}
+/* `&:hover` must sit inside the utility: at the top level `&` resolves to
+   :root, which painted the hover colours onto <html> instead of the button. */
+@utility btn-primary {
+  background: var(--accent);
+  color: var(--accent-fg);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.18),
+    0 6px 18px -8px var(--accent);
+  &:hover {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.18),
+      0 12px 28px -10px var(--accent);
+  }
+}
+@utility btn-ghost {
+  border: 1px solid var(--line-strong);
+  background: var(--bg-elevated);
+  color: var(--fg);
+  box-shadow: 0 1px 2px hsl(var(--shadow-color) / 0.08);
+  &:hover {
+    background: var(--bg-sunken);
+  }
+}
+
+@utility chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  /* ---------- Editorial prose (blog) ---------- */
+.prose-ghost {
+  color: var(--fg);
+  font-size: 1.0625rem;
+  line-height: 1.9;
+}
+.prose-ghost > * + * {
+  margin-top: 1.5rem;
+}
+.prose-ghost h2 {
+  font-size: clamp(1.5rem, 2.6vw, 1.95rem);
+  font-weight: 700;
+  margin-top: 3rem;
+  scroll-margin-top: 7rem;
+}
+.prose-ghost h3 {
+  font-size: 1.25rem;
+  font-weight: 650;
+  margin-top: 2.25rem;
+  scroll-margin-top: 7rem;
+}
+/* `.btn` is excluded: at (0,1,1) this rule beat `.btn-primary` and painted
+   the download button's label in the button's own background colour.
+   Heading permalinks are excluded for the same reason: they rendered every
+   h2/h3 as an underlined accent-coloured link. */
+.prose-ghost a:not(.btn, h2 > a, h3 > a) {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+}
+.prose-ghost a:not(.btn, h2 > a, h3 > a):hover {
+  text-decoration-thickness: 2.5px;
+}
+.prose-ghost strong {
+  font-weight: 700;
+}
+/* Lists inside `.not-prose` blocks (callouts, checklists, the hub diagram)
+   bring their own markers; without the :not() they got a second bullet and
+   an inline-start indent that pushed them off-centre. */
+.prose-ghost ul:not(.not-prose, .not-prose *),
+.prose-ghost ol:not(.not-prose, .not-prose *) {
+  padding-inline-start: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+.prose-ghost ul:not(.not-prose, .not-prose *) > li {
+  list-style: none;
+  position: relative;
+}
+.prose-ghost ul:not(.not-prose, .not-prose *) > li::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: -1.125rem;
+  top: 0.85em;
+  width: 6px;
+  height: 6px;
+  border-radius: 99px;
+  background: var(--accent);
+}
+.prose-ghost ol:not(.not-prose, .not-prose *) {
+  list-style: decimal;
+}
+.prose-ghost ol:not(.not-prose, .not-prose *) > li::marker {
+  color: var(--accent);
+  font-weight: 600;
+}
+.prose-ghost blockquote {
+  border-inline-start: 3px solid var(--accent);
+  padding-inline-start: 1.25rem;
+  padding-block: 0.25rem;
+  color: var(--fg-muted);
+  font-style: normal;
+}
+.prose-ghost code:not(pre code) {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 0.15em 0.4em;
+  border-radius: 6px;
+}
+.prose-ghost pre {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.75;
+  background: var(--bg-sunken);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  padding: 1.125rem 1.25rem;
+  overflow-x: auto;
+  direction: ltr;
+  text-align: left;
+}
+.prose-ghost hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+@layer utilities {
+  @keyframes marquee-x {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(var(--marquee-distance, 50%) * -1));
+    }
+  }
+  .animate-marquee {
+    animation: marquee-x var(--marquee-duration, 40s) linear infinite;
+  }
+
+  @keyframes float-slow {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(0, -14px, 0) scale(1.04);
+    }
+  }
+  .animate-float-slow {
+    animation: float-slow 14s ease-in-out infinite;
+  }
+
+  @keyframes aurora-drift {
+    0%,
+    100% {
+      transform: translate3d(-6%, -4%, 0) rotate(0deg);
+    }
+    33% {
+      transform: translate3d(8%, 6%, 0) rotate(12deg);
+    }
+    66% {
+      transform: translate3d(-4%, 10%, 0) rotate(-8deg);
+    }
+  }
+  .animate-aurora {
+    animation: aurora-drift 26s ease-in-out infinite;
+  }
+
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(0.85);
+      opacity: 0.55;
+    }
+    70% {
+      transform: scale(1.9);
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  .animate-pulse-ring {
+    animation: pulse-ring 2.4s var(--ease-out-expo) infinite;
+  }
+
+  @keyframes shimmer-x {
+    from {
+      background-position: 200% 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+  .animate-shimmer {
+    background-size: 200% 100%;
+    animation: shimmer-x 2.2s linear infinite;
+  }
+
+  @keyframes caret-blink {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+  .animate-caret {
+    animation: caret-blink 1.05s steps(1) infinite;
+  }
+
+  @keyframes scroll-hint {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    35% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(9px);
+      opacity: 0;
+    }
+  }
+  .animate-scroll-hint {
+    animation: scroll-hint 1.9s var(--ease-out-expo) infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

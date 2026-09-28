@@ -1,0 +1,82 @@
+# Ghost 778 — Netlify configuration
+#
+# `npm ci` needs the devDependencies (vite, tsc) even though NODE_ENV is
+# production for the build itself, hence NPM_FLAGS = --include=dev.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NODE_ENV = "production"
+  NPM_FLAGS = "--include=dev"
+
+# ---------------------------------------------------------------------------
+# Security headers
+#
+# The CSP is as tight as this site can run while still serving Google Fonts
+# and the TikTok player iframe. Everything else is denied by default.
+# ---------------------------------------------------------------------------
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # default-src 'none' would also block the document itself, so the base
+    # is 'self' and each capability is granted explicitly below.
+    Content-Security-Policy = """
+      default-src 'self'; \
+      script-src 'self'; \
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; \
+      font-src 'self' https://fonts.gstatic.com data:; \
+      img-src 'self' data: blob: https:; \
+      connect-src 'self' https://www.tiktok.com https://*.tiktokcdn.com https://*.tiktokcdn-eu.com; \
+      frame-src https://www.tiktok.com; \
+      media-src 'self' https:; \
+      object-src 'none'; \
+      base-uri 'self'; \
+      form-action 'self'; \
+      frame-ancestors 'self'; \
+      worker-src 'self' blob:; \
+      manifest-src 'self'; \
+      upgrade-insecure-requests"""
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), interest-cohort=()"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Resource-Policy = "same-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    X-DNS-Prefetch-Control = "off"
+    # Never let a browser sniff a response out of /assets into something executable.
+    X-Permitted-Cross-Domain-Policies = "none"
+    # The HTML shell must revalidate, otherwise a deploy stays invisible to
+    # anyone holding a cached copy. Matched on the request path ("/"), not the
+    # resolved file, so `/*.html` would miss the homepage.
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Content-hashed bundles are immutable.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/_redirects"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/favicon.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"

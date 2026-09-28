@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b0f17" media="(prefers-color-scheme: dark)" />
+    <title>Zidex — hub تيك توك، روابط، ومدونة</title>
+    <meta
+      name="description"
+      content="Zidex — بوابة حساب @ghost.7784 على تيك توك: أحدث الفيديوهات، كل الروابط المهمة في مكان واحد، ومدونة تفاعلية بتصميم نهاري وليلي."
+    />
+    <meta name="keywords" content="Zidex, ghost.7784, تيك توك, tiktok, روابط, link hub, مدونة, blog, أرشيف" />
+    <link rel="canonical" href="https://zidex.netlify.app/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Zidex" />
+    <meta property="og:title" content="Zidex — hub تيك توك، روابط، ومدونة" />
+    <meta
+      property="og:description"
+      content="أحدث فيديوهات تيك توك، كل الروابط المهمة في مكان واحد، ومدونة تفاعلية بتصميم نهاري وليلي."
+    />
+    <meta property="og:url" content="https://zidex.netlify.app/" />
+    <meta property="og:image" content="https://zidex.netlify.app/og.svg" />
+    <meta property="og:locale" content="ar_AR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Zidex — hub تيك توك، روابط، ومدونة" />
+    <meta name="twitter:description" content="فيديوهات تيك توك، روابط، ومدونة — كل ذلك في واجهة واحدة سريعة." />
+    <meta name="twitter:image" content="https://zidex.netlify.app/og.svg" />
+
+    <!--
+      `strict-origin-when-cross-origin` is repeated as a meta fallback: the
+      header in netlify.toml is authoritative, but this covers the case where
+      the site is served from a host that drops custom headers.
+    -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <!--
+      Only the weights actually used, and `display=swap` so text paints in the
+      fallback immediately instead of waiting on a third-party request.
+      Nine faces in total: the UI sans, the mono, and one bold serif per
+      script (Source Serif 4 / Noto Naskh Arabic) for display headings. Loaded as a normal stylesheet rather than
+      the media="print"/onload swap, because an inline onload handler would be
+      blocked by the site's own `script-src 'self'` CSP.
+    -->
+    <!--
+      Three families, each with a job, each with the weights the site uses.
+
+      display  — IBM Plex Sans Arabic. Chosen over Alexandria for headings
+                because Plex Arabic has a real 700 and 800 with proper Arabic
+                letterforms; Alexandria's heavier cuts are geometric and read
+                poorly at heading sizes in Arabic.
+      sans     — IBM Plex Sans Arabic at 400/500. Body copy lives at text-sm
+                and below, where a humanist face with a tall x-height holds
+                up far better than a geometric one.
+      mono     — JetBrains Mono for code, at 400/600 only.
+
+      Every weight requested here is actually used, so no request is wasted —
+      and the count is well under the budget the site criticises in its own
+      performance article.
+    -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+    />
+
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Zidex",
+        "alternateName": "@ghost.7784",
+        "url": "https://zidex.netlify.app/",
+        "sameAs": ["https://www.tiktok.com/@ghost.7784"]
+      }
+    </script>
+
+    <script>
+      // Runs before paint so the correct theme is painted with zero flash.
+      (function () {
+        try {
+          // Light is the default. The OS preference is deliberately not
+          // consulted: the site presents light-first, and only an explicit
+          // visitor choice (persisted here) switches it to dark. This also
+          // keeps the pre-paint decision identical to ThemeProvider's.
+          var theme = localStorage.getItem('ghost-theme') === 'dark' ? 'dark' : 'light'
+          document.documentElement.classList.toggle('dark', theme === 'dark')
+          document.documentElement.style.colorScheme = theme
+          // Language: Arabic unless the visitor picked English. Applied here
+          // too so an English visitor never sees one RTL frame first.
+          if (localStorage.getItem('ghost-lang') === 'en') {
+            document.documentElement.lang = 'en'
+            document.documentElement.dir = 'ltr'
+          }
+        } catch (e) {
+          // Storage blocked: fall through to the light default already on <html>.
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
