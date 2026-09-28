@@ -57,7 +57,7 @@ export function TikTokProfileCard() {
         className="tiktok-gradient animate-float-slow absolute -inset-6 rounded-[3.5rem] opacity-25 blur-3xl"
       />
 
-      <div className="bg-elevated/90 shadow-app-lg relative rounded-4xl border border-app p-5 backdrop-blur-xl sm:p-6">
+      <div className="bg-elevated shadow-app-lg relative rounded-4xl border border-app p-5 sm:p-6">
         <div className="relative flex flex-col items-center text-center">
           <div className="relative">
             <span
@@ -116,7 +116,7 @@ export function TikTokProfileCard() {
                 initial={reduce ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + i * 0.07, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="bg-sunken/70 flex flex-col items-center gap-0.5 rounded-2xl border border-app px-2 py-2.5"
+                className="bg-sunken flex flex-col items-center gap-0.5 rounded-2xl border border-app px-2 py-2.5"
               >
                 <dt className="text-subtle flex items-center gap-1 text-[11px]">
                   <Glyph name={glyph} size={12} className={accent} aria-hidden="true" />

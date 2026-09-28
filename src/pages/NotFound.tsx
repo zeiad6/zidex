@@ -21,7 +21,7 @@ export default function NotFound() {
 
   return (
     <section className="relative flex min-h-[72svh] items-center overflow-hidden pt-24 pb-16 sm:pt-28">
-      <AuroraBackdrop intensity="lg" className="opacity-50" />
+      <AuroraBackdrop intensity="lg" className="opacity-70" />
 
       <div className="container-app relative">
         <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
@@ -54,7 +54,7 @@ export default function NotFound() {
               <Reveal key={to} delay={0.18 + i * 0.06}>
                 <Link
                   to={to}
-                  className="bg-elevated/80 hover:border-strong hover:text-accent group flex h-full min-w-0 flex-col items-center gap-1.5 rounded-2xl border border-app p-4 text-center transition-all duration-300 hover:-translate-y-1"
+                  className="bg-elevated shadow-app-md hover:shadow-app-lg hover:border-strong hover:text-accent group flex h-full min-w-0 flex-col items-center gap-1.5 rounded-2xl border border-app p-4 text-center transition-[box-shadow,border-color,transform,color] duration-300 hover:-translate-y-1 motion-reduce:hover:translate-y-0"
                 >
                   <span className="bg-accent-soft text-accent grid size-11 place-items-center rounded-2xl transition-transform duration-300 group-hover:scale-110">
                     <Icon className="size-5" aria-hidden="true" />

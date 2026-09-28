@@ -1,4 +1,4 @@
-import { useRef, type ReactNode } from 'react'
+import { useRef, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
 import {
   motion,
   useMotionTemplate,
@@ -113,6 +113,67 @@ export function TiltCard({
           />
         ) : null}
       </motion.div>
+    </div>
+  )
+}
+
+/**
+ * A card that lifts on hover and carries a soft highlight with the cursor.
+ *
+ * The highlight is a radial gradient whose centre is set from the pointer's
+ * position inside the card. Setting a CSS custom property on pointer move
+ * costs one style write per event; a canvas or a per-frame animation loop
+ * would cost far more for an effect this simple, and the gradient is the
+ * part that actually reads as a surface catching light.
+ *
+ * `--spot-x` / `--spot-y` fall back to 50% so the highlight sits centred and
+ * invisible before the first pointer move, and stays put under
+ * prefers-reduced-motion where it is switched off entirely.
+ */
+export function SpotlightCard({
+  children,
+  className,
+  radius = 320,
+}: {
+  children: ReactNode
+  className?: string
+  /** Radius of the highlight in px. */
+  radius?: number
+}) {
+  const reduce = useReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+
+  const onMove = (e: ReactPointerEvent<HTMLDivElement>) => {
+    if (reduce || e.pointerType !== 'mouse') return
+    const rect = ref.current?.getBoundingClientRect()
+    if (!rect) return
+    ref.current?.style.setProperty('--spot-x', `${e.clientX - rect.left}px`)
+    ref.current?.style.setProperty('--spot-y', `${e.clientY - rect.top}px`)
+  }
+
+  return (
+    <div
+      ref={ref}
+      onPointerMove={onMove}
+      className={cn(
+        'group relative isolate overflow-hidden transition-[transform,box-shadow] duration-300',
+        !reduce && 'hover:-translate-y-1 motion-reduce:hover:translate-y-0',
+        className,
+      )}
+      style={{ '--spot-radius': `${radius}px` } as CSSProperties}
+    >
+      <span
+        aria-hidden="true"
+        className={cn(
+          'pointer-events-none absolute inset-0 -z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100',
+          reduce && 'hidden',
+        )}
+        style={{
+          background:
+            'radial-gradient(var(--spot-radius, 320px) circle at var(--spot-x, 50%) var(--spot-y, 50%), var(--accent-soft), transparent 70%)',
+        }}
+      />
+      {children}
     </div>
   )
 }

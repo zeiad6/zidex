@@ -198,7 +198,7 @@ export function Prose({ blocks }: { blocks: Post['body'] }) {
           case 'callout': {
             const s = calloutStyles[block.tone]
             return (
-              <aside key={key} className={cn('not-prose my-8 rounded-2xl border p-5', s.wrap)}>
+              <aside key={key} className={cn('not-prose shadow-app my-8 rounded-2xl border p-5', s.wrap)}>
                 <div className="flex items-center gap-2">
                   <Glyph name={s.glyph} size={18} className={cn('shrink-0', s.icon)} aria-hidden="true" />
                   <h4 className={cn('text-sm font-bold', s.title)}>{block.title}</h4>
@@ -242,7 +242,7 @@ export function Prose({ blocks }: { blocks: Post['body'] }) {
               <div
                 key={key}
                 className={cn(
-                  'not-prose my-8 grid gap-3',
+                  'not-prose shadow-app my-8 grid gap-3',
                   // Four figures wrapped 3 + 1 on a phone; 2 × 2 keeps the row even.
                   block.items.length === 4 ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-3',
                 )}
@@ -250,7 +250,7 @@ export function Prose({ blocks }: { blocks: Post['body'] }) {
                 {block.items.map((s) => (
                   <div
                     key={s.label}
-                    className="bg-elevated/70 rounded-2xl border border-app p-4 text-center"
+                    className="shadow-app bg-elevated rounded-2xl border border-app p-4 text-center"
                   >
                     <div className="gradient-text text-2xl font-extrabold tabular-nums sm:text-3xl">
                       {s.value}
@@ -265,7 +265,7 @@ export function Prose({ blocks }: { blocks: Post['body'] }) {
             return (
               <ul key={key} className="not-prose my-8 flex flex-col gap-2.5">
                 {block.items.map((item, j) => (
-                  <li key={j} className="border-app bg-elevated/60 flex items-start gap-3 rounded-xl border p-3.5">
+                  <li key={j} className="border-app shadow-app bg-elevated flex items-start gap-3 rounded-xl border p-3.5">
                     <span
                       className="border-accent/40 text-accent mt-0.5 grid size-5 shrink-0 place-items-center rounded-md border"
                       aria-hidden="true"
@@ -328,7 +328,7 @@ export function Prose({ blocks }: { blocks: Post['body'] }) {
           case 'hub':
             return (
               <figure key={key} className="not-prose my-10">
-                <div className="bg-sunken/50 relative overflow-hidden rounded-3xl border border-app p-5 sm:p-8">
+                <div className="bg-sunken shadow-app relative overflow-hidden rounded-3xl border border-app p-5 sm:p-8">
                   <span className="dot-grid absolute inset-0 opacity-40" aria-hidden="true" />
 
                   {/* Centre node: gradient hairline frame around an elevated card. */}
@@ -356,7 +356,7 @@ export function Prose({ blocks }: { blocks: Post['body'] }) {
                           aria-hidden="true"
                           className="bg-strong absolute top-0 left-1/2 h-5 w-px -translate-x-1/2 sm:h-6"
                         />
-                        <div className="bg-elevated h-full rounded-2xl border border-app p-4 text-center">
+                        <div className="shadow-app bg-elevated h-full rounded-2xl border border-app p-4 text-center">
                           <p className="text-app text-sm font-semibold" dir="ltr">
                             {n.title}
                           </p>
@@ -379,7 +379,7 @@ export function Prose({ blocks }: { blocks: Post['body'] }) {
             return (
               <div
                 key={key}
-                className="not-prose bg-sunken/60 my-8 flex flex-col gap-4 rounded-2xl border border-app p-5 sm:flex-row sm:items-center sm:justify-between"
+                className="not-prose shadow-app-md hover:shadow-app-lg my-8 flex flex-col gap-4 rounded-2xl border border-app bg-elevated p-5 transition-[box-shadow,transform] duration-300 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="min-w-0">
                   <p className="text-app text-sm font-semibold">{block.label}</p>

@@ -26,7 +26,7 @@ export default function Programs() {
     <>
       {/* Header */}
       <section className="relative overflow-hidden pt-24 pb-8 sm:pt-28">
-        <AuroraBackdrop intensity="md" className="opacity-40" />
+        <AuroraBackdrop intensity="md" className="opacity-70" />
         <div className="container-app relative">
           <Reveal>
             <span className="chip bg-accent-soft text-accent mb-5 w-fit">

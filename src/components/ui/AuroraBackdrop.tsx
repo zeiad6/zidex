@@ -29,7 +29,7 @@ export function AuroraBackdrop({
       </div>
       <div
         className={cn(
-          'animate-aurora absolute bottom-[-15%] left-[8%] rounded-full mix-blend-screen',
+          'animate-aurora absolute bottom-[-15%] left-[8%] rounded-full opacity-0 mix-blend-screen dark:opacity-70',
           scale,
         )}
         style={{ animationDelay: '-9s' }}
@@ -38,7 +38,7 @@ export function AuroraBackdrop({
       </div>
       <div
         className={cn(
-          'animate-aurora absolute right-[-10%] bottom-[10%] rounded-full mix-blend-screen',
+          'animate-aurora absolute right-[-10%] bottom-[10%] rounded-full opacity-0 mix-blend-screen dark:opacity-50',
           scale,
         )}
         style={{ animationDelay: '-17s' }}
@@ -51,7 +51,13 @@ export function AuroraBackdrop({
         is why the light-mode headers rendered blank. Light mode now uses plain
         normal blending (screen is applied only under `.dark`).
       */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,transparent,var(--bg)_85%)]" />
+      {/*
+        Light mode wants a structure to read against white, not a colour.
+        A dot field at 4% is enough to give the header depth and it survives
+        a screenshot; an aurora does not.
+      */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--grid-dot)_1px,transparent_1px)] bg-[length:24px_24px] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent_78%)] opacity-60 dark:hidden" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,transparent,var(--bg)_85%)] dark:hidden" />
     </div>
   )
 }

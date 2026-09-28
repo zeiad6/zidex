@@ -84,7 +84,7 @@ function Sidebar() {
         </p>
         <ul className="mt-2 flex flex-col gap-0.5">
           {categories.map((c) => {
-            const { icon: Icon, tile } = categoryStyle[c]
+            const { icon, tile } = categoryStyle[c]
             const count = allPosts.filter((p) => p.category === c).length
             return (
               <li key={c}>
@@ -94,7 +94,7 @@ function Sidebar() {
                   aria-current={activeCategory === c ? 'page' : undefined}
                 >
                   <span className={cn('grid size-6 shrink-0 place-items-center rounded-md text-white', tile)}>
-                    <Icon className="size-3.5" aria-hidden="true" />
+                    <Glyph name={icon} size={14} aria-hidden="true" />
                   </span>
                   <span className="min-w-0 truncate">{categoryLabel(c, lang)}</span>
                   <span className="text-subtle ms-auto font-mono text-[10px]">{count}</span>
@@ -152,7 +152,7 @@ function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void })
       // A click on the ::backdrop lands on the <dialog> element itself.
       onClick={(e) => e.target === ref.current && onClose()}
       aria-label={t('بحث', 'Search')}
-      className="bg-elevated text-app shadow-app-lg m-auto mt-[12vh] w-[min(38rem,calc(100%-2rem))] max-w-none rounded-2xl border border-app p-0 backdrop:bg-black/40 backdrop:backdrop-blur-sm"
+      className="bg-elevated text-app shadow-app-xl m-auto mt-[12vh] w-[min(38rem,calc(100%-2rem))] max-w-none rounded-2xl border border-app p-0 backdrop:bg-black/40 backdrop:backdrop-blur-sm"
     >
       <div className="flex items-center gap-3 border-b border-app px-4">
         <Search className="text-subtle size-5 shrink-0" aria-hidden="true" />
@@ -249,11 +249,25 @@ export function AppShell({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   const iconButton = 'text-muted hover:text-app hover:bg-sunken grid size-9 shrink-0 cursor-pointer place-items-center rounded-xl transition-colors'
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-app bg-(--bg)/90 backdrop-blur-md">
+      <header
+        className={cn(
+          'sticky top-0 z-40 border-b border-app bg-(--bg)/92 backdrop-blur-md transition-shadow duration-300',
+          scrolled ? 'shadow-app-md' : 'shadow-none',
+        )}
+      >
         <div className="mx-auto flex h-16 max-w-[90rem] items-center gap-2 px-3 sm:gap-3 sm:px-5">
           <button
             type="button"
@@ -332,7 +346,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           aria-modal="true"
           aria-label={t('القائمة', 'Menu')}
           className={cn(
-            'bg-app absolute inset-y-0 start-0 flex w-[min(20rem,85vw)] flex-col shadow-app-lg transition-transform duration-300 ease-out',
+            'bg-app absolute inset-y-0 start-0 flex w-[min(20rem,85vw)] flex-col shadow-app-xl transition-transform duration-300 ease-out',
             drawer ? 'translate-x-0' : 'ltr:-translate-x-full rtl:translate-x-full',
           )}
         >

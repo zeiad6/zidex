@@ -49,7 +49,7 @@ export default function Links() {
     <>
       {/* Page header */}
       <section className="relative overflow-hidden pt-24 pb-8 sm:pt-28">
-        <AuroraBackdrop intensity="md" className="opacity-45" />
+        <AuroraBackdrop intensity="md" className="opacity-75" />
         <div className="container-app relative">
           <Reveal>
             <span className="chip bg-accent-soft text-accent mb-5 w-fit">
@@ -148,7 +148,7 @@ export default function Links() {
             )}
 
             <Reveal delay={0.1}>
-              <div className="bg-elevated/70 mt-8 flex flex-col items-start gap-4 rounded-3xl border border-app p-6 sm:flex-row sm:items-center">
+              <div className="shadow-app-lg mt-8 flex flex-col items-start gap-4 rounded-3xl border border-app bg-elevated p-6 sm:flex-row sm:items-center">
                 <span className="tiktok-gradient grid size-12 shrink-0 place-items-center rounded-2xl text-xl">
                   🎵
                 </span>

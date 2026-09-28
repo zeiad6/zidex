@@ -77,7 +77,7 @@ export default function About() {
   return (
     <>
       <section className="relative overflow-hidden pt-24 pb-10 sm:pt-28 sm:pb-12">
-        <AuroraBackdrop intensity="md" className="opacity-40" />
+        <AuroraBackdrop intensity="md" className="opacity-70" />
         <div className="container-app relative">
           <Reveal>
             <span className="chip bg-accent-soft text-accent mb-5 w-fit">

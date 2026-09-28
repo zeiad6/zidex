@@ -8,8 +8,11 @@ export function ProgramCard({ program }: { program: Program }) {
   const { t } = useI18n()
 
   return (
-    <article className="bg-elevated flex flex-col gap-4 rounded-2xl border border-app p-5 sm:flex-row sm:items-center">
-      <span className="bg-sunken grid size-14 shrink-0 place-items-center rounded-2xl text-3xl" aria-hidden="true">
+    <article className="group border-app bg-elevated shadow-app-md hover:shadow-app-lg flex flex-col gap-4 rounded-2xl border p-5 transition-[box-shadow,transform] duration-300 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 sm:flex-row sm:items-center">
+      <span
+        className="bg-sunken group-hover:bg-accent-soft grid size-14 shrink-0 place-items-center rounded-2xl transition-colors duration-300"
+        aria-hidden="true"
+      >
         <Glyph name={program.glyph} size={22} className="text-accent" />
       </span>
 

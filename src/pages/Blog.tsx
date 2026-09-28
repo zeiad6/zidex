@@ -46,7 +46,7 @@ export default function Blog() {
     <>
       {/* Header */}
       <section className="relative overflow-hidden pt-24 pb-8 sm:pt-28">
-        <AuroraBackdrop intensity="md" className="opacity-40" />
+        <AuroraBackdrop intensity="md" className="opacity-70" />
         <div className="container-app relative">
           <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-end">
             <div className="flex-1">
@@ -188,7 +188,7 @@ export default function Blog() {
             </button>
           </div>
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filtered.map((post, i) => (
               <PostCard key={post.slug} post={post} index={i} />
             ))}

@@ -105,8 +105,8 @@ export function LinkCard({ link, onToast }: Props) {
     <TiltCard max={link.featured ? 4 : 6} className="group h-full">
       <div
         className={cn(
-          'bg-elevated/80 relative flex h-full min-w-0 flex-col overflow-hidden rounded-3xl border border-app p-4.5 backdrop-blur-sm transition-colors duration-300',
-          'hover:border-strong focus-within:border-accent',
+          'bg-elevated relative flex h-full min-w-0 flex-col overflow-hidden rounded-3xl border border-app p-4.5 shadow-app-md transition-[box-shadow,border-color,transform] duration-300',
+          'hover:border-strong hover:shadow-app-lg focus-within:border-accent',
         )}
       >
         {/* Accent wash, driven by the same token as the icon tile. */}

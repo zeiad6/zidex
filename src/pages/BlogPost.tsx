@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useReadingFont } from '@/hooks/useReadingFont'
 import { Glyph, type GlyphName } from '@/components/ui/Glyphs'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Calendar, Clock, Home, Share2, Tag } from 'lucide-react'
@@ -28,6 +29,9 @@ export default function BlogPost() {
   const [toast, setToast] = useState<string | null>(null)
   // Article text lives in its own chunk, so it arrives after first paint.
   const [body, setBody] = useState<Block[] | null>(null)
+
+  // Only an open article needs the reading serif.
+  useReadingFont()
 
   useEffect(() => {
     if (!post) {
@@ -207,7 +211,7 @@ export default function BlogPost() {
               </div>
 
               {/* Author / account nudge */}
-              <div className="bg-elevated/70 mt-10 flex flex-col items-start gap-5 rounded-3xl border border-app p-6 sm:flex-row sm:items-center">
+              <div className="shadow-app-lg mt-10 flex flex-col items-start gap-5 rounded-3xl border border-app bg-elevated p-6 sm:flex-row sm:items-center">
                 <span className="tiktok-gradient grid size-14 shrink-0 place-items-center rounded-2xl text-2xl">
                   🎵
                 </span>
@@ -306,11 +310,11 @@ function BodySkeleton() {
       {[92, 78, 86, 64].map((w, i) => (
         <div
           key={i}
-          className="bg-sunken/70 h-4 animate-pulse rounded-full"
+          className="bg-sunken h-4 animate-pulse rounded-full"
           style={{ width: `${w}%`, animationDelay: `${i * 90}ms` }}
         />
       ))}
-      <div className="bg-sunken/70 mt-6 h-40 w-full animate-pulse rounded-2xl" />
+      <div className="bg-sunken mt-6 h-40 w-full animate-pulse rounded-2xl" />
       <span className="sr-only">جارٍ تحميل نص المقال</span>
     </div>
   )

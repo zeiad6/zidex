@@ -28,6 +28,10 @@
   /* Headings share the text family but sit heavier and tighter — splitting
      them across two families doubled the font payload for no visible gain. */
   --font-display: 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  /* Injected on article routes by useReadingFont. The system serif is the
+     fallback for the split second before it arrives, and for the offline
+     case, so the text never reflows into a blank line. */
+  --font-read: 'Source Serif 4', 'Noto Naskh Arabic', ui-serif, Georgia, serif;
 
   /* Neutral gray (the reference's surfaces) */
   --color-ink-50: #f9fafb;
@@ -277,15 +281,50 @@
   border-color: var(--line);
 }
 
+/*
+ * One elevation ramp, four steps, used everywhere.
+ *
+ * Every step is two layers: a tight contact shadow that reads as the edge
+ * touching the page, and a wide ambient one that reads as height. A single
+ * layer at either size looks like a smudge or a sticker.
+ *
+ * Light mode needs less of both — on white, an alpha that reads as depth on
+ * ink-900 reads as dirt. That is why the alphas differ per theme rather than
+ * sharing one number.
+ */
 @utility shadow-app {
   box-shadow:
-    0 1px 2px hsl(var(--shadow-color) / 0.06),
-    0 12px 32px -12px hsl(var(--shadow-color) / 0.16);
+    0 1px 2px hsl(var(--shadow-color) / 0.05),
+    0 2px 8px -2px hsl(var(--shadow-color) / 0.08);
 }
+
+/* Resting height for a card in a grid. */
+@utility shadow-app-md {
+  box-shadow:
+    0 1px 2px hsl(var(--shadow-color) / 0.05),
+    0 8px 20px -6px hsl(var(--shadow-color) / 0.1);
+}
+
+/* Hover / lifted state: the same object, 40% higher. */
 @utility shadow-app-lg {
   box-shadow:
     0 2px 4px hsl(var(--shadow-color) / 0.06),
-    0 32px 64px -24px hsl(var(--shadow-color) / 0.24);
+    0 18px 40px -12px hsl(var(--shadow-color) / 0.18),
+    0 40px 80px -40px hsl(var(--shadow-color) / 0.2);
+}
+
+/* Overlays: navbar, mobile sheet, modal. Needs to clear page content. */
+@utility shadow-app-xl {
+  box-shadow:
+    0 4px 8px hsl(var(--shadow-color) / 0.06),
+    0 28px 60px -16px hsl(var(--shadow-color) / 0.22),
+    0 64px 120px -48px hsl(var(--shadow-color) / 0.26);
+}
+
+/* Inset edge, so an "elevated" white panel on a white page still has a
+   visible boundary without a drop shadow. */
+@utility shadow-app-inset {
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), inset 0 0 0 1px hsl(var(--shadow-color) / 0.06);
 }
 
 /* Interactive dot-grid backdrop (21st.dev: n1m4mz/sonar-grid). */
@@ -416,8 +455,28 @@
   /* ---------- Editorial prose (blog) ---------- */
 .prose-ghost {
   color: var(--fg);
+  font-family: var(--font-read);
+  /* The serif sits a touch smaller than the sans at the same size, so long
+     paragraphs need slightly more leading than the interface default. */
   font-size: 1.0625rem;
-  line-height: 1.9;
+  line-height: 1.95;
+}
+
+.prose-ghost h2,
+.prose-ghost h3,
+.prose-ghost h4,
+.prose-ghost code,
+.prose-ghost pre,
+.prose-ghost .not-prose {
+  font-family: var(--font-sans);
+}
+
+/* Serif numerals sit lower and thinner than the sans ones, which throws the
+   baseline off next to a sans date or a stat. Tabular lining figures keep
+   both faces on the same line. */
+.prose-ghost {
+  font-variant-numeric: lining-nums;
+  font-feature-settings: 'lnum' 1, 'tnum' 1;
 }
 .prose-ghost > * + * {
   margin-top: 1.5rem;
@@ -617,6 +676,14 @@
   }
 }
 
+/*
+ * Reduced motion.
+ *
+ * The blanket `transition-duration: 0` below is not enough on its own: a
+ * hover state that also *moves* the element would jump to its final position
+ * instantly, which is worse than no transition. So transform-based hover
+ * motion is cancelled outright as well.
+ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -625,5 +692,16 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* Cancel hover translations rather than letting them snap. */
+  .group:hover,
+  .group:focus-visible {
+    transform: none !important;
+  }
+  [class*='hover:-translate-y'],
+  [class*='hover:translate-y'],
+  [class*='group-hover:scale'] {
+    transform: none !important;
   }
 }
