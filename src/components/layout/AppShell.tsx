@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { AmbientField } from '@/components/ui/AmbientField'
 import { Glyph } from '@/components/ui/Glyphs'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import {
@@ -262,6 +263,9 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <>
+      {/* Decorative only, and inert: aria-hidden + pointer-events-none. */}
+      <AmbientField />
+
       <header
         className={cn(
           'sticky top-0 z-40 border-b border-app bg-(--bg)/92 backdrop-blur-md transition-shadow duration-300',
@@ -325,7 +329,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <div className="mx-auto flex max-w-[90rem]">
+      <div className="relative mx-auto flex max-w-[90rem]">
         <aside className="sticky top-16 hidden h-[calc(100svh-4rem)] w-64 shrink-0 overflow-y-auto lg:block">
           <Sidebar />
         </aside>
