@@ -14,7 +14,143 @@ const edmsDownload: Block = {
   meta: `${edms.file} · ${edms.size} · ${edms.host}`,
 }
 
+const aiFakeEn: Block[] = [
+  {
+    type: 'p',
+    text: 'An Android app that checks images, videos, video links and text **entirely on the device**, with no file ever uploaded. Written in Kotlin and Jetpack Compose on top of `onnxruntime-android`, so the deepfake detectors run locally.',
+  },
+  {
+    type: 'download',
+    href: 'https://www.mediafire.com/file/medmpqfun7h00e3/AiFake-v0.1.0-release-new.apk/file',
+    label: 'Download AiFake v0.1.0 — APK',
+    meta: 'AiFake-v0.1.0-release-new.apk · Android 8.0+ · MediaFire',
+  },
+  {
+    type: 'callout',
+    tone: 'warn',
+    title: 'Before you install',
+    items: [
+      'You have to allow installation from **unknown sources**.',
+      'The file is large — the base model ships inside the package.',
+      'The signing fingerprint has changed since earlier builds. An existing install signed with the old key needs `uninstall` first, or the system refuses the upgrade.',
+    ],
+  },
+
+  {
+    type: 'h2',
+    id: 'how-it-works',
+    text: 'How it works',
+  },
+  {
+    type: 'p',
+    text: 'The base is a ViT model quantised to INT8 and bundled inside the app at 23 MB, running on a `1×3×384×384` input. On top of that sits **multi-model fusion**: every scan combines the selected model with the other verified models through an equally weighted log-odds average.',
+  },
+  {
+    type: 'ul',
+    items: [
+      '**Cap by device tier:** LOW=1 model, MID=2, HIGH=3.',
+      'Models run sequentially in a single in-memory session — the cost is **time, not memory**.',
+      'The ensemble never downloads a model on its own.',
+    ],
+  },
+  {
+    type: 'p',
+    text: 'What separates it from a percentage generator is that every result carries **evidence**: each model\'s individual reading and whether they agree, a per-frame AI probability that catches partial edits, how many faces were examined, and a source-metadata pass.',
+  },
+
+  {
+    type: 'h2',
+    id: 'models',
+    text: 'Available models',
+  },
+  {
+    type: 'table',
+    caption: 'What ships inside the package, and what downloads on demand.',
+    head: ['Model', 'Size', 'Status'],
+    rows: [
+      ['DeepfakeDet-ViT INT8', '23 MB', 'Bundled · default'],
+      ['CommunityForensics 2026', '44 MB', 'Trained on 2025–2026 generators · first in the ensemble'],
+      ['Deepfake ViT-base/16', '84 MB', 'Strongest'],
+      ['Deep-Fake Detector v2', '87 MB', 'Experimental'],
+      ['AI vs Deepfake vs Real', '87 MB', 'Separates deepfake from AI'],
+    ],
+  },
+
+  {
+    type: 'h2',
+    id: 'metadata',
+    text: 'Source-metadata forensics',
+  },
+  {
+    type: 'p',
+    text: 'The app reads the fingerprint a generator leaves in the file itself: C2PA, IPTC `trainedAlgorithmicMedia`, Stable Diffusion / ComfyUI / InvokeAI parameters in PNG, generator names, and camera EXIF.',
+  },
+  {
+    type: 'callout',
+    tone: 'info',
+    title: 'How it affects the verdict',
+    items: [
+      'An explicit generator marker pushes the AI probability to **at least 95%**.',
+      'Missing data, or a clean camera, changes **nothing** — both are trivial to strip or forge.',
+    ],
+  },
+
+  {
+    type: 'h2',
+    id: 'screens',
+    text: 'The interface',
+  },
+  {
+    type: 'image',
+    src: '/img/aifake-1.webp',
+    fallback: '/img/aifake-1.jpg',
+    alt: 'The app home screen with the circular authenticity dial',
+    caption: 'Home screen — the circular authenticity dial.',
+  },
+  {
+    type: 'image',
+    src: '/img/aifake-2.webp',
+    fallback: '/img/aifake-2.jpg',
+    alt: 'Scan results with each model read separately',
+    caption: 'Result detail — every model read, and whether they agree.',
+  },
+  {
+    type: 'image',
+    src: '/img/aifake-3.webp',
+    fallback: '/img/aifake-3.jpg',
+    alt: 'Scan history and settings inside the app',
+    caption: 'Scan history and settings.',
+  },
+
+  {
+    type: 'h2',
+    id: 'limits',
+    text: 'Limits you should know',
+  },
+  {
+    type: 'ul',
+    items: [
+      'Public detector accuracy **drops sharply** on recent deepfakes. The result is always probabilistic.',
+      'Text checking is stylistic, not a language model — deliberately the weakest mode.',
+      'The cloud provider APIs were written from public documentation and never tested with real keys.',
+      'The gap between FP32 and INT8 output can be real on generators outside the training distribution.',
+      'The mixed `int8/uint8` `ConvInteger` path depends on ORT 1.27.0 device kernels and needs an on-device smoke test.',
+    ],
+  },
+  {
+    type: 'callout',
+    tone: 'tip',
+    title: 'Bottom line',
+    items: [
+      'Treat the app as a **second opinion**, not proof.',
+      'Corroborate it with the metadata pass and human review before acting on any verdict.',
+    ],
+  },
+]
+
 export const postBodiesEn: Record<string, Block[]> = {
+  "ai-fake-detector-android": aiFakeEn,
+
   'cloudcli-setup-guide': [
       {
         type: 'p',

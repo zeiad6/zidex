@@ -325,6 +325,31 @@ export function Prose({ blocks }: { blocks: Post['body'] }) {
           case 'divider':
             return <hr key={key} />
 
+          case 'image':
+            return (
+              <figure key={key} className="not-prose my-10">
+                <div className="shadow-app overflow-hidden rounded-2xl border border-app bg-sunken">
+                  <picture>
+                    <source srcSet={block.src} type="image/webp" />
+                    <img
+                      src={block.fallback}
+                      alt={block.alt}
+                      loading="lazy"
+                      decoding="async"
+                      width={720}
+                      height={1466}
+                      className="block h-auto w-full"
+                    />
+                  </picture>
+                </div>
+                {block.caption ? (
+                  <figcaption className="text-subtle mt-3 text-center text-xs">
+                    {block.caption}
+                  </figcaption>
+                ) : null}
+              </figure>
+            )
+
           case 'hub':
             return (
               <figure key={key} className="not-prose my-10">

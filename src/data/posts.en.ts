@@ -43,6 +43,13 @@ export const postsEn: Record<string, PostText> = {
     headings: [{"id":"agents","text":"Agents: minds with a clean context","level":2},{"id":"reviewer-lesson","text":"The power of a review is in the request, not the agent","level":3},{"id":"mcp-idle","text":"The biggest lesson: keep MCP servers off by default","level":2},{"id":"skills","text":"Skills: instructions loaded on demand","level":2},{"id":"errors-found","text":"Three real bugs the review caught","level":2},{"id":"npm-trap","text":"The trap that never throws an error","level":2},{"id":"security","text":"Security and privacy in the build","level":2},{"id":"lessons","text":"Lessons from the real deploy","level":2},{"id":"lesson-401","text":"401 on everything after deploying","level":3},{"id":"lesson-domain","text":"A globally reserved subdomain","level":3},{"id":"checklist","text":"Final checklist","level":2},{"id":"adapters","text":"What fits you","level":2}],
 
   },
+  'ai-fake-detector-android': {
+    title: 'AI Fake — an on-device AI-generated content detector for Android',
+    excerpt:
+      'An Android app that checks images, videos and video links entirely on the phone through ONNX models, catching deepfakes with multi-model fusion — no file ever leaves the device.',
+    tags: ['Android', 'Kotlin', 'ONNX', 'Deepfake', 'AI'],
+    headings: [{"id":"how-it-works","text":"How it works","level":2},{"id":"models","text":"Available models","level":2},{"id":"metadata","text":"Source-metadata forensics","level":2},{"id":"screens","text":"The interface","level":2},{"id":"limits","text":"Limits you should know","level":2}],
+  },
   'docker-on-android-termux': {
     title: 'Running Docker on Android with Termux — a practical guide',
     excerpt:

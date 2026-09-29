@@ -26,6 +26,18 @@ export type Block =
       caption?: string
     }
   | { type: 'divider' }
+  /**
+   * A screenshot. `src` is a WebP under /img with a JPEG fallback in
+   * `fallback`, because Safari < 14 has no WebP and a broken <picture>
+   * element is worse than a heavier image.
+   */
+  | {
+      type: 'image'
+      src: string
+      fallback: string
+      alt: string
+      caption?: string
+    }
   /** Prominent download button; `meta` is the file name, size, and host. */
   | { type: 'download'; href: string; label: string; meta: string }
   /** Hub-and-spoke architecture diagram: one centre node wired to N nodes below it. */
@@ -130,6 +142,21 @@ const raw: RawPost[] = [
     tags: ['OpenCode', 'MCP', 'وكلاء', 'مهارات', 'أدوات'],
     readMinutes: 6,
     headings: [{"id": "agents", "text": "الوكلاء: عقول بسياق نظيف", "level": 2}, {"id": "reviewer-lesson", "text": "قوة المراجعة في الطلب لا في الوكيل", "level": 3}, {"id": "mcp-idle", "text": "الدرس الأهم: أوقف سيرفرات MCP افتراضياً", "level": 2}, {"id": "skills", "text": "المهارات: تعليمات تُحمَّل عند الحاجة", "level": 2}, {"id": "errors-found", "text": "ثلاثة أخطاء حقيقية كشفتها المراجعة", "level": 2}, {"id": "npm-trap", "text": "الفخ الذي لا يُصدر خطأ أبداً", "level": 2}, {"id": "security", "text": "الأمان والخصوصية في البناء", "level": 2}, {"id": "lessons", "text": "دروس من النشر الفعلي", "level": 2}, {"id": "lesson-401", "text": "401 على كل شيء بعد النشر", "level": 3}, {"id": "lesson-domain", "text": "النطاق المحجوز عالمياً", "level": 3}, {"id": "checklist", "text": "قائمة تحقق نهائية", "level": 2}, {"id": "adapters", "text": "ما يناسبك أنت", "level": 2}],
+  },
+
+  {
+    slug: 'ai-fake-detector-android',
+    title: 'AI Fake — كاشف المحتوى المولَّد بالذكاء الاصطناعي على أندرويد',
+    excerpt:
+      'تطبيق أندرويد مفتوح يفحص الصور والفيديو وروابط الفيديو محلياً على الجهاز عبر نماذج ONNX، ويكشف التزييف العميق ب fusion متعدد النماذج — دون رفع أي ملف.',
+    category: 'تقنية',
+    date: '2026-09-30',
+    cover: 'shield',
+    coverFrom: 'from-veil-500',
+    coverTo: 'to-ink-900',
+    tags: ['Android', 'Kotlin', 'ONNX', 'Deepfake', 'AI'],
+    readMinutes: 2,
+    headings: [{"id":"how-it-works","text":"كيف يعمل","level":2},{"id":"models","text":"النماذج المتاحة","level":2},{"id":"metadata","text":"فحص بيانات المصدر","level":2},{"id":"screens","text":"من الواجهة","level":2},{"id":"limits","text":"حدود يجب أن تعرفها","level":2}],
   },
 
   {

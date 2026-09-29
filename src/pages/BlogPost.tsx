@@ -51,12 +51,36 @@ export default function BlogPost() {
   useEffect(() => {
     if (!post) return
     document.title = `${post.title} — ${site.name}`
-    const meta = document.querySelector('meta[name="description"]')
-    const prev = meta?.getAttribute('content')
-    meta?.setAttribute('content', post.excerpt)
+
+    // Open Graph and Twitter read the head, not document.title. Without this
+    // an article link previews with the site's generic title and description,
+    // so a shared article looked like a link to the homepage.
+    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href ?? window.location.origin
+    const origin = new URL(canonical).origin
+
+    const set = (selector: string, attr: string, value: string) => {
+      const el = document.querySelector<HTMLMetaElement>(selector)
+      if (!el) return null
+      const prev = el.getAttribute(attr)
+      el.setAttribute(attr, value)
+      return prev
+    }
+
+    const prevs: [string | null, string][] = [
+      [set('meta[name="description"]', 'content', post.excerpt), 'meta[name="description"]'],
+      [set('meta[property="og:title"]', 'content', post.title), 'meta[property="og:title"]'],
+      [set('meta[property="og:description"]', 'content', post.excerpt), 'meta[property="og:description"]'],
+      [set('meta[property="og:url"]', 'content', `${origin}/blog/${post.slug}`), 'meta[property="og:url"]'],
+      [set('meta[name="twitter:title"]', 'content', post.title), 'meta[name="twitter:title"]'],
+      [set('meta[name="twitter:description"]', 'content', post.excerpt), 'meta[name="twitter:description"]'],
+    ]
+
     return () => {
       document.title = t(site.title, site.titleEn)
-      if (prev) meta?.setAttribute('content', prev)
+      for (const [prev, selector] of prevs) {
+        if (prev === null) continue
+        document.querySelector(selector)?.setAttribute('content', prev)
+      }
     }
   }, [post, t])
 
