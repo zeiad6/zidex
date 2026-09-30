@@ -24,6 +24,13 @@ const aiFakeEn: Block[] = [
     href: 'https://www.mediafire.com/file/medmpqfun7h00e3/AiFake-v0.1.0-release-new.apk/file',
     label: 'Download AiFake v0.1.0 — APK',
     meta: 'AiFake-v0.1.0-release-new.apk · Android 8.0+ · MediaFire',
+    also: [
+      {
+        href: 'https://drive.google.com/uc?export=download&id=1zhU55QMifujaTSbzXLHtuwZpzDFzH9hD',
+        label: 'Mirror on Google Drive',
+        meta: 'same file · Google Drive',
+      },
+    ],
   },
   {
     type: 'callout',

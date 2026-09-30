@@ -400,29 +400,43 @@ export function Prose({ blocks }: { blocks: Post['body'] }) {
               </figure>
             )
 
-          case 'download':
+          case 'download': {
+            const sources = [block, ...(block.also ?? [])]
             return (
               <div
                 key={key}
-                className="not-prose shadow-app-md hover:shadow-app-lg my-8 flex flex-col gap-4 rounded-2xl border border-app bg-elevated p-5 transition-[box-shadow,transform] duration-300 sm:flex-row sm:items-center sm:justify-between"
+                className="not-prose shadow-app-md hover:shadow-app-lg my-8 flex flex-col gap-4 rounded-2xl border border-app bg-elevated p-5 transition-[box-shadow,transform] duration-300"
               >
-                <div className="min-w-0">
-                  <p className="text-app text-sm font-semibold">{block.label}</p>
-                  <p className="text-subtle mt-1 font-mono text-xs" dir="ltr">
-                    {block.meta}
-                  </p>
-                </div>
-                <a
-                  href={safeHref(block.href)}
-                  target="_blank"
-                  rel="noopener noreferrer nofollow"
-                  className="btn btn-primary h-11 shrink-0 cursor-pointer px-6 text-base"
-                >
-                  <Glyph name="download" size={16} aria-hidden="true" />
-                  {t('تحميل', 'Download')}
-                </a>
+                {sources.map((src, i) => (
+                  <div
+                    key={src.href}
+                    className={cn(
+                      'flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between',
+                      // Divide the mirrors rather than giving each a card of
+                      // its own: one file, one card, several doors.
+                      i > 0 && 'border-t border-app pt-4',
+                    )}
+                  >
+                    <div className="min-w-0">
+                      <p className="text-app text-sm font-semibold">{src.label}</p>
+                      <p className="text-subtle mt-1 font-mono text-xs" dir="ltr">
+                        {src.meta}
+                      </p>
+                    </div>
+                    <a
+                      href={safeHref(src.href)}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                      className="btn btn-primary h-11 shrink-0 cursor-pointer px-6 text-base"
+                    >
+                      <Glyph name="download" size={16} aria-hidden="true" />
+                      {t('تحميل', 'Download')}
+                    </a>
+                  </div>
+                ))}
               </div>
             )
+          }
 
           default:
             return <Fragment key={key} />

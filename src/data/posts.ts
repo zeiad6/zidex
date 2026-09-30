@@ -38,8 +38,19 @@ export type Block =
       alt: string
       caption?: string
     }
-  /** Prominent download button; `meta` is the file name, size, and host. */
-  | { type: 'download'; href: string; label: string; meta: string }
+  /**
+   * Prominent download button; `meta` is the file name, size, and host.
+   * `also` holds mirrors of the same file. They render as extra rows inside
+   * the one card rather than as separate stacked cards, because two full-size
+   * download panels 32px apart read as two unrelated files.
+   */
+  | {
+      type: 'download'
+      href: string
+      label: string
+      meta: string
+      also?: { href: string; label: string; meta: string }[]
+    }
   /** Hub-and-spoke architecture diagram: one centre node wired to N nodes below it. */
   | {
       type: 'hub'
