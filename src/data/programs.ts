@@ -112,6 +112,7 @@ export const programs: Program[] = [
         note: 'نسخة احتياطية',
       },
     ],
+    post: 'edms-archive-android',
     docs: 'https://github.com/zeiad6/Edms-archive-Android',
     glyph: 'package',
     date: '2026-09-30',

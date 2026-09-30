@@ -18,7 +18,7 @@ export function ThemeToggle({ className = '' }: { className?: string }) {
       onClick={toggle}
       aria-label={isDark ? t('التبديل إلى الوضع النهاري', 'Switch to light mode') : t('التبديل إلى الوضع الليلي', 'Switch to dark mode')}
       title={isDark ? t('الوضع النهاري', 'Light mode') : t('الوضع الليلي', 'Dark mode')}
-      className={`group text-muted hover:text-app hover:bg-sunken relative grid size-9 shrink-0 cursor-pointer place-items-center overflow-hidden rounded-xl transition-colors ${className}`}
+      className={`group bg-sunken text-muted hover:border-accent hover:text-accent relative grid size-10 shrink-0 cursor-pointer place-items-center overflow-hidden rounded-xl border border-app transition-colors ${className}`}
     >
       <motion.span
         aria-hidden="true"

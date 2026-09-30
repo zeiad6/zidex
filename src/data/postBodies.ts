@@ -33,7 +33,7 @@ export const aiFakeBody: Block[] = [
     also: [
       {
         href: 'https://drive.google.com/uc?export=download&id=1zhU55QMifujaTSbzXLHtuwZpzDFzH9hD',
-        label: 'نسخة mirror على Google Drive',
+        label: 'نسخة بديلة على Google Drive',
         meta: 'نفس الملف · Google Drive',
       },
     ],
@@ -161,8 +161,144 @@ export const aiFakeBody: Block[] = [
   },
 ]
 
+const edmsAndroid: Block[] = [
+  {
+    type: 'p',
+    text: '**عميل أندرويد أصلي لنظام أرشيف برو** — نفس النظام الذي له نسخة سطح مكتب لويندوز. مكتوب بـKotlin وJetpack Compose، ويعمل بإحدى طريقتين تختارهما من شاشة الدخول.',
+  },
+  {
+    type: 'download',
+    href: 'https://www.mediafire.com/file/inn8lf6tznv95nx/app-debug.apk/file',
+    label: 'تحميل عميل أرشيف برو — APK',
+    meta: 'app-debug.apk · Android 8.0+ · MediaFire',
+    also: [
+      {
+        href: 'https://drive.google.com/uc?export=download&id=1FxWSMfMpix-uE33fNSd3layuidLGIbQu',
+        label: 'نسخة بديلة على Google Drive',
+        meta: 'نفس الملف · Google Drive',
+      },
+    ],
+  },
+  {
+    type: 'callout',
+    tone: 'warn',
+    title: 'قبل التثبيت',
+    items: [
+      'يتطلب السماح بالتثبيت من **مصادر غير معروفة**.',
+      'المسح الضوئي يحتاج خدمات Google Play، وهي سبب حد `minSdk` عند أندرويد 8.0.',
+      'كل تحديث يجب أن يُوقَّع **بالمفتاح نفسه**، وإلا رفض أندرويد تثبيته فوق نسخة موجودة.',
+    ],
+  },
+
+  {
+    type: 'h2',
+    id: 'two-modes',
+    text: 'طريقتان للتشغيل',
+  },
+  {
+    type: 'ul',
+    items: [
+      '**على هذا الجهاز** — النظام كاملاً محلياً: قاعدة بيانات، تخزين ملفات، مستخدمون وصلاحيات. بلا حاسوب وبلا إنترنت.',
+      '**الاتصال بالنسخة المكتبية** — واجهة الحاسوب مقدَّمة عبر بوابة HTTPS بشهادة مثبّتة، مع ما لا تجيده صفحة الويب على الهاتف: التقاط المستندات والتنزيلات.',
+    ],
+  },
+
+  {
+    type: 'h2',
+    id: 'compatibility',
+    text: 'التوافق مع سطح المكتب',
+  },
+  {
+    type: 'p',
+    text: 'القاعدة والنسخة الاحتياطية ومجموعة كلمات المرور تنتقل في الاتجاهين **بلا تحويل** — وهذا هو الجزء الذي يحدد إن كان الطلب يستحق تطبيقاً منفصلاً أصلاً.',
+  },
+  {
+    type: 'ul',
+    items: [
+      '**قاعدة البيانات**: مخطط الحاسوب نفسه، جدولاً بجدول وعموداً بعمود.',
+      '**كلمات المرور**: بصمة `scrypt` بصيغة `scrypt$32768$8$1$salt$hash`. أندرويد لا يشحن scrypt، لذلك نُفِّذ [RFC 7914](https://www.rfc-editor.org/rfc/rfc7914) في `Passwords.kt` ويُختبر على متجهات الاختبار الرسمية.',
+      '**الملفات**: نفس التخطيط `storage/documents/YYYY/MM/<hex>.<ext>`، والمصغّرات تحت `storage/thumbnails/…`.',
+      '**النسخ الاحتياطية**: ملفات ZIP ببنية `manifest.json` + `database/` + `storage/`. الملف يرفض أي شيء ليس نسخة أرشيف، ويحمي نفسه من zip-slip.',
+    ],
+  },
+
+  {
+    type: 'h2',
+    id: 'trust',
+    text: 'نموذج الثقة',
+  },
+  {
+    type: 'p',
+    text: 'الاتصال بين الهاتف والحاسوب مقيس بالكامل — لا يوجد مسار «ثق في الشبكة».',
+  },
+  {
+    type: 'ul',
+    items: [
+      'الاقتران `edms://pair?h=…&p=…&fp=…&c=…` يحمل **SHA-256** لشهادة الحاسوب ذاتية التوقيع.',
+      'كل اتصال أصلي أو عبر WebView يجب أن يقدّم تلك الشهادة بالضبط، فتنفس الدبوس يعمل على IP محلي أو اسم DDNS أو عنوان VPN.',
+      'رمز الجهاز مخزّن مشفّراً بـAES-GCM تحت مفتاح لا يغادر Android Keystore.',
+      'الـWebView يعمل بـ`allowFileAccess = false`، وأي رابط غير معروف يُسلَّم للمتصفح.',
+    ],
+  },
+
+  {
+    type: 'h2',
+    id: 'tests',
+    text: 'نتائج الاختبار',
+  },
+  {
+    type: 'p',
+    text: 'اختبارات وحدة على JVM، تُشغَّل بـ`./gradlew :app:testDebugUnitTest`:',
+  },
+  {
+    type: 'table',
+    caption: '12 اختباراً · 0 فشل · 0 متجاهَل · 1.954 ثانية',
+    head: ['الملف', 'ما يغطّيه'],
+    rows: [
+      ['PasswordsTest', 'متجه RFC 7914 · تحقّق من بصمة سطح المكتب · دورة حفظ وتحميل مع تنقية'],
+      ['CredentialsTest', 'استبدال اسم مستخدم موجود بدل تكراره · حساسية حالة الاسم · النقل إلى الخانة الأحدث · بقاء الحقول عبر JSON · حذف السطر بلا اسم'],
+      ['PureLogicTest', 'تطبيع البحث العربي وتشكيله · سلامة جدول المراجع في مولّد PDF'],
+      ['UpdaterTest', 'مقارنة إصدارات ذات نقاط رقمية'],
+    ],
+  },
+  {
+    type: 'callout',
+    tone: 'info',
+    title: 'ملاحظة عن بيئة البناء',
+    items: [
+      'البناء يحتاج **JDK 17**. على JDK 25 يفشل AGP 8.5.2 برسالة `IllegalArgumentException: 25.0.4.1` بلا أي سياق.',
+      'مفتاح التوقيع **ليس في المستودع**؛ يُقرأ من متغيرات البيئة أو من ملف `keystore.properties` غير المتتبَّع.',
+    ],
+  },
+
+  {
+    type: 'h2',
+    id: 'limits',
+    text: 'ما يجب أن تعرفه',
+  },
+  {
+    type: 'ul',
+    items: [
+      'نسخة سطح المكتب تشحن JavaScript يمكن قراءته؛ نسخة أندرويد تمرّ على R8 في الوضع الكامل مع تقليص الموارد.',
+      'ما يبقى من الأسماء هو ما تحتاجه المنصة بالضرورة: مكوّنات المانيفست. الإبقاء على `Signature` و`InnerClasses` **محذوفان عمداً** لأنهما يعيدان كتابة الأسماء الأصلية داخل DEX حتى بعد تغيير اسم الصنف.',
+      'نسخة `app-debug.apk` هنا نسخة تصحيح، موقّعة بمفتاح تطوير لا بمفتاح الإصدار.',
+      'المسح الضوئي معطل عملياً على الأجهزة بلا خدمات Google Play.',
+    ],
+  },
+  {
+    type: 'callout',
+    tone: 'tip',
+    title: 'التوثيق الكامل',
+    items: [
+      'التوثيق الأصلي — بما فيه نموذج الثقة وتفاصيل R8 وخطوات البناء — في مستودع المشروع.',
+    ],
+  },
+]
+
 export const postBodies: Record<string, Block[]> = {
   "ai-fake-detector-android": aiFakeBody,
+
+  "edms-archive-android": edmsAndroid,
 
   "cloudcli-setup-guide": [
       {

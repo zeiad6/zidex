@@ -10,9 +10,10 @@
 @import 'tailwindcss';
 
 /* Zidex — design tokens.
-   Dashboard layout and palette follow the "Bloggo" Dribbble shot: neutral
-   gray surfaces, one indigo accent, a serif display face for greetings and
-   page titles. Tokens are semantic so light and dark share one source. */
+   Layout and palette follow the Zidex dashboard template: a cool #F3F4FA
+   canvas under white 20px cards, violet #6D5CFF with a teal #00C9A7 partner,
+   a navy dark mode, Plus Jakarta Sans for Latin and IBM Plex Sans Arabic for
+   Arabic. Tokens are semantic so light and dark share one source. */
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -23,11 +24,12 @@
    * geometric family did all the work, including 45 uses of text-sm where a
    * humanist face with a taller x-height holds up far better.
    */
-  --font-sans: 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  /* Jakarta has no Arabic glyphs, so Arabic runs fall through to Plex. */
+  --font-sans: 'Plus Jakarta Sans', 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
   /* Headings share the text family but sit heavier and tighter — splitting
      them across two families doubled the font payload for no visible gain. */
-  --font-display: 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
   /* Injected on article routes by useReadingFont. The system serif is the
      fallback for the split second before it arrives, and for the offline
      case, so the text never reflows into a blank line. */
@@ -96,15 +98,15 @@
 
 @layer base {
   :root {
-    --bg: #ffffff;
+    --bg: #f3f4fa;
     --bg-elevated: #ffffff;
-    --bg-sunken: var(--color-ink-100);
-    --fg: var(--color-ink-900);
-    --fg-muted: var(--color-ink-600);
-    --fg-subtle: var(--color-ink-500);
-    --line: var(--color-ink-200);
-    --line-strong: var(--color-ink-300);
-    --accent: var(--color-ghost-600);
+    --bg-sunken: #f4f5fa;
+    --fg: #0f1023;
+    --fg-muted: #5b5e81;
+    --fg-subtle: #767a9e;
+    --line: #eceef7;
+    --line-strong: #dde0ee;
+    --accent: var(--color-ghost-500);
     --accent-fg: #ffffff;
     --accent-soft: color-mix(in oklab, var(--color-ghost-600) 12%, transparent);
     --ring: color-mix(in oklab, var(--color-ghost-600) 45%, transparent);
@@ -113,14 +115,14 @@
   }
 
   .dark {
-    --bg: var(--color-ink-950);
-    --bg-elevated: var(--color-ink-900);
-    --bg-sunken: #0f1420;
-    --fg: #f3f4f6;
-    --fg-muted: #b3b9c6;
-    --fg-subtle: #8b93a3;
-    --line: color-mix(in oklab, #ffffff 11%, transparent);
-    --line-strong: color-mix(in oklab, #ffffff 18%, transparent);
+    --bg: #0b0d1e;
+    --bg-elevated: #151736;
+    --bg-sunken: #1e2042;
+    --fg: #e8eaf7;
+    --fg-muted: #a9add0;
+    --fg-subtle: #8b8fbb;
+    --line: #262952;
+    --line-strong: #3a3d6b;
     --accent: var(--color-ghost-400);
     --accent-fg: #05060a;
     --accent-soft: color-mix(in oklab, var(--color-ghost-400) 16%, transparent);
@@ -533,17 +535,23 @@
 }
 /* `&:hover` must sit inside the utility: at the top level `&` resolves to
    :root, which painted the hover colours onto <html> instead of the button. */
+/* Zidex primary: a violet gradient twice as wide as the button, so hover
+   slides it instead of swapping colours, plus a violet glow and a lift. */
 @utility btn-primary {
-  background: var(--accent);
-  color: var(--accent-fg);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.18),
-    0 6px 18px -8px var(--accent);
+  background-image: linear-gradient(135deg, #6d5cff 0%, #8b7cff 50%, #6d5cff 100%);
+  background-size: 200% auto;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgb(109 92 255 / 0.35);
   &:hover {
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.18),
-      0 12px 28px -10px var(--accent);
+    background-position: right center;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 34px rgb(109 92 255 / 0.45);
   }
+}
+
+/* The Zidex mark: violet into lavender into teal. */
+@utility brand-gradient {
+  background-image: linear-gradient(135deg, #6d5cff 0%, #9d8fff 50%, #00c9a7 100%);
 }
 @utility btn-ghost {
   border: 1px solid var(--line-strong);

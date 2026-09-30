@@ -38,7 +38,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       meta.name = 'theme-color'
       document.head.appendChild(meta)
     }
-    meta.content = theme === 'dark' ? '#0b0f17' : '#ffffff'
+    meta.content = theme === 'dark' ? '#0b0d1e' : '#f3f4fa'
   }, [theme])
 
   const persist = (t: Theme) => {

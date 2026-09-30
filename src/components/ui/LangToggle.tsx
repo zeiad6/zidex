@@ -12,7 +12,7 @@ export function LangToggle({ className = '' }: { className?: string }) {
       lang={next}
       aria-label={next === 'en' ? 'Switch to English' : 'التبديل إلى العربية'}
       title={next === 'en' ? 'English' : 'العربية'}
-      className={`text-muted hover:text-app hover:bg-sunken grid h-9 min-w-9 shrink-0 cursor-pointer place-items-center rounded-xl px-2 text-xs font-bold transition-colors ${className}`}
+      className={`bg-sunken text-muted hover:border-accent hover:text-accent grid h-10 min-w-10 shrink-0 cursor-pointer place-items-center rounded-xl border border-app px-2 text-xs font-black transition-colors ${className}`}
     >
       {next === 'en' ? 'EN' : 'ع'}
     </button>

@@ -79,7 +79,7 @@ export function Toast({ message, onDone }: { message: string | null; onDone: () 
   return (
     <div
       role="status"
-      className="pointer-events-none fixed inset-x-0 bottom-6 z-100 flex justify-center px-4"
+      className="pointer-events-none fixed inset-x-0 bottom-24 z-100 lg:bottom-6 flex justify-center px-4"
     >
       <div className="animate-caret glass shadow-app-lg rounded-full border border-app px-4 py-2.5 text-sm font-medium text-app">
         {message}

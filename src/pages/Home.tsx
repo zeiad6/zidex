@@ -3,7 +3,7 @@ import { ShineBorder } from '@/components/ui/Decor'
 import { Glyph, type GlyphName } from '@/components/ui/Glyphs'
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowLeft, Check, Download, FileText, Link2, Package, type LucideIcon } from 'lucide-react'
+import { ArrowLeft, Check, Download, FileText, LayoutGrid, Package, UserPlus, type LucideIcon } from 'lucide-react'
 import { allPosts, categories, categoryLabel, postsFor, type Category } from '@/data/posts'
 import { primaryDownload as primaryOf, programs } from '@/data/programs'
 import { site, tiktok } from '@/lib/site'
@@ -190,47 +190,117 @@ function Spotlight() {
   )
 }
 
+/**
+ * Zidex KPI row: icon tile + badge on top, label, big figure, and a footer
+ * (mini bars or a segment meter). Every number is read off the site's own
+ * data — the template's balances and campaign counts have no equivalent here.
+ */
 function QuickActions() {
-  const { t } = useI18n()
-  const actions: { to: string; icon: LucideIcon; tone: string; title: string; sub: string }[] = [
+  const { lang, t } = useI18n()
+  const perCategory = categories.map((c) => allPosts.filter((p) => p.category === c).length)
+  const maxCat = Math.max(...perCategory, 1)
+  const latest = postsFor(lang)[0]
+  const windows = programs.filter((p) => p.kind === 'windows').length
+  const android = programs.filter((p) => p.kind === 'android').length
+
+  const cards: {
+    to: string
+    icon: LucideIcon
+    tile: string
+    badge: string
+    badgeTone: string
+    label: string
+    value: number
+    unit: string
+    foot: React.ReactNode
+  }[] = [
     {
       to: '/blog',
       icon: FileText,
-      tone: 'bg-orange-50 text-orange-500 dark:bg-orange-400/10',
-      title: t('تصفّح المقالات', 'Browse articles'),
-      sub: t(`${allPosts.length} مقالاً عملياً`, `${allPosts.length} hands-on articles`),
+      tile: 'bg-orange-50 text-orange-500 dark:bg-orange-400/10',
+      badge: t('أحدثها', 'Latest'),
+      badgeTone: 'bg-orange-50 text-orange-600 dark:bg-orange-400/10 dark:text-orange-300',
+      label: t('مقالات منشورة', 'Published articles'),
+      value: allPosts.length,
+      unit: t('مقال', 'posts'),
+      foot: <span className="text-subtle block truncate text-[11px] font-bold">{latest?.title}</span>,
     },
     {
       to: '/programs',
       icon: Package,
-      tone: 'bg-ghost-50 text-ghost-600 dark:bg-ghost-400/10 dark:text-ghost-300',
-      title: t('حمّل البرامج', 'Get the programs'),
-      sub: t('برامج مجانية جاهزة للتثبيت', 'Free, ready-to-install software'),
+      tile: 'bg-ghost-50 text-ghost-500 dark:bg-ghost-400/10 dark:text-ghost-300',
+      badge: t('مجاني', 'Free'),
+      badgeTone: 'bg-ghost-50 text-ghost-600 dark:bg-ghost-400/10 dark:text-ghost-300',
+      label: t('برامج جاهزة للتحميل', 'Programs to download'),
+      value: programs.length,
+      unit: t('برنامج', 'apps'),
+      foot: (
+        <span className="text-subtle block text-[11px] font-bold">
+          {t(`ويندوز ${windows} · أندرويد ${android}`, `Windows ${windows} · Android ${android}`)}
+        </span>
+      ),
+    },
+    {
+      to: '/blog',
+      icon: LayoutGrid,
+      tile: 'bg-emerald-50 text-emerald-500 dark:bg-emerald-400/10',
+      badge: t(`${categories.length} أقسام`, `${categories.length} sections`),
+      badgeTone: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-400/10 dark:text-emerald-300',
+      label: t('توزيع المقالات', 'Articles by section'),
+      value: categories.length,
+      unit: t('قسم', 'sections'),
+      foot: (
+        <span className="flex h-6 items-end gap-[3px]" aria-hidden="true">
+          {perCategory.map((n, i) => (
+            <span
+              key={i}
+              className="from-ghost-500 to-veil-500 flex-1 rounded-sm bg-linear-to-t"
+              style={{ height: `${Math.max(12, (n / maxCat) * 100)}%` }}
+            />
+          ))}
+        </span>
+      ),
     },
     {
       to: '/links',
-      icon: Link2,
-      tone: 'bg-amber-50 text-amber-600 dark:bg-amber-400/10 dark:text-amber-400',
-      title: t('كل الروابط', 'All links'),
-      sub: t('حساباتي وطرق التواصل', 'My accounts and contacts'),
+      icon: UserPlus,
+      tile: 'bg-sky-50 text-sky-500 dark:bg-sky-400/10',
+      badge: site.handle,
+      badgeTone: 'bg-sky-50 text-sky-600 dark:bg-sky-400/10 dark:text-sky-300',
+      label: t('متابع على تيك توك', 'TikTok followers'),
+      value: tiktok.stats.followers,
+      unit: t('متابع', 'followers'),
+      foot: (
+        <span className="flex gap-1.5" aria-hidden="true">
+          {[1, 0.7, 0.4, 0.15].map((o) => (
+            <span key={o} className="bg-ghost-500 h-2 flex-1 rounded-full" style={{ opacity: o }} />
+          ))}
+        </span>
+      ),
     },
   ]
 
   return (
-    <div className="grid gap-3 sm:grid-cols-3">
-      {actions.map(({ to, icon: Icon, tone, title, sub }) => (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {cards.map(({ to, icon: Icon, tile, badge, badgeTone, label, value, unit, foot }, i) => (
         <Link
-          key={to}
+          key={i}
           to={to}
-          className="border-app bg-elevated shadow-app-md hover:shadow-app-lg group flex items-center gap-4 rounded-card border p-4 transition-[box-shadow,transform] duration-300 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
+          className="border-app bg-elevated shadow-app hover:shadow-app-lg rounded-card flex flex-col border p-5 transition-shadow duration-300"
         >
-          <span className={cn('grid size-11 shrink-0 place-items-center rounded-2xl', tone)}>
-            <Icon className="size-5" aria-hidden="true" />
+          <span className="flex items-start justify-between gap-2">
+            <span className={cn('grid size-11 shrink-0 place-items-center rounded-2xl', tile)}>
+              <Icon className="size-5" aria-hidden="true" />
+            </span>
+            <span className={cn('truncate rounded-full px-2 py-1 text-[11px] font-black', badgeTone)} dir="auto">
+              {badge}
+            </span>
           </span>
-          <span className="min-w-0">
-            <span className="text-app block font-semibold">{title}</span>
-            <span className="text-subtle block truncate text-[13px]">{sub}</span>
+          <span className="text-subtle mt-3 text-[12px] font-bold">{label}</span>
+          <span className="text-app mt-0.5 text-2xl font-black">
+            {value} <span className="text-subtle text-sm font-bold">{unit}</span>
           </span>
+          <span className="mt-2">{foot}</span>
         </Link>
       ))}
     </div>
@@ -483,15 +553,15 @@ export default function Home() {
   }, [t])
 
   return (
-    <div className="container-app flex flex-col gap-10 py-8 sm:py-10">
+    <div className="container-app flex flex-col gap-6 py-6 lg:gap-8 lg:py-8">
       <Hero />
 
       <Reveal delay={0.06}>
-        <Spotlight />
+        <QuickActions />
       </Reveal>
 
       <Reveal delay={0.1}>
-        <QuickActions />
+        <Spotlight />
       </Reveal>
 
       <Articles />

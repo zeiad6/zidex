@@ -156,6 +156,21 @@ const raw: RawPost[] = [
   },
 
   {
+    slug: 'edms-archive-android',
+    title: 'عميل أرشيف برو على أندرويد — نفس النظام على جوالك',
+    excerpt:
+      'عميل أندرويد أصلي لنظام أرشيف برو: يعمل كاملاً على الجهاز بقاعدة بيانات وملفات محلية، أو يتصل بالنسخة المكتبية عبر بوابة HTTPS بشهادة مثبّتة. القاعدة والنسخ الاحتياطي وكلمات المرور تنتقل في الاتجاهين بلا تحويل.',
+    category: 'تقنية',
+    date: '2026-09-30',
+    cover: 'package',
+    coverFrom: 'from-ghost-500',
+    coverTo: 'to-ink-900',
+    tags: ['Android', 'Kotlin', 'أرشيف برو', 'EDMS'],
+    readMinutes: 2,
+    headings: [{"id":"two-modes","text":"طريقتان للتشغيل","level":2},{"id":"compatibility","text":"التوافق مع سطح المكتب","level":2},{"id":"trust","text":"نموذج الثقة","level":2},{"id":"tests","text":"نتائج الاختبار","level":2},{"id":"limits","text":"ما يجب أن تعرفه","level":2}],
+  },
+
+  {
     slug: 'ai-fake-detector-android',
     title: 'AI Fake — كاشف المحتوى المولَّد بالذكاء الاصطناعي على أندرويد',
     excerpt:

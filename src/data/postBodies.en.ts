@@ -156,8 +156,144 @@ const aiFakeEn: Block[] = [
   },
 ]
 
+const edmsAndroidEn: Block[] = [
+  {
+    type: 'p',
+    text: 'The **native Android client for Archive Pro** — the same system that has a Windows desktop build. Written in Kotlin and Jetpack Compose, it runs in one of two modes you pick on the login screen.',
+  },
+  {
+    type: 'download',
+    href: 'https://www.mediafire.com/file/inn8lf6tznv95nx/app-debug.apk/file',
+    label: 'Download the Archive Pro client — APK',
+    meta: 'app-debug.apk · Android 8.0+ · MediaFire',
+    also: [
+      {
+        href: 'https://drive.google.com/uc?export=download&id=1FxWSMfMpix-uE33fNSd3layuidLGIbQu',
+        label: 'Alternative copy on Google Drive',
+        meta: 'same file · Google Drive',
+      },
+    ],
+  },
+  {
+    type: 'callout',
+    tone: 'warn',
+    title: 'Before you install',
+    items: [
+      'You have to allow installation from **unknown sources**.',
+      'The scanner needs Google Play services, which is what sets `minSdk` at Android 8.0.',
+      'Every update must be signed with the **same key**, or Android refuses to install it over an existing copy.',
+    ],
+  },
+
+  {
+    type: 'h2',
+    id: 'two-modes',
+    text: 'Two ways to run it',
+  },
+  {
+    type: 'ul',
+    items: [
+      '**On this phone** — the whole system locally: database, file storage, users and permissions. No computer, no internet.',
+      '**Connect to the desktop** — the paired desktop\'s interface served over a certificate-pinned HTTPS gateway, plus the things a web page does badly on a phone: document capture and downloads.',
+    ],
+  },
+
+  {
+    type: 'h2',
+    id: 'compatibility',
+    text: 'Compatibility with the desktop',
+  },
+  {
+    type: 'p',
+    text: 'The database, the backup and the password set move in both directions **with no conversion** — which is the whole reason a separate app is worth having.',
+  },
+  {
+    type: 'ul',
+    items: [
+      '**Database**: the desktop\'s own schema, table for table and column for column.',
+      '**Passwords**: scrypt hashes as `scrypt$32768$8$1$salt$hash`. Android ships no scrypt, so [RFC 7914](https://www.rfc-editor.org/rfc/rfc7914) is implemented in `Passwords.kt` and checked against the RFC test vectors.',
+      '**Files**: the same `storage/documents/YYYY/MM/<hex>.<ext>` layout, thumbnails under `storage/thumbnails/…`.',
+      '**Backups**: ZIPs carrying the desktop\'s `manifest.json` + `database/` + `storage/`. The reader refuses anything that is not an EDMS archive and guards against zip-slip.',
+    ],
+  },
+
+  {
+    type: 'h2',
+    id: 'trust',
+    text: 'Trust model',
+  },
+  {
+    type: 'p',
+    text: 'The link between phone and desktop is pinned end to end — there is no "trust the network" path.',
+  },
+  {
+    type: 'ul',
+    items: [
+      'Pairing (`edms://pair?h=…&p=…&fp=…&c=…`) carries the **SHA-256** of the desktop\'s self-signed certificate.',
+      'Every native and WebView connection must present exactly that certificate, so one pin works over a LAN IP, a DDNS name or a VPN address.',
+      'The device token is stored AES-GCM encrypted under a key that never leaves the Android Keystore.',
+      'The WebView runs with `allowFileAccess = false`, and unknown URLs go to the system browser.',
+    ],
+  },
+
+  {
+    type: 'h2',
+    id: 'tests',
+    text: 'Test results',
+  },
+  {
+    type: 'p',
+    text: 'JVM unit tests, run with `./gradlew :app:testDebugUnitTest`:',
+  },
+  {
+    type: 'table',
+    caption: '12 tests · 0 failures · 0 ignored · 1.954s',
+    head: ['File', 'What it covers'],
+    rows: [
+      ['PasswordsTest', 'RFC 7914 vector · verifies a desktop hash · save/load round trip with sanitising'],
+      ['CredentialsTest', 're-saving a username replaces it · username is case-insensitive · newest-slot ordering · fields survive JSON · rows with no username are dropped'],
+      ['PureLogicTest', 'Arabic search normalising and stemming · the PDF writer emits a valid xref table'],
+      ['UpdaterTest', 'dotted version strings compare numerically'],
+    ],
+  },
+  {
+    type: 'callout',
+    tone: 'info',
+    title: 'Build environment note',
+    items: [
+      'The build needs **JDK 17**. On JDK 25, AGP 8.5.2 fails with a bare `IllegalArgumentException: 25.0.4.1` and no context.',
+      'The signing key is **not in the repository**; it is read from environment variables or from an untracked `keystore.properties`.',
+    ],
+  },
+
+  {
+    type: 'h2',
+    id: 'limits',
+    text: 'What you should know',
+  },
+  {
+    type: 'ul',
+    items: [
+      'The desktop build ships JavaScript, so its logic is readable by anyone. The Android build is run through R8 in full mode with resource shrinking.',
+      'The names that survive are the ones the platform needs: manifest components. Keeping `Signature` and `InnerClasses` is **deliberately off**, because both write the original names back into the DEX even after the class was renamed.',
+      'This `app-debug.apk` is a debug build, signed with a development key rather than the release key.',
+      'The scanner is effectively unavailable on devices without Google Play services.',
+    ],
+  },
+  {
+    type: 'callout',
+    tone: 'tip',
+    title: 'Full documentation',
+    items: [
+      'The original documentation — trust model, R8 details, build steps — lives in the project repository.',
+    ],
+  },
+]
+
 export const postBodiesEn: Record<string, Block[]> = {
   "ai-fake-detector-android": aiFakeEn,
+
+  "edms-archive-android": edmsAndroidEn,
 
   'cloudcli-setup-guide': [
       {
