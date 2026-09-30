@@ -222,9 +222,9 @@ function QuickActions() {
         <Link
           key={to}
           to={to}
-          className="bg-elevated hover:border-strong group flex items-center gap-4 rounded-2xl border border-app p-4 transition-colors"
+          className="border-app bg-elevated shadow-app-md hover:shadow-app-lg group flex items-center gap-4 rounded-card border p-4 transition-[box-shadow,transform] duration-300 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
         >
-          <span className={cn('grid size-11 shrink-0 place-items-center rounded-xl', tone)}>
+          <span className={cn('grid size-11 shrink-0 place-items-center rounded-2xl', tone)}>
             <Icon className="size-5" aria-hidden="true" />
           </span>
           <span className="min-w-0">
@@ -247,9 +247,14 @@ function Articles() {
   return (
     <section aria-labelledby="home-articles">
       <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-3">
-        <h2 id="home-articles" className="text-app text-xl font-semibold">
-          {t('المقالات', 'Articles')}
-        </h2>
+        <div>
+          <h2 id="home-articles" className="text-app text-[17px] font-black">
+            {t('المقالات', 'Articles')}
+          </h2>
+          <p className="text-subtle mt-0.5 text-[12px]">
+            {t('أدق التفاصيل، بلا حشو', 'The detail, without the filler')}
+          </p>
+        </div>
         <span className="bg-line h-5 w-px" aria-hidden="true" />
         <label className="text-muted relative flex items-center text-sm">
           <span className="sr-only">{t('تصفية حسب القسم', 'Filter by category')}</span>
@@ -290,6 +295,186 @@ function Articles() {
   )
 }
 
+/* ------------------------------------------------------------------ *
+ * Hero. A dark gradient panel with a fine grid over it, two blurred
+ * colour blobs, and a column of floating fact cards.
+ *
+ * The fact cards carry real figures only. The reference this is drawn
+ * from filled its equivalents with a bank balance, a boarding pass and
+ * a testimonial; a personal hub has none of those, and inventing them
+ * would be the one thing the rest of the site never does.
+ * ------------------------------------------------------------------ */
+
+function HeroFact({
+  label,
+  value,
+  sub,
+  bars,
+  delay,
+}: {
+  label: string
+  value: React.ReactNode
+  sub?: string
+  /** Relative weights for the mini bar. Lengths, not invented trends. */
+  bars?: number[]
+  delay: number
+}) {
+  const reduce = useReducedMotion()
+  const max = bars?.length ? Math.max(...bars) : 1
+
+  return (
+    <motion.div
+      initial={reduce ? false : { opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }}
+      className={cn(
+        'rounded-3xl border p-4',
+        'border-white/15 bg-white/10 backdrop-blur-xl',
+        !reduce && 'motion-safe:animate-[floaty_6s_ease-in-out_infinite]',
+      )}
+      style={delay ? { animationDelay: `${delay}s` } : undefined}
+    >
+      <p className="text-[11px] font-bold text-white/60">{label}</p>
+      <p className="mt-1 text-2xl font-black text-white">{value}</p>
+      {sub ? <p className="mt-1 text-[11px] leading-relaxed text-white/50">{sub}</p> : null}
+      {bars?.length ? (
+        <div className="mt-3 flex h-9 items-end gap-0.5" aria-hidden="true">
+          {bars.map((b, i) => (
+            <motion.span
+              key={i}
+              initial={reduce ? false : { height: 0 }}
+              animate={{ height: `${Math.max(8, (b / max) * 100)}%` }}
+              transition={{ duration: 0.6, delay: delay + i * 0.04, ease: [0.16, 1, 0.3, 1] }}
+              className="flex-1 rounded-full bg-gradient-to-t from-ghost-400 to-veil-500"
+            />
+          ))}
+        </div>
+      ) : null}
+    </motion.div>
+  )
+}
+
+function Hero() {
+  const { lang, t } = useI18n()
+
+  // Real distribution: how the articles actually split across the five
+  // sections, read off the index rather than typed in.
+  const spread = categories
+    .map((c) => allPosts.filter((p) => p.category === c).length)
+    .sort((a, b) => b - a)
+
+  const longest = allPosts.reduce(
+    (acc, p) => (p.readMinutes > acc ? p.readMinutes : acc),
+    0,
+  )
+
+  return (
+    <section
+      aria-labelledby="hero-title"
+      className="grid-bg relative overflow-hidden rounded-panel p-6 sm:p-9"
+      style={{
+        background: 'linear-gradient(135deg, #0f1023 0%, #1e1b4b 55%, #31247a 100%)',
+      }}
+    >
+      <span
+        aria-hidden="true"
+        className="absolute -top-24 left-1/4 size-96 rounded-full opacity-45 blur-[100px]"
+        style={{ background: '#6d5cff' }}
+      />
+      <span
+        aria-hidden="true"
+        className="absolute -right-16 -bottom-24 size-72 rounded-full opacity-35 blur-[90px]"
+        style={{ background: '#00c9a7' }}
+      />
+
+      <div className="relative grid items-center gap-8 lg:grid-cols-2">
+        <div>
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[12px] font-bold text-white/85">
+            <span className="relative flex size-2">
+              <span className="absolute inline-flex size-full animate-ping rounded-full bg-veil-400 opacity-75 motion-reduce:animate-none" />
+              <span className="relative inline-flex size-2 rounded-full bg-veil-300" />
+            </span>
+            {t(`${site.handle} · الحساب الرسمي`, `${site.handle} · the official account`)}
+          </span>
+
+          <h1
+            id="hero-title"
+            className="mt-5 text-3xl leading-[1.25] font-black text-white lg:text-[2.75rem]"
+          >
+            {t('كل ما أنشره', 'Everything I publish')}{' '}
+            <span
+              className="gradient-text"
+              style={{ WebkitTextFillColor: 'transparent' }}
+            >
+              {t('في مكان واحد', 'in one place')}
+            </span>
+          </h1>
+
+          <p className="mt-3 max-w-md text-[14px] leading-relaxed text-white/65">
+            {t(
+              `${allPosts.length} مقالاً عملياً مشروحاً، و${programs.length} برنامج مجاني جاهز، وحساباتي كلها — بمدونة تُقرأ على الجوال أولاً.`,
+              `${allPosts.length} hands-on articles explained properly, ${programs.length} free programs ready to install, and all my accounts — with a blog built mobile-first.`,
+            )}
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link
+              to="/blog"
+              className="btn btn-primary tiktok-gradient-none bg-accent h-12 rounded-2xl px-6 text-[13px] font-black text-white"
+            >
+              <FileText className="size-4" aria-hidden="true" />
+              {t('ابدأ بالمقالات', 'Start with the articles')}
+            </Link>
+            <Link
+              to="/links"
+              className="flex h-12 items-center rounded-2xl border border-white/20 bg-white/10 px-6 text-[13px] font-black text-white transition-colors hover:bg-white hover:text-ink"
+            >
+              {t('كل الروابط', 'All my links')}
+              <ArrowLeft className="size-4 rtl:ms-2 ltr:ms-0" aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3.5">
+          <HeroFact
+            label={t('متابع على تيك توك', 'TikTok followers')}
+            value={<span dir="ltr">{tiktok.stats.followers}</span>}
+            sub={t(
+              `آخر تحديث ${tiktok.updatedAt}`,
+              `updated ${tiktok.updatedAt}`,
+            )}
+            delay={0.1}
+          />
+          <HeroFact
+            label={t('مقالات منشورة', 'Published articles')}
+            value={allPosts.length}
+            sub={t(
+              `أطولها ${longest} دقائق`,
+              `longest reads ${longest} min`,
+            )}
+            bars={spread}
+            delay={0.2}
+          />
+          <HeroFact
+            label={t('فيديو منشور', 'Videos posted')}
+            value={<span dir="ltr">{tiktok.stats.videos}</span>}
+            sub={t('بالإضافة إلى المقالات المكتوبة', 'on top of the written articles')}
+            delay={0.3}
+          />
+          <HeroFact
+            label={t('توزيع المقالات', 'How articles split')}
+            value={categories.length}
+            sub={categories
+              .map((c) => `${categoryLabel(c, lang)} ${allPosts.filter((p) => p.category === c).length}`)
+              .join(' · ')}
+            delay={0.4}
+          />
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export default function Home() {
   const { t } = useI18n()
 
@@ -297,27 +482,9 @@ export default function Home() {
     document.title = t(site.title, site.titleEn)
   }, [t])
 
-  const accentLink = 'text-accent font-semibold underline decoration-2 underline-offset-4'
-
   return (
     <div className="container-app flex flex-col gap-10 py-8 sm:py-10">
-      <Reveal>
-        <h1 className="font-display text-app text-3xl leading-tight font-bold sm:text-4xl">
-          {t('أهلاً بك في', 'Welcome to')} <span dir="ltr">{site.name}</span> 👋
-        </h1>
-        <p className="text-muted mt-2.5 text-[15px] leading-relaxed">
-          {t(
-            <>
-              كل ما أنشره في مكان واحد: <Link to="/blog" className={accentLink}>{allPosts.length} مقالاً</Link> عملياً و
-              <Link to="/programs" className={accentLink}>{programs.length} برنامج</Link> مجاني، وروابط حساباتي.
-            </>,
-            <>
-              Everything I publish, in one place: <Link to="/blog" className={accentLink}>{allPosts.length} hands-on articles</Link>,{' '}
-              <Link to="/programs" className={accentLink}>{programs.length} free program</Link>, and all my links.
-            </>,
-          )}
-        </p>
-      </Reveal>
+      <Hero />
 
       <Reveal delay={0.06}>
         <Spotlight />
@@ -332,10 +499,15 @@ export default function Home() {
       {programs.length ? (
         <section aria-labelledby="home-programs">
           <div className="mb-6 flex items-center gap-4">
-            <h2 id="home-programs" className="text-app text-xl font-semibold">
-              {t('البرامج', 'Programs')}
-            </h2>
-            <Link to="/programs" className="text-accent group ms-auto flex items-center gap-1 text-sm font-medium">
+            <div>
+              <h2 id="home-programs" className="text-app text-[17px] font-black">
+                {t('البرامج', 'Programs')}
+              </h2>
+              <p className="text-subtle mt-0.5 text-[12px]">
+                {t('كل برنامج موثّق بمقال مستقل', 'Every program documented in its own article')}
+              </p>
+            </div>
+            <Link to="/programs" className="text-accent group ms-auto flex items-center gap-1.5 text-[13px] font-bold">
               {t('كل البرامج', 'All programs')}
               <ArrowLeft className="size-3.5 transition-transform rtl:group-hover:-translate-x-0.5 ltr:group-hover:translate-x-0.5" aria-hidden="true" />
             </Link>

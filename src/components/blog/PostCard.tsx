@@ -25,12 +25,12 @@ export function PostCard({ post, index = 0 }: { post: PostMeta; index?: number }
       <SpotlightCard className="h-full shadow-app-md hover:shadow-app-lg">
       <Link
         to={`/blog/${post.slug}`}
-        className="border-app bg-elevated group flex h-full flex-col rounded-2xl border p-4"
+        className="border-app bg-elevated group flex h-full flex-col rounded-card border p-4"
       >
         <div className="flex items-center gap-2.5">
           <span
             className={cn(
-              'grid size-8 shrink-0 place-items-center rounded-lg bg-gradient-to-br text-white shadow-sm transition-transform duration-300 group-hover:scale-110 motion-reduce:group-hover:scale-100',
+              'grid size-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br text-white shadow-sm transition-transform duration-300 group-hover:scale-110 motion-reduce:group-hover:scale-100',
               post.coverFrom,
               post.coverTo,
             )}
