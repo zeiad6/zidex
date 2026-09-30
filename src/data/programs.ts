@@ -4,6 +4,46 @@
  * ------------------------------------------------------------------ */
 import type { GlyphName } from '@/components/ui/Glyphs'
 
+/**
+ * One mirror of the same build. A program can have several: a media host
+ * goes down, or a file is large enough that people want a second source.
+ * The first entry is the primary — the one the card leads with.
+ */
+export type ProgramDownload = {
+  href: string
+  /** Host shown next to the file name, e.g. "MediaFire". */
+  host: string
+  file: string
+  size: string
+  /** Shown on the button when a mirror needs explaining, e.g. a CDN. */
+  note?: string
+}
+
+/**
+ * Program groups. The keys are the whole API: adding a third platform is
+ * one entry here plus a `kind` on the programs that belong to it, and the
+ * /programs page grows a section on its own.
+ */
+export const programKinds = {
+  windows: {
+    label: 'تطبيقات ويندوز',
+    labelEn: 'Windows apps',
+    /** One line under the section title, so the split explains itself. */
+    hint: 'برامج سطح مكتب لنظام ويندوز',
+    hintEn: 'Desktop programs for Windows',
+    glyph: 'grid',
+  },
+  android: {
+    label: 'تطبيقات أندرويد',
+    labelEn: 'Android apps',
+    hint: 'تطبيقات جوّال تعمل على جهازك مباشرة',
+    hintEn: 'Mobile apps that run on your own device',
+    glyph: 'package',
+  },
+} as const
+
+export type ProgramKind = keyof typeof programKinds
+
 export type Program = {
   slug: string
   name: string
@@ -11,15 +51,14 @@ export type Program = {
   tagline: string
   taglineEn: string
   version: string
+  /** Human platform string for the facts row, e.g. "Android 8.0+". */
   platform: string
-  size: string
-  file: string
-  /** Where the download button points. */
-  href: string
-  /** Host shown next to the file name, e.g. "MediaFire". */
-  host: string
+  kind: ProgramKind
+  downloads: ProgramDownload[]
   /** Slug of the blog post that documents it, if any. */
   post?: string
+  /** External documentation, for programs documented outside this blog. */
+  docs?: string
   /** Key into the Glyphs registry — a drawn mark, not an emoji. */
   glyph: GlyphName
   date: string
@@ -34,16 +73,56 @@ export const programs: Program[] = [
     taglineEn: 'Electronic document management: full-text search, immutable versions, workflows, and digital signatures.',
     version: '1.0.0',
     platform: 'Windows x64',
-    size: '227.78 MB',
-    file: 'EDMS-Archive-1.0.0-Setup-x64.exe',
-    href: 'https://www.mediafire.com/file/v2w2hffyxwobykq/EDMS-Archive-1.0.0-Setup-x64.exe/file',
-    host: 'MediaFire',
+    kind: 'windows',
+    downloads: [
+      {
+        href: 'https://www.mediafire.com/file/v2w2hffyxwobykq/EDMS-Archive-1.0.0-Setup-x64.exe/file',
+        host: 'MediaFire',
+        file: 'EDMS-Archive-1.0.0-Setup-x64.exe',
+        size: '227.78 MB',
+      },
+    ],
     post: 'edms-archive-pro',
     glyph: 'archive',
     date: '2026-09-27',
+  },
+  {
+    slug: 'edms-archive-android',
+    name: 'أرشيف برو EDMS — أندرويد',
+    nameEn: 'Archive Pro EDMS — Android',
+    tagline:
+      'عميل أندرويد أصلي لنظام الأرشفة نفسه: يعمل كاملاً على الجهاز بقاعدة بيانات وملفات محلية، أو يتصل بالنسخة المكتبية عبر بوابة HTTPS بشهادة مثبّتة. نقل القاعدة وكلمات المرور والملفات في الاتجاهين بلا تحويل.',
+    taglineEn:
+      'The native Android client for the same system: run it fully on-device with a local database and file store, or pair with the desktop build over a certificate-pinned HTTPS gateway. Database, passwords and files move both ways with no conversion.',
+    version: '1.0.1',
+    platform: 'Android 8.0+',
+    kind: 'android',
+    downloads: [
+      {
+        href: 'https://www.mediafire.com/file/inn8lf6tznv95nx/app-debug.apk/file',
+        host: 'MediaFire',
+        file: 'app-debug.apk',
+        size: 'APK',
+      },
+      {
+        href: 'https://drive.google.com/uc?export=download&id=1FxWSMfMpix-uE33fNSd3layuidLGIbQu',
+        host: 'Google Drive',
+        file: 'app-debug.apk',
+        size: 'APK',
+        note: 'نسخة احتياطية',
+      },
+    ],
+    docs: 'https://github.com/zeiad6/Edms-archive-Android',
+    glyph: 'package',
+    date: '2026-09-30',
   },
 ]
 
 export function getProgram(slug: string) {
   return programs.find((p) => p.slug === slug)
+}
+
+/** The mirror a card leads with. Every program is guaranteed one. */
+export function primaryDownload(p: Program): ProgramDownload {
+  return p.downloads[0]
 }

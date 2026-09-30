@@ -7,15 +7,16 @@
  * visitor only downloads the text of the article they actually open.
  */
 import type { Block } from './posts'
-import { getProgram } from './programs'
+import { getProgram, primaryDownload } from './programs'
 
 /** Injected ahead of the EDMS body so the button always matches programs.ts. */
 const edms = getProgram('edms-archive-pro')!
+const edmsFile = primaryDownload(edms)
 const edmsDownload: Block = {
   type: 'download',
-  href: edms.href,
+  href: edmsFile.href,
   label: `أرشيف برو ${edms.version} — ${edms.platform}`,
-  meta: `${edms.file} · ${edms.size} · ${edms.host}`,
+  meta: `${edmsFile.file} · ${edmsFile.size} · ${edmsFile.host}`,
 }
 
 
@@ -797,7 +798,7 @@ claude --messaging-socket-path ~/.claude-socks/claude.sock`,
       },
       {
         type: 'p',
-        text:       `**رابط التحميل:** ${edms.href}`,
+        text:       `**رابط التحميل:** ${edmsFile.href}`,
       },
       {
         type: 'table',
@@ -1068,7 +1069,7 @@ sqlite3 backup.db "PRAGMA integrity_check;"`,
       },
       {
         type: 'p',
-        text:       `**رابط التحميل:** ${edms.href}`,
+        text:       `**رابط التحميل:** ${edmsFile.href}`,
       },
       {
         type: 'p',

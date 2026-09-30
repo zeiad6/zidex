@@ -4,14 +4,15 @@
  * entry bundle charged the first paint for content nobody had scrolled to.
  */
 import type { Block } from './posts'
-import { getProgram } from './programs'
+import { getProgram, primaryDownload } from './programs'
 
 const edms = getProgram('edms-archive-pro')!
+const edmsFile = primaryDownload(edms)
 const edmsDownload: Block = {
   type: 'download',
-  href: edms.href,
+  href: edmsFile.href,
   label: `Archive Pro ${edms.version} — ${edms.platform}`,
-  meta: `${edms.file} · ${edms.size} · ${edms.host}`,
+  meta: `${edmsFile.file} · ${edmsFile.size} · ${edmsFile.host}`,
 }
 
 const aiFakeEn: Block[] = [

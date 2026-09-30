@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowLeft, Check, Download, FileText, Link2, Package, type LucideIcon } from 'lucide-react'
 import { allPosts, categories, categoryLabel, postsFor, type Category } from '@/data/posts'
-import { programs } from '@/data/programs'
+import { primaryDownload as primaryOf, programs } from '@/data/programs'
 import { site, tiktok } from '@/lib/site'
 import { useI18n } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
@@ -86,8 +86,8 @@ function Spotlight() {
             title: t(program.name, program.nameEn),
             body: t(program.tagline, program.taglineEn),
             glyph: program.glyph,
-            cta: t(`تحميل · ${program.size}`, `Download · ${program.size}`),
-            href: program.href,
+            cta: t(`تحميل · ${primaryOf(program).size}`, `Download · ${primaryOf(program).size}`),
+            href: primaryOf(program).href,
             external: true,
           },
         ]
