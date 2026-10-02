@@ -1,5 +1,6 @@
-import { Suspense, lazy, useEffect } from 'react'
+import { Suspense, lazy, useEffect, type ReactNode } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
+import { motion, useReducedMotion } from 'framer-motion'
 import { AppShell } from '@/components/layout/AppShell'
 import { Footer } from '@/components/layout/Footer'
 import { ErrorBoundary } from '@/components/layout/ErrorBoundary'
@@ -45,6 +46,23 @@ function ScrollManager() {
   return null
 }
 
+/** Fades + lifts each page in on route change; a no-op under reduced motion. */
+function PageTransition({ children }: { children: ReactNode }) {
+  const { pathname } = useLocation()
+  const reduce = useReducedMotion()
+  if (reduce) return <>{children}</>
+  return (
+    <motion.div
+      key={pathname}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
 /** Matches the page background so a route change never flashes white. */
 function RouteFallback() {
   const { t } = useI18n()
@@ -72,15 +90,17 @@ export default function App() {
       <AppShell>
         <ErrorBoundary>
           <Suspense fallback={<RouteFallback />}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/links" element={<Links />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/programs" element={<Programs />} />
-              <Route path="/about" element={<About />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <PageTransition>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/links" element={<Links />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/programs" element={<Programs />} />
+                <Route path="/about" element={<About />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </PageTransition>
           </Suspense>
         </ErrorBoundary>
         <Footer />

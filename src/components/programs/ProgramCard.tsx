@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
+import { motion, useReducedMotion } from 'framer-motion'
 import { Glyph } from '@/components/ui/Glyphs'
+import { SpotlightCard } from '@/components/ui/Interactive'
 import { primaryDownload, type Program } from '@/data/programs'
 import { useDownloadCount } from '@/lib/downloads'
 import { useI18n } from '@/lib/i18n'
@@ -15,9 +17,11 @@ export function ProgramCard({ program }: { program: Program }) {
   const { t, lang } = useI18n()
   const primary = primaryDownload(program)
   const { count, bump } = useDownloadCount(program.slug)
+  const reduce = useReducedMotion()
 
   return (
-    <article className="group border-app bg-elevated shadow-app-md hover:shadow-app-lg flex flex-col gap-3 rounded-2xl border p-4 transition-[box-shadow,transform] duration-300 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 sm:flex-row sm:items-center">
+    <SpotlightCard className="rounded-2xl shadow-app-md hover:shadow-app-lg">
+    <article className="group border-app bg-elevated flex flex-col gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center">
       <span className="relative shrink-0">
         <span
           className="bg-sunken group-hover:bg-accent-soft grid size-11 place-items-center rounded-xl transition-colors duration-300"
@@ -51,7 +55,18 @@ export function ProgramCard({ program }: { program: Program }) {
           {count !== null && (
             <span className="flex items-center gap-1">
               <Download className="size-3" aria-hidden="true" />
-              {count.toLocaleString(lang === 'en' ? 'en' : 'ar')}
+              {reduce ? (
+                count.toLocaleString(lang === 'en' ? 'en' : 'ar')
+              ) : (
+                <motion.span
+                  key={count}
+                  initial={{ scale: 1.35, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {count.toLocaleString(lang === 'en' ? 'en' : 'ar')}
+                </motion.span>
+              )}
             </span>
           )}
         </p>
@@ -83,5 +98,6 @@ export function ProgramCard({ program }: { program: Program }) {
         ) : null}
       </div>
     </article>
+    </SpotlightCard>
   )
 }

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Glyph } from '@/components/ui/Glyphs'
 import { ArrowLeft, ArrowUpLeft, HardDrive, Download, Package, Cloud, Flame, Smartphone, Monitor } from 'lucide-react'
-import { useReducedMotion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import {
   primaryDownload,
   programKinds,
@@ -192,7 +192,19 @@ function ProgramTile({
             {count !== null && (
               <span className="text-subtle flex items-center gap-1">
                 <Download className="size-3" aria-hidden="true" />
-                {count.toLocaleString(lang === 'en' ? 'en' : 'ar')} {t('تحميل', 'downloads')}
+                {reduce ? (
+                  count.toLocaleString(lang === 'en' ? 'en' : 'ar')
+                ) : (
+                  <motion.span
+                    key={count}
+                    initial={{ scale: 1.35, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    {count.toLocaleString(lang === 'en' ? 'en' : 'ar')}
+                  </motion.span>
+                )}{' '}
+                {t('تحميل', 'downloads')}
               </span>
             )}
             <time dateTime={program.date} className="text-subtle ms-auto text-[10px]">
