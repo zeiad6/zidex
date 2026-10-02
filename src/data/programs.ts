@@ -117,6 +117,36 @@ export const programs: Program[] = [
     glyph: 'package',
     date: '2026-09-30',
   },
+  {
+    slug: 'verityscope',
+    name: 'VerityScope — كاشف التزييف العميق',
+    nameEn: 'VerityScope — AI Deepfake Detector',
+    tagline:
+      'تطبيق أندرويد يكشف التزييف العميق في الصور والفيديو والنصوص والصوت بـ 5 نماذج ذكاء اصطناعي محلية + خوارزميات طب شرعي رقمي (ELA, FFT, noise) — كل شيء على الجهاز، بياناتك لا تغادر.',
+    taglineEn:
+      'Android app that detects deepfakes in images, video, text and audio using 5 on-device AI models + digital forensic algorithms (ELA, FFT, noise) — everything runs locally, your data never leaves.',
+    version: '0.4.0',
+    platform: 'Android 8.0+',
+    kind: 'android',
+    downloads: [
+      {
+        href: 'https://www.mediafire.com/file/0taluz31zdblh8y/VerityScope-v0.4.0-release.apk/file',
+        host: 'MediaFire',
+        file: 'VerityScope-v0.4.0-release.apk',
+        size: '81 MB',
+      },
+      {
+        href: 'https://drive.google.com/file/d/1skhcwx208qWlxhQinNK7lU_XZuCjSC5_/view?usp=drivesdk',
+        host: 'Google Drive',
+        file: 'VerityScope-v0.4.0-release.apk',
+        size: '81 MB',
+        note: 'نسخة احتياطية',
+      },
+    ],
+    post: 'ai-fake-detector-android',
+    glyph: 'shield',
+    date: '2026-10-02',
+  },
 ]
 
 export function getProgram(slug: string) {

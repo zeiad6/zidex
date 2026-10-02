@@ -51,10 +51,10 @@ export const postsEn: Record<string, PostText> = {
     headings: [{"id":"two-modes","text":"Two ways to run it","level":2},{"id":"compatibility","text":"Compatibility with the desktop","level":2},{"id":"trust","text":"Trust model","level":2},{"id":"tests","text":"Test results","level":2},{"id":"limits","text":"What you should know","level":2}],
   },
   'ai-fake-detector-android': {
-    title: 'AI Fake — an on-device AI-generated content detector for Android',
+    title: 'VerityScope v0.4.0 — AI Deepfake Detector for Android',
     excerpt:
-      'An Android app that checks images, videos and video links entirely on the phone through ONNX models, catching deepfakes with multi-model fusion — no file ever leaves the device.',
-    tags: ['Android', 'Kotlin', 'ONNX', 'Deepfake', 'AI'],
+      'An Android app that detects deepfakes in images, video, text and audio using 5 on-device AI models + digital forensic algorithms (ELA, FFT, noise, spectral) — v0.4.0 adds image forensics engine, 8 audio signals, and 13 text signals.',
+    tags: ['Android', 'Kotlin', 'ONNX', 'Deepfake', 'AI', 'Forensics'],
     headings: [{"id":"how-it-works","text":"How it works","level":2},{"id":"models","text":"Available models","level":2},{"id":"metadata","text":"Source-metadata forensics","level":2},{"id":"screens","text":"The interface","level":2},{"id":"limits","text":"Limits you should know","level":2}],
   },
   'docker-on-android-termux': {

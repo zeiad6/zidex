@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Glyph } from '@/components/ui/Glyphs'
-import { ArrowLeft, ArrowUpLeft, FileCode2, HardDrive, Download, Package } from 'lucide-react'
+import { ArrowLeft, ArrowUpLeft, HardDrive, Download, Package, Cloud, Flame } from 'lucide-react'
 import { useReducedMotion } from 'framer-motion'
 import {
   primaryDownload,
@@ -10,7 +10,7 @@ import {
   type ProgramKind,
 } from '@/data/programs'
 import { useI18n } from '@/lib/i18n'
-import { cn, formatDate } from '@/lib/utils'
+import { formatDate } from '@/lib/utils'
 import { AuroraBackdrop } from '@/components/ui/AuroraBackdrop'
 import { Reveal } from '@/components/ui/Reveal'
 import { Magnetic } from '@/components/ui/Interactive'
@@ -120,6 +120,12 @@ export default function Programs() {
   )
 }
 
+function hostIcon(host: string) {
+  if (host.toLowerCase().includes('mediafire')) return Flame
+  if (host.toLowerCase().includes('drive')) return Cloud
+  return Package
+}
+
 function ProgramTile({
   program,
   index,
@@ -135,71 +141,60 @@ function ProgramTile({
   return (
     <Reveal delay={Math.min(index * 0.06, 0.24)} className="h-full">
       <TiltCard max={4} className="group h-full">
-        <div className="border-app bg-elevated shadow-app-md hover:shadow-app-lg relative flex h-full min-w-0 flex-col rounded-panel border p-5 transition-[box-shadow] duration-300 hover:border-strong sm:p-6">
-          <div className="relative flex items-start gap-4">
+        <div className="border-app bg-elevated shadow-app-md hover:shadow-app-lg relative flex h-full min-w-0 flex-col rounded-panel border p-4 transition-[box-shadow] duration-300 hover:border-strong sm:p-5">
+          <div className="relative flex items-start gap-3">
             <span
-              className="bg-accent-soft text-accent grid size-14 shrink-0 place-items-center rounded-2xl transition-transform duration-300 group-hover:scale-105"
+              className="bg-accent-soft text-accent grid size-11 shrink-0 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-105"
               aria-hidden="true"
             >
-              <Glyph name={program.glyph} size={30} />
+              <Glyph name={program.glyph} size={22} />
             </span>
 
             <div className="min-w-0 flex-1">
-              <h3 className="text-app text-lg leading-snug font-bold">
-                {t(program.name, program.nameEn)}
-              </h3>
-              <p className="text-muted mt-1.5 text-sm leading-relaxed">
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="text-app text-base leading-snug font-bold">
+                  {t(program.name, program.nameEn)}
+                </h3>
+                <span className="rounded-md bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300" dir="ltr">
+                  v{program.version}
+                </span>
+              </div>
+              <p className="text-muted mt-1 line-clamp-2 text-[13px] leading-relaxed">
                 {t(program.tagline, program.taglineEn)}
               </p>
             </div>
           </div>
 
-          {/* Facts */}
-          <dl className="border-app mt-5 grid grid-cols-2 gap-2 border-t pt-4 text-[11px] sm:grid-cols-4">
-            {[
-              { k: t('الإصدار', 'Version'), v: program.version, icon: FileCode2 },
-              { k: t('المنصة', 'Platform'), v: program.platform, icon: HardDrive },
-              { k: t('الحجم', 'Size'), v: primary.size, icon: Download },
-              { k: t('المضيف', 'Host'), v: primary.host, icon: Package },
-            ].map(({ k, v, icon: Icon }) => (
-              <div key={k} className="bg-sunken rounded-xl border border-app px-2.5 py-2">
-                <dt className="text-subtle flex items-center gap-1">
-                  <Icon className="size-3" aria-hidden="true" />
-                  {k}
-                </dt>
-                <dd className="text-app mt-0.5 font-semibold tabular-nums" dir="ltr">
-                  {v}
-                </dd>
-              </div>
-            ))}
-          </dl>
+          {/* Compact facts row */}
+          <div className="border-app mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 border-t pt-3 font-mono text-[11px]">
+            <span className="text-subtle flex items-center gap-1">
+              <HardDrive className="size-3" aria-hidden="true" />
+              {program.platform}
+            </span>
+            <span className="text-subtle flex items-center gap-1">
+              <Download className="size-3" aria-hidden="true" />
+              {primary.size}
+            </span>
+            <time dateTime={program.date} className="text-subtle ms-auto text-[10px]">
+              {formatDate(program.date, lang === 'en' ? 'en' : 'ar')}
+            </time>
+          </div>
 
-          {/* Every mirror, named. One button that silently picks a host
-              leaves no way to try the other when the first is down. */}
-          <ul className="mt-3 flex flex-col gap-1">
-            {program.downloads.map((d) => (
-              <li key={d.href} className="text-subtle truncate font-mono text-[10px]" dir="ltr">
-                {d.file} · {d.host}
-                {d.note ? <span className="ms-2 font-sans">{d.note}</span> : null}
-              </li>
-            ))}
-          </ul>
-
-          <div className="relative mt-5 flex flex-wrap items-center gap-2.5 border-t border-app pt-4">
+          {/* Download buttons with host icons */}
+          <div className="relative mt-3 flex flex-wrap items-center gap-2 border-t border-app pt-3">
             {program.downloads.map((d) => {
+              const HostIcon = hostIcon(d.host)
               const btn = (
                 <a
                   href={d.href}
                   target="_blank"
                   rel="noopener noreferrer nofollow"
                   title={`${d.file} · ${d.size}`}
-                  className="btn btn-primary h-10 cursor-pointer px-5"
+                  className="btn btn-primary h-9 cursor-pointer gap-1.5 px-3.5 text-[13px]"
                 >
-                  <Download className="size-4" aria-hidden="true" />
-                  {t('تحميل', 'Download')}
-                  <span className="opacity-70" dir="ltr">
-                    · {d.host}
-                  </span>
+                  <HostIcon className="size-3.5" aria-hidden="true" />
+                  {d.host}
+                  {d.note ? <span className="text-[10px] opacity-60">({d.note})</span> : null}
                 </a>
               )
               return (
@@ -212,26 +207,22 @@ function ProgramTile({
             {program.post ? (
               <Link
                 to={`/blog/${program.post}`}
-                className="btn btn-ghost h-10 cursor-pointer px-4 text-sm"
+                className="btn btn-ghost h-9 cursor-pointer px-3 text-[13px]"
               >
-                {t('اقرأ التوثيق', 'Read the docs')}
-                <ArrowLeft className="size-3.5" aria-hidden="true" />
+                {t('التفاصيل', 'Details')}
+                <ArrowLeft className="size-3" aria-hidden="true" />
               </Link>
             ) : program.docs ? (
               <a
                 href={program.docs}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
-                className="btn btn-ghost h-10 cursor-pointer px-4 text-sm"
+                className="btn btn-ghost h-9 cursor-pointer px-3 text-[13px]"
               >
-                {t('التوثيق الكامل', 'Full documentation')}
-                <ArrowUpLeft className="size-3.5" aria-hidden="true" />
+                {t('التوثيق', 'Docs')}
+                <ArrowUpLeft className="size-3" aria-hidden="true" />
               </a>
             ) : null}
-
-            <time dateTime={program.date} className={cn('text-subtle mr-auto text-[11px]')}>
-              {formatDate(program.date, lang === 'en' ? 'en' : 'ar')}
-            </time>
           </div>
         </div>
       </TiltCard>
