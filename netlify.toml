@@ -12,6 +12,11 @@
   NODE_ENV = "production"
   NPM_FLAGS = "--include=dev"
 
+# Download counter for /programs (netlify/functions/downloads.ts), backed by
+# Netlify Blobs — no external account or env var needed on Netlify hosting.
+[functions]
+  directory = "netlify/functions"
+
 # ---------------------------------------------------------------------------
 # Security headers
 #

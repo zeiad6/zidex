@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom'
 import { Glyph, type GlyphName } from '@/components/ui/Glyphs'
 import { categoryLabel, type PostMeta } from '@/data/posts'
+import { programForPost } from '@/data/programs'
 import { categoryStyle } from './categoryStyle'
 import { useI18n } from '@/lib/i18n'
 import { cn, formatDate } from '@/lib/utils'
 import { Reveal } from '@/components/ui/Reveal'
 import { SpotlightCard } from '@/components/ui/Interactive'
+import { Smartphone, Monitor } from 'lucide-react'
 
 /**
  * Article card: glyph, category, title, excerpt, then the date line.
@@ -19,6 +21,7 @@ export function PostCard({ post, index = 0 }: { post: PostMeta; index?: number }
   const { lang, t } = useI18n()
   const style = categoryStyle[post.category]
   const icon = style.icon
+  const prog = programForPost(post.slug)
 
   return (
     <Reveal as="article" delay={Math.min(index * 0.05, 0.25)} className="h-full">
@@ -28,14 +31,26 @@ export function PostCard({ post, index = 0 }: { post: PostMeta; index?: number }
         className="border-app bg-elevated group flex h-full flex-col rounded-card border p-4"
       >
         <div className="flex items-center gap-2.5">
-          <span
-            className={cn(
-              'grid size-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br text-white shadow-sm transition-transform duration-300 group-hover:scale-110 motion-reduce:group-hover:scale-100',
-              post.coverFrom,
-              post.coverTo,
+          <span className="relative shrink-0">
+            <span
+              className={cn(
+                'grid size-9 place-items-center rounded-xl bg-gradient-to-br text-white shadow-sm transition-transform duration-300 group-hover:scale-110 motion-reduce:group-hover:scale-100',
+                post.coverFrom,
+                post.coverTo,
+              )}
+            >
+              <Glyph name={post.cover as GlyphName} size={16} />
+            </span>
+            {prog?.kind === 'android' && (
+              <span className="absolute -end-1 -bottom-1 grid size-4 place-items-center rounded-full bg-emerald-500 text-white shadow-sm">
+                <Smartphone className="size-2.5" />
+              </span>
             )}
-          >
-            <Glyph name={post.cover as GlyphName} size={16} />
+            {prog?.kind === 'windows' && (
+              <span className="absolute -end-1 -bottom-1 grid size-4 place-items-center rounded-full bg-blue-500 text-white shadow-sm">
+                <Monitor className="size-2.5" />
+              </span>
+            )}
           </span>
           <span className={cn('flex items-center gap-1 text-[11px] font-medium', style.text)}>
             <Glyph name={icon} size={12} aria-hidden="true" />

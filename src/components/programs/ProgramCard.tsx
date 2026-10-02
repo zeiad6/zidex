@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
 import { Glyph } from '@/components/ui/Glyphs'
 import { primaryDownload, type Program } from '@/data/programs'
+import { useDownloadCount } from '@/lib/downloads'
 import { useI18n } from '@/lib/i18n'
-import { Cloud, Flame, Package } from 'lucide-react'
+import { Cloud, Download, Flame, Package, Smartphone, Monitor } from 'lucide-react'
 
 function hostIcon(host: string) {
   if (host.toLowerCase().includes('mediafire')) return Flame
@@ -11,16 +12,29 @@ function hostIcon(host: string) {
 }
 
 export function ProgramCard({ program }: { program: Program }) {
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const primary = primaryDownload(program)
+  const { count, bump } = useDownloadCount(program.slug)
 
   return (
     <article className="group border-app bg-elevated shadow-app-md hover:shadow-app-lg flex flex-col gap-3 rounded-2xl border p-4 transition-[box-shadow,transform] duration-300 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 sm:flex-row sm:items-center">
-      <span
-        className="bg-sunken group-hover:bg-accent-soft grid size-11 shrink-0 place-items-center rounded-xl transition-colors duration-300"
-        aria-hidden="true"
-      >
-        <Glyph name={program.glyph} size={20} className="text-accent" />
+      <span className="relative shrink-0">
+        <span
+          className="bg-sunken group-hover:bg-accent-soft grid size-11 place-items-center rounded-xl transition-colors duration-300"
+          aria-hidden="true"
+        >
+          <Glyph name={program.glyph} size={20} className="text-accent" />
+        </span>
+        {program.kind === 'android' && (
+          <span className="absolute -end-1.5 -bottom-1.5 grid size-5 place-items-center rounded-full bg-emerald-500 text-white shadow-sm">
+            <Smartphone className="size-3" />
+          </span>
+        )}
+        {program.kind === 'windows' && (
+          <span className="absolute -end-1.5 -bottom-1.5 grid size-5 place-items-center rounded-full bg-blue-500 text-white shadow-sm">
+            <Monitor className="size-3" />
+          </span>
+        )}
       </span>
 
       <div className="min-w-0 flex-1">
@@ -34,6 +48,12 @@ export function ProgramCard({ program }: { program: Program }) {
         <p className="text-subtle mt-1.5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-[11px]" dir="ltr">
           <span>{program.platform}</span>
           <span>{primary.size}</span>
+          {count !== null && (
+            <span className="flex items-center gap-1">
+              <Download className="size-3" aria-hidden="true" />
+              {count.toLocaleString(lang === 'en' ? 'en' : 'ar')}
+            </span>
+          )}
         </p>
       </div>
 
@@ -47,6 +67,7 @@ export function ProgramCard({ program }: { program: Program }) {
               target="_blank"
               rel="noopener noreferrer nofollow"
               title={d.note ? d.note : `${d.file} · ${d.size}`}
+              onClick={bump}
               className="btn btn-primary h-9 cursor-pointer gap-1.5 px-3.5 text-[13px]"
             >
               <HostIcon className="size-3.5" aria-hidden="true" />

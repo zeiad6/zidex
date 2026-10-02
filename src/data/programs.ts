@@ -153,6 +153,10 @@ export function getProgram(slug: string) {
   return programs.find((p) => p.slug === slug)
 }
 
+export function programForPost(postSlug: string) {
+  return programs.find((p) => p.post === postSlug)
+}
+
 /** The mirror a card leads with. Every program is guaranteed one. */
 export function primaryDownload(p: Program): ProgramDownload {
   return p.downloads[0]

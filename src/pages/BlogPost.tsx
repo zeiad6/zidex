@@ -169,28 +169,30 @@ export default function BlogPost() {
           </div>
         </header>
 
-        {/* Cover */}
-        <div className="container-app mt-8">
-          <Reveal y={24}>
-            <div
-              className={cn(
-                'relative flex h-52 items-center justify-center overflow-hidden rounded-4xl sm:h-64',
-                'bg-gradient-to-br',
-                post.coverFrom,
-                post.coverTo,
-              )}
-            >
-              <span className="dot-grid absolute inset-0 opacity-25" aria-hidden="true" />
-              <span
-                aria-hidden="true"
-                className="absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_80%_20%,rgb(0_0_0/0.3),transparent_60%)]"
-              />
-              <span className="animate-float-slow text-7xl drop-shadow-2xl sm:text-8xl" aria-hidden="true">
-                <Glyph name={post.cover as GlyphName} size={72} className="text-white drop-shadow-2xl" />
-              </span>
-            </div>
-          </Reveal>
-        </div>
+        {/* Cover — hidden when the body already opens with an image */}
+        {!(body && body.length > 0 && body[0].type === 'image') && (
+          <div className="container-app mt-8">
+            <Reveal y={24}>
+              <div
+                className={cn(
+                  'relative flex h-52 items-center justify-center overflow-hidden rounded-4xl sm:h-64',
+                  'bg-gradient-to-br',
+                  post.coverFrom,
+                  post.coverTo,
+                )}
+              >
+                <span className="dot-grid absolute inset-0 opacity-25" aria-hidden="true" />
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_80%_20%,rgb(0_0_0/0.3),transparent_60%)]"
+                />
+                <span className="animate-float-slow text-7xl drop-shadow-2xl sm:text-8xl" aria-hidden="true">
+                  <Glyph name={post.cover as GlyphName} size={72} className="text-white drop-shadow-2xl" />
+                </span>
+              </div>
+            </Reveal>
+          </div>
+        )}
 
         {/* Body */}
         <div className="container-app mt-10">

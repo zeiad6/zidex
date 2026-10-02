@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Glyph } from '@/components/ui/Glyphs'
-import { ArrowLeft, ArrowUpLeft, HardDrive, Download, Package, Cloud, Flame } from 'lucide-react'
+import { ArrowLeft, ArrowUpLeft, HardDrive, Download, Package, Cloud, Flame, Smartphone, Monitor } from 'lucide-react'
 import { useReducedMotion } from 'framer-motion'
 import {
   primaryDownload,
@@ -9,6 +9,7 @@ import {
   type Program,
   type ProgramKind,
 } from '@/data/programs'
+import { useDownloadCount } from '@/lib/downloads'
 import { useI18n } from '@/lib/i18n'
 import { formatDate } from '@/lib/utils'
 import { AuroraBackdrop } from '@/components/ui/AuroraBackdrop'
@@ -137,17 +138,30 @@ function ProgramTile({
 }) {
   const { lang, t } = useI18n()
   const primary = primaryDownload(program)
+  const { count, bump } = useDownloadCount(program.slug)
 
   return (
     <Reveal delay={Math.min(index * 0.06, 0.24)} className="h-full">
       <TiltCard max={4} className="group h-full">
         <div className="border-app bg-elevated shadow-app-md hover:shadow-app-lg relative flex h-full min-w-0 flex-col rounded-panel border p-4 transition-[box-shadow] duration-300 hover:border-strong sm:p-5">
           <div className="relative flex items-start gap-3">
-            <span
-              className="bg-accent-soft text-accent grid size-11 shrink-0 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-105"
-              aria-hidden="true"
-            >
-              <Glyph name={program.glyph} size={22} />
+            <span className="relative shrink-0">
+              <span
+                className="bg-accent-soft text-accent grid size-11 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-105"
+                aria-hidden="true"
+              >
+                <Glyph name={program.glyph} size={22} />
+              </span>
+              {program.kind === 'android' && (
+                <span className="absolute -end-1.5 -bottom-1.5 grid size-5 place-items-center rounded-full bg-emerald-500 text-white shadow-sm">
+                  <Smartphone className="size-3" />
+                </span>
+              )}
+              {program.kind === 'windows' && (
+                <span className="absolute -end-1.5 -bottom-1.5 grid size-5 place-items-center rounded-full bg-blue-500 text-white shadow-sm">
+                  <Monitor className="size-3" />
+                </span>
+              )}
             </span>
 
             <div className="min-w-0 flex-1">
@@ -175,6 +189,12 @@ function ProgramTile({
               <Download className="size-3" aria-hidden="true" />
               {primary.size}
             </span>
+            {count !== null && (
+              <span className="text-subtle flex items-center gap-1">
+                <Download className="size-3" aria-hidden="true" />
+                {count.toLocaleString(lang === 'en' ? 'en' : 'ar')} {t('تحميل', 'downloads')}
+              </span>
+            )}
             <time dateTime={program.date} className="text-subtle ms-auto text-[10px]">
               {formatDate(program.date, lang === 'en' ? 'en' : 'ar')}
             </time>
@@ -190,6 +210,7 @@ function ProgramTile({
                   target="_blank"
                   rel="noopener noreferrer nofollow"
                   title={`${d.file} · ${d.size}`}
+                  onClick={bump}
                   className="btn btn-primary h-9 cursor-pointer gap-1.5 px-3.5 text-[13px]"
                 >
                   <HostIcon className="size-3.5" aria-hidden="true" />

@@ -18,9 +18,22 @@ import { ProgramCard } from '@/components/programs/ProgramCard'
  * stepped "spotlight" card, three quick actions, then the content grids.
  * ------------------------------------------------------------------ */
 
-/** Decorative scene from the reference: a checklist sheet and a card on an indigo panel. */
-function Illustration({ glyph }: { glyph: GlyphName }) {
+function Illustration({ glyph, image }: { glyph: GlyphName; image?: string }) {
   const reduce = useReducedMotion()
+  if (image) {
+    return (
+      <motion.div
+        key={image}
+        initial={reduce ? false : { opacity: 0, scale: 0.97 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        aria-hidden="true"
+        className="relative h-44 overflow-hidden rounded-2xl sm:h-48"
+      >
+        <img src={image} alt="" className="size-full object-cover" loading="lazy" />
+      </motion.div>
+    )
+  }
   return (
     <div aria-hidden="true" className="bg-ghost-400 relative h-44 overflow-hidden rounded-2xl sm:h-48">
       <div className="dark:bg-ink-800 absolute start-[12%] top-0 w-[58%] rounded-b-xl bg-white p-3 shadow-lg">
