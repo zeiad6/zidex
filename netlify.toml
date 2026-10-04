@@ -72,7 +72,7 @@
     Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
-  for = "/favicon.svg"
+  for = "/icon-512.png"
   [headers.values]
     Cache-Control = "public, max-age=604800"
 

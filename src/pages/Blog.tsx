@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Glyph } from '@/components/ui/Glyphs'
 import { Link } from 'react-router-dom'
 import { allPosts, categories, categoryLabel, postsFor, searchPosts, type Category } from '@/data/posts'
 import { useI18n } from '@/lib/i18n'
+import { usePageMeta } from '@/hooks/usePageMeta'
 import { site } from '@/lib/site'
 import { cn } from '@/lib/utils'
 import { AuroraBackdrop } from '@/components/ui/AuroraBackdrop'
@@ -27,12 +28,11 @@ export default function Blog() {
   const posts = postsFor(lang)
   const featured = posts.find((p) => p.featured) ?? posts[0]
 
-  useEffect(() => {
-    document.title = `${t('المدونة', 'Blog')} — ${site.name}`
-    return () => {
-      document.title = t(site.title, site.titleEn)
-    }
-  }, [t])
+  usePageMeta(
+    `${t('المدونة', 'Blog')} — ${site.name}`,
+    t(site.description, site.descriptionEn),
+    '/blog',
+  )
 
   const categoryCounts = useMemo(() => {
     const map = new Map<string, number>([['all', allPosts.length]])

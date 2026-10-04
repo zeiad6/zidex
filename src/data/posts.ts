@@ -110,6 +110,21 @@ const raw: RawPost[] = [
   },
 
   {
+    slug: 'archive-1-0-6',
+    title: 'أرشيف 1.0.6: أمان أعلى، ترقية آمنة، ومثبّت بهوية Zeidex',
+    excerpt:
+      'تحديث أمني وإصلاحات ومزايا جديدة لنظام الأرشفة الإلكترونية: روابط تحميل من ثلاثة مصادر، وخطوات ترقية من 1.0.0 تحافظ على بياناتك كما هي.',
+    category: 'تقنية',
+    date: '2026-10-04',
+    cover: 'archive',
+    coverFrom: 'from-veil-600',
+    coverTo: 'to-ink-900',
+    tags: ['أرشيف', 'ويندوز', 'أمن', 'EDMS', '1.0.6'],
+    readMinutes: 2,
+    headings: [{"id": "whats-new", "text": "ما الجديد", "level": 2}, {"id": "stability", "text": "الإقلاع والاختبارات", "level": 2}, {"id": "upgrade", "text": "الترقية من 1.0.0", "level": 2}, {"id": "smartscreen", "text": "تنبيه SmartScreen", "level": 2}, {"id": "links", "text": "المصدر والروابط", "level": 2}],
+  },
+
+  {
     slug: 'edms-archive-pro',
     title: 'أرشيف برو EDMS: نظام إدارة الوثائق الإلكترونية',
     excerpt:

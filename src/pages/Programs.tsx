@@ -11,6 +11,8 @@ import {
 } from '@/data/programs'
 import { useDownloadCount } from '@/lib/downloads'
 import { useI18n } from '@/lib/i18n'
+import { usePageMeta } from '@/hooks/usePageMeta'
+import { site } from '@/lib/site'
 import { formatDate } from '@/lib/utils'
 import { AuroraBackdrop } from '@/components/ui/AuroraBackdrop'
 import { Reveal } from '@/components/ui/Reveal'
@@ -28,6 +30,12 @@ import NotFound from './NotFound'
 export default function Programs() {
   const { t } = useI18n()
   const reduce = useReducedMotion() ?? false
+
+  usePageMeta(
+    `${t('البرامج', 'Programs')} — ${site.name}`,
+    t('برامج وتطبيقات جاهزة للتحميل من Zidex.', 'Ready-to-download apps and tools from Zidex.'),
+    '/programs',
+  )
 
   if (programs.length === 0) return <NotFound />
 

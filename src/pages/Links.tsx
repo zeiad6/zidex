@@ -9,6 +9,7 @@ import { Toast } from '@/components/ui/Primitives'
 import { LinkCard } from '@/components/links/LinkCard'
 import { TikTokProfileCard } from '@/components/tiktok/TikTokProfileCard'
 import { useI18n } from '@/lib/i18n'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 const FILTERS = [
   { id: 'all', label: 'الكل', labelEn: 'All' },
@@ -24,6 +25,12 @@ export default function Links() {
   const [filter, setFilter] = useState<FilterId>('all')
   const [toast, setToast] = useState<string | null>(null)
   const { t } = useI18n()
+
+  usePageMeta(
+    `${t('الروابط', 'Links')} — ${site.name}`,
+    t('كل الروابط المهمة لـ Zidex في مكان واحد.', 'Every important Zidex link in one place.'),
+    '/links',
+  )
 
   const filtered = useMemo(
     () => (filter === 'all' ? hubLinks : hubLinks.filter((l: HubLink) => l.kind === filter)),

@@ -411,7 +411,125 @@ const edmsAndroid: Block[] = [
   },
 ]
 
+const archive106: Block[] = [
+  {
+    type: 'image',
+    src: '/img/archive-1.0.6-dashboard.webp',
+    fallback: '/img/archive-1.0.6-dashboard.jpg',
+    alt: 'لوحة التحكم في أرشيف 1.0.6',
+    caption: 'لوحة التحكم في أرشيف 1.0.6.',
+  },
+  {
+    type: 'p',
+    text: '**أرشيف 1.0.6** تحديث أمني وإصلاحات ومزايا جديدة لنظام الأرشفة الإلكترونية. يعمل على ويندوز 64-بت، والترقية من 1.0.0 تحافظ على المستندات والحسابات وكلمات المرور كما هي.',
+  },
+  {
+    type: 'download',
+    href: 'https://github.com/zeiad6/Edms-archive/releases/download/v1.0.6/EDMS-Archive-1.0.6-Setup-x64.exe',
+    label: 'تحميل أرشيف 1.0.6 — ويندوز 64-بت',
+    meta: 'EDMS-Archive-1.0.6-Setup-x64.exe · 238.6 MB · GitHub',
+    also: [
+      {
+        href: 'https://www.mediafire.com/file/cezytgi4hqxmorc/EDMS-Archive-1.0.6-Setup-x64.exe/file',
+        label: 'تحميل من MediaFire',
+        meta: 'نفس الملف · 238.6 MB · MediaFire',
+      },
+      {
+        href: 'https://drive.google.com/file/d/1AkBwaNUwlovtOPS4SyCvkz0LSU7hvDbn/view?usp=drivesdk',
+        label: 'تحميل من Google Drive',
+        meta: 'نفس الملف · نسخة احتياطية',
+      },
+    ],
+  },
+  {
+    type: 'table',
+    caption: 'بطاقة الإصدار',
+    head: ['البند', 'القيمة'],
+    rows: [
+      ['الإصدار', '1.0.6'],
+      ['المنصة', 'Windows x64 (NSIS)'],
+      ['اسم الملف', 'EDMS-Archive-1.0.6-Setup-x64.exe'],
+      ['الحجم', '238.6 MB'],
+      ['تاريخ الإصدار', '2026-10-04'],
+      ['التوقيع', 'غير موقّع (يظهر تنبيه SmartScreen)'],
+    ],
+  },
+  { type: 'h2', id: 'whats-new', text: 'ما الجديد' },
+  {
+    type: 'ul',
+    items: [
+      '**أمان:** إغلاق ثغرة كانت تتجاوز إلزام تغيير كلمة المرور عند أول دخول.',
+      '**أمان:** الحذف النهائي يحذف الملفات من القرص، وليس السجل فقط.',
+      '**أمان:** نافذة البرنامج لا تنتقل إلى مواقع خارجية، والروابط الخارجية تُفتح في المتصفح.',
+      '**أمان:** رسائل الخطأ لا تكشف المسارات الداخلية للنظام.',
+      '**الحزم:** تحديث `next` إلى 16.3.7 و`dompurify` و`brace-expansion`، ونتيجة `npm audit` صفر ثغرات.',
+      '**واجهة:** لوحة أوامر سريعة `Ctrl+K` للتنقل بين الصفحات.',
+      '**الدخول:** زر لإظهار كلمة المرور، وخيار لحفظ بيانات الدخول مشفّرة.',
+      '**سجل التدقيق:** تسميات عربية لكل أحداث السجل.',
+      '**التثبيت الجديد:** ينشئ حساب مدير واحداً بدلاً من ستة حسابات تجريبية، وتغيير كلمة المرور إجباري عند أول دخول.',
+    ],
+  },
+  {
+    type: 'stats',
+    items: [
+      { value: '0', label: 'ثغرات في npm audit' },
+      { value: '351', label: 'اختباراً ناجحاً' },
+      { value: '3', label: 'خطوات تحقق من الترقية' },
+    ],
+  },
+  { type: 'h2', id: 'stability', text: 'الإقلاع والاختبارات' },
+  {
+    type: 'p',
+    text: 'أصلحنا عطل الإقلاع على التثبيت الجديد: كانت شاشة الدخول تطلب جدول المستخدمين قبل إنشائه، فتفشل الصفحة ويُغلق البرنامج. الآن تُنشأ قاعدة البيانات عند بدء الخادم قبل أي طلب، وينتظر البرنامج اكتمال تحميل الواجهة الفعلي.',
+  },
+  {
+    type: 'p',
+    text: 'كل إصدار يمر بفحص كامل على GitHub Actions: فحص الأنواع، و ESLint، والاختبارات، ثم بناء المثبّت، واختبار إقلاع يشترط ظهور الواجهة، واختبار ترقية على بيانات نسخة 1.0.0.',
+  },
+  {
+    type: 'image',
+    src: '/img/archive-1.0.6-installer.webp',
+    fallback: '/img/archive-1.0.6-installer.jpg',
+    alt: 'هوية صفحات المثبّت بشعار Zeidex',
+    caption: 'صفحات المثبّت بهوية Zeidex.',
+  },
+  { type: 'h2', id: 'upgrade', text: 'الترقية من 1.0.0' },
+  {
+    type: 'checklist',
+    items: [
+      'أغلق البرنامج تماماً.',
+      'شغّل المثبّت الجديد، وسيُحدِّث البرنامج في المكان نفسه.',
+      'لا تحتاج إلى إزالة النسخة القديمة أولاً.',
+      'المستندات والحسابات وكلمات المرور تبقى كما هي.',
+    ],
+  },
+  {
+    type: 'callout',
+    tone: 'tip',
+    title: 'احتياط اختياري',
+    items: ['نفّذ نسخة احتياطية من **الإعدادات ← النسخ الاحتياطي** قبل أي تحديث. الترقية لا تحتاجها، لكنها تمنحك أماناً إضافياً.'],
+  },
+  { type: 'h2', id: 'smartscreen', text: 'تنبيه SmartScreen' },
+  {
+    type: 'callout',
+    tone: 'warn',
+    title: 'البناء غير موقّع رقمياً',
+    items: ['قد تظهر شاشة SmartScreen عند أول تشغيل. اختر «المزيد من المعلومات» ثم «تشغيل على أي حال».'],
+  },
+  { type: 'h2', id: 'links', text: 'المصدر والروابط' },
+  {
+    type: 'ul',
+    items: [
+      'الإصدار على GitHub: [v1.0.6](https://github.com/zeiad6/Edms-archive/releases/tag/v1.0.6)',
+      'المستودع: [zeiad6/Edms-archive](https://github.com/zeiad6/Edms-archive)',
+      'الموقع: [zeidex.netlify.app](https://zeidex.netlify.app/)',
+    ],
+  },
+]
+
 export const postBodies: Record<string, Block[]> = {
+  "archive-1-0-6": archive106,
+
   "ai-fake-detector-android": aiFakeBody,
 
   "edms-archive-android": edmsAndroid,

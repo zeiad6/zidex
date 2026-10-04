@@ -17,6 +17,7 @@ import { Reveal } from '@/components/ui/Reveal'
 import { SectionHeading } from '@/components/ui/Primitives'
 import { Magnetic } from '@/components/ui/Interactive'
 import { useI18n } from '@/lib/i18n'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 const principles = [
   {
@@ -74,6 +75,13 @@ const stack = [
 
 export default function About() {
   const { t } = useI18n()
+
+  usePageMeta(
+    `${t('عن المنصة', 'About')} — ${site.name}`,
+    t('عن تصميم وتقنية Zidex، وسياسة الخصوصية.', 'About Zidex’s design, tech stack, and privacy policy.'),
+    '/about',
+  )
+
   return (
     <>
       <section className="relative overflow-hidden pt-24 pb-10 sm:pt-28 sm:pb-12">

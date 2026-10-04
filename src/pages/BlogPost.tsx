@@ -13,6 +13,7 @@ import {
   type Block,
 } from '@/data/posts'
 import { useI18n } from '@/lib/i18n'
+import { usePageMeta } from '@/hooks/usePageMeta'
 import { site, tiktok } from '@/lib/site'
 import { cn, formatDate, nativeShare } from '@/lib/utils'
 import { Reveal } from '@/components/ui/Reveal'
@@ -48,41 +49,14 @@ export default function BlogPost() {
     }
   }, [post, lang])
 
-  useEffect(() => {
-    if (!post) return
-    document.title = `${post.title} — ${site.name}`
-
-    // Open Graph and Twitter read the head, not document.title. Without this
-    // an article link previews with the site's generic title and description,
-    // so a shared article looked like a link to the homepage.
-    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href ?? window.location.origin
-    const origin = new URL(canonical).origin
-
-    const set = (selector: string, attr: string, value: string) => {
-      const el = document.querySelector<HTMLMetaElement>(selector)
-      if (!el) return null
-      const prev = el.getAttribute(attr)
-      el.setAttribute(attr, value)
-      return prev
-    }
-
-    const prevs: [string | null, string][] = [
-      [set('meta[name="description"]', 'content', post.excerpt), 'meta[name="description"]'],
-      [set('meta[property="og:title"]', 'content', post.title), 'meta[property="og:title"]'],
-      [set('meta[property="og:description"]', 'content', post.excerpt), 'meta[property="og:description"]'],
-      [set('meta[property="og:url"]', 'content', `${origin}/blog/${post.slug}`), 'meta[property="og:url"]'],
-      [set('meta[name="twitter:title"]', 'content', post.title), 'meta[name="twitter:title"]'],
-      [set('meta[name="twitter:description"]', 'content', post.excerpt), 'meta[name="twitter:description"]'],
-    ]
-
-    return () => {
-      document.title = t(site.title, site.titleEn)
-      for (const [prev, selector] of prevs) {
-        if (prev === null) continue
-        document.querySelector(selector)?.setAttribute('content', prev)
-      }
-    }
-  }, [post, t])
+  // Canonical, og:url and title/description all follow the article here, not
+  // the homepage — without this every shared article previewed and indexed
+  // as the homepage, since the static HTML's head only describes "/".
+  usePageMeta(
+    post ? `${post.title} — ${site.name}` : t(site.title, site.titleEn),
+    post ? post.excerpt : t(site.description, site.descriptionEn),
+    post ? `/blog/${post.slug}` : '/blog',
+  )
 
   // One dismissal path for both the share and the copy toast. Previously the
   // copy path set state with no timer, so the pill stayed for the session.
