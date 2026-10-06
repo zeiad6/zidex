@@ -4,6 +4,7 @@ import { CircleCheck, CircleDollarSign, CreditCard, ExternalLink, Gem, Landmark,
 import { useI18n } from '@/lib/i18n'
 import { FRAGMENT_STARS, buyLink, starsLink, type Catalog, type StoreProduct } from '@/lib/store'
 import { cn } from '@/lib/utils'
+import { Shake, SubmitButton, useShake } from '@/components/ui/Motion'
 import { StarAmount } from '../atoms/StarAmount'
 import { CopyField } from '../molecules/CopyField'
 
@@ -332,10 +333,18 @@ function ConfirmForm({
   const { t } = useI18n()
   const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error' | 'busy'>('idle')
   const [orderId, setOrderId] = useState('')
+  const { shake, shakeKey } = useShake()
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const form = new FormData(e.currentTarget)
+    const contact = String(form.get('contact') ?? '').trim()
+    // A contact the buyer could not be reached on is the one failure worth
+    // shouting about, so it shakes the field instead of only turning red.
+    if (contact.length < 3) {
+      shake()
+      return
+    }
     setState('sending')
     try {
       const res = await fetch('/api/orders', {
@@ -344,7 +353,7 @@ function ConfirmForm({
         body: JSON.stringify({
           sku: product.sku,
           method,
-          contact: String(form.get('contact') ?? ''),
+          contact,
           reference: `${reference} ${String(form.get('tx') ?? '')}`.trim(),
         }),
       })
@@ -369,15 +378,24 @@ function ConfirmForm({
       <p className="text-app text-[14px] font-bold">{t('دفعت؟ أكّد الطلب', 'Paid? Confirm the order')}</p>
       <label className="grid gap-1 text-[12px] font-semibold">
         <span className="text-subtle">{t('تيليجرام أو البريد للتواصل', 'Telegram or email to reach you')}</span>
-        <input name="contact" required minLength={3} maxLength={120} autoComplete="email" dir="ltr" placeholder="@username" className="bg-sunken text-app focus:border-ghost-400 h-11 rounded-xl border border-transparent px-3 text-[14px] outline-none" />
+        <Shake shakeKey={shakeKey}>
+          <input
+            name="contact"
+            required
+            minLength={3}
+            maxLength={120}
+            autoComplete="email"
+            dir="ltr"
+            placeholder="@username"
+            className="bg-sunken text-app focus:border-ghost-400 h-11 w-full rounded-xl border border-transparent px-3 text-[14px] outline-none"
+          />
+        </Shake>
       </label>
       <label className="grid gap-1 text-[12px] font-semibold">
         <span className="text-subtle">{referenceLabel}</span>
         <input name="tx" maxLength={150} dir="ltr" className="bg-sunken text-app focus:border-ghost-400 h-11 rounded-xl border border-transparent px-3 font-mono text-[13px] outline-none" />
       </label>
-      <button type="submit" disabled={state === 'sending'} className="btn btn-ghost h-11 cursor-pointer px-5 font-bold disabled:cursor-wait disabled:opacity-60">
-        {state === 'sending' ? t('جارٍ الإرسال…', 'Sending…') : t('أرسل التأكيد', 'Send confirmation')}
-      </button>
+      <SubmitButton state={state} idle={t('أرسل التأكيد', 'Send confirmation')} sending={t('جارٍ الإرسال…', 'Sending…')} done={t('تم الإرسال', 'Sent')} variant="ghost" />
       {state === 'error' && <p role="alert" className="text-[13px] text-red-600 dark:text-red-400">{t('تعذّر الإرسال. تحقق من البيانات وحاول مجدداً.', 'Could not send. Check the details and try again.')}</p>}
       {state === 'busy' && <p role="alert" className="text-[13px] text-amber-700 dark:text-amber-300">{t('محاولات كثيرة — انتظر عشر دقائق ثم أعد الإرسال.', 'Too many attempts — wait ten minutes and resend.')}</p>}
     </form>
@@ -418,16 +436,29 @@ function KuraimiPanel({ product, rate }: { product: StoreProduct; rate: number }
   const [key, setKey] = useState(() => crypto.randomUUID())
   const [state, setState] = useState<'idle' | 'sending' | 'busy' | 'error' | 'locked'>('idle')
   const [result, setResult] = useState<KuraimiResult | null>(null)
+  const { shake, shakeKey } = useShake()
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const form = new FormData(e.currentTarget)
+    const mobile = String(form.get('mobile') ?? '').trim()
+    const pin = String(form.get('pin') ?? '')
+    // The two fields the bank refuses. Checked here so the shake lands on the
+    // offending input instead of on a generic banner below the form.
+    if (!/^7[0-9]{8}$/.test(mobile)) {
+      shake()
+      return
+    }
+    if (!/^[0-9]{4,8}$/.test(pin)) {
+      shake()
+      return
+    }
     setState('sending')
     try {
       const res = await fetch('/api/pay/kuraimi', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ sku: product.sku, mobile: form.get('mobile'), pin: form.get('pin'), idempotency_key: key }),
+        body: JSON.stringify({ sku: product.sku, mobile, pin, idempotency_key: key }),
       })
       if (res.status === 429) return setState('busy')
       if (res.status === 423) return setState('locked')
@@ -472,22 +503,24 @@ function KuraimiPanel({ product, rate }: { product: StoreProduct; rate: number }
           `Pay ${yer.toLocaleString('en-US')} YER from your Kuraimi account (Haseb / KJ / Mfloos).`,
         )}
       </p>
-      <label className="grid gap-1 text-[12px] font-semibold">
-        <span className="text-subtle">{t('رقم الجوال المسجّل في الكريمي', 'Kuraimi mobile number')}</span>
-        <input name="mobile" required inputMode="numeric" pattern="7[0-9]{8}" maxLength={9} dir="ltr" placeholder="77XXXXXXX" autoComplete="tel-national" className="bg-sunken text-app focus:border-ghost-400 h-11 rounded-xl border border-transparent px-3 font-mono text-[14px] outline-none" />
-      </label>
-      <label className="grid gap-1 text-[12px] font-semibold">
-        <span className="text-subtle">{t('رمز الدفع الإلكتروني', 'E-payment PIN')}</span>
-        <input name="pin" type="password" required inputMode="numeric" pattern="[0-9]{4,8}" maxLength={8} dir="ltr" autoComplete="off" className="bg-sunken text-app focus:border-ghost-400 h-11 rounded-xl border border-transparent px-3 font-mono text-[14px] outline-none" />
-      </label>
+      <Shake shakeKey={shakeKey} className="grid gap-3">
+        <label className="grid gap-1 text-[12px] font-semibold">
+          <span className="text-subtle">{t('رقم الجوال المسجّل في الكريمي', 'Kuraimi mobile number')}</span>
+          <input name="mobile" required inputMode="numeric" pattern="7[0-9]{8}" maxLength={9} dir="ltr" placeholder="77XXXXXXX" autoComplete="tel-national" className="bg-sunken text-app focus:border-ghost-400 h-11 w-full rounded-xl border border-transparent px-3 font-mono text-[14px] outline-none" />
+        </label>
+        <label className="grid gap-1 text-[12px] font-semibold">
+          <span className="text-subtle">{t('رمز الدفع الإلكتروني', 'E-payment PIN')}</span>
+          <input name="pin" type="password" required inputMode="numeric" pattern="[0-9]{4,8}" maxLength={8} dir="ltr" autoComplete="off" className="bg-sunken text-app focus:border-ghost-400 h-11 w-full rounded-xl border border-transparent px-3 font-mono text-[14px] outline-none" />
+        </label>
+      </Shake>
       <p className="text-subtle flex items-start gap-1.5 text-[12px]">
         <Lock className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
         {t('يُرسل الرمز مرة واحدة إلى البنك مباشرة عبر اتصال مشفّر، ولا نحفظه.', 'The PIN goes once, encrypted, straight to the bank. We never store it.')}
       </p>
-      <button type="submit" disabled={state === 'sending'} className="btn btn-primary h-11 cursor-pointer px-5 font-bold disabled:cursor-wait disabled:opacity-60">
+      <SubmitButton state={state} idle={t(`ادفع ${yer.toLocaleString('en-US')} ريال`, `Pay ${yer.toLocaleString('en-US')} YER`)} sending={t('جارٍ الدفع…', 'Paying…')} done={t('تم الإرسال للبنك', 'Sent to the bank')}>
         <Landmark className="size-4" aria-hidden="true" />
         {state === 'sending' ? t('جارٍ الدفع…', 'Paying…') : t(`ادفع ${yer.toLocaleString('en-US')} ريال`, `Pay ${yer.toLocaleString('en-US')} YER`)}
-      </button>
+      </SubmitButton>
       {result?.status === 'failed' && <p role="alert" className="text-[13px] text-red-600 dark:text-red-400">{t('رفض البنك العملية', 'The bank declined')}{result.message ? `: ${result.message}` : '.'}</p>}
       {state === 'busy' && <p role="alert" className="text-[13px] text-amber-700 dark:text-amber-300">{t('محاولات كثيرة — انتظر عشر دقائق.', 'Too many attempts — wait ten minutes.')}</p>}
       {state === 'locked' && <p role="alert" className="text-[13px] text-red-600 dark:text-red-400">{t('أُوقف الدفع لهذا الرقم اليوم بعد عدة محاولات مرفوضة. حاول غداً أو تواصل معنا.', 'Payments for this number are paused today after several refusals. Try tomorrow or contact us.')}</p>}

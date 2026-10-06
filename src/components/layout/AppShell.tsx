@@ -15,6 +15,7 @@ import {
   MessageCircle,
   Search,
   ShoppingBag,
+  Star,
   LayoutGrid,
   X,
   type LucideIcon,
@@ -22,8 +23,10 @@ import {
 import { allPosts, categories, categoryLabel, postsFor, searchPosts } from '@/data/posts'
 import { programs } from '@/data/programs'
 import { site, tiktok } from '@/lib/site'
+import { formatStars, searchProducts, useCatalog } from '@/lib/store'
 import { useI18n } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
+import { CountPop } from '@/components/ui/Motion'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { LangToggle } from '@/components/ui/LangToggle'
 import { categoryStyle } from '@/components/blog/categoryStyle'
@@ -63,9 +66,11 @@ function Sidebar({ onSearch }: { onSearch: () => void }) {
   const activeCategory = pathname === '/blog' ? new URLSearchParams(search).get('c') : null
 
   // Zidex nav item: 14px semibold, 14px radius; active is a violet gradient with a glow.
+  // The sweep underline carries the hover for the rows that have no sliding pill of
+  // their own — the category rows — so a hover always answers with a moving line.
   const rowClass = (active: boolean) =>
     cn(
-      'flex items-center gap-3 rounded-[14px] px-3.5 py-3 text-[14px] font-semibold transition-colors duration-200',
+      'group/nav link-underline flex items-center gap-3 rounded-[14px] px-3.5 py-3 text-[14px] font-semibold transition-colors duration-200',
       active
         ? 'bg-linear-to-l from-ghost-500 to-ghost-400 text-white shadow-[0_10px_24px_rgb(109_92_255/0.35)] ltr:bg-linear-to-r'
         : 'text-muted hover:bg-accent-soft hover:text-accent',
@@ -169,7 +174,9 @@ function Sidebar({ onSearch }: { onSearch: () => void }) {
                 <Glyph name={icon} size={14} aria-hidden="true" />
               </span>
               <span className="min-w-0 flex-1 truncate">{categoryLabel(c, lang)}</span>
-              <span className={cn('font-mono text-[10px]', on ? 'text-white/80' : 'text-subtle')}>{count}</span>
+              <span className={cn('font-mono text-[10px] transition-transform duration-300 group-hover/nav:scale-110', on ? 'text-white/80' : 'text-subtle')}>
+                <CountPop value={count} />
+              </span>
             </Link>
           )
         })}
@@ -199,7 +206,7 @@ function Sidebar({ onSearch }: { onSearch: () => void }) {
           </p>
           <span className="text-accent mt-2 inline-flex items-center gap-1 text-[12px] font-bold">
             {t('ادخل المتجر', 'Visit the store')}
-            <ShoppingBag className="size-3.5" aria-hidden="true" />
+            <ShoppingBag className="size-3.5 transition-transform duration-300 group-hover:-translate-y-0.5" aria-hidden="true" />
           </span>
         </Link>
         <a
@@ -260,6 +267,10 @@ function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void })
   const ref = useRef<HTMLDialogElement>(null)
   const [query, setQuery] = useState('')
   const { lang, t } = useI18n()
+  // The catalogue is only fetched once the dialog is actually opened — this
+  // shell is on every route, and the store JSON has no business loading on
+  // an article page.
+  const { catalog } = useCatalog(open)
 
   useEffect(() => {
     const d = ref.current
@@ -275,8 +286,17 @@ function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void })
   const progs = programs.filter(
     (p) => !q || [p.name, p.nameEn, p.tagline, p.taglineEn].join(' ').toLowerCase().includes(q),
   )
+  // Word-OR matching over the shop, so "بوت متجر" finds "بوت المتجر الذكي"
+  // — the same rule the Telegram bot applies to /search.
+  const goods = q && catalog ? searchProducts(catalog.products, query, lang).slice(0, 5) : []
 
   const row = 'hover:bg-sunken focus-visible:bg-sunken flex items-center gap-3 rounded-xl px-3 py-2.5 outline-none'
+  const sectionLabel = 'text-subtle px-3 pt-2 pb-1 text-[11px] font-medium tracking-wider uppercase'
+  const hitCount = (n: number) => (
+    <span className="text-subtle ms-auto shrink-0 font-mono text-[10px]" aria-hidden="true">
+      <CountPop value={n} />
+    </span>
+  )
 
   return (
     <dialog
@@ -294,7 +314,7 @@ function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void })
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder={t('ابحث في المقالات والبرامج…', 'Search posts and programs…')}
+          placeholder={t('ابحث في المقالات والبرامج ومنتجات المتجر…', 'Search posts, programs and store products…')}
           className="placeholder:text-subtle h-14 min-w-0 flex-1 bg-transparent text-base outline-none [&::-webkit-search-cancel-button]:hidden"
         />
         <kbd className="text-subtle hidden rounded-md border border-app px-1.5 py-0.5 font-mono text-[10px] sm:block">Esc</kbd>
@@ -322,10 +342,34 @@ function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void })
           </>
         ) : null}
 
+        {goods.length > 0 ? (
+          <>
+            <p className={cn(sectionLabel, 'flex items-center gap-2')}>
+              {t('منتجات المتجر', 'Store products')}
+              {hitCount(goods.length)}
+            </p>
+            {goods.map((p) => (
+              <Link key={p.sku} to={`/shop/${p.sku}`} onClick={onClose} className={row}>
+                <span className="bg-sunken grid size-9 shrink-0 place-items-center rounded-lg" aria-hidden="true">
+                  <Star className="size-4 fill-amber-400 text-amber-400" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-medium">{t(p.title, p.title_en)}</span>
+                  <span className="text-subtle block font-mono text-[11px]" dir="ltr">
+                    ⭐️ {formatStars(p.stars)}
+                    {p.usd ? ` · $${p.usd}` : ''}
+                  </span>
+                </span>
+              </Link>
+            ))}
+          </>
+        ) : null}
+
         {posts.length > 0 ? (
           <>
-            <p className="text-subtle px-3 pt-3 pb-1 text-[11px] font-medium tracking-wider uppercase">
+            <p className={cn(sectionLabel, 'pt-3 flex items-center gap-2')}>
               {q ? t('المقالات', 'Articles') : t('أحدث المقالات', 'Latest articles')}
+              {hitCount(posts.length)}
             </p>
             {posts.map((p) => (
               <Link key={p.slug} to={`/blog/${p.slug}`} onClick={onClose} className={row}>
@@ -344,7 +388,7 @@ function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void })
           </>
         ) : null}
 
-        {posts.length === 0 && progs.length === 0 ? (
+        {posts.length === 0 && progs.length === 0 && goods.length === 0 ? (
           <p className="text-muted px-3 py-10 text-center text-sm">
             {t(`لا نتائج لـ «${query}»`, `No results for “${query}”`)}
           </p>
@@ -476,13 +520,13 @@ export function AppShell({ children }: { children: ReactNode }) {
             end={to === '/'}
             className={({ isActive }) =>
               cn(
-                'flex flex-col items-center gap-0.5 rounded-xl py-1.5 transition-colors',
+                'group/tab flex flex-col items-center gap-0.5 rounded-xl py-1.5 transition-colors',
                 isActive ? 'text-accent' : 'text-subtle hover:text-app',
               )
             }
           >
-            <Icon className="size-5" aria-hidden="true" />
-            <span className="text-[10px] font-black">{t(label, labelEn)}</span>
+            <Icon className="size-5 transition-transform duration-300 group-hover/tab:-translate-y-0.5" aria-hidden="true" />
+            <span className="link-underline text-[10px] font-black">{t(label, labelEn)}</span>
           </NavLink>
         ))}
         <button

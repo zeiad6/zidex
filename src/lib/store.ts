@@ -67,10 +67,19 @@ function loadCatalog() {
   return pending
 }
 
-export function useCatalog() {
+/**
+ * Loads the catalogue once per page load and shares the promise.
+ *
+ * `enabled` exists for the surfaces that render everywhere but need the
+ * catalogue only on demand — the ⌘K dialog lives in the app shell, so a
+ * plain `useCatalog()` there would fetch 15 KB of JSON on the blog for a
+ * search box that may never be opened.
+ */
+export function useCatalog(enabled = true) {
   const [catalog, setCatalog] = useState<Catalog | null>(null)
   const [failed, setFailed] = useState(false)
   useEffect(() => {
+    if (!enabled) return
     let alive = true
     loadCatalog()
       .then((c) => alive && setCatalog(c))
@@ -78,8 +87,43 @@ export function useCatalog() {
     return () => {
       alive = false
     }
-  }, [])
+  }, [enabled])
   return { catalog, failed }
+}
+
+/**
+ * Product text search, matched the same way the Telegram bot matches:
+ * any word of the query appearing anywhere in the title or description
+ * counts. An exact-phrase-only search hides products from buyers who type
+ * two of the five words in the name they are looking for.
+ */
+export function searchProducts(products: StoreProduct[], query: string, lang: 'ar' | 'en' = 'ar') {
+  const q = norm(query)
+  if (!q) return []
+  const words = q.split(' ').filter(Boolean)
+  return products.filter((p) => {
+    const hay = norm(`${lang === 'en' ? p.title_en : p.title} ${lang === 'en' ? p.description_en : p.description} ${p.sku}`)
+    return hay.includes(q) || words.some((w) => hay.includes(w))
+  })
+}
+
+/**
+ * Folds Arabic and Latin into one comparable form, mirroring `norm()` in
+ * worker/bots.ts: harakat, tatweel, Arabic-Indic digits, the alef/ya/ha
+ * spellings and every punctuation mark come out, so a buyer who types
+ * "الدفع" finds a product titled "الدَّفع".
+ */
+function norm(input: string) {
+  return input
+    .toLowerCase()
+    .replace(/[ً-ْٰـ]/g, '')
+    .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 0x660))
+    .replace(/[۰-۹]/g, (d) => String(d.charCodeAt(0) - 0x6f0))
+    .replace(/[آأإٱ]/g, 'ا')
+    .replace(/ى/g, 'ي')
+    .replace(/ة/g, 'ه')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim()
 }
 
 /** Localised product copy in one place, so every surface reads the same fields. */

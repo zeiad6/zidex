@@ -40,6 +40,17 @@ function trackDownload(slug: string) {
   }).catch(() => {})
 }
 
+/**
+ * Counts for several programs in one request.
+ *
+ * `useDownloadCount` fetches per component, so a page listing every program
+ * would issue one request per row. The dashboard needs them together anyway,
+ * so this takes the whole set in one call.
+ */
+export function downloadCountsFor(slugs: string[]) {
+  return fetchDownloadCounts(slugs)
+}
+
 /** Live count for one program, plus a `bump` to call from the download link's onClick. */
 export function useDownloadCount(slug: string) {
   const [count, setCount] = useState<number | null>(null)

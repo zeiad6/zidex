@@ -4,8 +4,9 @@ import { onRequestGet, onRequestPost } from '../functions/api/downloads'
 import { createOrder, tonRate, type OrdersEnv } from './orders'
 import { kuraimiCheckUser, kuraimiPay, kuraimiStatus, type KuraimiEnv } from './kuraimi'
 import { botWebhook, botsAdmin, type BotsEnv } from './bots'
+import { activate, confirm, status, licenseAdmin, type LicenseAdminEnv } from './license'
 
-type Env = Parameters<typeof onRequestGet>[0]['env'] & OrdersEnv & KuraimiEnv & BotsEnv
+type Env = Parameters<typeof onRequestGet>[0]['env'] & OrdersEnv & KuraimiEnv & BotsEnv & LicenseAdminEnv
 
 const HOST = 'zeidexsoft.com'
 
@@ -19,6 +20,15 @@ export default {
       if (request.method === 'GET') return onRequestGet({ request, env })
       if (request.method === 'POST') return onRequestPost({ request, env })
       return new Response('method not allowed', { status: 405 })
+    }
+    // Pro licensing. activate+confirm is a two-step proof of possession: the app registers its
+    // Keystore public key, gets a nonce, and returns a signature over it. seats are counted here,
+    // never trusted from the client.
+    if (url.pathname === '/api/license/activate' && request.method === 'POST') return activate(request, env)
+    if (url.pathname === '/api/license/confirm' && request.method === 'POST') return confirm(request, env)
+    if (url.pathname === '/api/license/status' && request.method === 'POST') return status(request, env)
+    if (url.pathname === '/admin/license' || url.pathname.startsWith('/admin/license/')) {
+      return licenseAdmin(request, env, url)
     }
     if (url.pathname === '/api/orders') {
       return request.method === 'POST' ? createOrder(request, env) : new Response('method not allowed', { status: 405 })

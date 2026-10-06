@@ -11,6 +11,8 @@
 // BOTS_ADMIN_TOKEN. KV free tier allows 1,000 writes/day across the account — enough for
 // small shops; Workers Paid ($5/month) lifts it to millions.
 
+import { issueLicense, type LicenseEnv } from './license'
+
 type KV = {
   get(key: string): Promise<string | null>
   put(key: string, value: string, opts?: { expirationTtl?: number }): Promise<void>
@@ -23,7 +25,9 @@ export type BotsEnv = {
   BOT_LIMITER?: Limiter
   BOTS_KEY?: string
   BOTS_ADMIN_TOKEN?: string
-}
+  /** Telegram id of the platform's own bot; see DEFAULT_PLATFORM_BOT_ID. */
+  BOT_PLATFORM_ID?: string
+} & LicenseEnv
 
 type Item = { id: number; title: string; stars: number; desc: string }
 type Cfg = {
@@ -43,8 +47,50 @@ type Cfg = {
 }
 
 const ORIGIN = 'https://zeidexsoft.com'
-const MAX_ITEMS = 30
-const MAX_FAQS = 30
+const MAX_ITEMS = 50
+
+/**
+ * The platform's own bot, which gets the extra menu rows (the app downloads and
+ * the donation button) on top of the standard shop menu.
+ *
+ * Matched by numeric id, not by username. The username changes whenever the
+ * owner renames the bot in BotFather, and a rename that silently demotes the
+ * platform's own bot to a bare shop menu is exactly the kind of bug that ships
+ * unnoticed — the storefront still works, it is just missing its buttons. The
+ * id is assigned by Telegram at creation and never changes.
+ *
+ * Env override: BOT_PLATFORM_ID, for when this Worker serves a fork whose
+ * platform bot was re-created under a different account.
+ */
+/** Verified against getMe on 2026-10-06: @deanonimaizer_2hbot_8fml_bot. */
+const DEFAULT_PLATFORM_BOT_ID = 8968001501
+
+const platformBotId = (env: BotsEnv) => Number(env.BOT_PLATFORM_ID ?? DEFAULT_PLATFORM_BOT_ID)
+
+/**
+ * How long a cached owner id is trusted before the record is read again.
+ *
+ * Bounds the worst case of the owner cache — a bot re-provisioned to a new
+ * owner is unreachable for at most this long — and caps the read cost at one
+ * per bot per interval. A minute keeps a stale entry far shorter than any human
+ * would notice, while 1,440 reads/day/bot stays well inside the 100,000/day
+ * free tier even with several dozen bots on one account.
+ */
+const OWNER_CACHE_TTL_MS = 60_000
+
+/**
+ * Test-only hook: ages every cached owner id out, so the stale-cache path can
+ * be exercised without sleeping for the real TTL.
+ *
+ * Exported because it is the only way to reach that state deterministically,
+ * and the alternative — a 60-second sleep in the suite — is worse than a
+ * slightly wider module surface.
+ */
+export function __expireOwnerCache() {
+  for (const [k, v] of ownerCache) ownerCache.set(k, { owner: v.owner, at: 0 })
+}
+
+const MAX_FAQS = 50
 const MAX_USERS = 5000
 const esc = (s: unknown) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
 
@@ -99,9 +145,131 @@ const load = async (env: BotsEnv, id: string) => {
 }
 const save = (env: BotsEnv, cfg: Cfg) => env.DOWNLOADS.put(`tb:${cfg.id}`, JSON.stringify(cfg))
 
+/**
+ * Owner ids, cached per isolate so the rate limiter can run *before* the KV
+ * read on the common path.
+ *
+ * The limiter has to know whether the sender is the owner, because owners are
+ * never throttled — and reading the whole bot record to learn one integer is
+ * the cost being optimised away.
+ *
+ * The first update for a bot in a cold isolate therefore always pays one read
+ * to fill the cache, and every update after that is free of it. That is the
+ * honest trade: the alternative designs were all worse, and this one is worth
+ * being explicit about.
+ *
+ *   · Limiter first, unconditionally → the cache can never be filled by a
+ *     throttled request, so an owner under rate limiting is never recognised
+ *     and is locked out permanently. This is the bug the cache replaced.
+ *   · Limiter after the read (the original order) → correct, but every spam
+ *     message costs a read out of the 100,000/day free-tier budget.
+ *
+ * Keyed by the bot id as a string on both sides. The lookup gets the raw URL
+ * path segment and the write has `cfg.id` (a number, from getMe), so keying the
+ * write with `cfg.id` and the read with the URL param silently never matches.
+ */
+const ownerCache = new Map<string, { owner: number; at: number }>()
+const botKey = (id: string | number) => String(id)
+const rememberOwner = (id: string | number, owner: number) => ownerCache.set(botKey(id), { owner, at: Date.now() })
+
+/**
+ * Cached owner, or undefined when there is nothing usable — which includes an
+ * entry that has aged out.
+ *
+ * The TTL is what stops a re-provision from locking the new owner out forever.
+ * Without it the warm path never reads KV, so a cached owner id is trusted for
+ * the isolate's whole lifetime: hand the bot to a new owner and they are
+ * throttled as a customer, permanently, with nothing able to correct it. An
+ * expiry bounds that to one TTL instead of infinity.
+ *
+ * One read per bot per TTL is the price, which is what makes the spam case
+ * affordable: a spamming customer refreshes the cache, so it stops costing
+ * reads, rather than costing one per message for as long as they keep sending.
+ */
+const knownOwnerOf = (id: string | number, ttl: number) => {
+  const hit = ownerCache.get(botKey(id))
+  if (!hit) return undefined
+  if (Date.now() - hit.at > ttl) return undefined
+  return hit.owner
+}
+
 const CONTACT_PROMPT = 'اكتب رسالتك للمالك ردّاً على هذه الرسالة.'
 
 const menu = { inline_keyboard: [[{ text: '🛍 المنتجات', callback_data: 't:items' }, { text: '❓ الأسئلة', callback_data: 't:faqs' }], [{ text: '💬 راسل المالك', callback_data: 't:contact' }]] }
+
+// ── customer search ─────────────────────────────────────────────────
+// /search, /catalog, /help and the plain-message fallback share ONE matcher, so words and
+// buttons can never disagree. Every path here is read-only: the reply's buttons carry the
+// same t:buy / t:faq callbacks the menu already uses, so a search costs zero KV writes
+// (free tier: 1,000/day across every bot on the account).
+type Btn = { text: string; callback_data: string }
+const btnRow = (b: Btn): Btn[] => [b]
+
+const SEARCH_ITEM_CAP = 8
+const SEARCH_FAQ_CAP = 5
+const SEARCH_HINT =
+  '🔎 أرسل الكلمة التي تبحث عنها، مثال: <code>/search مثال</code>\n<code>/catalog</code> يعرض كل المنتجات — أو افتح القائمة من الأزرار.'
+const HELP_TEXT =
+  '<b>الأوامر</b>\n/start — القائمة الرئيسية\n/search — ابحث في المنتجات\n/catalog — كل المنتجات\n/help — هذه القائمة'
+
+/** Fold Arabic and Latin text into one comparable form: lowercase, no harakat or tatweel,
+ *  Arabic-Indic and Persian digits as Latin, one alef/ya/ha spelling, no punctuation.
+ *  Owners type shop data with full spelling; customers type the sloppy version, so
+ *  "بوتّ المتجّر" and "بوت المتجر" have to land on the same key. */
+const norm = (s: unknown) =>
+  String(s ?? '')
+    .toLowerCase()
+    .replace(/[\u064b-\u0652\u0670\u0640]/g, '') // harakat, superscript alef, tatweel
+    .replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x660)) // ٠-٩
+    .replace(/[\u06f0-\u06f9]/g, (d) => String(d.charCodeAt(0) - 0x6f0)) // ۰-۹
+    .replace(/[\u0622\u0623\u0625\u0671]/g, '\u0627') // آ أ إ ٱ → ا
+    .replace(/\u0649/g, '\u064a') // ى → ي
+    .replace(/\u0629/g, '\u0647') // ة → ه
+    .replace(/[^\p{L}\p{N}]+/gu, ' ') // punctuation of both scripts out, runs collapse
+    .trim()
+
+/** A fresh copy of the main menu rows, appended to every reply so a customer who wandered
+ *  in through /search or /catalog can always get back. Copied, never handed out as the
+ *  shared `menu` object, so a caller cannot mutate the menu for every later message. */
+const mainRows = (): Btn[][] => menu.inline_keyboard.map((row) => [...row])
+
+/** Matching items plus matching FAQ indices. A row hits when ANY whitespace token of the
+ *  query is a substring of its normalised title+desc (or question+answer), so "بوت متجر"
+ *  finds "بوت المتجر الذكي" without the customer typing the exact phrase; the whole
+ *  query as one substring also counts. Returns null when nothing searchable was typed —
+ *  an empty /search and a punctuation-only one get the same usage hint. */
+function searchKeys(cfg: Cfg, query: string) {
+  const q = norm(query)
+  const tokens = q.split(' ').filter(Boolean)
+  if (!tokens.length) return null
+  const items: Item[] = []
+  const faqs: number[] = []
+  for (const it of cfg.items) {
+    if (items.length >= SEARCH_ITEM_CAP) break
+    const hay = norm(`${it.title} ${it.desc}`)
+    if (hay.includes(q) || tokens.some((t) => hay.includes(t))) items.push(it)
+  }
+  cfg.faqs.forEach((f, i) => {
+    if (faqs.length >= SEARCH_FAQ_CAP) return
+    const hay = norm(`${f.q} ${f.a}`)
+    if (hay.includes(q) || tokens.some((t) => hay.includes(t))) faqs.push(i)
+  })
+  return { q, items, faqs }
+}
+
+/** The one search reply, shared by /search and by a customer's plain words. Never saves. */
+async function sendSearch(token: string, chat: number, cfg: Cfg, query: string) {
+  const hit = searchKeys(cfg, query)
+  if (!hit) return void (await send(token, chat, SEARCH_HINT, { reply_markup: { inline_keyboard: mainRows() } }))
+  const rows: Btn[][] = [
+    ...hit.items.map((it) => btnRow({ text: `⭐️ ${it.stars} — ${it.title}`, callback_data: `t:buy:${it.id}` })),
+    ...hit.faqs.map((i) => btnRow({ text: cfg.faqs[i].q, callback_data: `t:faq:${i}` })),
+  ]
+  if (!rows.length) {
+    return void (await send(token, chat, 'لم أجد شيئاً. جرّب كلمة أخرى، أو افتح القائمة.', { reply_markup: { inline_keyboard: mainRows() } }))
+  }
+  await send(token, chat, `🔎 <b>نتائج «${esc(hit.q)}»</b>`, { reply_markup: { inline_keyboard: [...rows, ...mainRows()] } })
+}
 
 // ── webhook ─────────────────────────────────────────────────────────
 export async function botWebhook(request: Request, env: BotsEnv, id: string): Promise<Response> {
@@ -110,18 +278,40 @@ export async function botWebhook(request: Request, env: BotsEnv, id: string): Pr
   if (!safeEqual(request.headers.get('x-telegram-bot-api-secret-token') ?? '', await webhookSecret(env, id))) {
     return new Response('ok')
   }
-  const cfg = await load(env, id)
-  if (!cfg) return new Response('ok')
+  // Parse the body before touching KV. It is free — the body has already been
+  // received — and it yields the sender id, which is what the limiter needs.
+  //
+  // Order matters for the free-tier read budget (100,000/day across every bot
+  // on the account). The limiter used to run *after* load(), so a chatty or
+  // spamming customer cost one KV read per message before being throttled at
+  // all. Checking first means a throttled message costs nothing but the parse.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const update = (await request.json().catch(() => ({}))) as Record<string, any>
   const from = update.message?.from ?? update.callback_query?.from ?? update.pre_checkout_query?.from
-  // Payments are never throttled: Telegram has already taken the Stars.
+  // Payments are never throttled: Telegram has already taken the Stars, and
+  // refusing to answer the pre-checkout query would leave the buyer stuck at
+  // the payment sheet.
   const payment = update.pre_checkout_query || update.message?.successful_payment
-  if (from && from.id !== cfg.owner && env.BOT_LIMITER && !payment) {
+
+  // Cold isolate: the owner id is unknown, so the exemption cannot be decided
+  // without a read. Pay it once. Warm isolate: the answer is already here.
+  const cached = knownOwnerOf(id, OWNER_CACHE_TTL_MS)
+  const cfg = cached === undefined ? await load(env, id) : null
+  if (cfg) rememberOwner(cfg.id, cfg.owner)
+  const owner = cfg?.owner ?? cached
+
+  const isOwner = from ? from.id === owner : false
+  // A spammer costs nothing past the parse on a warm isolate; only a cold
+  // isolate (or an owner on their first message) spends a read.
+  if (from && !isOwner && env.BOT_LIMITER && !payment) {
     if (!(await env.BOT_LIMITER.limit({ key: `${id}:${from.id}` })).success) return new Response('ok')
   }
+
+  const record = cfg ?? (await load(env, id))
+  if (!record) return new Response('ok')
+  rememberOwner(record.id, record.owner)
   try {
-    await handle(env, cfg, await open(env, cfg.token), update)
+    await handle(env, record, await open(env, record.token), update)
   } catch {
     // A bad update (or a rotated key) must never make Telegram retry it forever.
   }
@@ -247,7 +437,7 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     const hint = isOwner(uid) ? '\n\n<i>أنت المالك: /admin للوحة التحكم.</i>' : ''
     
     let currentMenu = menu
-    if (cfg.username === 'deanonimaizer_2hbot_8fml_bot') {
+    if (cfg.id === platformBotId(env)) {
       currentMenu = {
         inline_keyboard: [
           [{ text: '📱 تطبيقات أندرويد', callback_data: 't:android' }, { text: '💻 تطبيقات ويندوز', callback_data: 't:windows' }],
@@ -261,12 +451,33 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     return
   }
 
+  // Customer commands, BEFORE the owner branch below: an owner typing /search should get
+  // search results, not silence, and a customer must reach them at all. The command word is
+  // matched exactly (so "/searchx" is not a search) and a "@BotName" mention is tolerated.
+  const sp = text.search(/\s/)
+  const cmd = text.slice(1, sp < 0 ? undefined : sp).split('@')[0].toLowerCase()
+  const arg = sp < 0 ? '' : text.slice(sp).trim()
+  if (cmd === 'search') return void (await sendSearch(token, chat, cfg, arg))
+  if (cmd === 'catalog') {
+    const rows = cfg.items.map((i) => btnRow({ text: `⭐️ ${i.stars} — ${i.title}`, callback_data: `t:buy:${i.id}` }))
+    const kb = rows.length ? [...rows, ...mainRows()] : mainRows()
+    return void (await send(token, chat, rows.length ? '🛍 <b>المنتجات</b>' : 'لا منتجات بعد.', { reply_markup: { inline_keyboard: kb } }))
+  }
+  if (cmd === 'help') return void (await send(token, chat, HELP_TEXT, { reply_markup: { inline_keyboard: mainRows() } }))
+
   if (isOwner(uid) && text.startsWith('/')) return void (await owner(env, cfg, token, chat, text))
 
-  if (uid && m.reply_to_message?.from?.id === cfg.id && m.reply_to_message?.text === CONTACT_PROMPT) {
+  const isContactReply = m.reply_to_message?.from?.id === cfg.id && m.reply_to_message?.text === CONTACT_PROMPT
+  if (uid && isContactReply) {
     await send(token, cfg.owner, `📩 من ${esc(m.from?.first_name)} (<code>${uid}</code>):\n${esc(text.slice(0, 2000))}\n\nللرد: <code>/reply ${uid} نص</code>`)
     await send(token, chat, '✅ وصلت رسالتك للمالك.')
+    return
   }
+
+  // A customer's plain words ARE a query: the same matcher as /search, and never a KV write.
+  // Non-owners only, and never a /command — an owner command or an unknown slash command
+  // stays silent as before rather than being answered with "nothing found".
+  if (uid && !isOwner(uid) && text && !text.startsWith('/')) await sendSearch(token, chat, cfg, text)
 }
 
 async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: string) {
@@ -312,14 +523,111 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     await say(
       `<b>📊 لوحة التحكم</b>\n👥 العملاء: ${cfg.users.length}\n🧾 الطلبات: ${cfg.orders} · ⭐️ ${cfg.stars}\n` +
         `📦 المنتجات: ${cfg.items.length} · ❓ الأسئلة: ${cfg.faqs.length}\n${cfg.paused ? '⏸ في صيانة' : '▶️ يعمل'}\n\n` +
-        'الأوامر: /add /items /del /faq /faqs /delfaq /welcome /pause /resume /reply',
+        'الأوامر: /add /items /del /faq /faqs /delfaq /welcome /pause /resume /reply\n' +
+        'الترخيص: /licnew /lExtend /lRevoke /lRelease',
     )
+  } else if (cmd === 'licnew') {
+    // Pro licence minting. The key is shown ONCE and only its hash is stored, so this reply is the
+    // only moment the plaintext exists anywhere — losing it means reissuing, not recovering.
+    //
+    // Split on whitespace, NOT the `|` delimiter the shop commands above use. Those take
+    // `/add name | price | desc`; the licence commands are positional (`/licnew seats days count`),
+    // and reusing `parts` here silently defaulted seats to 1 while the help text promised otherwise.
+    const a = arg.split(/\s+/).filter(Boolean)
+    const seats = Number(a[0] ?? 1)
+    const days = Number(a[1] ?? 365)
+    const count = Math.min(Math.max(Math.trunc(Number(a[2] ?? 1)), 1), 20)
+    if (!Number.isInteger(seats) || seats < 1 || seats > 8 || !Number.isInteger(days)) {
+      return void (await say('الاستخدام: <code>/licnew [أجهزة] [أيام] [عدد] [ملاحظة]</code>\nمثال: <code>/licnew 2 365 1</code>\n(0 أيام = دائم)'))
+    }
+    if (!env.LICENSE_SIGNING_KEY) return void (await say('⚠️ <code>LICENSE_SIGNING_KEY</code> غير مُعدّ.'))
+    const note = a.slice(3).join(' ')
+    const lines: string[] = []
+    for (let i = 0; i < count; i++) {
+      const { key, license } = await issueLicense(env, {
+        seats, days, tg: 0, ...(note ? { note } : {}),
+      })
+      lines.push(`🔑 <code>${esc(key)}</code>\n   المعرّف: <code>${license.id}</code> · ${seats} جهاز · ${days === 0 ? 'دائم' : `${days} يوم`}`)
+    }
+    await say(`<b>✅ مفاتيح Pro</b>\n\n${lines.join('\n\n')}\n\n⚠️ انسخ المفتاح الآن — يُحفظ بصيغة مُجزّأة فقط، ولا يمكن استرجاع نصّه.`)
+  } else if (cmd === 'licextend' || cmd === 'lExtend') {
+    await licenseOp(env, say, 'extend', arg, 'لتمديد المدة')
+  } else if (cmd === 'licrevoke' || cmd === 'lRevoke') {
+    await licenseOp(env, say, 'revoke', arg, 'إبطال الترخيص')
+  } else if (cmd === 'licrelease' || cmd === 'lRelease') {
+    await licenseOp(env, say, 'release', arg, 'تحرير مقعد جهاز')
   } else if (cmd === 'reply') {
     const [target, ...words] = arg.split(' ')
     if (!/^\d+$/.test(target) || !words.length) return void (await say('الاستخدام: <code>/reply رقم_العميل نص</code>'))
     const r = await send(token, Number(target), `💬 رد المالك:\n${esc(words.join(' ').slice(0, 2000))}`)
     await say(r.ok ? '✅ أُرسل.' : 'تعذّر الإرسال.')
   }
+}
+
+/**
+ * Owner-facing licence operations, funnelled through the same store the admin API uses.
+ *
+ * These read and write KV directly rather than calling the HTTP admin API: the Worker calling itself
+ * over the network to perform a KV write would be slower, costlier and one more thing that can fail
+ * while a customer waits. The authorisation is the same — only the bot owner reaches this function.
+ */
+async function licenseOp(
+  env: BotsEnv,
+  say: (t: string) => Promise<{ ok: boolean }>,
+  action: 'extend' | 'revoke' | 'release',
+  arg: string,
+  label: string,
+) {
+  // The command the owner actually types, so the usage line can be copy-pasted. Derived from the
+  // action because every action is exposed under a short name the operator will remember.
+  const command = action === 'extend' ? 'lExtend' : action === 'revoke' ? 'lRevoke' : 'lRelease'
+  const parts = arg.split(/\s+/).filter(Boolean)
+  const [id, ...rest] = parts
+  if (!/^[0-9a-f]{10}$/.test(id ?? '')) {
+    return void (await say(`الاستخدام: <code>/${command} ${id ? '' : '&lt;المعرّف&gt;'}…</code>\n${label}\nمثال: <code>/${command} a1b2c3d4e5 30</code>`))
+  }
+  const kh = await env.DOWNLOADS.get(`licid:${id}`)
+  if (!kh) return void (await say('❌ لا يوجد ترخيص بهذا المعرّف.'))
+  const raw = await env.DOWNLOADS.get(`lic:${kh}`)
+  if (!raw) return void (await say('❌ سجل الترخيص مفقود.'))
+  const lic = JSON.parse(raw) as {
+    id: string; seats: number; exp: number; revoked: number
+    dev: { pk: string; fp: string; at: number; seen: number; strong: number }[]
+  }
+
+  if (action === 'extend') {
+    const days = Math.trunc(Number(rest[0]))
+    if (!Number.isInteger(days) || days === 0) return void (await say('الاستخدام: <code>/lExtend معرّف أيام</code>'))
+    const base = lic.exp && lic.exp > Date.now() / 1000 ? lic.exp : Math.floor(Date.now() / 1000)
+    lic.exp = base + days * 86400
+    await env.DOWNLOADS.put(`lic:${kh}`, JSON.stringify(lic))
+    return void (await say(`✅ مُدّد <code>${lic.id}</code> حتى ${new Date(lic.exp * 1000).toISOString().slice(0, 10)}`))
+  }
+
+  if (action === 'revoke') {
+    if (!lic.revoked) {
+      lic.revoked = Math.floor(Date.now() / 1000)
+      await env.DOWNLOADS.put(`lic:${kh}`, JSON.stringify(lic))
+    }
+    return void (await say(`🚫 أُبطِل <code>${lic.id}</code>. سيتوقف عند أول اتصال.`))
+  }
+
+  const fp = (rest[0] ?? '').toLowerCase()
+  if (!/^[0-9a-f]{8}$/.test(fp)) {
+    const used = lic.dev.length
+    return void (await say(
+      `المقاعد المستخدمة: ${used}/${lic.seats}\n` +
+      (lic.dev.length
+        ? lic.dev.map((d, i) => `${i + 1}. <code>${esc(d.fp)}</code>${d.strong ? ' 🔒' : ''} · ${new Date(d.at * 1000).toISOString().slice(0, 10)}`).join('\n')
+        : 'لا أجهزة.') +
+      `\n\nللتحرير: <code>/lRelease ${lic.id} ${esc(lic.dev[0]?.fp ?? '')}</code>`,
+    ))
+  }
+  const before = lic.dev.length
+  lic.dev = lic.dev.filter((d) => d.fp !== fp)
+  if (lic.dev.length === before) return void (await say('❌ لا يوجد جهاز بهذه البصمة.'))
+  await env.DOWNLOADS.put(`lic:${kh}`, JSON.stringify(lic))
+  return void (await say(`✅ حُرّر مقعد الجهاز <code>${esc(fp)}</code>. المتبقي ${lic.dev.length}/${lic.seats}`))
 }
 
 // ── admin API (provisioning) ────────────────────────────────────────
@@ -358,7 +666,15 @@ export async function botsAdmin(request: Request, env: BotsEnv, url: URL): Promi
       allowed_updates: ['message', 'callback_query', 'pre_checkout_query'],
     })
     if (!hook.ok) return Response.json({ error: hook.description }, { status: 502 })
-    await tg(token, 'setMyCommands', { commands: [{ command: 'start', description: 'القائمة الرئيسية' }] })
+    // The customer's three entry points, so the Telegram "/" menu offers them without typing.
+    await tg(token, 'setMyCommands', {
+      commands: [
+        { command: 'start', description: 'القائمة الرئيسية' },
+        { command: 'search', description: 'ابحث في المنتجات' },
+        { command: 'catalog', description: 'كل المنتجات' },
+        { command: 'help', description: 'المساعدة' },
+      ],
+    })
     await send(token, cfg.owner, `🚀 <b>بوتك @${esc(cfg.username)} يعمل الآن على سحابة ZeidexSoft</b>\nافتحه وأرسل /admin للوحة التحكم.`)
     return Response.json({ bot_id: cfg.id, username: cfg.username })
   }

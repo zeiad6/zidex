@@ -16,8 +16,8 @@ export function PackageCard({ product, catalog }: { product: StoreProduct; catal
   return (
     <article
       className={cn(
-        'group/card bg-elevated relative flex h-full flex-col rounded-panel border p-5 transition-[box-shadow,transform] duration-300 hover:-translate-y-0.5 sm:p-6',
-        product.featured ? 'border-ghost-400/50 shadow-app-lg' : 'border-app shadow-app-md hover:shadow-app-lg',
+        'group/card bg-elevated relative flex h-full flex-col rounded-panel border p-5 transition-[box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:shadow-app-lg sm:p-6',
+        product.featured ? 'border-ghost-400/50 shadow-app-lg' : 'border-app shadow-app-md',
       )}
     >
       {product.featured && <BorderBeam />}
@@ -29,7 +29,9 @@ export function PackageCard({ product, catalog }: { product: StoreProduct; catal
         />
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-app text-[17px] leading-snug font-black">{copy.title}</h3>
+            <h3 className="text-app text-[17px] leading-snug font-black transition-colors duration-200 group-hover/card:text-accent">
+              {copy.title}
+            </h3>
             {product.featured && <Pill>{t('الأكثر طلباً', 'Most popular')}</Pill>}
           </div>
           <div className="mt-2">

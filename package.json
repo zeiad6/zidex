@@ -13,7 +13,12 @@
     "sync-meta": "node scripts/sync-post-meta.mjs",
     "sync-meta:write": "node scripts/sync-post-meta.mjs --write",
     "deploy:cf": "npm run build && node scripts/cf-headers.mjs && rm -f dist/_redirects && npx -y wrangler@4 deploy",
-    "indexnow": "node scripts/indexnow.mjs"
+    "indexnow": "node scripts/indexnow.mjs",
+    "test:license": "node scripts/test-license.mjs",
+    "test:botlic": "node scripts/test-bot-licensing.mjs",
+    "test": "node scripts/test-bots.mjs && node scripts/test-license.mjs && node scripts/test-bot-licensing.mjs && node scripts/test-store-app.mjs",
+    "gen:license-keys": "node scripts/gen-license-keys.mjs --env",
+    "test:store": "node scripts/test-store-app.mjs"
   },
   "dependencies": {
     "@netlify/blobs": "^8.1.0",
@@ -36,6 +41,8 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
+    "jsdom": "^25.0.1",
+    "playwright": "^1.63.0",
     "tailwindcss": "^4.0.0",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.19.1",

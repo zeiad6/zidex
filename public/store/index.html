@@ -14,6 +14,51 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/store/store.css" />
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    /* Theme and language before first paint.
+     *
+     * The stylesheet keys off <html data-theme>, and the runtime in store.js
+     * sets it too — but the runtime runs after the parser, which is a visible
+     * white flash on a dark phone. This block runs in the head, costs
+     * nothing, and reads exactly what store.js will read, so the two agree.
+     *
+     * Inside Telegram the client's colourScheme is authoritative, so there
+     * is nothing to choose here and only the data-tg marker is set. */
+    (function () {
+      var r = document.documentElement
+      var inTg = !!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData)
+      var dark
+      if (inTg) {
+        r.setAttribute('data-tg', '')
+        dark = window.Telegram.WebApp.colorScheme !== 'light'
+      } else {
+        try {
+          var forced = localStorage.getItem('zeidex-store-theme')
+          dark =
+            forced === 'dark' || forced === 'light'
+              ? forced === 'dark'
+              : !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        } catch (e) {
+          // Storage blocked and no matchMedia: the light default in the
+          // stylesheet stands, which is the readable one on an unknown screen.
+          dark = false
+        }
+        if (localStorageSafe() === 'en') {
+          r.lang = 'en'
+          r.dir = 'ltr'
+        }
+      }
+      r.setAttribute('data-theme', dark ? 'dark' : 'light')
+    })()
+
+    function localStorageSafe() {
+      try {
+        return localStorage.getItem('zeidex-store-lang')
+      } catch (e) {
+        return null
+      }
+    }
+  </script>
   <script src="/store/store.js" defer></script>
 </head>
 <body>

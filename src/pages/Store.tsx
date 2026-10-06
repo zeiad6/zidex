@@ -13,13 +13,15 @@ import {
 } from '@/lib/store'
 import { Reveal } from '@/components/ui/Reveal'
 import { AuroraBackdrop } from '@/components/ui/AuroraBackdrop'
+import { ArrowNudge, LiveDot, SweepLink } from '@/components/ui/Motion'
 import { ChatDemo } from '@/components/store/organisms/ChatDemo'
 import { PackageCard } from '@/components/store/organisms/PackageCard'
-import { StarAmount } from '@/components/store/atoms/StarAmount'
-import { ProductMark } from '@/components/store/atoms/ProductMark'
 import { Magnetic } from '@/components/ui/Interactive'
 import { StoreSection } from '@/components/store/templates/StoreSection'
 import { StoreFaq } from '@/components/store/organisms/StoreFaq'
+import { ChannelServices } from '@/components/store/organisms/ChannelServices'
+import { Marketplaces } from '@/components/store/organisms/Marketplaces'
+import { BotCommands } from '@/components/store/organisms/BotCommands'
 
 export default function Store() {
   const { t } = useI18n()
@@ -103,10 +105,10 @@ export default function Store() {
             'A fixed Stars price inside Telegram, or in USD on this site via TON, USDT, PayPal and card where enabled. Hosting is a subscription you can cancel any time.',
           )}
           action={
-            <a href={MINI_APP_PATH} className="text-accent flex items-center gap-1.5 text-[13px] font-bold hover:underline hover:underline-offset-4">
+            <SweepLink href={MINI_APP_PATH} className="text-accent flex items-center gap-1.5 text-[13px] font-bold">
               <ShoppingBag className="size-4" aria-hidden="true" />
               {t('نسخة تطبيق تيليجرام المصغّر', 'Telegram Mini App version')}
-            </a>
+            </SweepLink>
           }
         >
           {failed ? (
@@ -147,33 +149,12 @@ export default function Store() {
         ) : null}
 
         {catalog && services.length ? (
-          <section aria-labelledby="shop-services">
-            <h2 id="shop-services" className="text-app text-xl font-black">
-              {t('خدمات للقنوات', 'Channel services')}
-            </h2>
-            <ul className="border-app bg-elevated shadow-app mt-4 divide-y divide-(--line) rounded-panel border">
-              {services.map((p) => (
-                <li key={p.sku} className="flex flex-wrap items-center gap-x-4 gap-y-2 p-4 sm:px-5">
-                  <ProductMark product={p} size={44} />
-                  <div className="min-w-0 flex-1 basis-52">
-                    <p className="text-app font-bold">{copy(p).title}</p>
-                    <p className="text-subtle mt-0.5 text-[13px] leading-relaxed">{copy(p).description}</p>
-                  </div>
-                  <StarAmount value={p.stars} className="text-app" />
-                  <a
-                    href={buyLink(catalog, p.sku)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-ghost h-9 cursor-pointer px-3.5 text-[13px]"
-                  >
-                    {t('اشترِ', 'Buy')}
-                    <ArrowLeft className="size-3.5 ltr:rotate-180" aria-hidden="true" />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
+          <ChannelServices catalog={catalog} services={services} />
         ) : null}
+
+        {catalog ? <BotCommands catalog={catalog} /> : null}
+
+        <Marketplaces />
 
         <StoreSection id="shop-faq" title={t('أسئلة قبل الشراء', 'Before you buy')}>
           <StoreFaq />
@@ -186,17 +167,42 @@ export default function Store() {
           </h2>
           <p className="mt-3 max-w-[62ch] leading-relaxed text-white/90">
             {t(
-              'النجوم تُشترى من تيليجرام نفسه: داخل التطبيق بالبطاقة أو Apple/Google Pay، أو أرخص بنحو 30٪ بعملة TON عبر Fragment. وعند الدفع يعرض تيليجرام الشحن تلقائياً إن نقص رصيدك.',
-              'Stars are sold by Telegram itself: in the app by card or Apple/Google Pay, or about 30% cheaper with TON on Fragment. At checkout Telegram offers a top-up automatically if your balance is short.',
+              'النجوم تُشترى من تيليجرام نفسه: داخل التطبيق بالبطاقة أو Apple/Google Pay، أو أرخص بنحو 38٪ بعملة TON عبر Fragment. وعند الدفع يعرض تيليجرام الشحن تلقائياً إن نقص رصيدك.',
+              'Stars are sold by Telegram itself: in the app by card or Apple/Google Pay, or about 38% cheaper with TON on Fragment. At checkout Telegram offers a top-up automatically if your balance is short.',
             )}
           </p>
+
+          {/* The concrete numbers, because "cheaper" is a claim and this is the
+              evidence for it: 1,000 Stars is $15 in-app and $9.74 through Fragment. */}
+          <dl className="mt-6 grid max-w-lg grid-cols-3 gap-2.5 text-center">
+            <div className="rounded-2xl bg-white/12 p-3">
+              <dt className="text-[11px] font-bold text-white/70">{t('داخل التطبيق', 'In the app')}</dt>
+              <dd className="mt-1 text-lg font-black" dir="ltr">
+                $15
+              </dd>
+            </div>
+            <div className="rounded-2xl bg-white/12 p-3">
+              <dt className="text-[11px] font-bold text-white/70">{t('عبر Fragment', 'Via Fragment')}</dt>
+              <dd className="mt-1 text-lg font-black" dir="ltr">
+                $9.74
+              </dd>
+            </div>
+            <div className="rounded-2xl bg-white/25 p-3 ring-1 ring-white/40">
+              <dt className="text-[11px] font-bold text-white/80">{t('التوفير على 1000 نجمة', 'You save on 1,000')}</dt>
+              <dd className="mt-1 flex items-center justify-center gap-1 text-lg font-black">
+                <LiveDot tone="ok" />
+                <span dir="ltr">38%</span>
+              </dd>
+            </div>
+          </dl>
+
           <div className="mt-6 flex flex-wrap gap-3">
             {catalog ? (
               <a
                 href={starsLink(catalog)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn h-11 cursor-pointer bg-white px-5 font-bold text-[#3b2f8f] hover:bg-white/90"
+                className="btn press h-11 cursor-pointer bg-white px-5 font-bold text-[#3b2f8f] hover:bg-white/90"
               >
                 <Send className="size-4" aria-hidden="true" />
                 {t('اشترِ النجوم من البوت', 'Buy Stars via the bot')}
@@ -205,20 +211,23 @@ export default function Store() {
             <a
               href={FRAGMENT_STARS}
               target="_blank"
-              rel="noopener noreferrer"
-              className="btn h-11 cursor-pointer border border-white/40 px-5 text-white hover:bg-white/10"
+                rel="noopener noreferrer"
+              className="btn press h-11 cursor-pointer border border-white/40 px-5 text-white hover:bg-white/10"
             >
               <Gem className="size-4" aria-hidden="true" />
               {t('Fragment — بعملة TON', 'Fragment — pay with TON')}
+              <ArrowNudge>
+                <ArrowLeft className="size-4" />
+              </ArrowNudge>
             </a>
           </div>
         </section>
 
         <p className="text-subtle text-center text-[13px]">
           {t('تريد بوتاً بمواصفات خاصة؟', 'Need something custom?')}{' '}
-          <a href={`mailto:${site.email}`} className="text-accent font-bold hover:underline hover:underline-offset-4" dir="ltr">
+          <SweepLink href={`mailto:${site.email}`} className="text-accent font-bold" dir="ltr">
             {site.email}
-          </a>
+          </SweepLink>
         </p>
       </div>
     </>

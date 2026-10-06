@@ -563,6 +563,20 @@
   }
 }
 
+/* The settled state of a submit button: green fill, and a hover that
+   brightens instead of lifting. A success that keeps floating around reads
+   as "still loading" for as long as the pointer stays on it. */
+@utility btn-ok {
+  background-image: linear-gradient(135deg, #10b981 0%, #059669 50%, #10b981 100%);
+  background-size: 200% auto;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgb(16 185 129 / 0.35);
+  &:hover {
+    background-position: right center;
+    box-shadow: 0 12px 30px rgb(16 185 129 / 0.42);
+  }
+}
+
 @utility chip {
     display: inline-flex;
     align-items: center;
@@ -795,6 +809,202 @@
   }
   .animate-scroll-hint {
     animation: scroll-hint 1.9s var(--ease-out-expo) infinite;
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Interaction kit — hover, micro-interactions, transitions.
+   *
+   * Everything here is transform / opacity / background-position only, so
+   * each one stays on the compositor: a hover that animates `width`,
+   * `height`, `top` or `box-shadow` forces layout or a full repaint of the
+   * subtree on every frame, which is what makes a card grid feel sticky on
+   * a phone. Each rule is opt-in and every one of them is inert under
+   * prefers-reduced-motion (see the block at the end of this file).
+   * ------------------------------------------------------------------ */
+
+  /* Horizontal shake for a rejected input. `translateX` only, and a
+     decaying amplitude, so it reads as "no" instead of "broken". */
+  @keyframes shake-x {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    15% {
+      transform: translateX(-7px);
+    }
+    30% {
+      transform: translateX(6px);
+    }
+    45% {
+      transform: translateX(-4px);
+    }
+    60% {
+      transform: translateX(3px);
+    }
+    80% {
+      transform: translateX(-1.5px);
+    }
+  }
+  .animate-shake {
+    animation: shake-x 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  }
+
+  /* The success mark that replaces a submit button. The stroke is drawn by
+     dashoffset, so the checkmark writes itself instead of popping in. */
+  @keyframes draw-check {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes pop-check {
+    0% {
+      transform: scale(0.4);
+      opacity: 0;
+    }
+    60% {
+      transform: scale(1.12);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  .animate-pop-check {
+    animation: pop-check 0.34s var(--ease-spring) both;
+  }
+
+  /* A soft pulse for the "live" dot and for pending states. */
+  @keyframes ping-soft {
+    0% {
+      transform: scale(1);
+      opacity: 0.55;
+    }
+    70%,
+    100% {
+      transform: scale(2.1);
+      opacity: 0;
+    }
+  }
+  .animate-ping-soft {
+    animation: ping-soft 2.2s var(--ease-out-expo) infinite;
+  }
+
+  /* Number pop used when a counter changes. */
+  @keyframes pop-number {
+    0% {
+      transform: translateY(0.4em) scale(0.9);
+      opacity: 0;
+    }
+    100% {
+      transform: none;
+      opacity: 1;
+    }
+  }
+  .animate-pop-number {
+    animation: pop-number 0.34s var(--ease-out-expo) both;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Structural hover utilities.
+ *
+ * These are plain classes rather than `@utility` because they combine
+ * with `group-*` variants from the call site, and several of them are
+ * shared by components that are not React (the Telegram Mini App in
+ * public/store/store.css has its own copy of the same three rules).
+ * ------------------------------------------------------------------ */
+
+/* Sweeping underline for a nav item or an inline link. `background-size`
+   animates, the gradient box itself does not resize — that is why this is
+   cheap where `border-width` or a pseudo-element width would not be. */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  background-size: 0 2px;
+  transition:
+    background-size 0.32s var(--ease-out-expo),
+    color 0.2s;
+}
+.link-underline:hover,
+.link-underline:focus-visible,
+.link-underline[aria-current='page'] {
+  background-position: 0 100%;
+  background-size: 100% 2px;
+}
+/* Arabic and Latin run opposite ways: the line should grow from the
+   reading edge, not from the physical left. */
+[dir='rtl'] .link-underline {
+  background-position: 0 100%;
+}
+[dir='rtl'] .link-underline:hover,
+[dir='rtl'] .link-underline:focus-visible,
+[dir='rtl'] .link-underline[aria-current='page'] {
+  background-position: 100% 100%;
+}
+
+/* The lift every card in the store and the link hub shares. Kept as one
+   class so the distance and the easing cannot drift apart per surface. */
+.card-lift {
+  transition:
+    transform 0.32s var(--ease-out-expo),
+    box-shadow 0.32s var(--ease-out-expo),
+    border-color 0.32s;
+}
+.card-lift:hover {
+  transform: translateY(-3px);
+}
+
+/* Press feedback for anything that is not a .btn (cards, list rows,
+   disclosure headers). `.btn` already scales on :active. */
+.press {
+  transition:
+    transform 0.18s var(--ease-out-expo),
+    opacity 0.18s;
+}
+.press:active {
+  transform: scale(0.985);
+}
+
+/* The icon that follows a link on hover: nudges along the reading
+   direction. Physical left in RTL, right in LTR. */
+.arrow-nudge {
+  transition: transform 0.28s var(--ease-out-expo);
+}
+.group:hover .arrow-nudge,
+.group:focus-within .arrow-nudge {
+  transform: translateX(-3px);
+}
+[dir='ltr'] .group:hover .arrow-nudge,
+[dir='ltr'] .group:focus-within .arrow-nudge {
+  transform: translateX(3px);
+}
+
+/* A ring that fades in around a card on hover, for surfaces that sit on
+   the page background and need an edge rather than a lift. */
+.hover-ring {
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s var(--ease-out-expo);
+}
+.hover-ring:hover,
+.hover-ring:focus-within {
+  border-color: color-mix(in oklab, var(--accent) 55%, var(--line));
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 14%, transparent);
+}
+
+/* Reduced motion: cancel the transforms too, not only the duration. A
+   hover lift that jumps to its end position is worse than no lift. */
+@media (prefers-reduced-motion: reduce) {
+  .card-lift:hover,
+  .press:active,
+  .arrow-nudge {
+    transform: none !important;
+  }
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 2px;
   }
 }
 
