@@ -210,7 +210,7 @@ const SEARCH_FAQ_CAP = 5
 const SEARCH_HINT =
   '🔎 أرسل الكلمة التي تبحث عنها، مثال: <code>/search مثال</code>\n<code>/catalog</code> يعرض كل المنتجات — أو افتح القائمة من الأزرار.'
 const HELP_TEXT =
-  '<b>الأوامر</b>\n/start — القائمة الرئيسية\n/search — ابحث في المنتجات\n/catalog — كل المنتجات\n/help — هذه القائمة'
+  '<b>الأوامر</b>\n/start — القائمة الرئيسية\n/search — ابحث في المنتجات\n/catalog — كل المنتجات\n/apps — تطبيقاتنا (أندرويد وويندوز)\n/donate — دعم وتبرع\n/help — هذه القائمة'
 
 /** Fold Arabic and Latin text into one comparable form: lowercase, no harakat or tatweel,
  *  Arabic-Indic and Persian digits as Latin, one alef/ya/ha spelling, no punctuation.
@@ -346,33 +346,83 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     if (cfg.paused && !isOwner(q.from.id)) return void (await send(token, chat, '🛠 البوت في صيانة قصيرة.'))
     const data = String(q.data ?? '')
     if (data === 't:android') {
+      const text =
+        '📱 <b>تطبيقات الأندرويد من ZeidexSoft</b>\n\n' +
+        '1️⃣ <b>أرشيف برو EDMS</b> (v1.0.1)\nنظام إدارة وأرشفة الوثائق الإلكترونية، يعمل على الهاتف محلياً مع إمكانية المزامنة الآمنة مع الحاسوب.\n\n' +
+        '2️⃣ <b>VerityScope — كاشف التزييف العميق</b> (v0.4.0)\nكشف التزييف في الصور والفيديو والنصوص والصوت بـ 5 نماذج ذكاء اصطناعي محلية + تحليلات رقمية جنائية.'
       const rows = [
-        [{ text: 'أرشيف برو EDMS', url: 'https://zeidexsoft.com/programs/edms-archive-android' }],
-        [{ text: 'VerityScope — كاشف التزييف', url: 'https://zeidexsoft.com/programs/verityscope' }]
+        [{ text: '📥 تحميل أرشيف برو (MediaFire)', url: 'https://www.mediafire.com/file/inn8lf6tznv95nx/app-debug.apk/file' }],
+        [{ text: '📥 تحميل VerityScope (MediaFire)', url: 'https://www.mediafire.com/file/0taluz31zdblh8y/VerityScope-v0.4.0-release.apk/file' }],
+        [{ text: '🌐 استعراض البرامج على الموقع', url: 'https://zeidexsoft.com/programs' }],
+        [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
       ]
-      await send(token, chat, '📱 <b>تطبيقات الأندرويد</b>\nاضغط على التطبيق لتحميله أو قراءة المزيد:', { reply_markup: { inline_keyboard: rows } })
+      await send(token, chat, text, { reply_markup: { inline_keyboard: rows } })
     } else if (data === 't:windows') {
+      const text =
+        '💻 <b>تطبيقات ويندوز من ZeidexSoft</b>\n\n' +
+        '🔹 <b>أرشيف برو EDMS</b> (v1.0.6 - x64)\nنظام مكتبي متطور لإدارة وأرشفة الوثائق والمستندات: بحث نصي كامل، إصدارات غير قابلة للاستبدال، وسير عمل إلكتروني.'
       const rows = [
-        [{ text: 'أرشيف برو EDMS', url: 'https://zeidexsoft.com/programs/edms-archive-pro' }]
+        [{ text: '📥 تحميل الإعداد (GitHub)', url: 'https://github.com/zeiad6/Edms-archive/releases/download/v1.0.6/EDMS-Archive-1.0.6-Setup-x64.exe' }],
+        [{ text: '📥 مرآة التحميل (MediaFire)', url: 'https://www.mediafire.com/file/cezytgi4hqxmorc/EDMS-Archive-1.0.6-Setup-x64.exe/file' }],
+        [{ text: '🌐 صفحة البرنامج على الموقع', url: 'https://zeidexsoft.com/programs/edms-archive-pro' }],
+        [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
       ]
-      await send(token, chat, '💻 <b>تطبيقات ويندوز</b>\nاضغط على التطبيق لتحميله أو قراءة المزيد:', { reply_markup: { inline_keyboard: rows } })
+      await send(token, chat, text, { reply_markup: { inline_keyboard: rows } })
     } else if (data === 't:myapps') {
       const rows = [
-        [{ text: 'أرشيف برو EDMS', url: 'https://zeidexsoft.com/programs/edms-archive-pro' }],
-        [{ text: 'أرشيف برو للأندرويد', url: 'https://zeidexsoft.com/programs/edms-archive-android' }],
-        [{ text: 'VerityScope', url: 'https://zeidexsoft.com/programs/verityscope' }]
+        [{ text: '📱 تطبيقات أندرويد', callback_data: 't:android' }, { text: '💻 تطبيقات ويندوز', callback_data: 't:windows' }],
+        [{ text: '🌐 جميع البرامج على الموقع', url: 'https://zeidexsoft.com/programs' }],
+        [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
       ]
-      await send(token, chat, '🌐 <b>تطبيقات موقعي</b>\nتطبيقاتنا المتاحة:', { reply_markup: { inline_keyboard: rows } })
+      await send(token, chat, '🌐 <b>برمجيات وتطبيقات موقعنا</b>\nاختر المنصة لاستعراض وتحميل التطبيقات المتاحة:', { reply_markup: { inline_keyboard: rows } })
     } else if (data === 't:donate') {
       const rows = [
         [{ text: '⭐️ تبرع بالنجوم (Telegram Stars)', callback_data: 't:don_stars' }],
-        [{ text: '💳 تبرع بطرق أخرى (كريمي، USDT، بطاقة)', url: 'https://zeidexsoft.com/shop' }]
+        [{ text: '🏦 حسابات بنك الكريمي', callback_data: 't:don_kuraimi' }],
+        [{ text: '💎 تبرع بالعملات الرقمية (Crypto)', callback_data: 't:don_crypto' }],
+        [{ text: '🌐 التبرع عبر المتجر الإلكتروني', url: 'https://zeidexsoft.com/shop' }],
+        [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
       ]
-      await send(token, chat, '💖 <b>تبرع لدعمنا</b>\nاختر وسيلة الدفع التي تناسبك:', { reply_markup: { inline_keyboard: rows } })
+      await send(token, chat, '💖 <b>تبرع لدعم تطوير مشاريع ZeidexSoft</b>\nاختر وسيلة الدفع التي تناسبك:', { reply_markup: { inline_keyboard: rows } })
+    } else if (data === 't:don_kuraimi') {
+      const text =
+        '🏦 <b>حسابات بنك الكريمي للتبرع والدعم:</b>\n\n' +
+        '• دولار (USD): <code>3212959129</code>\n' +
+        '• ريال يمني (YER): <code>3179177535</code>\n' +
+        '• ريال سعودي (SAR): <code>3212932816</code>\n\n' +
+        '<i>اضغط على رقم الحساب لنسخه مباشرة. بعد التحويل يمكنك مراسلة المالك عبر البوت لتأكيد الدعم.</i>'
+      const rows = [
+        [{ text: '💬 إرسال إشعار للمالك', callback_data: 't:contact' }],
+        [{ text: '🔙 رجوع لخيارات التبرع', callback_data: 't:donate' }]
+      ]
+      await send(token, chat, text, { reply_markup: { inline_keyboard: rows } })
+    } else if (data === 't:don_crypto') {
+      const text =
+        '💎 <b>التبرع بالعملات الرقمية (TON / USDT):</b>\n\n' +
+        '• يمكنك التبرع بنجوم تيليجرام وشحنها عبر TON من Fragment، أو التحويل المباشر عبر صفحة المتجر الإلكتروني.\n\n' +
+        '🌐 تفضل بزيارة صفحة الدفع الرقمي على موقعنا:'
+      const rows = [
+        [{ text: '🌐 فتح صفحة الدفع الرقمي', url: 'https://zeidexsoft.com/shop' }],
+        [{ text: '🔙 رجوع لخيارات التبرع', callback_data: 't:donate' }]
+      ]
+      await send(token, chat, text, { reply_markup: { inline_keyboard: rows } })
+    } else if (data === 't:main') {
+      let currentMenu = menu
+      if (cfg.id === platformBotId(env)) {
+        currentMenu = {
+          inline_keyboard: [
+            [{ text: '📱 تطبيقات أندرويد', callback_data: 't:android' }, { text: '💻 تطبيقات ويندوز', callback_data: 't:windows' }],
+            [{ text: '🌐 تطبيقات موقعي', callback_data: 't:myapps' }, { text: '💖 تبرع', callback_data: 't:donate' }],
+            ...menu.inline_keyboard
+          ]
+        }
+      }
+      await send(token, chat, esc(cfg.welcome), { reply_markup: currentMenu })
     } else if (data === 't:don_stars') {
       const rows = [
         [{ text: '⭐️ 50', callback_data: 't:don:50' }, { text: '⭐️ 100', callback_data: 't:don:100' }],
-        [{ text: '⭐️ 500', callback_data: 't:don:500' }, { text: '⭐️ 1000', callback_data: 't:don:1000' }]
+        [{ text: '⭐️ 500', callback_data: 't:don:500' }, { text: '⭐️ 1000', callback_data: 't:don:1000' }],
+        [{ text: '🔙 رجوع لخيارات التبرع', callback_data: 't:donate' }]
       ]
       await send(token, chat, '⭐️ <b>اختر عدد النجوم للتبرع:</b>', { reply_markup: { inline_keyboard: rows } })
     } else if (data.startsWith('t:don:') && q.message?.chat?.type === 'private') {
@@ -462,6 +512,49 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     const rows = cfg.items.map((i) => btnRow({ text: `⭐️ ${i.stars} — ${i.title}`, callback_data: `t:buy:${i.id}` }))
     const kb = rows.length ? [...rows, ...mainRows()] : mainRows()
     return void (await send(token, chat, rows.length ? '🛍 <b>المنتجات</b>' : 'لا منتجات بعد.', { reply_markup: { inline_keyboard: kb } }))
+  }
+  if (cmd === 'apps' || cmd === 'myapps') {
+    const rows = [
+      [{ text: '📱 تطبيقات أندرويد', callback_data: 't:android' }, { text: '💻 تطبيقات ويندوز', callback_data: 't:windows' }],
+      [{ text: '🌐 جميع البرامج على الموقع', url: 'https://zeidexsoft.com/programs' }],
+      [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
+    ]
+    return void (await send(token, chat, '🌐 <b>برمجيات وتطبيقات موقعنا</b>\nاختر المنصة لاستعراض وتحميل التطبيقات المتاحة:', { reply_markup: { inline_keyboard: rows } }))
+  }
+  if (cmd === 'android') {
+    const text =
+      '📱 <b>تطبيقات الأندرويد من ZeidexSoft</b>\n\n' +
+      '1️⃣ <b>أرشيف برو EDMS</b> (v1.0.1)\nنظام إدارة وأرشفة الوثائق الإلكترونية، يعمل على الهاتف محلياً مع إمكانية المزامنة الآمنة مع الحاسوب.\n\n' +
+      '2️⃣ <b>VerityScope — كاشف التزييف العميق</b> (v0.4.0)\nكشف التزييف في الصور والفيديو والنصوص والصوت بـ 5 نماذج ذكاء اصطناعي محلية + تحليلات رقمية جنائية.'
+    const rows = [
+      [{ text: '📥 تحميل أرشيف برو (MediaFire)', url: 'https://www.mediafire.com/file/inn8lf6tznv95nx/app-debug.apk/file' }],
+      [{ text: '📥 تحميل VerityScope (MediaFire)', url: 'https://www.mediafire.com/file/0taluz31zdblh8y/VerityScope-v0.4.0-release.apk/file' }],
+      [{ text: '🌐 استعراض البرامج على الموقع', url: 'https://zeidexsoft.com/programs' }],
+      [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
+    ]
+    return void (await send(token, chat, text, { reply_markup: { inline_keyboard: rows } }))
+  }
+  if (cmd === 'windows') {
+    const text =
+      '💻 <b>تطبيقات ويندوز من ZeidexSoft</b>\n\n' +
+      '🔹 <b>أرشيف برو EDMS</b> (v1.0.6 - x64)\nنظام مكتبي متطور لإدارة وأرشفة الوثائق والمستندات: بحث نصي كامل، إصدارات غير قابلة للاستبدال، وسير عمل إلكتروني.'
+    const rows = [
+      [{ text: '📥 تحميل الإعداد (GitHub)', url: 'https://github.com/zeiad6/Edms-archive/releases/download/v1.0.6/EDMS-Archive-1.0.6-Setup-x64.exe' }],
+      [{ text: '📥 مرآة التحميل (MediaFire)', url: 'https://www.mediafire.com/file/cezytgi4hqxmorc/EDMS-Archive-1.0.6-Setup-x64.exe/file' }],
+      [{ text: '🌐 صفحة البرنامج على الموقع', url: 'https://zeidexsoft.com/programs/edms-archive-pro' }],
+      [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
+    ]
+    return void (await send(token, chat, text, { reply_markup: { inline_keyboard: rows } }))
+  }
+  if (cmd === 'donate') {
+    const rows = [
+      [{ text: '⭐️ تبرع بالنجوم (Telegram Stars)', callback_data: 't:don_stars' }],
+      [{ text: '🏦 حسابات بنك الكريمي', callback_data: 't:don_kuraimi' }],
+      [{ text: '💎 تبرع بالعملات الرقمية (Crypto)', callback_data: 't:don_crypto' }],
+      [{ text: '🌐 التبرع عبر المتجر الإلكتروني', url: 'https://zeidexsoft.com/shop' }],
+      [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
+    ]
+    return void (await send(token, chat, '💖 <b>تبرع لدعم تطوير مشاريع ZeidexSoft</b>\nاختر وسيلة الدفع التي تناسبك:', { reply_markup: { inline_keyboard: rows } }))
   }
   if (cmd === 'help') return void (await send(token, chat, HELP_TEXT, { reply_markup: { inline_keyboard: mainRows() } }))
 
