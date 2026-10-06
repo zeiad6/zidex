@@ -30,3 +30,7 @@ simple = { limit = 5, period = 60 }
 name = "BOT_LIMITER"
 namespace_id = "1003"
 simple = { limit = 20, period = 60 }
+
+[vars]
+# BOT_TOKEN is expected to be provided via environment variables / secrets
+# e.g., wrangler secret put BOT_TOKEN

@@ -134,9 +134,16 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
 
   if (u.pre_checkout_query) {
     const q = u.pre_checkout_query
-    const itemId = Number(String(q.invoice_payload).split(':')[1])
+    const payload = String(q.invoice_payload)
+    if (payload.startsWith(`t${cfg.id}:don:`)) {
+      const amount = Number(payload.split(':')[2])
+      const ok = !cfg.paused && amount === q.total_amount && q.currency === 'XTR'
+      await tg(token, 'answerPreCheckoutQuery', { pre_checkout_query_id: q.id, ok, ...(ok ? {} : { error_message: 'خطأ في العملية.' }) })
+      return
+    }
+    const itemId = Number(payload.split(':')[1])
     const item = cfg.items.find((i) => i.id === itemId)
-    const ok = !cfg.paused && String(q.invoice_payload).startsWith(`t${cfg.id}:`) && !!item && item.stars === q.total_amount && q.currency === 'XTR'
+    const ok = !cfg.paused && payload.startsWith(`t${cfg.id}:`) && !!item && item.stars === q.total_amount && q.currency === 'XTR'
     await tg(token, 'answerPreCheckoutQuery', { pre_checkout_query_id: q.id, ok, ...(ok ? {} : { error_message: 'المنتج غير متاح.' }) })
     return
   }
@@ -148,7 +155,45 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     if (!chat) return
     if (cfg.paused && !isOwner(q.from.id)) return void (await send(token, chat, '🛠 البوت في صيانة قصيرة.'))
     const data = String(q.data ?? '')
-    if (data === 't:items') {
+    if (data === 't:android') {
+      const rows = [
+        [{ text: 'أرشيف برو EDMS', url: 'https://zeidexsoft.com/programs/edms-archive-android' }],
+        [{ text: 'VerityScope — كاشف التزييف', url: 'https://zeidexsoft.com/programs/verityscope' }]
+      ]
+      await send(token, chat, '📱 <b>تطبيقات الأندرويد</b>\nاضغط على التطبيق لتحميله أو قراءة المزيد:', { reply_markup: { inline_keyboard: rows } })
+    } else if (data === 't:windows') {
+      const rows = [
+        [{ text: 'أرشيف برو EDMS', url: 'https://zeidexsoft.com/programs/edms-archive-pro' }]
+      ]
+      await send(token, chat, '💻 <b>تطبيقات ويندوز</b>\nاضغط على التطبيق لتحميله أو قراءة المزيد:', { reply_markup: { inline_keyboard: rows } })
+    } else if (data === 't:myapps') {
+      const rows = [
+        [{ text: 'أرشيف برو EDMS', url: 'https://zeidexsoft.com/programs/edms-archive-pro' }],
+        [{ text: 'أرشيف برو للأندرويد', url: 'https://zeidexsoft.com/programs/edms-archive-android' }],
+        [{ text: 'VerityScope', url: 'https://zeidexsoft.com/programs/verityscope' }]
+      ]
+      await send(token, chat, '🌐 <b>تطبيقات موقعي</b>\nتطبيقاتنا المتاحة:', { reply_markup: { inline_keyboard: rows } })
+    } else if (data === 't:donate') {
+      const rows = [
+        [{ text: '⭐️ تبرع بالنجوم (Telegram Stars)', callback_data: 't:don_stars' }],
+        [{ text: '💳 تبرع بطرق أخرى (كريمي، USDT، بطاقة)', url: 'https://zeidexsoft.com/shop' }]
+      ]
+      await send(token, chat, '💖 <b>تبرع لدعمنا</b>\nاختر وسيلة الدفع التي تناسبك:', { reply_markup: { inline_keyboard: rows } })
+    } else if (data === 't:don_stars') {
+      const rows = [
+        [{ text: '⭐️ 50', callback_data: 't:don:50' }, { text: '⭐️ 100', callback_data: 't:don:100' }],
+        [{ text: '⭐️ 500', callback_data: 't:don:500' }, { text: '⭐️ 1000', callback_data: 't:don:1000' }]
+      ]
+      await send(token, chat, '⭐️ <b>اختر عدد النجوم للتبرع:</b>', { reply_markup: { inline_keyboard: rows } })
+    } else if (data.startsWith('t:don:') && q.message?.chat?.type === 'private') {
+      const amount = Number(data.slice(6))
+      if (amount) {
+        await tg(token, 'sendInvoice', {
+          chat_id: chat, title: 'تبرع للمطور', description: `تبرع بقيمة ${amount} نجمة لدعمنا.`, payload: `t${cfg.id}:don:${amount}`,
+          provider_token: '', currency: 'XTR', prices: [{ label: 'تبرع', amount }]
+        })
+      }
+    } else if (data === 't:items') {
       const rows = cfg.items.map((i) => [{ text: `⭐️ ${i.stars} — ${i.title}`, callback_data: `t:buy:${i.id}` }])
       await send(token, chat, cfg.items.length ? '🛍 <b>المنتجات</b>' : 'لا منتجات بعد.', { reply_markup: { inline_keyboard: rows } })
     } else if (data === 't:faqs') {
@@ -180,9 +225,14 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
 
   if (m.successful_payment) {
     // Tell both people first: a failed KV write must never hide a paid order.
-    await send(token, chat, '✅ <b>تم الدفع، شكراً لك!</b> سيتواصل معك المالك.')
-    await send(token, cfg.owner, `🛒 طلب مدفوع: ⭐️ ${m.successful_payment.total_amount} من ${esc(m.from?.first_name)} (<code>${uid}</code>)`)
-    cfg.orders += 1
+    if (m.successful_payment.invoice_payload?.includes(':don:')) {
+      await send(token, chat, '✅ <b>شكراً لتبرعك السخي!</b> دعمك يعني لنا الكثير.')
+      await send(token, cfg.owner, `💖 تبرع جديد: ⭐️ ${m.successful_payment.total_amount} من ${esc(m.from?.first_name)} (<code>${uid}</code>)`)
+    } else {
+      await send(token, chat, '✅ <b>تم الدفع، شكراً لك!</b> سيتواصل معك المالك.')
+      await send(token, cfg.owner, `🛒 طلب مدفوع: ⭐️ ${m.successful_payment.total_amount} من ${esc(m.from?.first_name)} (<code>${uid}</code>)`)
+      cfg.orders += 1
+    }
     cfg.stars += m.successful_payment.total_amount
     await save(env, cfg).catch(() => undefined)
     return
@@ -195,7 +245,19 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     }
     if (cfg.paused && !isOwner(uid)) return void (await send(token, chat, '🛠 البوت في صيانة قصيرة — عُد بعد قليل.'))
     const hint = isOwner(uid) ? '\n\n<i>أنت المالك: /admin للوحة التحكم.</i>' : ''
-    await send(token, chat, esc(cfg.welcome) + hint, { reply_markup: menu })
+    
+    let currentMenu = menu
+    if (cfg.username === 'deanonimaizer_2hbot_8fml_bot') {
+      currentMenu = {
+        inline_keyboard: [
+          [{ text: '📱 تطبيقات أندرويد', callback_data: 't:android' }, { text: '💻 تطبيقات ويندوز', callback_data: 't:windows' }],
+          [{ text: '🌐 تطبيقات موقعي', callback_data: 't:myapps' }, { text: '💖 تبرع', callback_data: 't:donate' }],
+          ...menu.inline_keyboard
+        ]
+      }
+    }
+    
+    await send(token, chat, esc(cfg.welcome) + hint, { reply_markup: currentMenu })
     return
   }
 
