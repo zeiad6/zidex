@@ -243,12 +243,12 @@
     /* -0.02em fits Latin, but Arabic joins along the baseline and does not
        like negative tracking; a hair of positive space stops the descenders
        and the tail of ح/ج from colliding at large sizes. */
-    letter-spacing: -0.005em;
+    letter-spacing: 0.005em;
   }
 
   h1 {
     font-weight: 800;
-    letter-spacing: -0.015em;
+    letter-spacing: 0.015em;
   }
 
   /* Arabic ascenders and diacritics need more vertical room than Latin. */

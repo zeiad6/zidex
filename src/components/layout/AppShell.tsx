@@ -15,6 +15,7 @@ import {
   MessageCircle,
   Search,
   ShoppingBag,
+  LayoutGrid,
   X,
   type LucideIcon,
 } from 'lucide-react'
@@ -41,6 +42,7 @@ const primaryNav: NavItem[] = [
   { to: '/blog', icon: BookOpen, label: 'المقالات', labelEn: 'Articles', badge: 'posts' },
   { to: '/shop', icon: ShoppingBag, label: 'المتجر', labelEn: 'Store', badge: 'new' },
   { to: '/programs', icon: Package, label: 'البرامج', labelEn: 'Programs' },
+  { to: '/dashboard', icon: LayoutGrid, label: 'لوحة التحكم', labelEn: 'Dashboard' },
   { to: '/links', icon: Compass, label: 'الروابط', labelEn: 'Links' },
   { to: '/about', icon: Info, label: 'عن المنصة', labelEn: 'About' },
 ]

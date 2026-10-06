@@ -87,6 +87,7 @@ async function tg(token: string, method: string, body: Record<string, unknown>) 
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(body),
   })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (await res.json()) as { ok: boolean; result?: any; description?: string }
 }
 const send = (token: string, chat_id: number, text: string, extra: Record<string, unknown> = {}) =>
@@ -111,6 +112,7 @@ export async function botWebhook(request: Request, env: BotsEnv, id: string): Pr
   }
   const cfg = await load(env, id)
   if (!cfg) return new Response('ok')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const update = (await request.json().catch(() => ({}))) as Record<string, any>
   const from = update.message?.from ?? update.callback_query?.from ?? update.pre_checkout_query?.from
   // Payments are never throttled: Telegram has already taken the Stars.
@@ -126,6 +128,7 @@ export async function botWebhook(request: Request, env: BotsEnv, id: string): Pr
   return new Response('ok')
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, any>) {
   const isOwner = (uid?: number) => uid === cfg.owner
 
