@@ -14,7 +14,8 @@ export function usePageMeta(title: string, description: string, path: string) {
 
     const canonicalEl = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
     const prevCanonical = canonicalEl?.getAttribute('href') ?? null
-    const url = `${window.location.origin}${path}`
+    // Fixed host: mirrors (pages.dev, netlify.app) must point search engines here.
+    const url = `https://zeidexsoft.com${path}`
     canonicalEl?.setAttribute('href', url)
 
     const set = (selector: string, value: string) => {

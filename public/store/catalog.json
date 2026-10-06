@@ -1,0 +1,349 @@
+{
+  "bot": "deanonimaizer_2hbot_8fml_bot",
+  "currency": "XTR",
+  "payments": {
+    "stars": true,
+    "kuraimi_transfer": {
+      "accounts": {
+        "USD": "3212959129",
+        "YER": "3179177535",
+        "SAR": "3212932816"
+      },
+      "name": ""
+    }
+  },
+  "whatsapp": "https://wa.me/qr/2EZCWPVVO3DUE1?s=v",
+  "products": [
+    {
+      "sku": "store-bot-basic",
+      "title": "بوت متجر — أساسي",
+      "title_en": "Store bot — Basic",
+      "description": "بوت متجر رقمي باسمك: حتى 20 منتجاً، دفع بنجوم تيليجرام، تسليم تلقائي للمنتج، وإشعار لك بكل طلب. التسليم خلال 3 أيام مع تعديلين.",
+      "description_en": "A digital store bot under your name: up to 20 products, Telegram Stars checkout, automatic delivery and an alert on every order. Delivered in 3 days, 2 revisions.",
+      "stars": 3500,
+      "category": "bots",
+      "monthly": false,
+      "featured": false,
+      "usd": 49,
+      "image": "/store/img/products/store-bot-basic.webp",
+      "demo": "store",
+      "features": [
+        "حتى 20 منتجاً رقمياً مرتبة في أقسام",
+        "دفع بنجوم تيليجرام — بلا بوابة دفع ولا بطاقة",
+        "تسليم تلقائي للملف أو الرابط بعد الدفع",
+        "إشعار فوري لك بكل طلب وسجل كامل للطلبات",
+        "يعمل باسم متجرك وشعارك"
+      ],
+      "features_en": [
+        "Up to 20 digital products in categories",
+        "Telegram Stars checkout, no gateway or card",
+        "Automatic file or link delivery after payment",
+        "Instant alert on every order, full order log",
+        "Runs under your store's name and logo"
+      ],
+      "invoice": "https://t.me/$aDbQ--7UIEY8AgAAg86ue9IkPgo"
+    },
+    {
+      "sku": "store-bot-pro",
+      "title": "بوت متجر — احترافي",
+      "title_en": "Store bot — Pro",
+      "description": "كل ما في الأساسي، مع واجهة متجر Mini App بتصميم احترافي مثل هذا المتجر: أقسام ومنتجات بلا حد، لغتان، ثيم نهاري وليلي، وربط بموقعك. التسليم خلال 7 أيام ودعم 30 يوماً.",
+      "description_en": "Everything in Basic plus a polished Mini App storefront like this one: unlimited categories and products, two languages, light and dark themes, linked to your site. Delivered in 7 days, 30 days of support.",
+      "stars": 7500,
+      "category": "bots",
+      "monthly": false,
+      "featured": true,
+      "usd": 99,
+      "image": "/store/img/products/store-bot-pro.webp",
+      "demo": "store",
+      "features": [
+        "كل مميزات الباقة الأساسية",
+        "واجهة متجر Mini App بلغتين وثيم نهاري وليلي",
+        "منتجات وأقسام بلا حد، واشتراكات شهرية بالنجوم",
+        "أسئلة تلقائية بعد الشراء تصلك إجاباتها",
+        "زر المتجر في قائمة البوت وربط بموقعك",
+        "دعم وتعديلات لمدة 30 يوماً"
+      ],
+      "features_en": [
+        "Everything in Basic",
+        "Mini App storefront, two languages, light and dark",
+        "Unlimited products and categories, Stars subscriptions",
+        "Automatic post-purchase questions sent to you",
+        "Store button in the bot menu, linked to your site",
+        "30 days of support and changes"
+      ],
+      "invoice": "https://t.me/$Sy4VrO7UIEY9AgAA6j1_1zm2bgw"
+    },
+    {
+      "sku": "store-bot-hosting",
+      "title": "استضافة وصيانة بوتك",
+      "title_en": "Bot hosting & upkeep",
+      "description": "تشغيل بوتك على مدار الساعة، نسخ احتياطي، تحديثات أمنية، وتعديلات بسيطة كل شهر. يتجدد كل 30 يوماً ويمكن إلغاؤه من إعدادات تيليجرام في أي وقت.",
+      "description_en": "Your bot online around the clock, backups, security updates and small monthly tweaks. Renews every 30 days; cancel any time in Telegram settings.",
+      "stars": 750,
+      "category": "bots",
+      "monthly": true,
+      "featured": false,
+      "usd": 9,
+      "image": "/store/img/products/store-bot-hosting.webp",
+      "demo": "",
+      "features": [
+        "تشغيل على مدار الساعة مع مراقبة",
+        "نسخ احتياطي لقاعدة البيانات",
+        "تحديثات أمنية وتحديث المكتبات",
+        "تعديلات بسيطة كل شهر",
+        "إلغاء في أي وقت من إعدادات تيليجرام"
+      ],
+      "features_en": [
+        "Online around the clock, monitored",
+        "Database backups",
+        "Security and library updates",
+        "Small changes every month",
+        "Cancel any time in Telegram settings"
+      ],
+      "invoice": "https://t.me/$cDHL--7UIEY-AgAA8HW3n7w9QyA"
+    },
+    {
+      "sku": "group-bot",
+      "title": "بوت إدارة المجموعات",
+      "title_en": "Group manager bot",
+      "description": "يحمي مجموعتك تلقائياً: تحقق من الأعضاء الجدد، منع الروابط والسبام، ترحيب، تحذيرات وحظر، وتقارير للمشرفين.",
+      "description_en": "Guards your group: new-member captcha, link and spam filters, welcomes, warnings and bans, admin reports.",
+      "stars": 2500,
+      "category": "types",
+      "monthly": false,
+      "featured": false,
+      "usd": 35,
+      "image": "/store/img/products/group-bot.webp",
+      "demo": "group",
+      "features": [
+        "تحقق كابتشا للأعضاء الجدد",
+        "فلترة الروابط والكلمات والسبام",
+        "رسائل ترحيب وقوانين مثبتة",
+        "تحذيرات تلقائية ثم كتم أو حظر",
+        "تقرير يومي للمشرفين"
+      ],
+      "features_en": [
+        "Captcha for new members",
+        "Link, word and spam filters",
+        "Welcome message and pinned rules",
+        "Automatic warnings, then mute or ban",
+        "Daily admin report"
+      ],
+      "invoice": "https://t.me/$9rvFqO7UIEY_AgAAprDBasgQfNA"
+    },
+    {
+      "sku": "support-bot",
+      "title": "بوت خدمة العملاء",
+      "title_en": "Customer support bot",
+      "description": "يرد على الأسئلة الشائعة فوراً، ويحوّل المحادثة لموظف حين يلزم، مع ساعات عمل وتقييم للخدمة.",
+      "description_en": "Answers FAQs instantly, hands the chat to a human when needed, with working hours and ratings.",
+      "stars": 3000,
+      "category": "types",
+      "monthly": false,
+      "featured": false,
+      "usd": 39,
+      "image": "/store/img/products/support-bot.webp",
+      "demo": "support",
+      "features": [
+        "ردود فورية على الأسئلة الشائعة",
+        "تحويل لموظف بزر واحد",
+        "تذاكر برقم متابعة",
+        "ساعات عمل ورسالة خارج الدوام",
+        "تقييم الخدمة بعد كل محادثة"
+      ],
+      "features_en": [
+        "Instant FAQ answers",
+        "One-tap handoff to a human",
+        "Tickets with a tracking number",
+        "Working hours and an after-hours reply",
+        "Rating after every chat"
+      ],
+      "invoice": "https://t.me/$1r8cq-7UIEZAAgAAzE45VkzvREs"
+    },
+    {
+      "sku": "booking-bot",
+      "title": "بوت الحجوزات والمواعيد",
+      "title_en": "Booking bot",
+      "description": "يحجز عملاؤك المواعيد بأنفسهم: اختيار الخدمة واليوم والساعة، تذكير قبل الموعد، وعربون بالنجوم.",
+      "description_en": "Customers book themselves: pick a service, day and time, get a reminder, pay a deposit in Stars.",
+      "stars": 3500,
+      "category": "types",
+      "monthly": false,
+      "featured": false,
+      "usd": 45,
+      "image": "/store/img/products/booking-bot.webp",
+      "demo": "booking",
+      "features": [
+        "اختيار الخدمة واليوم والساعة",
+        "منع الحجز المزدوج للموعد",
+        "تذكير تلقائي قبل الموعد",
+        "عربون أو دفع كامل بالنجوم",
+        "جدول يومي للمشرف"
+      ],
+      "features_en": [
+        "Service, day and time picker",
+        "No double-booked slots",
+        "Automatic reminder before the slot",
+        "Deposit or full payment in Stars",
+        "Daily schedule for the admin"
+      ],
+      "invoice": "https://t.me/$Q3b7QO7UIEZBAgAAarf-rjGJNWA"
+    },
+    {
+      "sku": "subs-bot",
+      "title": "بوت الاشتراكات المدفوعة",
+      "title_en": "Paid subscriptions bot",
+      "description": "يبيع الاشتراك في قناتك أو مجموعتك الخاصة بالنجوم شهرياً، ويُدخل المشترك ويخرجه تلقائياً عند الانتهاء.",
+      "description_en": "Sells monthly access to your private channel or group in Stars, adding and removing members automatically.",
+      "stars": 3000,
+      "category": "types",
+      "monthly": false,
+      "featured": false,
+      "usd": 39,
+      "image": "/store/img/products/subs-bot.webp",
+      "demo": "subs",
+      "features": [
+        "اشتراك شهري بنجوم تيليجرام",
+        "رابط دعوة خاص لكل مشترك",
+        "إخراج تلقائي عند انتهاء الاشتراك",
+        "تذكير قبل التجديد",
+        "إحصائيات المشتركين والإيرادات"
+      ],
+      "features_en": [
+        "Monthly Stars subscription",
+        "Personal invite link per member",
+        "Automatic removal on expiry",
+        "Reminder before renewal",
+        "Subscriber and revenue stats"
+      ],
+      "invoice": "https://t.me/$44sDCO7UIEZCAgAAgqEx5embIRY"
+    },
+    {
+      "sku": "quiz-bot",
+      "title": "بوت المسابقات والاختبارات",
+      "title_en": "Quiz bot",
+      "description": "مسابقات تفاعلية باستطلاعات تيليجرام الأصلية: جولات بوقت محدد، لوحة صدارة، وجوائز للفائزين.",
+      "description_en": "Interactive quizzes with native Telegram polls: timed rounds, a leaderboard and prizes for winners.",
+      "stars": 2000,
+      "category": "types",
+      "monthly": false,
+      "featured": false,
+      "usd": 25,
+      "image": "/store/img/products/quiz-bot.webp",
+      "demo": "quiz",
+      "features": [
+        "أسئلة باختبارات تيليجرام الأصلية",
+        "جولات بوقت محدد",
+        "لوحة صدارة للمجموعة",
+        "بنك أسئلة تضيفه بسهولة",
+        "إعلان الفائزين تلقائياً"
+      ],
+      "features_en": [
+        "Native Telegram quiz polls",
+        "Timed rounds",
+        "Group leaderboard",
+        "Easy question bank",
+        "Automatic winner announcement"
+      ],
+      "invoice": "https://t.me/$rg2Ht-7UIEZDAgAAc48wSsBBob8"
+    },
+    {
+      "sku": "ai-bot",
+      "title": "بوت المساعد الذكي",
+      "title_en": "AI assistant bot",
+      "description": "مساعد بالذكاء الاصطناعي يجيب من معلومات نشاطك فقط، ويحوّل لإنسان عند الحاجة، مع حدود استخدام. تكلفة الذكاء الاصطناعي حسب الاستهلاك.",
+      "description_en": "An AI assistant that answers only from your business facts, hands off to a human, with usage limits. AI usage is billed separately.",
+      "stars": 5000,
+      "category": "types",
+      "monthly": false,
+      "featured": false,
+      "usd": 65,
+      "image": "/store/img/products/ai-bot.webp",
+      "demo": "ai",
+      "features": [
+        "يجيب من معلومات نشاطك فقط",
+        "لا يخترع أسعاراً أو وعوداً",
+        "تحويل لإنسان بزر واحد",
+        "حدود استخدام لكل مستخدم",
+        "يعمل بالعربية والإنجليزية"
+      ],
+      "features_en": [
+        "Answers only from your business facts",
+        "Never invents prices or promises",
+        "One-tap human handoff",
+        "Per-user usage limits",
+        "Arabic and English"
+      ],
+      "invoice": "https://t.me/$LBXDg-7UIEZEAgAAWssTfMNQpag"
+    },
+    {
+      "sku": "post-50",
+      "title": "حزمة 50 منشور",
+      "title_en": "50-post bundle",
+      "description": "نشر 50 رسالة في قناتك من داخل البوت مع سجل كامل في لوحة التحكم.",
+      "description_en": "Publish 50 messages to your channel from the bot, fully logged in the dashboard.",
+      "stars": 250,
+      "category": "channel",
+      "monthly": false,
+      "featured": false,
+      "usd": 3,
+      "image": "/store/img/products/post-50.webp",
+      "demo": "",
+      "features": [],
+      "features_en": [],
+      "invoice": "https://t.me/$AX-JM-7UIEZFAgAASyCPxbQUYOI"
+    },
+    {
+      "sku": "pin-month",
+      "title": "تثبيت شهري",
+      "title_en": "Monthly pin",
+      "description": "تثبيت رسالتك في أعلى القناة لمدة 30 يوماً، تتجدد تلقائياً.",
+      "description_en": "Your message pinned at the top of the channel for 30 days, auto-renewed.",
+      "stars": 500,
+      "category": "channel",
+      "monthly": false,
+      "featured": false,
+      "usd": 6,
+      "image": "/store/img/products/pin-month.webp",
+      "demo": "",
+      "features": [],
+      "features_en": [],
+      "invoice": "https://t.me/$Zy8Toe7UIEZGAgAAJ-KOoHZ3ut8"
+    },
+    {
+      "sku": "archive-5k",
+      "title": "أرشيف 5000 رسالة",
+      "title_en": "5,000-message archive",
+      "description": "تصدير تاريخ القناة كاملاً إلى JSON مع فهرسة زمنية.",
+      "description_en": "Export the full channel history to JSON with a time index.",
+      "stars": 900,
+      "category": "channel",
+      "monthly": false,
+      "featured": false,
+      "usd": 12,
+      "image": "/store/img/products/archive-5k.webp",
+      "demo": "",
+      "features": [],
+      "features_en": [],
+      "invoice": "https://t.me/$9EiNZ-7UIEZHAgAApbmbqHvj5o8"
+    },
+    {
+      "sku": "panel-pro",
+      "title": "لوحة تحكم Pro — شهر",
+      "title_en": "Pro dashboard — 1 month",
+      "description": "كل ميزات لوحة التحكم: نسخ احتياطي، تصدير، وجدولة متقدمة.",
+      "description_en": "Every dashboard feature: backups, exports and advanced scheduling.",
+      "stars": 700,
+      "category": "channel",
+      "monthly": false,
+      "featured": false,
+      "usd": 9,
+      "image": "/store/img/products/panel-pro.webp",
+      "demo": "",
+      "features": [],
+      "features_en": [],
+      "invoice": "https://t.me/$MZaZV-7UIEZIAgAAejM1THAj6aU"
+    }
+  ]
+}

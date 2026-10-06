@@ -1,0 +1,47 @@
+// zeidexsoft.com — static site from Workers assets, plus the download counter.
+// The counter is the same code Cloudflare Pages ran (functions/api/downloads.ts).
+import { onRequestGet, onRequestPost } from '../functions/api/downloads'
+import { createOrder, tonRate, type OrdersEnv } from './orders'
+import { kuraimiCheckUser, kuraimiPay, kuraimiStatus, type KuraimiEnv } from './kuraimi'
+import { botWebhook, botsAdmin, type BotsEnv } from './bots'
+
+type Env = Parameters<typeof onRequestGet>[0]['env'] & OrdersEnv & KuraimiEnv & BotsEnv
+
+const HOST = 'zeidexsoft.com'
+
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    const url = new URL(request.url)
+    if (url.hostname !== HOST && url.hostname.endsWith(HOST)) {
+      return Response.redirect(`https://${HOST}${url.pathname}${url.search}`, 301)
+    }
+    if (url.pathname === '/api/downloads') {
+      if (request.method === 'GET') return onRequestGet({ request, env })
+      if (request.method === 'POST') return onRequestPost({ request, env })
+      return new Response('method not allowed', { status: 405 })
+    }
+    if (url.pathname === '/api/orders') {
+      return request.method === 'POST' ? createOrder(request, env) : new Response('method not allowed', { status: 405 })
+    }
+    if (url.pathname === '/api/rates') return tonRate()
+    const hosted = url.pathname.match(/^\/tg\/(\d{4,15})$/)
+    if (hosted && request.method === 'POST') return botWebhook(request, env, hosted[1])
+    if (url.pathname === '/admin/bots' || url.pathname.startsWith('/admin/bots/')) return botsAdmin(request, env, url)
+    if (url.pathname === '/api/pay/kuraimi/status') return kuraimiStatus(env)
+    if (url.pathname === '/api/pay/kuraimi/check-user' && request.method === 'POST') return kuraimiCheckUser(request, env)
+    if (url.pathname === '/api/pay/kuraimi' && request.method === 'POST') return kuraimiPay(request, env)
+    // Google's HTML-file verification fetches the exact .html name and expects 200;
+    // assets would 307 it to the extensionless path.
+    if (/^\/google[0-9a-f]+\.html$/.test(url.pathname)) {
+      const res = await env.ASSETS.fetch(new URL(url.pathname.slice(0, -'.html'.length), url))
+      return new Response(res.body, { status: res.status, headers: res.headers })
+    }
+    const res = await env.ASSETS.fetch(request)
+    // A missing hashed chunk must 404, not fall back to index.html: /assets/* is cached
+    // immutably for a year, so an HTML fallback there would stick after every deploy.
+    if (url.pathname.startsWith('/assets/') && res.headers.get('content-type')?.startsWith('text/html')) {
+      return new Response('not found', { status: 404, headers: { 'cache-control': 'no-store' } })
+    }
+    return res
+  },
+}

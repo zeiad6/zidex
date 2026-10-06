@@ -522,7 +522,7 @@ const archive106: Block[] = [
     items: [
       'الإصدار على GitHub: [v1.0.6](https://github.com/zeiad6/Edms-archive/releases/tag/v1.0.6)',
       'المستودع: [zeiad6/Edms-archive](https://github.com/zeiad6/Edms-archive)',
-      'الموقع: [zeidex.netlify.app](https://zeidex.netlify.app/)',
+      'الموقع: [zeidexsoft.com](https://zeidexsoft.com/)',
     ],
   },
 ]

@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
+import { motion, useReducedMotion, type MotionStyle } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 /**
@@ -205,5 +206,51 @@ export function TickRule({ className, ticks = 12 }: { className?: string; ticks?
         />
       ))}
     </span>
+  )
+}
+
+/* ---------------------------------------------------------------- *
+ * Border beam — a short beam of light that travels the border.
+ * Adapted from Magic UI `border-beam` (MIT, magicui.design, also on
+ * 21st.dev): framer-motion instead of motion/react, brand colours, and
+ * a reduced-motion path that renders nothing rather than a frozen beam.
+ * Needs a positioned parent with a border-radius.
+ * ---------------------------------------------------------------- */
+export function BorderBeam({
+  size = 90,
+  duration = 7,
+  colorFrom = 'var(--color-ghost-500)',
+  colorTo = 'var(--color-veil-500)',
+  borderWidth = 1.5,
+}: {
+  size?: number
+  duration?: number
+  colorFrom?: string
+  colorTo?: string
+  borderWidth?: number
+}) {
+  const reduce = useReducedMotion()
+  if (reduce) return null
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 rounded-[inherit] border-(length:--beam-w) border-transparent mask-[linear-gradient(transparent,transparent),linear-gradient(#000,#000)] mask-intersect [mask-clip:padding-box,border-box]"
+      style={{ '--beam-w': `${borderWidth}px` } as CSSProperties}
+    >
+      <motion.div
+        className="absolute aspect-square bg-linear-to-l from-(--beam-from) via-(--beam-to) to-transparent"
+        style={
+          {
+            width: size,
+            offsetPath: `rect(0 auto auto 0 round ${size}px)`,
+            '--beam-from': colorFrom,
+            '--beam-to': colorTo,
+          } as MotionStyle
+        }
+        initial={{ offsetDistance: '0%' }}
+        animate={{ offsetDistance: ['0%', '100%'] }}
+        transition={{ repeat: Infinity, ease: 'linear', duration }}
+      />
+    </div>
   )
 }

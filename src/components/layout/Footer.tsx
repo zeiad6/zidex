@@ -12,6 +12,16 @@ export function Footer() {
           © {new Date().getFullYear()} {site.name} — {t('صُنع بعناية 🤍', 'Made with care 🤍')}
         </p>
         <ul className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+          <li>
+            <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-app transition-colors">
+              {t('واتساب', 'WhatsApp')}
+            </a>
+          </li>
+          <li>
+            <a href={`mailto:${site.email}`} className="hover:text-app transition-colors" dir="ltr">
+              {site.email}
+            </a>
+          </li>
           {socials.map((s) => (
             <li key={s.name}>
               <a href={s.href} target="_blank" rel="noopener noreferrer nofollow" className="hover:text-app transition-colors">

@@ -1,2 +1,6 @@
+# Old Netlify host → primary domain (Netlify only; Cloudflare Pages skips
+# host-qualified rules). Must sit above the SPA fallback: first match wins.
+https://zeidex.netlify.app/*  https://zeidexsoft.com/:splat  301!
+
 # SPA fallback — every route is handled by the React router.
 /*    /index.html   200

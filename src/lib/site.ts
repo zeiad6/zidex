@@ -4,17 +4,20 @@
  */
 
 export const site = {
-  name: 'Zidex',
+  name: 'ZeidexSoft',
   /** Default document title; pages that set their own restore this on unmount. */
-  title: 'Zidex — hub تيك توك، روابط، ومدونة',
-  titleEn: 'Zidex — TikTok hub, links & blog',
+  title: 'ZeidexSoft — بوتات تيليجرام وبرمجيات احترافية',
+  titleEn: 'ZeidexSoft — Telegram bots & professional software',
   handle: '@ghost.7784',
   handleBare: 'ghost.7784',
-  tagline: 'بوابتك الرسمية',
+  tagline: 'الموقع الرسمي',
   description:
-    'فيديوهات تيك توك، روابط مهمة، ومدونة تفاعلية — كل ذلك في واجهة واحدة سريعة تعمل ليلاً ونهاراً.',
+    'نبني بوتات تيليجرام ومتاجر رقمية وبرمجيات احترافية: دفع بالنجوم والكريمي، تجربة مجانية 3 أيام، وحماية من الدرجة الأولى.',
   descriptionEn:
-    'TikTok videos, key links, and an interactive blog — all in one fast interface that works day and night.',
+    'We build Telegram bots, digital stores and professional software: Stars and Kuraimi payments, a free 3-day trial, and security first.',
+  /** Company inbox, routed by Cloudflare Email Routing to the owner's mailbox. */
+  email: 'info@zeidexsoft.com',
+  whatsapp: 'https://wa.me/qr/2EZCWPVVO3DUE1?s=v',
   locale: 'ar' as const,
   dir: 'rtl' as const,
 } as const
@@ -126,6 +129,18 @@ export const hubLinks: HubLink[] = [
     emoji: '📓',
     accent: 'mint',
     featured: true,
+  },
+  {
+    id: 'store',
+    title: 'المتجر',
+    titleEn: 'Store',
+    description: 'منتجات رقمية تُدفع بنجوم تيليجرام',
+    descriptionEn: 'Digital goods paid with Telegram Stars',
+    // Absolute on purpose: /store is a static Mini App page, not a React route.
+    href: 'https://zeidexsoft.com/store/',
+    kind: 'tool',
+    emoji: '🛍️',
+    accent: 'veil',
   },
   {
     id: 'links-page',

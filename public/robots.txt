@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://zeidex.netlify.app/sitemap.xml
+Sitemap: https://zeidexsoft.com/sitemap.xml

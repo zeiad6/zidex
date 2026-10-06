@@ -28,7 +28,7 @@ export default function Links() {
 
   usePageMeta(
     `${t('الروابط', 'Links')} — ${site.name}`,
-    t('كل الروابط المهمة لـ Zidex في مكان واحد.', 'Every important Zidex link in one place.'),
+    t('كل الروابط المهمة لـ ZeidexSoft في مكان واحد.', 'Every important ZeidexSoft link in one place.'),
     '/links',
   )
 

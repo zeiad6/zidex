@@ -33,7 +33,7 @@ export default function Programs() {
 
   usePageMeta(
     `${t('البرامج', 'Programs')} — ${site.name}`,
-    t('برامج وتطبيقات جاهزة للتحميل من Zidex.', 'Ready-to-download apps and tools from Zidex.'),
+    t('برامج وتطبيقات جاهزة للتحميل من ZeidexSoft.', 'Ready-to-download apps and tools from ZeidexSoft.'),
     '/programs',
   )
 

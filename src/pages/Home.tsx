@@ -3,7 +3,7 @@ import { ShineBorder } from '@/components/ui/Decor'
 import { Glyph, type GlyphName } from '@/components/ui/Glyphs'
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowLeft, Check, Download, FileText, LayoutGrid, Package, UserPlus, type LucideIcon } from 'lucide-react'
+import { ArrowLeft, Check, Download, FileText, Gift, LayoutGrid, Package, ShoppingBag, UserPlus, type LucideIcon } from 'lucide-react'
 import { allPosts, categories, categoryLabel, postsFor, type Category } from '@/data/posts'
 import { primaryDownload as primaryOf, programs } from '@/data/programs'
 import { site, tiktok } from '@/lib/site'
@@ -12,6 +12,8 @@ import { cn } from '@/lib/utils'
 import { Reveal } from '@/components/ui/Reveal'
 import { PostCard } from '@/components/blog/PostCard'
 import { ProgramCard } from '@/components/programs/ProgramCard'
+import { StoreTeaser } from '@/components/store/organisms/StoreTeaser'
+import { useCatalog } from '@/lib/store'
 
 /* ------------------------------------------------------------------ *
  * Home dashboard, after the "Bloggo" Dribbble shot: serif greeting, a
@@ -438,118 +440,81 @@ function HeroFact({
 }
 
 function Hero() {
-  const { lang, t } = useI18n()
-
-  // Real distribution: how the articles actually split across the five
-  // sections, read off the index rather than typed in.
-  const spread = categories
-    .map((c) => allPosts.filter((p) => p.category === c).length)
-    .sort((a, b) => b - a)
-
-  const longest = allPosts.reduce(
-    (acc, p) => (p.readMinutes > acc ? p.readMinutes : acc),
-    0,
-  )
+  const { t } = useI18n()
+  const { catalog } = useCatalog()
+  const botCount = catalog?.products.filter((p) => p.category === 'types' || (p.category === 'bots' && !p.monthly)).length
+  const trialLink = catalog ? `https://t.me/${catalog.bot}?start=trial` : '/shop'
 
   return (
     <section
       aria-labelledby="hero-title"
       className="grid-bg relative overflow-hidden rounded-panel p-6 sm:p-9"
-      style={{
-        background: 'linear-gradient(135deg, #0f1023 0%, #1e1b4b 55%, #31247a 100%)',
-      }}
+      style={{ background: 'linear-gradient(135deg, #0f1023 0%, #1e1b4b 55%, #31247a 100%)' }}
     >
-      <span
-        aria-hidden="true"
-        className="absolute -top-24 left-1/4 size-96 rounded-full opacity-45 blur-[100px]"
-        style={{ background: '#6d5cff' }}
-      />
-      <span
-        aria-hidden="true"
-        className="absolute -right-16 -bottom-24 size-72 rounded-full opacity-35 blur-[90px]"
-        style={{ background: '#00c9a7' }}
-      />
+      <span aria-hidden="true" className="absolute -top-24 left-1/4 size-96 rounded-full opacity-45 blur-[100px]" style={{ background: '#6d5cff' }} />
+      <span aria-hidden="true" className="absolute -right-16 -bottom-24 size-72 rounded-full opacity-35 blur-[90px]" style={{ background: '#00c9a7' }} />
 
-      <div className="relative grid items-center gap-8 lg:grid-cols-2">
+      <div className="relative grid items-center gap-8 lg:grid-cols-[1.15fr_1fr]">
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[12px] font-bold text-white/85">
             <span className="relative flex size-2">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-veil-400 opacity-75 motion-reduce:animate-none" />
-              <span className="relative inline-flex size-2 rounded-full bg-veil-300" />
+              <span className="bg-veil-400 absolute inline-flex size-full animate-ping rounded-full opacity-75 motion-reduce:animate-none" />
+              <span className="bg-veil-300 relative inline-flex size-2 rounded-full" />
             </span>
-            {t(`${site.handle} · الحساب الرسمي`, `${site.handle} · the official account`)}
+            {t('ZeidexSoft · الموقع الرسمي', 'ZeidexSoft · official site')}
           </span>
 
-          <h1
-            id="hero-title"
-            className="mt-5 text-3xl leading-[1.25] font-black text-white lg:text-[2.75rem]"
-          >
-            {t('كل ما أنشره', 'Everything I publish')}{' '}
-            <span
-              className="gradient-text"
-              style={{ WebkitTextFillColor: 'transparent' }}
-            >
-              {t('في مكان واحد', 'in one place')}
-            </span>
+          <h1 id="hero-title" className="mt-5 text-3xl leading-[1.2] font-black text-balance text-white lg:text-[2.9rem]">
+            {t('نبني بوتات تيليجرام وبرمجيات تعمل لعملك', 'We build Telegram bots and software that work for your business')}
           </h1>
 
-          <p className="mt-3 max-w-md text-[14px] leading-relaxed text-white/65">
+          <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-white/70">
             {t(
-              `${allPosts.length} مقالاً عملياً مشروحاً، و${programs.length} برنامج مجاني جاهز، وحساباتي كلها — بمدونة تُقرأ على الجوال أولاً.`,
-              `${allPosts.length} hands-on articles explained properly, ${programs.length} free programs ready to install, and all my accounts — with a blog built mobile-first.`,
+              'متاجر رقمية، إدارة مجموعات، خدمة عملاء، حجوزات واشتراكات — بدفع بالنجوم والكريمي، وبوتك الخاص مجاناً 3 أيام قبل أن تقرر.',
+              'Digital stores, group management, support, bookings and subscriptions — paid in Stars or via Kuraimi, with your own bot free for 3 days before you decide.',
             )}
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link
-              to="/blog"
-              className="btn btn-primary tiktok-gradient-none bg-accent h-12 rounded-2xl px-6 text-[13px] font-black text-white"
-            >
-              <FileText className="size-4" aria-hidden="true" />
-              {t('ابدأ بالمقالات', 'Start with the articles')}
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Link to="/shop" className="btn btn-primary h-12 rounded-2xl px-6 text-[14px] font-black">
+              <ShoppingBag className="size-4" aria-hidden="true" />
+              {t('تصفح البوتات', 'Browse bots')}
             </Link>
-            <Link
-              to="/links"
-              className="flex h-12 items-center rounded-2xl border border-white/20 bg-white/10 px-6 text-[13px] font-black text-white transition-colors hover:bg-white hover:text-ink"
+            <a
+              href={trialLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-ink flex h-12 items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-6 text-[14px] font-black text-white transition-colors hover:bg-white"
             >
-              {t('كل الروابط', 'All my links')}
-              <ArrowLeft className="size-4 rtl:ms-2 ltr:ms-0" aria-hidden="true" />
-            </Link>
+              <Gift className="size-4" aria-hidden="true" />
+              {t('بوتك مجاناً 3 أيام', 'Your bot free for 3 days')}
+            </a>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3.5">
           <HeroFact
-            label={t('متابع على تيك توك', 'TikTok followers')}
-            value={<span dir="ltr">{tiktok.stats.followers}</span>}
-            sub={t(
-              `آخر تحديث ${tiktok.updatedAt}`,
-              `updated ${tiktok.updatedAt}`,
-            )}
+            label={t('أنواع بوتات جاهزة', 'Ready bot types')}
+            value={botCount ?? '…'}
+            sub={t('لكل منها تجربة مجانية داخل تيليجرام', 'each with a free demo in Telegram')}
             delay={0.1}
           />
           <HeroFact
-            label={t('مقالات منشورة', 'Published articles')}
-            value={allPosts.length}
-            sub={t(
-              `أطولها ${longest} دقائق`,
-              `longest reads ${longest} min`,
-            )}
-            bars={spread}
+            label={t('تجربة مجانية', 'Free trial')}
+            value={t('3 أيام', '3 days')}
+            sub={t('على توكن بوتك، مرة واحدة لكل شخص', 'on your own bot token, once per person')}
             delay={0.2}
           />
           <HeroFact
-            label={t('فيديو منشور', 'Videos posted')}
-            value={<span dir="ltr">{tiktok.stats.videos}</span>}
-            sub={t('بالإضافة إلى المقالات المكتوبة', 'on top of the written articles')}
+            label={t('برامج منشورة', 'Published apps')}
+            value={programs.length}
+            sub={t('ويندوز وأندرويد', 'Windows and Android')}
             delay={0.3}
           />
           <HeroFact
-            label={t('توزيع المقالات', 'How articles split')}
-            value={categories.length}
-            sub={categories
-              .map((c) => `${categoryLabel(c, lang)} ${allPosts.filter((p) => p.category === c).length}`)
-              .join(' · ')}
+            label={t('مقالات تقنية', 'Technical articles')}
+            value={allPosts.length}
+            sub={t('شروحات عملية بالتفصيل', 'hands-on, in depth')}
             delay={0.4}
           />
         </div>
@@ -570,12 +535,17 @@ export default function Home() {
       <Hero />
 
       <Reveal delay={0.06}>
+        <StoreTeaser />
+      </Reveal>
+
+      <Reveal delay={0.08}>
         <QuickActions />
       </Reveal>
 
       <Reveal delay={0.1}>
         <Spotlight />
       </Reveal>
+
 
       <Articles />
 

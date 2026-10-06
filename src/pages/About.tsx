@@ -78,7 +78,7 @@ export default function About() {
 
   usePageMeta(
     `${t('عن المنصة', 'About')} — ${site.name}`,
-    t('عن تصميم وتقنية Zidex، وسياسة الخصوصية.', 'About Zidex’s design, tech stack, and privacy policy.'),
+    t('عن تصميم وتقنية ZeidexSoft، وسياسة الخصوصية.', 'About ZeidexSoft’s design, tech stack, and privacy policy.'),
     '/about',
   )
 

@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
+import { motion } from 'framer-motion'
+import { FloatingWhatsApp } from '@/components/store/organisms/FloatingWhatsApp'
 import { AmbientField } from '@/components/ui/AmbientField'
 import { Glyph } from '@/components/ui/Glyphs'
 import { Link, NavLink, useLocation } from 'react-router-dom'
@@ -10,7 +12,9 @@ import {
   Lock,
   Menu,
   Package,
+  MessageCircle,
   Search,
+  ShoppingBag,
   X,
   type LucideIcon,
 } from 'lucide-react'
@@ -35,7 +39,8 @@ type NavItem = { to: string; icon: LucideIcon; label: string; labelEn: string; b
 const primaryNav: NavItem[] = [
   { to: '/', icon: House, label: 'الرئيسية', labelEn: 'Home' },
   { to: '/blog', icon: BookOpen, label: 'المقالات', labelEn: 'Articles', badge: 'posts' },
-  { to: '/programs', icon: Package, label: 'البرامج', labelEn: 'Programs', badge: 'new' },
+  { to: '/shop', icon: ShoppingBag, label: 'المتجر', labelEn: 'Store', badge: 'new' },
+  { to: '/programs', icon: Package, label: 'البرامج', labelEn: 'Programs' },
   { to: '/links', icon: Compass, label: 'الروابط', labelEn: 'Links' },
   { to: '/about', icon: Info, label: 'عن المنصة', labelEn: 'About' },
 ]
@@ -50,6 +55,8 @@ function useSection() {
 
 function Sidebar({ onSearch }: { onSearch: () => void }) {
   const { lang, t } = useI18n()
+  // The sidebar renders twice (desktop + drawer); a per-instance id keeps their pills apart.
+  const pillId = `nav-pill-${useId()}`
   const { pathname, search } = useLocation()
   const activeCategory = pathname === '/blog' ? new URLSearchParams(search).get('c') : null
 
@@ -66,16 +73,14 @@ function Sidebar({ onSearch }: { onSearch: () => void }) {
   return (
     <div className="flex h-full flex-col">
       <Link to="/" className="flex items-center gap-3 p-5" aria-label={site.name}>
-        <span className="brand-gradient grid size-11 shrink-0 place-items-center rounded-2xl text-2xl font-black text-white shadow-[0_8px_20px_rgb(109_92_255/0.4)]">
-          Z
-        </span>
+        <img src="/icon-192.png" alt="" width={44} height={44} className="size-11 shrink-0 rounded-2xl shadow-[0_8px_20px_rgb(109_92_255/0.4)]" />
         <span className="min-w-0 flex-1">
-          <span className="text-app flex items-center gap-2 text-xl leading-none font-black tracking-tight" dir="ltr">
+          <span className="text-app flex items-center gap-2 text-[17px] leading-none font-black tracking-tight" dir="ltr">
             {site.name.toUpperCase()}
-            <span className="bg-accent-soft text-accent rounded-full px-2 py-0.5 text-[11px] font-bold">{t('مجاني', 'FREE')}</span>
+            <span className="bg-accent-soft text-accent rounded-full px-2 py-0.5 text-[11px] font-bold">{t('رسمي', 'OFFICIAL')}</span>
           </span>
           <span className="text-subtle mt-1 block truncate text-[12px] font-medium">
-            {t('مقالات • برامج • روابط', 'Articles • Programs • Links')}
+            {t('بوتات • برامج • مقالات', 'Bots • Software • Articles')}
           </span>
         </span>
       </Link>
@@ -99,13 +104,27 @@ function Sidebar({ onSearch }: { onSearch: () => void }) {
             key={to}
             to={to}
             end={to === '/'}
-            className={({ isActive }) => rowClass(isActive && !(to === '/blog' && activeCategory))}
+            className={({ isActive }) =>
+              cn(
+                'group relative isolate flex items-center gap-3 rounded-[14px] px-3.5 py-3 text-[14px] font-semibold transition-colors duration-200',
+                isActive && !(to === '/blog' && activeCategory) ? 'text-white' : 'text-muted hover:bg-accent-soft hover:text-accent',
+              )
+            }
           >
             {({ isActive }) => {
               const on = isActive && !(to === '/blog' && activeCategory)
               return (
                 <>
-                  <Icon className="size-[1.15rem] shrink-0" aria-hidden="true" />
+                  {/* One pill that slides between items instead of each item lighting up. */}
+                  {on && (
+                    <motion.span
+                      layoutId={pillId}
+                      aria-hidden="true"
+                      className="from-ghost-500 to-ghost-400 absolute inset-0 -z-10 rounded-[14px] bg-linear-to-l shadow-[0_10px_24px_rgb(109_92_255/0.35)] ltr:bg-linear-to-r"
+                      transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                    />
+                  )}
+                  <Icon className="size-[1.15rem] shrink-0 transition-transform duration-300 group-hover:scale-110" aria-hidden="true" />
                   <span className="flex-1">{t(ar, labelEn)}</span>
                   {badge === 'posts' ? (
                     <span
@@ -152,6 +171,44 @@ function Sidebar({ onSearch }: { onSearch: () => void }) {
             </Link>
           )
         })}
+
+        {/* Store card: the products, one tap away from every page. */}
+        <Link
+          to="/shop"
+          className="group border-app bg-elevated hover:border-ghost-400/50 relative mt-4 block overflow-hidden rounded-2xl border p-4 transition-colors"
+        >
+          <div className="flex -space-x-3 rtl:space-x-reverse" aria-hidden="true">
+            {['store-bot-pro', 'group-bot', 'booking-bot', 'ai-bot'].map((sku, i) => (
+              <img
+                key={sku}
+                src={`/store/img/products/${sku}.webp`}
+                alt=""
+                width={34}
+                height={34}
+                loading="lazy"
+                className="ring-(--bg-elevated) size-[34px] rounded-[22%] ring-2 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1"
+                style={{ transitionDelay: `${i * 40}ms` }}
+              />
+            ))}
+          </div>
+          <p className="text-app mt-3 text-[13px] font-black">{t('بوتات تيليجرام جاهزة', 'Ready-made Telegram bots')}</p>
+          <p className="text-subtle mt-0.5 text-[11px] leading-relaxed">
+            {t('متجر، مجموعات، حجوزات، اشتراكات… جرّبها مجاناً.', 'Store, groups, bookings, subscriptions… try them free.')}
+          </p>
+          <span className="text-accent mt-2 inline-flex items-center gap-1 text-[12px] font-bold">
+            {t('ادخل المتجر', 'Visit the store')}
+            <ShoppingBag className="size-3.5" aria-hidden="true" />
+          </span>
+        </Link>
+        <a
+          href={site.whatsapp}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 flex items-center justify-center gap-2 rounded-xl bg-[#1fa855]/10 py-2.5 text-[13px] font-bold text-[#167a3e] transition-colors hover:bg-[#1fa855]/20 dark:text-[#3ddc84]"
+        >
+          <MessageCircle className="size-4" aria-hidden="true" />
+          {t('تواصل عبر واتساب', 'Chat on WhatsApp')}
+        </a>
 
         {/* Zidex upgrade card, repurposed: the one call to action worth a card. */}
         <div
@@ -295,6 +352,7 @@ function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void })
   )
 }
 
+// Home, Store, Articles, Programs; the rest live behind the More drawer.
 const mobileNav = primaryNav.slice(0, 4)
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -401,6 +459,8 @@ export function AppShell({ children }: { children: ReactNode }) {
           </main>
         </div>
       </div>
+
+      <FloatingWhatsApp />
 
       {/* Phone bottom nav, as in the template: four sections plus the full menu. */}
       <nav

@@ -835,3 +835,16 @@
     transform: none !important;
   }
 }
+
+/* Build-time prerender (scripts/prerender.mjs): readable for the instant before React
+   mounts and replaces it, and for crawlers that do not run JavaScript. */
+.prerender {
+  max-width: 70ch;
+  margin-inline: auto;
+  padding: 2rem 1.25rem;
+  line-height: 1.8;
+  color: var(--fg);
+}
+.prerender a {
+  color: var(--accent);
+}

@@ -1,0 +1,279 @@
+/* ZeidexSoft storefront — a Telegram Mini App that is also a plain web page.
+ * Inside Telegram the palette comes from themeParams (--tg-theme-*), so the store
+ * looks native in every client theme; outside it falls back to the site's brand. */
+:root {
+  --brand: #6d5cff;
+  --brand-2: #00c9a7;
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --surface-2: #eef0f6;
+  --text: #111827;
+  --muted: #5b6472;
+  --line: rgba(17, 24, 39, 0.08);
+  --button: var(--brand);
+  --button-text: #ffffff;
+  --radius: 20px;
+  --shadow: 0 1px 2px rgba(17, 24, 39, 0.06), 0 8px 24px rgba(17, 24, 39, 0.06);
+}
+:root[data-theme="dark"] {
+  --bg: #0b0f17;
+  --surface: #121826;
+  --surface-2: #1a2132;
+  --text: #f3f4f6;
+  --muted: #9ca3af;
+  --line: rgba(255, 255, 255, 0.08);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+/* Telegram wins when present: these vars only exist inside a Mini App. */
+:root[data-tg] {
+  --bg: var(--tg-theme-secondary-bg-color, var(--bg));
+  --surface: var(--tg-theme-bg-color, var(--surface));
+  --surface-2: var(--tg-theme-section-bg-color, var(--surface-2));
+  --text: var(--tg-theme-text-color, var(--text));
+  --muted: var(--tg-theme-hint-color, var(--muted));
+  --button: var(--tg-theme-button-color, var(--brand));
+  --button-text: var(--tg-theme-button-text-color, #fff);
+}
+
+* { box-sizing: border-box; }
+/* `hidden` must win over any component display rule (.feature is grid, .home-add block). */
+[hidden] { display: none !important; }
+/* clip, not hidden: no horizontal scroll in RTL, and sticky headers keep working. */
+html, body { overflow-x: clip; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.6 "IBM Plex Sans Arabic", system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+.glow {
+  position: fixed; inset: -20vh 0 auto; height: 60vh; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(40% 60% at 80% 20%, color-mix(in srgb, var(--brand) 28%, transparent), transparent 70%),
+    radial-gradient(35% 50% at 15% 30%, color-mix(in srgb, var(--brand-2) 22%, transparent), transparent 70%);
+  filter: blur(10px);
+}
+
+.top {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 16px;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: saturate(1.6) blur(14px);
+  -webkit-backdrop-filter: saturate(1.6) blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; min-width: 0; }
+.brand strong { display: block; font-size: 15px; font-weight: 700; }
+.brand small { display: block; color: var(--muted); font-size: 12px; }
+.logo {
+  display: grid; place-items: center; flex: none;
+  width: 38px; height: 38px; border-radius: 12px;
+  background: linear-gradient(135deg, #5a4ae6, #00836e);
+  color: #fff; font-weight: 800; font-size: 18px;
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--brand) 40%, transparent);
+}
+.tools { display: flex; gap: 8px; }
+.chip {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 999px;
+  height: 36px; min-width: 44px; padding: 0 12px; font-weight: 600; font-size: 13px;
+  transition: transform .15s ease, background .2s ease;
+}
+.chip.icon { display: grid; place-items: center; padding: 0; width: 36px; min-width: 0; }
+.chip:active { transform: scale(.94); }
+:root[data-tg] [data-outside] { pointer-events: none; }
+:root[data-tg] #theme { display: none; }
+
+main { max-width: 960px; margin: 0 auto; padding: 16px; }
+
+.hero {
+  position: relative; overflow: hidden;
+  padding: 22px 20px; border-radius: 24px;
+  background:
+    /* Deep stops on purpose: white text keeps >= 4.5:1 across the whole gradient
+       (the bright teal end alone measured ~2:1). */
+    linear-gradient(140deg, #3b2f8f 0%, #5a4ae6 50%, #00836e 100%);
+  color: #fff;
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--brand) 30%, transparent);
+  animation: rise .5s ease both;
+}
+.hero::after {
+  content: ""; position: absolute; inset: auto -30% -60% auto; width: 70%; aspect-ratio: 1;
+  border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.22), transparent 65%);
+}
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600;
+  background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .22);
+}
+.star { color: #ffd54a; }
+.hero h1 { margin: 12px 0 6px; font-size: clamp(22px, 5.5vw, 32px); line-height: 1.25; font-weight: 700; }
+.hero p { margin: 0; max-width: 46ch; }
+.trust { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 16px 0 0; }
+.trust li {
+  display: inline-flex; gap: 6px; align-items: center; font-size: 12.5px;
+  padding: 6px 10px; border-radius: 12px; background: rgba(0, 0, 0, .22);
+}
+
+.section-head { display: flex; align-items: baseline; justify-content: space-between; margin: 26px 2px 12px; }
+.section-head h2 { margin: 0; font-size: 18px; }
+.count { color: var(--muted); font-size: 13px; }
+
+.filters { display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px 14px; padding: 0 16px; scrollbar-width: none; }
+.filters::-webkit-scrollbar { display: none; }
+.filters[hidden] { display: none; }
+.filters button {
+  flex: none; height: 34px; padding: 0 14px; border-radius: 999px; font-size: 13px; font-weight: 600;
+  border: 1px solid var(--line); background: var(--surface); color: var(--muted);
+}
+.filters button[aria-selected="true"] { background: var(--button); border-color: transparent; color: var(--button-text); }
+.badge {
+  position: absolute; inset-block-start: 10px; inset-inline-start: 10px; z-index: 1;
+  padding: 3px 9px; border-radius: 999px; font-size: 11.5px; font-weight: 700;
+  background: #fff; color: #3b2f8f; box-shadow: 0 4px 12px rgba(0, 0, 0, .18);
+}
+.card.featured { border-color: color-mix(in srgb, var(--button) 55%, transparent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--button) 35%, transparent), var(--shadow); }
+.per { color: var(--muted); font-weight: 500; font-size: 12px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap: 12px; }
+.card {
+  position: relative; display: flex; flex-direction: column; text-align: start;
+  padding: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
+  background: var(--surface); box-shadow: var(--shadow);
+  transition: transform .2s ease, box-shadow .2s ease;
+  animation: rise .45s ease both; animation-delay: calc(var(--i, 0) * 60ms);
+}
+.card:hover { transform: translateY(-3px); }
+.card:active { transform: scale(.98); }
+.art {
+  position: relative; height: 112px; display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--a), var(--b));
+}
+.art::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.18) 1px, transparent 1px);
+  background-size: 14px 14px; mask-image: linear-gradient(to bottom, #000, transparent);
+}
+.art svg { position: relative; width: 46px; height: 46px; color: #fff; filter: drop-shadow(0 6px 12px rgba(0,0,0,.25)); }
+.body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.body h3 { margin: 0; font-size: 15px; line-height: 1.35; }
+.body p {
+  margin: 0; color: var(--muted); font-size: 13px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.row { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 6px; }
+.price {
+  display: inline-flex; align-items: center; gap: 4px; font-weight: 700; font-size: 14px;
+  padding: 4px 10px; border-radius: 999px; background: var(--surface-2);
+}
+.go { color: var(--button); font-weight: 600; font-size: 13px; }
+
+.skeleton { min-height: 230px; background: linear-gradient(90deg, var(--surface) 0%, var(--surface-2) 50%, var(--surface) 100%); background-size: 200% 100%; animation: shimmer 1.2s linear infinite; }
+
+.note { text-align: center; color: var(--muted); font-size: 13px; margin: 20px 0; }
+
+.sheet-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, .45); z-index: 20; animation: fade .2s ease both; }
+.sheet {
+  position: fixed; inset: auto 0 0 0; z-index: 21; margin: 0 auto; max-width: 560px;
+  padding: 10px 18px calc(18px + env(safe-area-inset-bottom));
+  background: var(--surface); color: var(--text);
+  border-radius: 24px 24px 0 0; box-shadow: 0 -12px 40px rgba(0, 0, 0, .25);
+  animation: up .28s cubic-bezier(.2, .8, .2, 1) both;
+}
+.handle { width: 40px; height: 4px; border-radius: 4px; background: var(--line); margin: 0 auto 12px; }
+.sheet h3 { margin: 14px 0 4px; font-size: 19px; }
+.sheet p { margin: 0; color: var(--muted); }
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+.facts div { padding: 10px 12px; border-radius: 14px; background: var(--surface-2); }
+.facts dt { font-size: 12px; color: var(--muted); }
+.facts dd { margin: 2px 0 0; font-weight: 700; }
+.buy, .ghost { width: 100%; height: 50px; border-radius: 14px; font-weight: 700; border: 0; }
+.buy { background: var(--button); color: var(--button-text); box-shadow: 0 10px 24px color-mix(in srgb, var(--button) 35%, transparent); }
+.ghost { background: transparent; color: var(--muted); margin-top: 6px; }
+/* Telegram draws its own MainButton, so the in-page one would be a second copy. */
+:root[data-tg] .buy, :root[data-tg] .ghost { display: none; }
+
+.toast {
+  position: fixed; inset: auto 16px calc(20px + env(safe-area-inset-bottom)); z-index: 30;
+  margin: 0 auto; max-width: 420px; padding: 12px 16px; border-radius: 14px;
+  background: var(--text); color: var(--bg); text-align: center; font-weight: 600;
+  animation: up .25s ease both;
+}
+
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+@keyframes up { from { transform: translateY(100%); } }
+@keyframes fade { from { opacity: 0; } }
+@keyframes shimmer { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { *, *::before { animation: none !important; transition: none !important; } }
+
+/* Product imagery: bot packages show the real bot avatar instead of a drawn mark. */
+.art img { position: relative; width: 76px; height: 76px; border-radius: 22%; box-shadow: 0 14px 28px -6px rgba(0, 0, 0, .4);
+  transition: transform .5s cubic-bezier(.16, 1, .3, 1); }
+.card:hover .art img { transform: rotate(-6deg) scale(1.08); }
+.gallery .tile img { width: 104px; height: 104px; border-radius: 22%; box-shadow: 0 16px 32px -8px rgba(0, 0, 0, .45); }
+::view-transition-group(product-mark) { animation-duration: .45s; animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .25s; }
+.trust svg, .pill svg { flex: none; }
+
+.gallery {
+  display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory;
+  margin: 0 -18px; padding: 0 18px 4px; scrollbar-width: none;
+}
+.gallery::-webkit-scrollbar { display: none; }
+.gallery > * { flex: none; scroll-snap-align: center; border-radius: 18px; }
+.gallery .tile { width: 100%; height: 150px; display: grid; place-items: center; background: linear-gradient(135deg, var(--a), var(--b)); }
+.gallery .tile svg { width: 58px; height: 58px; color: #fff; }
+.gallery .shot { height: 150px; width: auto; aspect-ratio: 9 / 20; object-fit: cover; object-position: top; border: 1px solid var(--line); background: var(--surface-2); }
+.gallery:has(.shot) .tile { width: 72%; }
+
+.features { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 8px; }
+.features li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; }
+.features svg { flex: none; margin-top: 3px; color: var(--brand-2); }
+:root[data-theme="light"] .features svg { color: #00836e; }
+
+.sheet { max-height: 92vh; overflow-y: auto; }
+.sheet-links { display: flex; justify-content: center; gap: 22px; margin-top: 10px; }
+.sheet-links a { color: var(--button); font-weight: 600; font-size: 14px; text-decoration: none; padding: 6px 2px; }
+.sheet-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+::selection { background: color-mix(in srgb, var(--brand) 30%, transparent); }
+
+/* Featured banner — the one product the store leads with. */
+.feature {
+  position: relative; width: 100%; margin: 18px 0 0; padding: 16px; border: 0; border-radius: var(--radius);
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; text-align: start;
+  background: var(--surface); box-shadow: var(--shadow); overflow: hidden; isolation: isolate;
+}
+.feature::before {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; z-index: -1;
+  background: conic-gradient(from var(--beam, 0deg), transparent 0 70%, var(--brand) 82%, var(--brand-2) 90%, transparent 96%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: beam 6s linear infinite;
+}
+@property --beam { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@keyframes beam { to { --beam: 360deg; } }
+.feature img { width: 56px; height: 56px; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, .25); }
+.feature b { display: block; font-size: 15px; }
+.feature small { color: var(--muted); font-size: 12.5px; }
+.feature .go-pill { background: var(--button); color: var(--button-text); border-radius: 999px; padding: 7px 12px; font-weight: 700; font-size: 13px; white-space: nowrap; }
+
+.search {
+  display: flex; align-items: center; gap: 8px; margin-top: 14px; padding: 0 14px; height: 46px;
+  border-radius: 14px; background: var(--surface); border: 1px solid var(--line); color: var(--muted);
+}
+.search:focus-within { border-color: var(--brand); }
+.search input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--text); font: inherit; }
+.search input::-webkit-search-cancel-button { filter: grayscale(1); }
+
+.home-add {
+  display: block; margin: 18px auto 0; border: 1px dashed var(--line); background: transparent; color: var(--button);
+  border-radius: 999px; padding: 10px 16px; font-weight: 600; font-size: 13px;
+}
+
+.wa-link { display: inline-flex; align-items: center; gap: 6px; color: #1a8f48; font-weight: 700; text-decoration: none; padding: 8px 14px; border-radius: 999px; background: rgba(31, 168, 85, .1); }
+:root[data-theme="dark"] .wa-link { color: #3ddc84; }

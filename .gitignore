@@ -42,3 +42,8 @@ pnpm-debug.log*
 .temp/
 .tmp/
 coverage/
+
+# Cloudflare local secrets and state
+.dev.vars
+.dev.vars.*
+.wrangler/

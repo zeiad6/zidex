@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>متجر ZeidexSoft</title>
+  <meta name="description" content="بوت متجر رقمي على تيليجرام بالدفع بالنجوم: باقة أساسية واحترافية واستضافة شهرية — اطلبه من داخل تيليجرام." />
+  <link rel="canonical" href="https://zeidexsoft.com/store/" />
+  <meta name="theme-color" content="#0b0f17" />
+  <link rel="icon" href="/favicon.ico" sizes="48x48" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/store/store.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="/store/store.js" defer></script>
+</head>
+<body>
+  <div class="glow" aria-hidden="true"></div>
+
+  <header class="top">
+    <a class="brand" href="https://zeidexsoft.com/" data-outside>
+      <img class="logo" src="/icon-192.png" alt="" width="38" height="38" />
+      <span>
+        <strong data-i18n="brand">متجر ZeidexSoft</strong>
+        <small data-i18n="brandSub">منتجات رقمية · دفع بالنجوم</small>
+      </span>
+    </a>
+    <div class="tools">
+      <button class="chip" id="lang" type="button" aria-label="Language">EN</button>
+      <button class="chip icon" id="theme" type="button" aria-label="Theme" data-outside>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <span class="pill"><svg class="star" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="currentColor" d="m12 2.5 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.3l-5.8 3.1 1.1-6.5L2.6 9.3l6.5-.9z"/></svg> <span data-i18n="heroPill">Telegram Stars</span></span>
+      <h1 data-i18n="heroTitle">بوت متجرك الرقمي على تيليجرام</h1>
+      <p data-i18n="heroText">بِع منتجاتك الرقمية بنجوم تيليجرام دون بطاقة أو بوابة دفع. هذا المتجر نفسه مثال حي على الباقة الاحترافية.</p>
+      <ul class="trust">
+        <li><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span data-i18n="trust1">دفع رسمي من تيليجرام</span></li>
+        <li><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span data-i18n="trust2">تسليم فوري للإيصال</span></li>
+        <li><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="m5.6 5.6 3.6 3.6m5.6 5.6 3.6 3.6m0-12.8-3.6 3.6m-5.6 5.6-3.6 3.6"/></svg><span data-i18n="trust3">دعم بشري</span></li>
+      </ul>
+    </section>
+
+    <button class="feature" id="feature" type="button" hidden></button>
+
+    <label class="search">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="search" type="search" autocomplete="off" data-i18n-placeholder="searchPh" placeholder="ابحث في المنتجات…" />
+    </label>
+
+    <div class="section-head">
+      <h2 data-i18n="products">المنتجات</h2>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="filters" id="filters" role="tablist"></div>
+
+    <section class="grid" id="grid" aria-live="polite">
+      <div class="card skeleton"></div><div class="card skeleton"></div>
+      <div class="card skeleton"></div><div class="card skeleton"></div>
+    </section>
+
+    <p class="note" id="empty" hidden data-i18n="noResults">لا نتائج — جرّب كلمة أخرى.</p>
+    <button class="home-add" id="home-add" type="button" hidden data-i18n="addHome">أضف المتجر إلى الشاشة الرئيسية</button>
+    <p class="note"><a id="wa" href="#" hidden class="wa-link">واتساب</a></p>
+    <p class="note" id="outside" hidden data-i18n="outside">تتصفح من المتصفح — الشراء يفتح البوت في تيليجرام.</p>
+  </main>
+
+  <div class="sheet-backdrop" id="backdrop" hidden></div>
+  <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
+    <div class="handle" aria-hidden="true"></div>
+    <div class="gallery" id="sheet-gallery"></div>
+    <h3 id="sheet-title"></h3>
+    <p id="sheet-desc"></p>
+    <ul class="features" id="sheet-features"></ul>
+    <dl class="facts">
+      <div><dt data-i18n="price">السعر</dt><dd id="sheet-price"></dd></div>
+      <div><dt data-i18n="billing">الدفع</dt><dd id="sheet-billing"></dd></div>
+    </dl>
+    <button class="buy" id="sheet-buy" type="button"></button>
+    <div class="sheet-links">
+      <a id="sheet-demo" href="#" hidden>جرّبه مجاناً</a>
+      <a id="sheet-try" href="#" data-i18n="tryBot">جرّب البوت</a>
+      <a id="sheet-stars" href="#" data-i18n="getStars">شراء نجوم</a>
+    </div>
+    <button class="ghost" id="sheet-close" type="button" data-i18n="close">إغلاق</button>
+  </section>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>

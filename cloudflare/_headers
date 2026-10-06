@@ -1,0 +1,42 @@
+# Cloudflare Pages headers (Netlify uses netlify.toml). Copied into dist by npm run deploy:cf.
+# CSP: tight as the site can run with Google Fonts and the TikTok player.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-ViHqCi+wRwAv5u4IeJjyuiToXseja5OWkeFb2JROT74='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://www.tiktok.com https://*.tiktokcdn.com https://*.tiktokcdn-eu.com; frame-src https://www.tiktok.com; media-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-DNS-Prefetch-Control: off
+  X-Permitted-Cross-Domain-Policies: none
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Content-hashed bundles are immutable.
+/assets/*
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+
+/favicon.ico
+  ! Cache-Control
+  Cache-Control: public, max-age=604800
+
+/icon-512.png
+  ! Cache-Control
+  Cache-Control: public, max-age=604800
+
+/robots.txt
+  ! Cache-Control
+  Cache-Control: public, max-age=3600
+
+/sitemap.xml
+  ! Cache-Control
+  Cache-Control: public, max-age=3600
+
+# Storefront Mini App: Telegram Web embeds it in an iframe and it loads
+# telegram-web-app.js, so it gets its own CSP and no X-Frame-Options.
+/store/*
+  ! Content-Security-Policy
+  ! X-Frame-Options
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://telegram.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'self' https://web.telegram.org; base-uri 'self'; object-src 'none'; form-action 'none'
