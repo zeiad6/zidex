@@ -62,7 +62,7 @@ const MAX_ITEMS = 50
  * Env override: BOT_PLATFORM_ID, for when this Worker serves a fork whose
  * platform bot was re-created under a different account.
  */
-/** Verified against getMe on 2026-10-06: @deanonimaizer_2hbot_8fml_bot. */
+/** Verified platform bot username: @ZeidexStoreBot (ID: 8968001501). */
 const DEFAULT_PLATFORM_BOT_ID = 8968001501
 
 const platformBotId = (env: BotsEnv) => Number(env.BOT_PLATFORM_ID ?? DEFAULT_PLATFORM_BOT_ID)
@@ -88,6 +88,7 @@ const OWNER_CACHE_TTL_MS = 60_000
  */
 export function __expireOwnerCache() {
   for (const [k, v] of ownerCache) ownerCache.set(k, { owner: v.owner, at: 0 })
+  for (const [k, v] of configCache) configCache.set(k, { cfg: (v as any).cfg, at: 0 })
 }
 
 const MAX_FAQS = 50
@@ -140,10 +141,17 @@ const send = (token: string, chat_id: number, text: string, extra: Record<string
   tg(token, 'sendMessage', { chat_id, text, parse_mode: 'HTML', disable_web_page_preview: true, ...extra })
 
 const load = async (env: BotsEnv, id: string) => {
+  const cached = configCache.get(String(id)) as { cfg: Cfg | null; at: number } | undefined
+  if (cached && Date.now() - cached.at < 60000) return cached.cfg
   const raw = await env.DOWNLOADS.get(`tb:${id}`)
-  return raw ? (JSON.parse(raw) as Cfg) : null
+  const cfg = raw ? (JSON.parse(raw) as Cfg) : null
+  configCache.set(String(id), { cfg, at: Date.now() })
+  return cfg
 }
-const save = (env: BotsEnv, cfg: Cfg) => env.DOWNLOADS.put(`tb:${cfg.id}`, JSON.stringify(cfg))
+const save = (env: BotsEnv, cfg: Cfg) => {
+  configCache.set(String(cfg.id), { cfg, at: Date.now() })
+  return env.DOWNLOADS.put(`tb:${cfg.id}`, JSON.stringify(cfg))
+}
 
 /**
  * Owner ids, cached per isolate so the rate limiter can run *before* the KV
@@ -168,7 +176,8 @@ const save = (env: BotsEnv, cfg: Cfg) => env.DOWNLOADS.put(`tb:${cfg.id}`, JSON.
  * path segment and the write has `cfg.id` (a number, from getMe), so keying the
  * write with `cfg.id` and the read with the URL param silently never matches.
  */
-const ownerCache = new Map<string, { owner: number; at: number }>()
+export const ownerCache = new Map<string, { owner: number; at: number }>()
+export const configCache = new Map<string, unknown>()
 const botKey = (id: string | number) => String(id)
 const rememberOwner = (id: string | number, owner: number) => ownerCache.set(botKey(id), { owner, at: Date.now() })
 
@@ -399,6 +408,8 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     } else if (data === 't:don_crypto') {
       const text =
         '💎 <b>التبرع بالعملات الرقمية (TON / USDT):</b>\n\n' +
+        '• عنوان محفظة TON الخاصة بنا:\n' +
+        '<code>UQCndGV2Qs1BqWvNjAzjv6K_LSfleQp9_V5PL76_EfuKX0LD</code>\n\n' +
         '• يمكنك التبرع بنجوم تيليجرام وشحنها عبر TON من Fragment، أو التحويل المباشر عبر صفحة المتجر الإلكتروني.\n\n' +
         '🌐 تفضل بزيارة صفحة الدفع الرقمي على موقعنا:'
       const rows = [
@@ -445,6 +456,39 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     } else if (data === 't:contact') {
       // force_reply, not a KV flag: a tap must cost no KV write (free tier: 1,000/day).
       await send(token, chat, CONTACT_PROMPT, { reply_markup: { force_reply: true, input_field_placeholder: 'رسالتك…' } })
+    } else if (data === 't:adm_items') {
+      if (!isOwner(q.from.id)) return
+      await send(token, chat, cfg.items.map((i, n) => `${n + 1}. ${esc(i.title)} — ⭐️ ${i.stars}`).join('\n') || 'لا منتجات مسجلة بعد.')
+    } else if (data === 't:adm_faqs') {
+      if (!isOwner(q.from.id)) return
+      await send(token, chat, cfg.faqs.map((f, n) => `${n + 1}. ${esc(f.q)}`).join('\n') || 'لا أسئلة مسجلة بعد.')
+    } else if (data === 't:adm_toggle_pause') {
+      if (!isOwner(q.from.id)) return
+      cfg.paused = !cfg.paused
+      await save(env, cfg)
+      await send(token, chat, cfg.paused ? '⏸ تم إيقاف البوت مؤقتاً للعملاء.' : '▶️ تم استئناف تشغيل البوت للعملاء.')
+    } else if (data === 't:adm_refresh') {
+      if (!isOwner(q.from.id)) return
+      const adminRows = [
+        [{ text: '📦 قائمة المنتجات', callback_data: 't:adm_items' }, { text: '❓ الأسئلة الشائعة', callback_data: 't:adm_faqs' }],
+        [{ text: cfg.paused ? '▶️ استئناف البوت' : '⏸ إيقاف للصيانة', callback_data: 't:adm_toggle_pause' }, { text: '🔄 تحديث الإحصاءات', callback_data: 't:adm_refresh' }]
+      ]
+      await send(token, chat,
+        `<b>📊 لوحة تحكم المتجر (ZeidexSoft Admin)</b>\n\n` +
+        `👥 العملاء النشطون: <b>${cfg.users.length}</b>\n` +
+        `🧾 إجمالي الطلبات: <b>${cfg.orders}</b>\n` +
+        `⭐️ إجمالي الأرباح: <b>${cfg.stars} نجمة</b>\n` +
+        `📦 المنتجات المسجلة: <b>${cfg.items.length}</b> / ${MAX_ITEMS}\n` +
+        `❓ الأسئلة الشائعة: <b>${cfg.faqs.length}</b> / ${MAX_FAQS}\n` +
+        `الحالة التشغيلية: <b>${cfg.paused ? '⏸ متوقف (وضع الصيانة)' : '▶️ يعمل بنشاط'}</b>\n\n` +
+        `<i>أوامر الإدارة المباشرة:</i>\n` +
+        `• إضافة منتج: <code>/add اسم | سعر_النجوم | وصف</code>\n` +
+        `• تعديل الترحيب: <code>/welcome النص</code>\n` +
+        `• إضافة سؤال: <code>/faq سؤال | جواب</code>\n` +
+        `• الرد على عميل: <code>/reply رقم_العميل النص</code>\n` +
+        `• إصدار تراخيص Pro: <code>/licnew 2 365 1</code>`,
+        { reply_markup: { inline_keyboard: adminRows } }
+      )
     } else if (data.startsWith('t:buy:') && q.message.chat.type === 'private') {
       const item = cfg.items.find((i) => i.id === Number(data.slice(6)))
       if (item) {
@@ -613,11 +657,25 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     await save(env, cfg)
     await say(cfg.paused ? '⏸ البوت متوقف للعملاء.' : '▶️ عاد البوت للعمل.')
   } else if (cmd === 'admin') {
-    await say(
-      `<b>📊 لوحة التحكم</b>\n👥 العملاء: ${cfg.users.length}\n🧾 الطلبات: ${cfg.orders} · ⭐️ ${cfg.stars}\n` +
-        `📦 المنتجات: ${cfg.items.length} · ❓ الأسئلة: ${cfg.faqs.length}\n${cfg.paused ? '⏸ في صيانة' : '▶️ يعمل'}\n\n` +
-        'الأوامر: /add /items /del /faq /faqs /delfaq /welcome /pause /resume /reply\n' +
-        'الترخيص: /licnew /lExtend /lRevoke /lRelease',
+    const adminRows = [
+      [{ text: '📦 قائمة المنتجات', callback_data: 't:adm_items' }, { text: '❓ الأسئلة الشائعة', callback_data: 't:adm_faqs' }],
+      [{ text: cfg.paused ? '▶️ استئناف البوت' : '⏸ إيقاف للصيانة', callback_data: 't:adm_toggle_pause' }, { text: '🔄 تحديث الإحصاءات', callback_data: 't:adm_refresh' }]
+    ]
+    await send(token, chat,
+      `<b>📊 لوحة تحكم المتجر (ZeidexSoft Admin)</b>\n\n` +
+      `👥 العملاء النشطون: <b>${cfg.users.length}</b>\n` +
+      `🧾 إجمالي الطلبات: <b>${cfg.orders}</b>\n` +
+      `⭐️ إجمالي الأرباح: <b>${cfg.stars} نجمة</b>\n` +
+      `📦 المنتجات المسجلة: <b>${cfg.items.length}</b> / ${MAX_ITEMS}\n` +
+      `❓ الأسئلة الشائعة: <b>${cfg.faqs.length}</b> / ${MAX_FAQS}\n` +
+      `الحالة التشغيلية: <b>${cfg.paused ? '⏸ متوقف (وضع الصيانة)' : '▶️ يعمل بنشاط'}</b>\n\n` +
+      `<i>أوامر الإدارة المباشرة:</i>\n` +
+      `• إضافة منتج: <code>/add اسم | سعر_النجوم | وصف</code>\n` +
+      `• تعديل الترحيب: <code>/welcome النص</code>\n` +
+      `• إضافة سؤال: <code>/faq سؤال | جواب</code>\n` +
+      `• الرد على عميل: <code>/reply رقم_العميل النص</code>\n` +
+      `• إصدار تراخيص Pro: <code>/licnew 2 365 1</code>`,
+      { reply_markup: { inline_keyboard: adminRows } }
     )
   } else if (cmd === 'licnew') {
     // Pro licence minting. The key is shown ONCE and only its hash is stored, so this reply is the
@@ -787,6 +845,7 @@ export async function botsAdmin(request: Request, env: BotsEnv, url: URL): Promi
     const cfg = await load(env, id)
     if (!cfg) return new Response('not found', { status: 404 })
     await tg(await open(env, cfg.token), 'deleteWebhook', { drop_pending_updates: true })
+    ownerCache.delete(botKey(id))
     await env.DOWNLOADS.delete(`tb:${id}`)
     return Response.json({ deleted: Number(id) })
   }

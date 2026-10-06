@@ -19,6 +19,7 @@
 // (+ optional LIKECARD_* and SUPPLIER_PRODUCTS="sku=productId,…").
 // Field names follow that open-source client; confirm them against the contract the bank
 // gives you at merchant onboarding before going live.
+import { issueLicense, type LicenseEnv } from './license'
 
 type KV = {
   get(key: string): Promise<string | null>
@@ -175,13 +176,14 @@ export async function kuraimiCheckUser(request: Request, env: KuraimiEnv) {
   )
 }
 
-type Product = { sku: string; title: string; usd: number }
+type Product = { sku: string; title: string; usd: number; monthly?: boolean }
 type Stored = {
   status: 'charging' | 'paid' | 'failed' | 'unknown'
   sku: string
   yer: number
   bankRef?: string
   code?: string | null
+  licenseId?: string
 }
 
 /** POST /api/pay/kuraimi — the website checkout. Same-origin, rate limited, idempotent. */
@@ -259,18 +261,37 @@ export async function kuraimiPay(request: Request, env: KuraimiEnv): Promise<Res
   }
 
   const supplierId = supplierProductFor(env, sku)
-  const code = supplierId && likecardReady(env) ? await buyCode(env, supplierId, refno) : null
-  const stored: Stored = { status: 'paid', sku, yer, bankRef: bank.ResultSet?.PH_REF_NO, code }
+  let code = supplierId && likecardReady(env) ? await buyCode(env, supplierId, refno) : null
+  let licenseId: string | null = null
+
+  // Automated Web Storefront Licensing:
+  // If no supplier code exists and this is a software/bot license, mint it automatically
+  const isLicenseProduct = sku.includes('pro') || sku.includes('license') || sku.includes('panel') || sku.includes('bot')
+  if (!code && isLicenseProduct) {
+    try {
+      const issued = await issueLicense(env as unknown as LicenseEnv, {
+        seats: sku.includes('pro') ? 3 : 1,
+        days: product.monthly ? 30 : 365,
+        note: `web:kuraimi:${refno}`,
+      })
+      code = issued.key
+      licenseId = issued.license.id
+    } catch {
+      // In case of any issuance fault, fallback to manual admin delivery without failing the payment
+    }
+  }
+
+  const stored: Stored = { status: 'paid', sku, yer, bankRef: bank.ResultSet?.PH_REF_NO, code, ...(licenseId ? { licenseId } : {}) }
 
   // Admins first: if the KV write below fails, a paid order is still never lost.
   await notifyAdmins(
     env,
     `🏦 <b>دفع الكريمي ناجح</b>\nالطلب: <code>${refno}</code>\nالمنتج: ${escapeHtml(product.title)}\nالمبلغ: ${yer.toLocaleString('en-US')} ريال\nمرجع البنك: <code>${escapeHtml(stored.bankRef ?? '—')}</code>\n` +
-      (supplierId
-        ? code
-          ? 'الكود سُلّم تلقائياً من LikeCard.'
-          : '⚠️ <b>فشل شراء الكود من LikeCard</b> — سلّمه يدوياً أو اعكس الدفعة.'
-        : 'سلّم الخدمة يدوياً للعميل.'),
+      (code
+        ? `🔑 <b>مفتاح الترخيص / الكود المولد:</b> <code>${escapeHtml(code)}</code>\n(سُلّم للمشتري فوراً على شاشة المتجر).`
+        : supplierId
+          ? '⚠️ <b>فشل شراء الكود من LikeCard</b> — سلّمه يدوياً أو اعكس الدفعة.'
+          : 'سلّم الخدمة يدوياً للعميل.'),
   )
   await env.DOWNLOADS.put(`kref:${refno}`, JSON.stringify(stored), { expirationTtl: ORDER_TTL_S }).catch(() => undefined)
   return Response.json({ refno, ...stored })

@@ -278,6 +278,93 @@
       "invoice": "https://t.me/$LBXDg-7UIEZEAgAAWssTfMNQpag"
     },
     {
+      "sku": "multibot-crm",
+      "title": "منصة CRM الموحدة لإدارة وأتمتة البوتات",
+      "title_en": "Unified Multi-Bot CRM Platform",
+      "description": "لوحة تحكم سحابية مركزية لإدارة كل بوتاتك في مكان واحد، مزامنة فورية للبيانات، وسيناريوهات أتمتة ذكية بين البوتات.",
+      "description_en": "Centralized cloud dashboard to manage all your bots in one place, real-time data sync, and smart cross-bot automations.",
+      "stars": 9500,
+      "category": "types",
+      "monthly": false,
+      "featured": false,
+      "usd": 129,
+      "image": "/store/img/products/crm-bot.webp",
+      "demo": "crm",
+      "features": [
+        "إدارة مركزية لعدة بوتات من واجهة واحدة",
+        "أتمتة متقاطعة بين بوتات المبيعات والدعم",
+        "لوحة تحليلات وإحصائيات مركزية موحدة",
+        "تخزين سحابي فائق السرعة وأمان مشدد",
+        "ربط غير محدود للمشرفين والصلاحيات"
+      ],
+      "features_en": [
+        "Central management for multiple bots from one UI",
+        "Cross-bot triggers between sales and help desks",
+        "Unified real-time analytics dashboard",
+        "Ultra-fast cloud storage and hardened security",
+        "Unlimited admin team access with roles"
+      ],
+      "invoice": "https://t.me/$CRM99-7UIEZJAgAAcrm99platform"
+    },
+    {
+      "sku": "workflow-engine",
+      "title": "محرك الأتمتة والربط الذكي (No-Code Engine)",
+      "title_en": "Visual Workflow Automation Engine",
+      "description": "ربط بوتاتك بمنصات الأتمتة العالمية مثل n8n وActivepieces وبناء مسارات عمل مخصصة دون كتابة أسطر برمجية.",
+      "description_en": "Connect your bots to visual workflow tools like n8n and Activepieces to craft tailored automations without coding.",
+      "stars": 8500,
+      "category": "types",
+      "monthly": false,
+      "featured": false,
+      "usd": 115,
+      "image": "/store/img/products/workflow.webp",
+      "demo": "workflow",
+      "features": [
+        "تكامل مباشر مع n8n وActivepieces وWebhooks",
+        "أتمتة إرسال الرسائل بناءً على أحداث خارجية",
+        "قوالب جاهزة لمزامنة جداول البيانات وGoogle Sheets",
+        "معالجة فورية للبيانات وتنبيهات مخصصة",
+        "دعم كامل للخطط الذاتية والسحابية"
+      ],
+      "features_en": [
+        "Native hooks for n8n, Activepieces and Webhooks",
+        "Event-driven messaging triggered by external actions",
+        "Ready templates for spreadsheets and Google Sheets sync",
+        "Real-time payload processing and alerts",
+        "Full support for cloud and self-hosted nodes"
+      ],
+      "invoice": "https://t.me/$N8N01-7UIEZKAgAAn8nworkflow99"
+    },
+    {
+      "sku": "whatsapp-bot-pro",
+      "title": "بوت واتساب للأعمال والربط المزدوج",
+      "title_en": "WhatsApp Business & Dual-Bot Suite",
+      "description": "حل متكامل لخدمة ومبيعات واتساب مع مزامنة كاملة وتوجيه الرسائل الذكي المشترك بين تيليجرام وواتساب.",
+      "description_en": "Complete WhatsApp sales and service suite with dual-channel sync and smart routing between Telegram and WhatsApp.",
+      "stars": 11000,
+      "category": "types",
+      "monthly": false,
+      "featured": false,
+      "usd": 149,
+      "image": "/store/img/products/whatsapp.webp",
+      "demo": "whatsapp",
+      "features": [
+        "ربط رسمي عبر WhatsApp Cloud API أو جلسات آمنة",
+        "مزامنة الرسائل والمبيعات بين تيليجرام وواتساب",
+        "ردود آلية ذكية ورسائل ترحيب تفاعلية",
+        "توزيع التذاكر واستفسارات المستخدمين آلياً",
+        "لوحة تقارير تفصيلية لمعدلات التحويل"
+      ],
+      "features_en": [
+        "Official WhatsApp Cloud API or secure session bridge",
+        "Cross-sync orders and chats across both platforms",
+        "Interactive replies and welcoming flows",
+        "Automated ticket assignment to team members",
+        "Detailed conversion and retention metrics"
+      ],
+      "invoice": "https://t.me/$WA999-7UIEZLAgAAwhatsapp99pro"
+    },
+    {
       "sku": "post-50",
       "title": "حزمة 50 منشور",
       "title_en": "50-post bundle",

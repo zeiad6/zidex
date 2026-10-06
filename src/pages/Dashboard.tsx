@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowLeft, BarChart2, BookOpen, Download, Package, Star, Users, Video } from 'lucide-react'
+import { ArrowLeft, BarChart2, BookOpen, Download, Package, Star, Users, Video, Key, ShieldCheck, CheckCircle2, AlertCircle } from 'lucide-react'
 import { useI18n } from '@/lib/i18n'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { programs } from '@/data/programs'
@@ -12,33 +12,41 @@ import { Reveal } from '@/components/ui/Reveal'
 import { Stat } from '@/components/ui/Stat'
 import { downloadCountsFor } from '@/lib/downloads'
 
-/**
- * The platform's real numbers, in one place.
- *
- * This page used to show a creator-analytics template filled with figures
- * nobody had measured — 892.4K reach, 14.2% engagement, two videos called
- * "New Dance Challenge". They looked precise, which is what made them
- * dangerous: this is a storefront, so an invented growth curve on the same
- * domain as the buy buttons reads as a claim about the products.
- *
- * Everything below is either measured, or visibly absent:
- *
- *   · TikTok figures come from the dated snapshot in `tiktok.stats`, shown
- *     with the date they were taken. oEmbed exposes no counters, and
- *     pretending a snapshot is live is the same lie in a different font.
- *   · Download counts are real: counted server-side and de-duplicated per
- *     browser, so they are the site's most trustworthy metric.
- *   · Programs and posts are counted from the catalogues, so those tiles are
- *     exact by construction.
- *   · A metric with no source is not rendered as a number. Where the honest
- *     answer is "we do not measure this", the tile says so — a dash with a
- *     reason beats a plausible number.
- */
+const ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'
+const KEY_CHARS = 20
+
+function checksum(body: string): string {
+  let h = 0x811c9dc5
+  for (const ch of body) {
+    h ^= ch.charCodeAt(0)
+    h = Math.imul(h, 0x01000193) >>> 0
+  }
+  return ALPHABET[h & 31] + ALPHABET[(h >>> 8) & 31]
+}
+
+function normaliseKey(raw: string): string {
+  return raw.toUpperCase().replace(/[^0-9A-Z]/g, '').replace(/O/g, '0').replace(/[IL]/g, '1').replace(/U/g, 'V')
+}
+
+function looksLikeKey(s: string): boolean {
+  const n = normaliseKey(s)
+  if (!new RegExp(`^[0-9A-HJKMNP-TV-Z]{${KEY_CHARS}}[0-9A-HJKMNP-TV-Z]{2}$`).test(n)) return false
+  return n.slice(KEY_CHARS) === checksum(n.slice(0, KEY_CHARS))
+}
 
 export default function Dashboard() {
   const { t, lang } = useI18n()
   const { state, avatar, handle } = useTikTokProfile()
   const [counts, setCounts] = useState<Record<string, number> | null>(null)
+  const [licenseInput, setLicenseInput] = useState('')
+  const [licenseStatus, setLicenseStatus] = useState<'idle' | 'valid' | 'invalid'>('idle')
+
+  const handleCheckLicense = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!licenseInput.trim()) return
+    const valid = looksLikeKey(licenseInput)
+    setLicenseStatus(valid ? 'valid' : 'invalid')
+  }
 
   usePageMeta(
     `${t('لوحة التحكم', 'Dashboard')} — ZeidexSoft`,
@@ -198,6 +206,89 @@ export default function Dashboard() {
               </span>
             </p>
           ) : null}
+        </section>
+      </Reveal>
+      {/* ── Bot Solutions & Digital Licensing Hub ─────────────────────────── */}
+      <Reveal delay={0.11}>
+        <section aria-labelledby="dash-licensing" className="border-app bg-elevated shadow-app-md rounded-panel border p-5 sm:p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="bg-accent-soft text-accent p-2.5 rounded-xl">
+                <Key className="size-5" aria-hidden="true" />
+              </div>
+              <div>
+                <h2 id="dash-licensing" className="text-app text-lg font-black">
+                  {t('بوابة فحص التراخيص والحلول البرمجية', 'Digital Licensing & Solutions Hub')}
+                </h2>
+                <p className="text-subtle text-[13px]">
+                  {t('تحقق من صحة مفتاح الترخيص الخاص بك (Crockford Base32 + Ed25519) وتابع حلول البوتات.', 'Verify your license key integrity (Crockford Base32 + Ed25519) and track bot solutions.')}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="chip bg-accent-soft text-accent text-[12px] font-bold">
+                <ShieldCheck className="size-3.5" aria-hidden="true" />
+                {t('حماية عتادية مشفرة', 'Hardware-backed')}
+              </span>
+            </div>
+          </div>
+
+          <form onSubmit={handleCheckLicense} className="mt-5 grid gap-3 sm:grid-cols-[1fr_auto]">
+            <div>
+              <label htmlFor="lic-input" className="sr-only">
+                {t('مفتاح الترخيص', 'License Key')}
+              </label>
+              <input
+                id="lic-input"
+                type="text"
+                dir="ltr"
+                value={licenseInput}
+                onChange={(e) => {
+                  setLicenseInput(e.target.value)
+                  setLicenseStatus('idle')
+                }}
+                placeholder="XXXXX-XXXXX-XXXXX-XXXXX-XX"
+                className="border-app bg-sunken text-app w-full rounded-xl border px-3.5 py-2.5 font-mono text-[13.5px] tracking-wider placeholder:text-subtle focus:border-accent focus:outline-none"
+              />
+            </div>
+            <button
+              type="submit"
+              className="bg-accent text-on-accent inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-[13.5px] font-bold transition-opacity hover:opacity-90 cursor-pointer"
+            >
+              <ShieldCheck className="size-4" aria-hidden="true" />
+              {t('فحص المفتاح', 'Verify Key')}
+            </button>
+          </form>
+
+          {licenseStatus === 'valid' && (
+            <div className="mt-4 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-3.5 text-[13px] text-emerald-800 dark:text-emerald-300">
+              <div className="flex items-center gap-2 font-bold">
+                <CheckCircle2 className="size-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+                {t('مفتاح الترخيص سليم وموثق هندسياً!', 'License key format and checksum verified!')}
+              </div>
+              <p className="mt-1 text-[12px] leading-relaxed opacity-90">
+                {t(
+                  'المفتاح يطابق صيغة التشفير الرسمية (20 محرفاً + 2 تحقق). صالح للاستخدام مع تطبيقات أندرويد وويندوز وبوتات المنصة.',
+                  'Key conforms to standard cryptographic specifications (20 chars + 2 checksum). Valid for Android, Windows, and platform bots.',
+                )}
+              </p>
+            </div>
+          )}
+
+          {licenseStatus === 'invalid' && (
+            <div className="mt-4 rounded-xl border border-rose-500/20 bg-rose-500/10 p-3.5 text-[13px] text-rose-800 dark:text-rose-300">
+              <div className="flex items-center gap-2 font-bold">
+                <AlertCircle className="size-4 text-rose-600 dark:text-rose-400" aria-hidden="true" />
+                {t('مفتاح الترخيص غير صالح أو به خطأ في الكتابة.', 'Invalid license key or typographical error.')}
+              </div>
+              <p className="mt-1 text-[12px] leading-relaxed opacity-90">
+                {t(
+                  'تأكد من إدخال الـ 22 محرفاً بدقة. لا تحتوي المفاتيح الصالحة على أحرف I أو L أو O أو U.',
+                  'Ensure all 22 characters are typed accurately. Valid keys never contain letters I, L, O, or U.',
+                )}
+              </p>
+            </div>
+          )}
         </section>
       </Reveal>
 

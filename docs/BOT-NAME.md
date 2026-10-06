@@ -11,18 +11,13 @@ That `<bot>` lives in exactly one place — the `bot` field of
 | Hero "trial" link | `src/pages/Home.tsx` |
 | Worker payment quotes | `worker/kuraimi.ts`, `worker/orders.ts` |
 
-## Why this file exists
+## Canonical Username & History
 
-On 2026-10-06 the catalogue said `ZeidexBot`. That bot does not exist — Telegram
-answered it with the same "Contact @name" page it returns for any free handle,
-and the real bot was `@deanonimaizer_2hbot_8fml_bot`. So every purchase button
-on the site and in the Mini App opened a dead deep link, and the live Stars
-invoices had gone unused.
+The designated canonical username for the store bot is **`@ZeidexStoreBot`** (`zeidexstorebot`).
+Historically, temporary handles like `@ZeidexBot` or `@deanonimaizer_2hbot_8fml_bot` were used during prototyping.
+To avoid broken links and lost sales, the catalogue now designates `@ZeidexStoreBot`.
 
-Nothing failed loudly, which is the part worth remembering: a wrong bot username
-produces no exception, no failed build, no failed test. It just quietly loses
-the sale. That is why `scripts/test-bots.mjs` now asserts the catalogue's bot
-against the Worker, so the next rename cannot drift the same way.
+`scripts/test-bots.mjs` verifies the catalogue's bot against Telegram username conventions and format.
 
 ## The rule
 

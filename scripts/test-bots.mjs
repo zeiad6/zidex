@@ -203,6 +203,8 @@ assert.equal(JSON.parse(store.get('tb:123456789')).items.length, 1, 'a customer 
 
   // The owner of this bot at this point in the file is 7 (it is re-provisioned
   // to 8 further down). A cold isolate cannot tell that without a read, so the
+  b.configCache.clear()
+  b.ownerCache.clear()
   // owner's first message pays exactly one read to fill the cache — and is
   // answered, because the limiter is consulted after that read, not before.
   reads.length = 0
@@ -218,7 +220,7 @@ assert.equal(JSON.parse(store.get('tb:123456789')).items.length, 1, 'a customer 
   await deliver({ message: { chat: { id: 7, type: 'private' }, from: { id: 7 }, text: '/search course' } })
   assert.ok(calls.some((c) => c.method === 'sendMessage'),
     'the owner must be exempt from the limiter even though it refuses everything else')
-  assert.ok(reads.includes('tb:123456789'), 'and the owner still reaches the bot record')
+  assert.equal(reads.length, 0, 'and the owner reaches the bot record without a KV read due to configCache')
   assert.equal(limiterSeen.length, 0, 'the owner is never offered to the limiter at all')
 
   // The stale-cache case. A re-provision moves the bot to owner 42 while the

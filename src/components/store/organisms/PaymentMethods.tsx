@@ -490,7 +490,7 @@ function KuraimiPanel({ product, rate }: { product: StoreProduct; rate: number }
       <Notice icon={<CircleCheck className="size-5 text-emerald-600 dark:text-emerald-300" aria-hidden="true" />}>
         {t(`تم الدفع (${result.refno}).`, `Paid (${result.refno}).`)}{' '}
         {result.code
-          ? <><br />{t('كودك:', 'Your code:')} <code dir="ltr" className="font-mono font-bold select-all">{result.code}</code></>
+          ? <><br />{t('مفتاح الترخيص / كود التفعيل:', 'Your license key / activation code:')} <code dir="ltr" className="font-mono font-bold select-all bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">{result.code}</code></>
           : t('سيتواصل معك المشرف لتسليم طلبك.', 'An admin will contact you to deliver your order.')}
       </Notice>
     )
