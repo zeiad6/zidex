@@ -31,6 +31,45 @@ name = "BOT_LIMITER"
 namespace_id = "1003"
 simple = { limit = 20, period = 60 }
 
+# Pro licensing: IP flood protection is generous because a legitimate owner setting up a multi-seat
+# licence makes several successful calls in a row; per-KEY limiting is charged only on failures, so
+# a buyer can always activate all their own seats.
+[[ratelimits]]
+name = "LICENSE_LIMITER"
+namespace_id = "1004"
+simple = { limit = 40, period = 60 }
+
+# Cloudflare ratelimit bindings only accept period = 10 or 60 — 900 is rejected at deploy time.
+# 1/60s is the tightest legal window, i.e. 15 guesses per key per quarter hour. The key is 20
+# Crockford base32 chars (100 bits), so this is a guard against hammering, not the real defence.
+[[ratelimits]]
+name = "LICENSE_KEY_LIMITER"
+namespace_id = "1005"
+simple = { limit = 1, period = 60 }
+
 [vars]
-# BOT_TOKEN is expected to be provided via environment variables / secrets
-# e.g., wrangler secret put BOT_TOKEN
+# The following variables/secrets are expected to be provided via environment variables
+# or Cloudflare secrets (e.g., wrangler secret put <NAME>):
+#
+# BOT_TOKEN
+# ADMIN_CHAT_IDS
+# BOTS_KEY
+# BOTS_ADMIN_TOKEN
+# LICENSE_SIGNING_KEY       (base64url PKCS#8 Ed25519, from: openssl genpkey -algorithm ed25519)
+# LICENSE_PUBLIC_KEY        (base64url raw 32-byte Ed25519 public key; embedded in the APK)
+# LICENSE_KID               (key id string, bump to rotate public keys without a new app build)
+# LICENSE_ADMIN_TOKEN       (Bearer token for POST/GET/DELETE /admin/license)
+# KURAIMI_BASE_URL
+# KURAIMI_USERNAME
+# KURAIMI_PASSWORD
+# KURAIMI_WEBHOOK_USER
+# KURAIMI_WEBHOOK_PASS
+# KURAIMI_YER_PER_USD
+# KURAIMI_CURRENCY_ZONE
+# LIKECARD_DEVICE_ID
+# LIKECARD_EMAIL
+# LIKECARD_PASSWORD
+# LIKECARD_SECURITY_CODE
+# LIKECARD_PHONE
+# LIKECARD_HASH_KEY
+# SUPPLIER_PRODUCTS
