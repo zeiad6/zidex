@@ -262,6 +262,7 @@ function menuFor(env: BotsEnv, cfg: Cfg) {
   const rows: KbButton[][] = []
   if (cfg.id === platformBotId(env)) {
     rows.push(
+      [{ text: '🤖 بوتات ومتاجر رقمية', callback_data: 't:sec:1' }, { text: '🎁 أنشئ متجرك مجاناً', callback_data: 't:freebot' }],
       [{ text: '📱 تطبيقات أندرويد', callback_data: 't:android' }, { text: '💻 تطبيقات ويندوز', callback_data: 't:windows' }],
       [{ text: '🌐 تطبيقات موقعي', callback_data: 't:myapps' }, { text: '💖 تبرع', callback_data: 't:donate' }],
     )
@@ -287,11 +288,11 @@ const SEARCH_HINT =
   '🔎 أرسل الكلمة التي تبحث عنها، مثال: <code>/search مثال</code>\n<code>/catalog</code> يعرض كل المنتجات — أو افتح القائمة من الأزرار.'
 const HELP_TEXT =
   '<b>الأوامر</b>\n/start — القائمة الرئيسية\n/search — ابحث في المنتجات\n/catalog — كل المنتجات\n/clear — مسح المحادثة\n/help — هذه القائمة'
-const PLATFORM_HELP = '\n/apps — تطبيقاتنا (أندرويد وويندوز)\n/donate — دعم وتبرع'
+const PLATFORM_HELP = '\n/apps — تطبيقاتنا (أندرويد وويندوز)\n/donate — دعم وتبرع\n/freebot — إنشاء بوت متجر مجاني'
 /** ZeidexSoft's own apps and donation (with its bank accounts) belong to the platform bot.
  *  Every hosted shop answered them too — a customer's store showing our accounts. */
-const PLATFORM_COMMANDS = new Set(['apps', 'myapps', 'android', 'windows', 'donate'])
-const PLATFORM_CALLBACK = /^t:(android|windows|myapps|donate|don_|don:)/
+const PLATFORM_COMMANDS = new Set(['apps', 'myapps', 'android', 'windows', 'donate', 'freebot', 'bots'])
+const PLATFORM_CALLBACK = /^t:(android|windows|myapps|donate|don_|don:|freebot)/
 
 /** Fold Arabic and Latin text into one comparable form: lowercase, no harakat or tatweel,
  *  Arabic-Indic and Persian digits as Latin, one alef/ya/ha spelling, no punctuation.
@@ -459,6 +460,24 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
         [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
       ]
       await send(token, chat, '🌐 <b>برمجيات وتطبيقات موقعنا</b>\nاختر المنصة لاستعراض وتحميل التطبيقات المتاحة:', { reply_markup: { inline_keyboard: rows } })
+    } else if (data === 't:freebot') {
+      const text =
+        '🎁 <b>إنشاء بوت متجر رقمي مجاني باسمك — لمدة شهر كامل</b>\n\n' +
+        'نوفر لك استضافة سحابية كاملة لبوت متجر خاص بك مجاناً:\n' +
+        '• بيع حتى 30 منتجاً وقبول نجوم تيليجرام (Telegram Stars)\n' +
+        '• 30 سؤالاً شائعاً مع ردود تلقائية\n' +
+        '• تقسيم المتجر إلى أقسام وصفحات\n' +
+        '• استضافة سحابية 24/7 على Cloudflare Workers بدون خادم\n\n' +
+        '<b>كيف تبدأ؟</b>\n' +
+        '1. افتح @BotFather وأنشئ بوتاً جديداً بأمر <code>/newbot</code>\n' +
+        '2. انسخ توكن البوت (API Token)\n' +
+        '3. أرسل التوكن للمطور لتفعيله لك فوراً، أو اطلب الباقة الأساسية من المتجر:'
+      const rows = [
+        [{ text: '💬 تواصل مع المطور للتفعيل', callback_data: 't:contact' }],
+        [{ text: '🛍 باقات المتاجر في الموقع', url: 'https://zeidexsoft.com/shop' }],
+        [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
+      ]
+      await send(token, chat, text, { reply_markup: { inline_keyboard: rows } })
     } else if (data === 't:donate') {
       const rows = [
         [{ text: '⭐️ تبرع بالنجوم (Telegram Stars)', callback_data: 't:don_stars' }],
