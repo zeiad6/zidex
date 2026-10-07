@@ -1,19 +1,20 @@
 # zeidexsoft.com — Cloudflare Worker with static assets (primary host).
 # Deploy: npm run deploy:cf  (drops dist/_redirects: Netlify-only; SPA fallback is not_found_handling)
 name = "zeidex"
+account_id = "7a162b13be689159942b4629272a870f"
 main = "worker/index.ts"
 compatibility_date = "2026-10-01"
 # Worker first, so www → apex redirects cover asset paths too.
 assets = { directory = "dist", binding = "ASSETS", not_found_handling = "single-page-application", run_worker_first = true }
-routes = [
-  { pattern = "zeidexsoft.com", custom_domain = true },
-  { pattern = "www.zeidexsoft.com", custom_domain = true },
-]
-workers_dev = false
+# routes = [
+#   { pattern = "zeidexsoft.com", custom_domain = true },
+#   { pattern = "www.zeidexsoft.com", custom_domain = true },
+# ]
+workers_dev = true
 
 [[kv_namespaces]]
 binding = "DOWNLOADS"
-id = "a547128ea8f647fb9e553bcd1b0f056e"
+id = "2c64a0129ce64cf982ebf3b1ad9390e0"
 
 # Atomic per-location burst limits (KV counters are eventually consistent).
 [[ratelimits]]

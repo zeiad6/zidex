@@ -31,6 +31,8 @@ export type BotsEnv = {
   AI?: { run(model: string, input: Record<string, unknown>): Promise<{ response?: string }> }
   /** Override the model when Cloudflare retires the default one. */
   AI_MODEL?: string
+  /** Public webhook host; defaults to https://zeidexsoft.com */
+  ORIGIN?: string
 } & LicenseEnv
 
 type Item = { id: number; title: string; stars: number; desc: string; section?: number }
@@ -60,7 +62,8 @@ type Cfg = {
   pages?: { title: string; body: string }[]
 }
 
-const ORIGIN = 'https://zeidexsoft.com'
+const DEFAULT_ORIGIN = 'https://zeidexsoft.com'
+const originOf = (env: BotsEnv) => env.ORIGIN || DEFAULT_ORIGIN
 const MAX_ITEMS = 50
 // The free plan is a mid-range store for one month: enough to run a real shop and decide.
 const FREE_MAX_ITEMS = 30
@@ -618,7 +621,7 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     }
     if (cfg.paused && !isOwner(uid)) return void (await send(token, chat, '🛠 البوت في صيانة قصيرة — عُد بعد قليل.'))
     const ended = lapsed(cfg)
-      ? `\n\n⏳ <b>انتهى الشهر المجاني</b> — متجرك متوقف للعملاء وكل بياناته محفوظة. فعّله بالترقية: ${ORIGIN}/store/`
+      ? `\n\n⏳ <b>انتهى الشهر المجاني</b> — متجرك متوقف للعملاء وكل بياناته محفوظة. فعّله بالترقية: ${originOf(env)}/store/`
       : ''
     const hint = isOwner(uid) ? `\n\n<i>أنت المالك: /admin للوحة التحكم.</i>${ended}` : ''
     
@@ -1166,7 +1169,7 @@ export async function botsAdmin(request: Request, env: BotsEnv, url: URL): Promi
       : undefined
     await save(env, cfg)
     const hook = await tg(token, 'setWebhook', {
-      url: `${ORIGIN}/tg/${cfg.id}`, secret_token: secret, drop_pending_updates: true,
+      url: `${originOf(env)}/tg/${cfg.id}`, secret_token: secret, drop_pending_updates: true,
       // One update at a time per bot: each update rewrites the whole KV record, so parallel
       // deliveries would overwrite each other (a product added during a /start vanishes).
       max_connections: 1,
