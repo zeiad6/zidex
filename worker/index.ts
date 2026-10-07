@@ -6,6 +6,7 @@ import { kuraimiCheckUser, kuraimiPay, kuraimiStatus, type KuraimiEnv } from './
 import { botWebhook, botsAdmin, type BotsEnv } from './bots'
 import { activate, confirm, status, licenseAdmin, type LicenseAdminEnv } from './license'
 import { waWebhook, type WhatsAppEnv } from './whatsapp'
+import { anthropicProxy } from './anthropic'
 
 type Env = Parameters<typeof onRequestGet>[0]['env'] & OrdersEnv & KuraimiEnv & BotsEnv & LicenseAdminEnv & WhatsAppEnv
 
@@ -42,6 +43,9 @@ export default {
     if (url.pathname === '/api/pay/kuraimi/status') return kuraimiStatus(env)
     if (url.pathname === '/api/pay/kuraimi/check-user' && request.method === 'POST') return kuraimiCheckUser(request, env)
     if (url.pathname === '/api/pay/kuraimi' && request.method === 'POST') return kuraimiPay(request, env)
+    if (url.pathname === '/api/anthropic' || url.pathname.startsWith('/api/anthropic/')) {
+      return anthropicProxy(request, url)
+    }
     // Google's HTML-file verification fetches the exact .html name and expects 200;
     // assets would 307 it to the extensionless path.
     if (/^\/google[0-9a-f]+\.html$/.test(url.pathname)) {
