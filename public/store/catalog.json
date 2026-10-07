@@ -24,11 +24,11 @@
       "title_en": "Smart Store Bot — Basic",
       "description": "بوت متجر رقمي متطور باسمك: حتى 50 منتجاً، دفع بنجوم تيليجرام، تسليم تلقائي للمنتج، وإشعار لك بكل طلب. أداء سريع جداً.",
       "description_en": "An advanced digital store bot under your name: up to 50 products, Stars checkout, auto delivery. Blazing fast performance.",
-      "stars": 3500,
+      "stars": 1750,
       "category": "bots",
       "monthly": false,
       "featured": false,
-      "usd": 49,
+      "usd": 24.5,
       "image": "/store/img/products/store-bot-basic.webp",
       "demo": "store",
       "features": [
@@ -45,7 +45,45 @@
         "Instant alert on every order, full order log",
         "Runs under your store's name and logo"
       ],
-      "invoice": "https://t.me/$aDbQ--7UIEY8AgAAg86ue9IkPgo"
+      "invoice": "https://t.me/$aDbQ--7UIEY8AgAAg86ue9IkPgo",
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك فوراً إيصال بمعرّف العملية",
+        "يسألك البوت 3 أسئلة قصيرة: اسم مشروعك، ما تحتاجه، وشعارك",
+        "تصل إجاباتك للمشرف ويبدأ التنفيذ، ويتواصل معك إن احتاج تفصيلاً",
+        "نسلّمك بوتك جاهزاً خلال المدة المذكورة، مع شرح أوامر الإدارة"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt with the transaction id at once",
+        "The bot asks 3 short questions: your project's name, what you need, your logo",
+        "Your answers reach an admin who starts the build and contacts you if needed",
+        "You get your bot within the stated time, with its admin commands explained"
+      ],
+      "needs": [
+        "حساب تيليجرام ورصيد نجوم (يُشحن من تيليجرام أو Fragment)",
+        "وصف واضح لما تريده: المنتجات وأسعارها أو مهام البوت",
+        "شعارك إن وُجد — اختياري"
+      ],
+      "needs_en": [
+        "A Telegram account and Stars (top up in Telegram or on Fragment)",
+        "A clear description: your products and prices, or the bot's tasks",
+        "Your logo, if you have one — optional"
+      ],
+      "stars_full": 3500,
+      "usd_full": 49,
+      "setup": [
+        "أنشئ بوتاً من @BotFather وأرسل توكنه عند الطلب — يُحفظ مشفّراً",
+        "افتح بوتك وأرسل /admin — هذه لوحة تحكمك",
+        "أضف منتجاتك وأقسامها: /add اسم | سعر | وصف | القسم",
+        "اكتب ترحيبك وأسئلتك الشائعة: /welcome و /faq",
+        "اربط موقعك إن وُجد: /site، ثم شارك رابط بوتك مع عملائك"
+      ],
+      "setup_en": [
+        "Create a bot in @BotFather and send its token when asked — it is stored encrypted",
+        "Open your bot and send /admin — that is your control panel",
+        "Add products and sections: /add name | price | description | section",
+        "Write your welcome and FAQ: /welcome and /faq",
+        "Link your site if you have one: /site — then share your bot's link"
+      ]
     },
     {
       "sku": "store-bot-pro",
@@ -53,11 +91,11 @@
       "title_en": "Integrated Store Bot — Pro",
       "description": "واجهة متجر Mini App بتصميم عصري واحترافي: أقسام ومنتجات غير محدودة، لغتان، ثيم نهاري وليلي، ربط بموقعك، وإحصائيات متقدمة.",
       "description_en": "Modern Mini App storefront: unlimited categories/products, bilingual, light/dark themes, linked to site, advanced stats.",
-      "stars": 7500,
+      "stars": 3750,
       "category": "bots",
       "monthly": false,
       "featured": true,
-      "usd": 99,
+      "usd": 49.5,
       "image": "/store/img/products/store-bot-pro.webp",
       "demo": "store",
       "features": [
@@ -76,7 +114,45 @@
         "Store button in the bot menu, linked to your site",
         "30 days of support and changes"
       ],
-      "invoice": "https://t.me/$Sy4VrO7UIEY9AgAA6j1_1zm2bgw"
+      "invoice": "https://t.me/$Sy4VrO7UIEY9AgAA6j1_1zm2bgw",
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك فوراً إيصال بمعرّف العملية",
+        "يسألك البوت 3 أسئلة قصيرة: اسم مشروعك، ما تحتاجه، وشعارك",
+        "تصل إجاباتك للمشرف ويبدأ التنفيذ، ويتواصل معك إن احتاج تفصيلاً",
+        "نسلّمك بوتك جاهزاً خلال المدة المذكورة، مع شرح أوامر الإدارة"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt with the transaction id at once",
+        "The bot asks 3 short questions: your project's name, what you need, your logo",
+        "Your answers reach an admin who starts the build and contacts you if needed",
+        "You get your bot within the stated time, with its admin commands explained"
+      ],
+      "needs": [
+        "حساب تيليجرام ورصيد نجوم (يُشحن من تيليجرام أو Fragment)",
+        "وصف واضح لما تريده: المنتجات وأسعارها أو مهام البوت",
+        "شعارك إن وُجد — اختياري"
+      ],
+      "needs_en": [
+        "A Telegram account and Stars (top up in Telegram or on Fragment)",
+        "A clear description: your products and prices, or the bot's tasks",
+        "Your logo, if you have one — optional"
+      ],
+      "stars_full": 7500,
+      "usd_full": 99,
+      "setup": [
+        "أنشئ بوتاً من @BotFather وأرسل توكنه عند الطلب — يُحفظ مشفّراً",
+        "افتح بوتك وأرسل /admin — هذه لوحة تحكمك",
+        "أضف منتجاتك وأقسامها: /add اسم | سعر | وصف | القسم",
+        "اكتب ترحيبك وأسئلتك الشائعة: /welcome و /faq",
+        "اربط موقعك إن وُجد: /site، ثم شارك رابط بوتك مع عملائك"
+      ],
+      "setup_en": [
+        "Create a bot in @BotFather and send its token when asked — it is stored encrypted",
+        "Open your bot and send /admin — that is your control panel",
+        "Add products and sections: /add name | price | description | section",
+        "Write your welcome and FAQ: /welcome and /faq",
+        "Link your site if you have one: /site — then share your bot's link"
+      ]
     },
     {
       "sku": "store-bot-hosting",
@@ -88,7 +164,7 @@
       "category": "bots",
       "monthly": true,
       "featured": false,
-      "usd": 9,
+      "usd": 9.0,
       "image": "/store/img/products/store-bot-hosting.webp",
       "demo": "",
       "features": [
@@ -105,7 +181,35 @@
         "Small changes every month",
         "Cancel any time in Telegram settings"
       ],
-      "invoice": "https://t.me/$cDHL--7UIEY-AgAA8HW3n7w9QyA"
+      "invoice": "https://t.me/$cDHL--7UIEY-AgAA8HW3n7w9QyA",
+      "after": [
+        "تدفع اشتراك 30 يوماً بالنجوم — ويصلك إيصال فوري",
+        "يتواصل معك المشرف لنقل بوتك إلى الاستضافة",
+        "يعمل بوتك 24/7 مع نسخ احتياطي وتحديثات أمنية",
+        "يتجدد تلقائياً كل 30 يوماً، والإلغاء من إعدادات تيليجرام"
+      ],
+      "after_en": [
+        "You pay a 30-day subscription in Stars and get a receipt at once",
+        "An admin contacts you to move your bot onto the hosting",
+        "Your bot runs 24/7 with backups and security updates",
+        "Renews every 30 days; cancel any time in Telegram settings"
+      ],
+      "needs": [
+        "بوت قائم وتوكنه من @BotFather"
+      ],
+      "needs_en": [
+        "An existing bot and its token from @BotFather"
+      ],
+      "stars_full": 750,
+      "usd_full": 9,
+      "setup": [
+        "أرسل للمشرف توكن بوتك من @BotFather عند تواصله",
+        "تأكد أن البوت يعمل بإرسال /start له"
+      ],
+      "setup_en": [
+        "Send the admin your bot token from @BotFather when contacted",
+        "Check the bot works by sending it /start"
+      ]
     },
     {
       "sku": "group-bot",
@@ -113,11 +217,11 @@
       "title_en": "Automated Group Admin Bot",
       "description": "حماية متطورة لمجموعتك: تحقق ذكي من الأعضاء، منع الروابط والسبام بدقة عالية، ترحيب، تحذيرات، وتقارير تفصيلية للمشرفين.",
       "description_en": "Advanced group protection: smart captcha, high-accuracy link/spam filters, welcomes, warnings, detailed admin reports.",
-      "stars": 2500,
+      "stars": 1250,
       "category": "types",
       "monthly": false,
       "featured": false,
-      "usd": 35,
+      "usd": 17.5,
       "image": "/store/img/products/group-bot.webp",
       "demo": "group",
       "features": [
@@ -134,7 +238,45 @@
         "Automatic warnings, then mute or ban",
         "Daily admin report"
       ],
-      "invoice": "https://t.me/$9rvFqO7UIEY_AgAAprDBasgQfNA"
+      "invoice": "https://t.me/$9rvFqO7UIEY_AgAAprDBasgQfNA",
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك فوراً إيصال بمعرّف العملية",
+        "يسألك البوت 3 أسئلة قصيرة: اسم مشروعك، ما تحتاجه، وشعارك",
+        "تصل إجاباتك للمشرف ويبدأ التنفيذ، ويتواصل معك إن احتاج تفصيلاً",
+        "نسلّمك بوتك جاهزاً خلال المدة المذكورة، مع شرح أوامر الإدارة"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt with the transaction id at once",
+        "The bot asks 3 short questions: your project's name, what you need, your logo",
+        "Your answers reach an admin who starts the build and contacts you if needed",
+        "You get your bot within the stated time, with its admin commands explained"
+      ],
+      "needs": [
+        "حساب تيليجرام ورصيد نجوم (يُشحن من تيليجرام أو Fragment)",
+        "وصف واضح لما تريده: المنتجات وأسعارها أو مهام البوت",
+        "شعارك إن وُجد — اختياري"
+      ],
+      "needs_en": [
+        "A Telegram account and Stars (top up in Telegram or on Fragment)",
+        "A clear description: your products and prices, or the bot's tasks",
+        "Your logo, if you have one — optional"
+      ],
+      "stars_full": 2500,
+      "usd_full": 35,
+      "setup": [
+        "أنشئ بوتاً من @BotFather وأرسل توكنه عند الطلب — يُحفظ مشفّراً",
+        "افتح بوتك وأرسل /admin — هذه لوحة تحكمك",
+        "أضف منتجاتك وأقسامها: /add اسم | سعر | وصف | القسم",
+        "اكتب ترحيبك وأسئلتك الشائعة: /welcome و /faq",
+        "اربط موقعك إن وُجد: /site، ثم شارك رابط بوتك مع عملائك"
+      ],
+      "setup_en": [
+        "Create a bot in @BotFather and send its token when asked — it is stored encrypted",
+        "Open your bot and send /admin — that is your control panel",
+        "Add products and sections: /add name | price | description | section",
+        "Write your welcome and FAQ: /welcome and /faq",
+        "Link your site if you have one: /site — then share your bot's link"
+      ]
     },
     {
       "sku": "support-bot",
@@ -142,11 +284,11 @@
       "title_en": "Instant Customer Support Bot",
       "description": "ردود فورية وذكية على الأسئلة الشائعة، يحوّل المحادثة لموظف عند اللزوم، إدارة تذاكر متطورة، وتقييم جودة الخدمة.",
       "description_en": "Smart instant FAQ replies, human handoff, advanced ticketing, and service quality rating.",
-      "stars": 3000,
+      "stars": 1500,
       "category": "types",
       "monthly": false,
       "featured": false,
-      "usd": 39,
+      "usd": 19.5,
       "image": "/store/img/products/support-bot.webp",
       "demo": "support",
       "features": [
@@ -163,7 +305,45 @@
         "Working hours and an after-hours reply",
         "Rating after every chat"
       ],
-      "invoice": "https://t.me/$1r8cq-7UIEZAAgAAzE45VkzvREs"
+      "invoice": "https://t.me/$1r8cq-7UIEZAAgAAzE45VkzvREs",
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك فوراً إيصال بمعرّف العملية",
+        "يسألك البوت 3 أسئلة قصيرة: اسم مشروعك، ما تحتاجه، وشعارك",
+        "تصل إجاباتك للمشرف ويبدأ التنفيذ، ويتواصل معك إن احتاج تفصيلاً",
+        "نسلّمك بوتك جاهزاً خلال المدة المذكورة، مع شرح أوامر الإدارة"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt with the transaction id at once",
+        "The bot asks 3 short questions: your project's name, what you need, your logo",
+        "Your answers reach an admin who starts the build and contacts you if needed",
+        "You get your bot within the stated time, with its admin commands explained"
+      ],
+      "needs": [
+        "حساب تيليجرام ورصيد نجوم (يُشحن من تيليجرام أو Fragment)",
+        "وصف واضح لما تريده: المنتجات وأسعارها أو مهام البوت",
+        "شعارك إن وُجد — اختياري"
+      ],
+      "needs_en": [
+        "A Telegram account and Stars (top up in Telegram or on Fragment)",
+        "A clear description: your products and prices, or the bot's tasks",
+        "Your logo, if you have one — optional"
+      ],
+      "stars_full": 3000,
+      "usd_full": 39,
+      "setup": [
+        "أنشئ بوتاً من @BotFather وأرسل توكنه عند الطلب — يُحفظ مشفّراً",
+        "افتح بوتك وأرسل /admin — هذه لوحة تحكمك",
+        "أضف منتجاتك وأقسامها: /add اسم | سعر | وصف | القسم",
+        "اكتب ترحيبك وأسئلتك الشائعة: /welcome و /faq",
+        "اربط موقعك إن وُجد: /site، ثم شارك رابط بوتك مع عملائك"
+      ],
+      "setup_en": [
+        "Create a bot in @BotFather and send its token when asked — it is stored encrypted",
+        "Open your bot and send /admin — that is your control panel",
+        "Add products and sections: /add name | price | description | section",
+        "Write your welcome and FAQ: /welcome and /faq",
+        "Link your site if you have one: /site — then share your bot's link"
+      ]
     },
     {
       "sku": "booking-bot",
@@ -171,11 +351,11 @@
       "title_en": "Smart Booking Bot",
       "description": "نظام حجوزات آلي متكامل: اختيار الخدمة والموعد، تزامن دقيق لمنع التضارب، تذكير تلقائي، ودفع العربون بنجوم تيليجرام.",
       "description_en": "Fully automated booking system: precise slot sync to prevent double-booking, auto reminders, and Stars deposits.",
-      "stars": 3500,
+      "stars": 1750,
       "category": "types",
       "monthly": false,
       "featured": false,
-      "usd": 45,
+      "usd": 22.5,
       "image": "/store/img/products/booking-bot.webp",
       "demo": "booking",
       "features": [
@@ -192,7 +372,45 @@
         "Deposit or full payment in Stars",
         "Daily schedule for the admin"
       ],
-      "invoice": "https://t.me/$Q3b7QO7UIEZBAgAAarf-rjGJNWA"
+      "invoice": "https://t.me/$Q3b7QO7UIEZBAgAAarf-rjGJNWA",
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك فوراً إيصال بمعرّف العملية",
+        "يسألك البوت 3 أسئلة قصيرة: اسم مشروعك، ما تحتاجه، وشعارك",
+        "تصل إجاباتك للمشرف ويبدأ التنفيذ، ويتواصل معك إن احتاج تفصيلاً",
+        "نسلّمك بوتك جاهزاً خلال المدة المذكورة، مع شرح أوامر الإدارة"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt with the transaction id at once",
+        "The bot asks 3 short questions: your project's name, what you need, your logo",
+        "Your answers reach an admin who starts the build and contacts you if needed",
+        "You get your bot within the stated time, with its admin commands explained"
+      ],
+      "needs": [
+        "حساب تيليجرام ورصيد نجوم (يُشحن من تيليجرام أو Fragment)",
+        "وصف واضح لما تريده: المنتجات وأسعارها أو مهام البوت",
+        "شعارك إن وُجد — اختياري"
+      ],
+      "needs_en": [
+        "A Telegram account and Stars (top up in Telegram or on Fragment)",
+        "A clear description: your products and prices, or the bot's tasks",
+        "Your logo, if you have one — optional"
+      ],
+      "stars_full": 3500,
+      "usd_full": 45,
+      "setup": [
+        "أنشئ بوتاً من @BotFather وأرسل توكنه عند الطلب — يُحفظ مشفّراً",
+        "افتح بوتك وأرسل /admin — هذه لوحة تحكمك",
+        "أضف منتجاتك وأقسامها: /add اسم | سعر | وصف | القسم",
+        "اكتب ترحيبك وأسئلتك الشائعة: /welcome و /faq",
+        "اربط موقعك إن وُجد: /site، ثم شارك رابط بوتك مع عملائك"
+      ],
+      "setup_en": [
+        "Create a bot in @BotFather and send its token when asked — it is stored encrypted",
+        "Open your bot and send /admin — that is your control panel",
+        "Add products and sections: /add name | price | description | section",
+        "Write your welcome and FAQ: /welcome and /faq",
+        "Link your site if you have one: /site — then share your bot's link"
+      ]
     },
     {
       "sku": "subs-bot",
@@ -200,11 +418,11 @@
       "title_en": "Smart Subscriptions Bot",
       "description": "إدارة آلية لاشتراكات قنواتك الخاصة: بيع بالنجوم، إضافة وإزالة الأعضاء تلقائياً، تذكير بالتجديد، وإحصائيات نمو تفصيلية.",
       "description_en": "Automated private channel subscriptions: sell in Stars, auto add/remove members, renewal reminders, detailed growth stats.",
-      "stars": 3000,
+      "stars": 1500,
       "category": "types",
       "monthly": false,
       "featured": false,
-      "usd": 39,
+      "usd": 19.5,
       "image": "/store/img/products/subs-bot.webp",
       "demo": "subs",
       "features": [
@@ -221,7 +439,45 @@
         "Reminder before renewal",
         "Subscriber and revenue stats"
       ],
-      "invoice": "https://t.me/$44sDCO7UIEZCAgAAgqEx5embIRY"
+      "invoice": "https://t.me/$44sDCO7UIEZCAgAAgqEx5embIRY",
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك فوراً إيصال بمعرّف العملية",
+        "يسألك البوت 3 أسئلة قصيرة: اسم مشروعك، ما تحتاجه، وشعارك",
+        "تصل إجاباتك للمشرف ويبدأ التنفيذ، ويتواصل معك إن احتاج تفصيلاً",
+        "نسلّمك بوتك جاهزاً خلال المدة المذكورة، مع شرح أوامر الإدارة"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt with the transaction id at once",
+        "The bot asks 3 short questions: your project's name, what you need, your logo",
+        "Your answers reach an admin who starts the build and contacts you if needed",
+        "You get your bot within the stated time, with its admin commands explained"
+      ],
+      "needs": [
+        "حساب تيليجرام ورصيد نجوم (يُشحن من تيليجرام أو Fragment)",
+        "وصف واضح لما تريده: المنتجات وأسعارها أو مهام البوت",
+        "شعارك إن وُجد — اختياري"
+      ],
+      "needs_en": [
+        "A Telegram account and Stars (top up in Telegram or on Fragment)",
+        "A clear description: your products and prices, or the bot's tasks",
+        "Your logo, if you have one — optional"
+      ],
+      "stars_full": 3000,
+      "usd_full": 39,
+      "setup": [
+        "أنشئ بوتاً من @BotFather وأرسل توكنه عند الطلب — يُحفظ مشفّراً",
+        "افتح بوتك وأرسل /admin — هذه لوحة تحكمك",
+        "أضف منتجاتك وأقسامها: /add اسم | سعر | وصف | القسم",
+        "اكتب ترحيبك وأسئلتك الشائعة: /welcome و /faq",
+        "اربط موقعك إن وُجد: /site، ثم شارك رابط بوتك مع عملائك"
+      ],
+      "setup_en": [
+        "Create a bot in @BotFather and send its token when asked — it is stored encrypted",
+        "Open your bot and send /admin — that is your control panel",
+        "Add products and sections: /add name | price | description | section",
+        "Write your welcome and FAQ: /welcome and /faq",
+        "Link your site if you have one: /site — then share your bot's link"
+      ]
     },
     {
       "sku": "quiz-bot",
@@ -229,11 +485,11 @@
       "title_en": "Advanced Interactive Quiz Bot",
       "description": "مسابقات وتحديات تفاعلية مشوقة: جولات بوقت، لوحة صدارة لحظية، بنك أسئلة متطور، وتوزيع جوائز للفائزين تلقائياً.",
       "description_en": "Engaging interactive challenges: timed rounds, real-time leaderboard, advanced question bank, and auto prize distribution.",
-      "stars": 2000,
+      "stars": 1000,
       "category": "types",
       "monthly": false,
       "featured": false,
-      "usd": 25,
+      "usd": 12.5,
       "image": "/store/img/products/quiz-bot.webp",
       "demo": "quiz",
       "features": [
@@ -250,7 +506,45 @@
         "Easy question bank",
         "Automatic winner announcement"
       ],
-      "invoice": "https://t.me/$rg2Ht-7UIEZDAgAAc48wSsBBob8"
+      "invoice": "https://t.me/$rg2Ht-7UIEZDAgAAc48wSsBBob8",
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك فوراً إيصال بمعرّف العملية",
+        "يسألك البوت 3 أسئلة قصيرة: اسم مشروعك، ما تحتاجه، وشعارك",
+        "تصل إجاباتك للمشرف ويبدأ التنفيذ، ويتواصل معك إن احتاج تفصيلاً",
+        "نسلّمك بوتك جاهزاً خلال المدة المذكورة، مع شرح أوامر الإدارة"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt with the transaction id at once",
+        "The bot asks 3 short questions: your project's name, what you need, your logo",
+        "Your answers reach an admin who starts the build and contacts you if needed",
+        "You get your bot within the stated time, with its admin commands explained"
+      ],
+      "needs": [
+        "حساب تيليجرام ورصيد نجوم (يُشحن من تيليجرام أو Fragment)",
+        "وصف واضح لما تريده: المنتجات وأسعارها أو مهام البوت",
+        "شعارك إن وُجد — اختياري"
+      ],
+      "needs_en": [
+        "A Telegram account and Stars (top up in Telegram or on Fragment)",
+        "A clear description: your products and prices, or the bot's tasks",
+        "Your logo, if you have one — optional"
+      ],
+      "stars_full": 2000,
+      "usd_full": 25,
+      "setup": [
+        "أنشئ بوتاً من @BotFather وأرسل توكنه عند الطلب — يُحفظ مشفّراً",
+        "افتح بوتك وأرسل /admin — هذه لوحة تحكمك",
+        "أضف منتجاتك وأقسامها: /add اسم | سعر | وصف | القسم",
+        "اكتب ترحيبك وأسئلتك الشائعة: /welcome و /faq",
+        "اربط موقعك إن وُجد: /site، ثم شارك رابط بوتك مع عملائك"
+      ],
+      "setup_en": [
+        "Create a bot in @BotFather and send its token when asked — it is stored encrypted",
+        "Open your bot and send /admin — that is your control panel",
+        "Add products and sections: /add name | price | description | section",
+        "Write your welcome and FAQ: /welcome and /faq",
+        "Link your site if you have one: /site — then share your bot's link"
+      ]
     },
     {
       "sku": "ai-bot",
@@ -258,11 +552,11 @@
       "title_en": "Advanced AI Assistant Bot",
       "description": "مساعد ذكاء اصطناعي فائق التطور: يجيب من قاعدة معرفة نشاطك فقط بدقة تامة، تحويل سريع للموظف، ويدعم العربية والإنجليزية بطلاقة.",
       "description_en": "Cutting-edge AI assistant: answers exclusively and accurately from your knowledge base, fast human handoff, fluent bilingual support.",
-      "stars": 5000,
+      "stars": 2500,
       "category": "types",
       "monthly": false,
       "featured": false,
-      "usd": 65,
+      "usd": 32.5,
       "image": "/store/img/products/ai-bot.webp",
       "demo": "ai",
       "features": [
@@ -279,7 +573,45 @@
         "Per-user usage limits",
         "Arabic and English"
       ],
-      "invoice": "https://t.me/$LBXDg-7UIEZEAgAAWssTfMNQpag"
+      "invoice": "https://t.me/$LBXDg-7UIEZEAgAAWssTfMNQpag",
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك فوراً إيصال بمعرّف العملية",
+        "يسألك البوت 3 أسئلة قصيرة: اسم مشروعك، ما تحتاجه، وشعارك",
+        "تصل إجاباتك للمشرف ويبدأ التنفيذ، ويتواصل معك إن احتاج تفصيلاً",
+        "نسلّمك بوتك جاهزاً خلال المدة المذكورة، مع شرح أوامر الإدارة"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt with the transaction id at once",
+        "The bot asks 3 short questions: your project's name, what you need, your logo",
+        "Your answers reach an admin who starts the build and contacts you if needed",
+        "You get your bot within the stated time, with its admin commands explained"
+      ],
+      "needs": [
+        "حساب تيليجرام ورصيد نجوم (يُشحن من تيليجرام أو Fragment)",
+        "وصف واضح لما تريده: المنتجات وأسعارها أو مهام البوت",
+        "شعارك إن وُجد — اختياري"
+      ],
+      "needs_en": [
+        "A Telegram account and Stars (top up in Telegram or on Fragment)",
+        "A clear description: your products and prices, or the bot's tasks",
+        "Your logo, if you have one — optional"
+      ],
+      "stars_full": 5000,
+      "usd_full": 65,
+      "setup": [
+        "أنشئ بوتاً من @BotFather وأرسل توكنه عند الطلب — يُحفظ مشفّراً",
+        "افتح بوتك وأرسل /admin — هذه لوحة تحكمك",
+        "أضف منتجاتك وأقسامها: /add اسم | سعر | وصف | القسم",
+        "اكتب ترحيبك وأسئلتك الشائعة: /welcome و /faq",
+        "اربط موقعك إن وُجد: /site، ثم شارك رابط بوتك مع عملائك"
+      ],
+      "setup_en": [
+        "Create a bot in @BotFather and send its token when asked — it is stored encrypted",
+        "Open your bot and send /admin — that is your control panel",
+        "Add products and sections: /add name | price | description | section",
+        "Write your welcome and FAQ: /welcome and /faq",
+        "Link your site if you have one: /site — then share your bot's link"
+      ]
     },
     {
       "sku": "multibot-crm",
@@ -287,12 +619,12 @@
       "title_en": "Unified Multi-Bot CRM Platform",
       "description": "لوحة تحكم سحابية مركزية لإدارة كل بوتاتك في مكان واحد، مزامنة فورية للبيانات، وسيناريوهات أتمتة ذكية بين البوتات.",
       "description_en": "Centralized cloud dashboard to manage all your bots in one place, real-time data sync, and smart cross-bot automations.",
-      "stars": 9500,
+      "stars": 4750,
       "category": "types",
       "monthly": false,
       "featured": false,
-      "usd": 129,
-      "image": "/store/img/products/crm-bot.webp",
+      "usd": 64.5,
+      "image": "/store/img/products/multibot-crm.webp",
       "demo": "crm",
       "features": [
         "إدارة مركزية لعدة بوتات من واجهة واحدة",
@@ -308,7 +640,9 @@
         "Ultra-fast cloud storage and hardened security",
         "Unlimited admin team access with roles"
       ],
-      "invoice": "https://t.me/$CRM99-7UIEZJAgAAcrm99platform"
+      "soon": true,
+      "stars_full": 9500,
+      "usd_full": 129
     },
     {
       "sku": "workflow-engine",
@@ -316,12 +650,12 @@
       "title_en": "Visual Workflow Automation Engine",
       "description": "ربط بوتاتك بمنصات الأتمتة العالمية مثل n8n وActivepieces وبناء مسارات عمل مخصصة دون كتابة أسطر برمجية.",
       "description_en": "Connect your bots to visual workflow tools like n8n and Activepieces to craft tailored automations without coding.",
-      "stars": 8500,
+      "stars": 4250,
       "category": "types",
       "monthly": false,
       "featured": false,
-      "usd": 115,
-      "image": "/store/img/products/workflow.webp",
+      "usd": 57.5,
+      "image": "/store/img/products/workflow-engine.webp",
       "demo": "workflow",
       "features": [
         "تكامل مباشر مع n8n وActivepieces وWebhooks",
@@ -337,7 +671,9 @@
         "Real-time payload processing and alerts",
         "Full support for cloud and self-hosted nodes"
       ],
-      "invoice": "https://t.me/$N8N01-7UIEZKAgAAn8nworkflow99"
+      "soon": true,
+      "stars_full": 8500,
+      "usd_full": 115
     },
     {
       "sku": "whatsapp-bot-pro",
@@ -345,12 +681,12 @@
       "title_en": "WhatsApp Business & Dual-Bot Suite",
       "description": "حل متكامل لخدمة ومبيعات واتساب مع مزامنة كاملة وتوجيه الرسائل الذكي المشترك بين تيليجرام وواتساب.",
       "description_en": "Complete WhatsApp sales and service suite with dual-channel sync and smart routing between Telegram and WhatsApp.",
-      "stars": 11000,
+      "stars": 5500,
       "category": "types",
       "monthly": false,
       "featured": false,
-      "usd": 149,
-      "image": "/store/img/products/whatsapp.webp",
+      "usd": 74.5,
+      "image": "/store/img/products/whatsapp-bot-pro.webp",
       "demo": "whatsapp",
       "features": [
         "ربط رسمي عبر WhatsApp Cloud API أو جلسات آمنة",
@@ -366,7 +702,9 @@
         "Automated ticket assignment to team members",
         "Detailed conversion and retention metrics"
       ],
-      "invoice": "https://t.me/$WA999-7UIEZLAgAAwhatsapp99pro"
+      "soon": true,
+      "stars_full": 11000,
+      "usd_full": 149
     },
     {
       "sku": "post-50",
@@ -374,16 +712,44 @@
       "title_en": "50-post bundle",
       "description": "نشر 50 رسالة في قناتك من داخل البوت مع سجل كامل في لوحة التحكم.",
       "description_en": "Publish 50 messages to your channel from the bot, fully logged in the dashboard.",
-      "stars": 250,
+      "stars": 125,
       "category": "channel",
       "monthly": false,
       "featured": false,
-      "usd": 3,
+      "usd": 1.5,
       "image": "/store/img/products/post-50.webp",
       "demo": "",
       "features": [],
       "features_en": [],
-      "invoice": "https://t.me/$AX-JM-7UIEZFAgAASyCPxbQUYOI"
+      "invoice": "https://t.me/$AX-JM-7UIEZFAgAASyCPxbQUYOI",
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك إيصال فوري",
+        "يصل طلبك للمشرف ويُفعَّل لقناتك",
+        "يتواصل معك المشرف إن احتاج خطوة منك"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt at once",
+        "Your order reaches an admin and is activated for your channel",
+        "The admin contacts you if a step is needed from you"
+      ],
+      "needs": [
+        "قناتك على تيليجرام",
+        "إضافة البوت مشرفاً في القناة بصلاحية النشر"
+      ],
+      "needs_en": [
+        "Your Telegram channel",
+        "The bot added as a channel admin that can post"
+      ],
+      "stars_full": 250,
+      "usd_full": 3,
+      "setup": [
+        "أضف البوت مشرفاً في قناتك بصلاحية النشر والتثبيت",
+        "أرسل للمشرف معرّف قناتك أو رابطها"
+      ],
+      "setup_en": [
+        "Add the bot to your channel as an admin that can post and pin",
+        "Send the admin your channel's id or link"
+      ]
     },
     {
       "sku": "pin-month",
@@ -391,16 +757,44 @@
       "title_en": "Monthly pin",
       "description": "تثبيت رسالتك في أعلى القناة لمدة 30 يوماً، تتجدد تلقائياً.",
       "description_en": "Your message pinned at the top of the channel for 30 days, auto-renewed.",
-      "stars": 500,
+      "stars": 250,
       "category": "channel",
       "monthly": false,
       "featured": false,
-      "usd": 6,
+      "usd": 3.0,
       "image": "/store/img/products/pin-month.webp",
       "demo": "",
       "features": [],
       "features_en": [],
-      "invoice": "https://t.me/$Zy8Toe7UIEZGAgAAJ-KOoHZ3ut8"
+      "invoice": "https://t.me/$Zy8Toe7UIEZGAgAAJ-KOoHZ3ut8",
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك إيصال فوري",
+        "يصل طلبك للمشرف ويُفعَّل لقناتك",
+        "يتواصل معك المشرف إن احتاج خطوة منك"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt at once",
+        "Your order reaches an admin and is activated for your channel",
+        "The admin contacts you if a step is needed from you"
+      ],
+      "needs": [
+        "قناتك على تيليجرام",
+        "إضافة البوت مشرفاً في القناة بصلاحية النشر"
+      ],
+      "needs_en": [
+        "Your Telegram channel",
+        "The bot added as a channel admin that can post"
+      ],
+      "stars_full": 500,
+      "usd_full": 6,
+      "setup": [
+        "أضف البوت مشرفاً في قناتك بصلاحية النشر والتثبيت",
+        "أرسل للمشرف معرّف قناتك أو رابطها"
+      ],
+      "setup_en": [
+        "Add the bot to your channel as an admin that can post and pin",
+        "Send the admin your channel's id or link"
+      ]
     },
     {
       "sku": "archive-5k",
@@ -408,16 +802,44 @@
       "title_en": "5,000-message archive",
       "description": "تصدير تاريخ القناة كاملاً إلى JSON مع فهرسة زمنية.",
       "description_en": "Export the full channel history to JSON with a time index.",
-      "stars": 900,
+      "stars": 450,
       "category": "channel",
       "monthly": false,
       "featured": false,
-      "usd": 12,
+      "usd": 6.0,
       "image": "/store/img/products/archive-5k.webp",
       "demo": "",
       "features": [],
       "features_en": [],
-      "invoice": "https://t.me/$9EiNZ-7UIEZHAgAApbmbqHvj5o8"
+      "invoice": "https://t.me/$9EiNZ-7UIEZHAgAApbmbqHvj5o8",
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك إيصال فوري",
+        "يصل طلبك للمشرف ويُفعَّل لقناتك",
+        "يتواصل معك المشرف إن احتاج خطوة منك"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt at once",
+        "Your order reaches an admin and is activated for your channel",
+        "The admin contacts you if a step is needed from you"
+      ],
+      "needs": [
+        "قناتك على تيليجرام",
+        "إضافة البوت مشرفاً في القناة بصلاحية النشر"
+      ],
+      "needs_en": [
+        "Your Telegram channel",
+        "The bot added as a channel admin that can post"
+      ],
+      "stars_full": 900,
+      "usd_full": 12,
+      "setup": [
+        "أضف البوت مشرفاً في قناتك بصلاحية النشر والتثبيت",
+        "أرسل للمشرف معرّف قناتك أو رابطها"
+      ],
+      "setup_en": [
+        "Add the bot to your channel as an admin that can post and pin",
+        "Send the admin your channel's id or link"
+      ]
     },
     {
       "sku": "panel-pro",
@@ -425,16 +847,48 @@
       "title_en": "Pro dashboard — 1 month",
       "description": "كل ميزات لوحة التحكم: نسخ احتياطي، تصدير، وجدولة متقدمة.",
       "description_en": "Every dashboard feature: backups, exports and advanced scheduling.",
-      "stars": 700,
+      "stars": 350,
       "category": "channel",
       "monthly": false,
       "featured": false,
-      "usd": 9,
+      "usd": 4.5,
       "image": "/store/img/products/panel-pro.webp",
       "demo": "",
       "features": [],
       "features_en": [],
-      "invoice": "https://t.me/$MZaZV-7UIEZIAgAAejM1THAj6aU"
+      "invoice": "https://t.me/$MZaZV-7UIEZIAgAAejM1THAj6aU",
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك إيصال فوري",
+        "يصل طلبك للمشرف ويُفعَّل لقناتك",
+        "يتواصل معك المشرف إن احتاج خطوة منك"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt at once",
+        "Your order reaches an admin and is activated for your channel",
+        "The admin contacts you if a step is needed from you"
+      ],
+      "needs": [
+        "قناتك على تيليجرام",
+        "إضافة البوت مشرفاً في القناة بصلاحية النشر"
+      ],
+      "needs_en": [
+        "Your Telegram channel",
+        "The bot added as a channel admin that can post"
+      ],
+      "stars_full": 700,
+      "usd_full": 9,
+      "setup": [
+        "أضف البوت مشرفاً في قناتك بصلاحية النشر والتثبيت",
+        "أرسل للمشرف معرّف قناتك أو رابطها"
+      ],
+      "setup_en": [
+        "Add the bot to your channel as an admin that can post and pin",
+        "Send the admin your channel's id or link"
+      ]
     }
-  ]
+  ],
+  "offer": {
+    "pct": 50,
+    "ends": "2026-11-06T21:00:00+00:00"
+  }
 }

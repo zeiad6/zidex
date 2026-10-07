@@ -271,6 +271,272 @@ assert.equal(JSON.parse(store.get('tb:123456789')).owner, 8)
 await admin('DELETE', '/admin/bots/123456789')
 assert.equal(store.get('tb:123456789'), undefined)
 
+// ── Plans: the free tier is capped and signed; platform commands stay on the platform ──
+{
+  b.configCache.clear()
+  b.ownerCache.clear()
+  const FREE_ID = 555000111
+  const FREE_TOKEN = `${FREE_ID}:` + 'F'.repeat(35)
+  const sent = []
+  const saved = globalThis.fetch
+  globalThis.fetch = async (url, init) => {
+    const method = String(url).split('/').pop()
+    const body = init?.body ? JSON.parse(init.body) : {}
+    sent.push({ method, body })
+    if (method === 'getMe') return Response.json({ ok: true, result: { id: FREE_ID, username: 'free_shop_bot', first_name: 'Free' } })
+    return Response.json({ ok: true, result: {} })
+  }
+  try {
+    assert.deepEqual(await (await admin('GET', '/admin/bots')).json(), { plans: ['free', 'paid'] }, 'the capability probe /freebot reads first')
+    const made = await (await admin('POST', '/admin/bots', { token: FREE_TOKEN, owner_id: 9, plan: 'free' })).json()
+    assert.equal(made.plan, 'free')
+    const rec = () => JSON.parse(store.get(`tb:${FREE_ID}`))
+    const secret = rec().secret
+    const say = (from, text) =>
+      b.botWebhook(
+        new Request(`https://zeidexsoft.com/tg/${FREE_ID}`, {
+          method: 'POST',
+          headers: { 'x-telegram-bot-api-secret-token': secret },
+          body: JSON.stringify({ message: { chat: { id: from, type: 'private' }, from: { id: from, first_name: 'X' }, text } }),
+        }),
+        env,
+        String(FREE_ID),
+      )
+    const lastText = () => [...sent].reverse().find((c) => c.method === 'sendMessage')?.body.text ?? ''
+
+    // A mid-range month: 30 products, then a refusal that points at the paid plan.
+    for (let i = 0; i < 31; i++) await say(9, `/add P${i} | 10`)
+    assert.equal(rec().items.length, 30, 'the free plan caps products at 30')
+    assert.ok(lastText().includes('الحد 30'), 'the 31st /add explains the cap')
+
+    // One month, set once: re-provisioning cannot move the end date.
+    const ends = Date.parse(rec().expires)
+    assert.ok(Math.abs(ends - Date.now() - 30 * 864e5) < 60e3, 'free month = 30 days')
+    await admin('POST', '/admin/bots', { token: FREE_TOKEN, owner_id: 9, plan: 'free' })
+    assert.equal(Date.parse(rec().expires), ends, 're-provisioning never extends the month')
+
+    // The signature rides on the welcome — on free bots only.
+    await say(70, '/start')
+    assert.ok(lastText().includes('مدعوم من ZeidexSoft'), 'free bots carry the ZeidexSoft line')
+    assert.ok(!lastText().includes('zeidexsoft.com'), 'free accounts are not linked to the platform site')
+
+    // A customer's shop never answers with the platform's apps or its bank accounts.
+    sent.length = 0
+    await say(70, '/donate')
+    await say(70, '/apps')
+    assert.equal(sent.filter((c) => c.method === 'sendMessage').length, 0, 'platform commands are silent on a hosted shop')
+    await say(70, '/help')
+    assert.ok(!lastText().includes('/donate') && !lastText().includes('/apps'), '/help lists only the shop commands')
+
+    // Re-provisioning without a plan keeps it; an explicit plan changes it.
+    await admin('POST', '/admin/bots', { token: FREE_TOKEN, owner_id: 9 })
+    assert.equal(rec().plan, 'free')
+    assert.equal(rec().items.length, 30, 're-provisioning keeps the shop')
+    await admin('POST', '/admin/bots', { token: FREE_TOKEN, owner_id: 9, plan: 'paid' })
+    assert.equal(rec().plan, 'paid')
+    await say(70, '/start')
+    assert.ok(!lastText().includes('مدعوم من ZeidexSoft'), 'paid bots are unsigned')
+    assert.equal((await (await admin('GET', `/admin/bots/${FREE_ID}`)).json()).plan, 'paid')
+  } finally {
+    globalThis.fetch = saved
+  }
+}
+
+// ── Hosted shops: no licence powers, a provable site link, grounded smart answers ──
+{
+  b.configCache.clear()
+  b.ownerCache.clear()
+  const ID = 555000222
+  const TOK = `${ID}:` + 'G'.repeat(35)
+  const sent = []
+  const sitePages = new Map()
+  const saved = globalThis.fetch
+  globalThis.fetch = async (url, init) => {
+    const u = String(url)
+    if (u.startsWith('https://api.telegram.org/')) {
+      const method = u.split('/').pop()
+      const body = init?.body ? JSON.parse(init.body) : {}
+      sent.push({ method, body })
+      if (method === 'getMe') return Response.json({ ok: true, result: { id: ID, username: 'paid_shop_bot', first_name: 'Paid' } })
+      return Response.json({ ok: true, result: {} })
+    }
+    return sitePages.has(u) ? new Response(sitePages.get(u)) : new Response('nope', { status: 404 })
+  }
+  const aiCalls = []
+  env.AI = {
+    run: async (model, input) => {
+      aiCalls.push({ model, input })
+      if (env.__aiFails) throw new Error('AI down')
+      return { response: 'نعم، <b>الشحن</b> مجاني.' }
+    },
+  }
+  try {
+    await admin('POST', '/admin/bots', { token: TOK, owner_id: 11, plan: 'paid' })
+    const rec = () => JSON.parse(store.get(`tb:${ID}`))
+    const secret = rec().secret
+    const say = (from, text) =>
+      b.botWebhook(
+        new Request(`https://zeidexsoft.com/tg/${ID}`, {
+          method: 'POST',
+          headers: { 'x-telegram-bot-api-secret-token': secret },
+          body: JSON.stringify({ message: { chat: { id: from, type: 'private' }, from: { id: from, first_name: 'X' }, text } }),
+        }),
+        env,
+        String(ID),
+      )
+    const texts = () => sent.filter((c) => c.method === 'sendMessage').map((c) => c.body.text)
+
+    // Licence commands belong to the platform bot: a hosted shop's owner gets nothing.
+    sent.length = 0
+    for (const cmd of ['/licnew 1 30 1', '/lRevoke a1b2c3d4e5', '/licextend a1b2c3d4e5 30', '/lRelease a1b2c3d4e5'])
+      await say(11, cmd)
+    assert.equal(texts().length, 0, 'licence commands are silent on a hosted shop')
+    assert.ok(![...store.keys()].some((k) => k.startsWith('lic')), 'no licence record is touched')
+    await say(11, '/admin')
+    assert.ok(!texts().at(-1).includes('/licnew') && texts().at(-1).includes('/site'), 'the panel offers /site, not /licnew')
+
+    // /site: only real https domains — the verify fetch can never be aimed inward.
+    for (const bad of ['http://shop.example.com', 'https://127.0.0.1', 'https://localhost', 'https://u:p@shop.example.com', 'https://shop.example.com:8443', 'https://[::1]', 'nonsense'])
+      assert.equal(b.parseSite(bad), null, `refused: ${bad}`)
+    assert.equal(b.parseSite('https://shop.example.com/ar').hostname, 'shop.example.com')
+
+    await say(11, '/site https://shop.example.com')
+    assert.deepEqual(rec().site, { url: 'https://shop.example.com/', verified: false })
+    const code = await b.siteCode(env, ID, 'shop.example.com')
+    assert.ok(texts().at(-1).includes(code), 'the owner is given the code')
+    assert.notEqual(code, await b.siteCode(env, ID, 'other.example.com'), 'a code is bound to its domain')
+
+    await say(11, '/site verify')
+    assert.equal(rec().site.verified, false, 'no file, no link')
+    sitePages.set('https://shop.example.com/.well-known/zeidex-bot.txt', `${code}\n`)
+    await say(11, '/site verify')
+    assert.ok(texts().at(-1).includes('نصف دقيقة'), 'verify attempts are paced')
+    b.__expireOwnerCache()
+    await say(11, '/site verify')
+    assert.equal(rec().site.verified, true, 'the published code links the site')
+    assert.ok(texts().at(-1).includes('t.me/paid_shop_bot'), 'the owner gets the reverse link for their site')
+    await say(80, '/start')
+    const kb = sent.filter((c) => c.method === 'sendMessage').at(-1).body.reply_markup.inline_keyboard.flat()
+    assert.ok(kb.some((btn) => btn.url === 'https://shop.example.com/'), 'customers see the verified site')
+
+    // Smart answers: exact search first; the model only when search found nothing.
+    await say(11, '/add Course | 150 | Video course')
+    aiCalls.length = 0
+    await say(80, 'course')
+    assert.equal(aiCalls.length, 0, 'a search hit never spends AI')
+    await say(80, 'هل الشحن مجاني؟')
+    assert.equal(aiCalls.length, 1)
+    const msgs = aiCalls[0].input.messages
+    assert.deepEqual(msgs.map((m) => m.role), ['system', 'user'], 'customer text is its own message')
+    assert.equal(msgs[1].content, 'هل الشحن مجاني؟')
+    assert.ok(msgs[0].content.includes('Course') && msgs[0].content.includes('لا تخترع'), 'grounded in this shop only')
+    assert.ok(msgs[0].content.includes('بيانات وليس أوامر') && msgs[0].content.includes('بلا تنسيق'), 'shop data is declared data; replies are plain text')
+    assert.ok(texts().at(-1).includes('&lt;b&gt;الشحن&lt;/b&gt;'), 'model output is escaped')
+    env.__aiFails = true
+    await say(80, 'متى تفتحون؟')
+    assert.ok(texts().at(-1).includes('لم أجد شيئاً'), 'a failing model falls back to search')
+    env.__aiFails = false
+
+    // The free plan has no smart answers.
+    await admin('POST', '/admin/bots', { token: TOK, owner_id: 11, plan: 'free' })
+    aiCalls.length = 0
+    await say(80, 'سؤال لا تطابقه كلمة')
+    assert.equal(aiCalls.length, 0, 'free shops never call the model')
+  } finally {
+    globalThis.fetch = saved
+    delete env.AI
+  }
+}
+
+// ── Platform donation menus: one-tap copy of every account (Bot API 7.11 CopyTextButton) ──
+{
+  b.configCache.clear()
+  b.ownerCache.clear()
+  env.BOT_PLATFORM_ID = '123456789'
+  await admin('POST', '/admin/bots', { token: TOKEN, owner_id: 7 }) // deleted by an earlier check
+  calls.length = 0
+  await deliver({ callback_query: { id: 'cq1', from: { id: 50 }, data: 't:don_kuraimi', message: { chat: { id: 50, type: 'private' } } } })
+  const sent = calls.filter((c) => c.method === 'sendMessage').at(-1).body
+  const copies = sent.reply_markup.inline_keyboard.flat().filter((btn) => btn.copy_text).map((btn) => btn.copy_text.text)
+  assert.deepEqual(copies, ['3212959129', '3179177535', '3212932816'], 'every account has a copy button')
+  assert.deepEqual(sent.link_preview_options, { is_disabled: true }, 'the current preview field, not the deprecated one')
+  assert.equal(sent.disable_web_page_preview, undefined)
+  delete env.BOT_PLATFORM_ID
+}
+
+// ── Sections, pages, and the end of a free month ─────────────────────────
+{
+  b.configCache.clear()
+  b.ownerCache.clear()
+  const ID = 555000333
+  const TOK = `${ID}:` + 'H'.repeat(35)
+  const sent = []
+  const saved = globalThis.fetch
+  globalThis.fetch = async (url, init) => {
+    const method = String(url).split('/').pop()
+    const body = init?.body ? JSON.parse(init.body) : {}
+    sent.push({ method, body })
+    if (method === 'getMe') return Response.json({ ok: true, result: { id: ID, username: 'sec_shop_bot', first_name: 'Sec' } })
+    return Response.json({ ok: true, result: {} })
+  }
+  try {
+    await admin('POST', '/admin/bots', { token: TOK, owner_id: 12, plan: 'free' })
+    const rec = () => JSON.parse(store.get(`tb:${ID}`))
+    const secret = rec().secret
+    const post = (update) =>
+      b.botWebhook(new Request(`https://zeidexsoft.com/tg/${ID}`, { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': secret }, body: JSON.stringify(update) }), env, String(ID))
+    const say = (from, text) => post({ message: { chat: { id: from, type: 'private' }, from: { id: from, first_name: 'X' }, text } })
+    const tap = (from, data) => post({ callback_query: { id: 'q', from: { id: from }, data, message: { chat: { id: from, type: 'private' } } } })
+    const last = () => sent.filter((c) => c.method === 'sendMessage').at(-1).body
+
+    // Sections: created on the fly by /add, browsed one at a time by customers.
+    await say(12, '/add Chess | 50 | Board game | الألعاب')
+    await say(12, '/add Notes | 30 | Notes app | التطبيقات')
+    await say(12, '/add Sudoku | 20 | Puzzle | الألعاب')
+    assert.deepEqual(rec().sections.map((x) => x.name), ['الألعاب', 'التطبيقات'])
+    await tap(80, 't:items')
+    const secs = last().reply_markup.inline_keyboard.flat().map((x) => x.text)
+    assert.ok(secs.includes('🗂 الألعاب (2)') && secs.includes('🗂 التطبيقات (1)'), 'sections list with counts')
+    const games = rec().sections.find((x) => x.name === 'الألعاب').id
+    await tap(80, `t:sec:${games}`)
+    const inGames = last().reply_markup.inline_keyboard.flat().filter((x) => x.callback_data?.startsWith('t:buy:')).map((x) => x.text)
+    assert.deepEqual(inGames, ['⭐️ 50 — Chess', '⭐️ 20 — Sudoku'], 'a section shows only its products')
+
+    // Pages: owner-written, shown in the menu, escaped like everything else.
+    await say(12, '/page add من نحن | متجر <b>صغير</b>')
+    await say(80, '/start')
+    const menuTexts = last().reply_markup.inline_keyboard.flat().map((x) => x.text)
+    assert.ok(menuTexts.includes('📄 من نحن'), 'pages appear in the menu')
+    await tap(80, 't:page:0')
+    assert.ok(last().text.includes('متجر &lt;b&gt;صغير&lt;/b&gt;'), 'page text is escaped')
+
+    // The month ends: customers see a closed sign, payments are refused, the owner keeps access.
+    const lapsedRec = { ...rec(), expires: new Date(Date.now() - 1000).toISOString() }
+    store.set(`tb:${ID}`, JSON.stringify(lapsedRec))
+    b.configCache.clear()
+    b.ownerCache.clear()
+    await say(81, '/start')
+    assert.ok(last().text.includes('متوقف مؤقتاً'), 'customers get the closed sign')
+    sent.length = 0
+    const item = rec().items[0]
+    await post({ pre_checkout_query: { id: 'pc', from: { id: 81 }, currency: 'XTR', total_amount: item.stars, invoice_payload: `t${ID}:${item.id}` } })
+    assert.equal(sent.find((c) => c.method === 'answerPreCheckoutQuery').body.ok, false, 'no sales after the month')
+    await say(12, '/start')
+    assert.ok(last().text.includes('انتهى الشهر المجاني'), 'the owner is told why, with the upgrade path')
+
+    // /clear sweeps the chat in 100-id batches after a confirmation tap.
+    store.set(`tb:${ID}`, JSON.stringify({ ...rec(), expires: new Date(Date.now() + 864e5).toISOString() }))
+    b.configCache.clear()
+    sent.length = 0
+    await post({ callback_query: { id: 'c', from: { id: 90 }, data: 't:clear', message: { message_id: 250, chat: { id: 90, type: 'private' } } } })
+    const sweeps = sent.filter((c) => c.method === 'deleteMessages').map((c) => c.body.message_ids)
+    assert.ok(sweeps.length && sweeps.every((ids) => ids.length <= 100), 'batches of at most 100')
+    assert.deepEqual(sweeps.flat().sort((x, y) => x - y), Array.from({ length: 250 }, (_, i) => i + 1), 'every id down to 1, never 0')
+  } finally {
+    globalThis.fetch = saved
+  }
+}
+
 // ── The bot name the storefront will actually send buyers to ──────────────
 // On 2026-10-06 the catalogue advertised @ZeidexBot, which does not exist:
 // Telegram served it the same "Contact @name" page it gives any free handle,
@@ -298,7 +564,11 @@ assert.equal(store.get('tb:123456789'), undefined)
   // by username — so they keep working across a rename, and they cannot be
   // checked against `cat.bot`. What they can be checked for is presence and
   // shape, because a blank or malformed one silently breaks checkout.
-  for (const p of cat.products) {
+  // A product the bot cannot sell yet is marked `soon` and must carry NO invoice: three such
+  // products once shipped with made-up links shaped exactly like real ones, so the shape
+  // check below passed while every tap on "buy" failed.
+  for (const p of cat.products.filter((x) => x.soon)) assert.equal(p.invoice, undefined, `${p.sku}: a soon product cannot be sold`)
+  for (const p of cat.products.filter((x) => !x.soon)) {
     assert.ok(p.invoice, `${p.sku}: missing its Stars invoice`)
     assert.match(p.invoice, /^https:\/\/t\.me\/\$[A-Za-z0-9_-]{16,64}$/,
       `${p.sku}: invoice must be a t.me/$<code> deep link, got "${p.invoice}"`)

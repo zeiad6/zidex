@@ -19,6 +19,7 @@ const pub = join(here, '..', 'public', 'store')
 const html = readFileSync(join(pub, 'index.html'), 'utf8')
 const runtime = readFileSync(join(pub, 'store.js'), 'utf8')
 const catalog = JSON.parse(readFileSync(join(pub, 'catalog.json'), 'utf8'))
+const apps = JSON.parse(readFileSync(join(pub, 'apps.json'), 'utf8'))
 
 let fails = 0
 const ok = (name, cond, extra = '') => {
@@ -27,7 +28,7 @@ const ok = (name, cond, extra = '') => {
 }
 
 /** A fresh page: jsdom, the real markup, the real script, the real catalogue. */
-function boot({ storedTheme, storedLang, colorScheme = 'light' } = {}) {
+function boot({ storedTheme, storedLang, colorScheme = 'light', noApps = false, telegram = null } = {}) {
   const errors = []
   const vc = new VirtualConsole()
   vc.on('jsdomError', (e) => errors.push(String(e)))
@@ -75,10 +76,14 @@ function boot({ storedTheme, storedLang, colorScheme = 'light' } = {}) {
     if (String(url).includes('catalog.json')) {
       return { ok: true, status: 200, json: async () => catalog }
     }
+    if (String(url).includes('apps.json') && !noApps) {
+      return { ok: true, status: 200, json: async () => apps }
+    }
     throw new Error('unexpected fetch: ' + url)
   }
   window.open = () => ({ focus() {} })
 
+  if (telegram) window.Telegram = { WebApp: telegram }
   // The head script has already run under jsdom; the runtime is what we test.
   window.eval(runtime)
   return { dom, window, doc: window.document, errors, ls: store }
@@ -366,6 +371,147 @@ console.log('\n8. resilience')
   ok('the empty note is shown', dom.window.document.querySelector('#empty').hidden === false)
   ok('no unhandled rejection', errors.length === 0, errors.join(' | ') || 'clean')
   dom.window.close()
+}
+
+// ── 9. Paid / free sections ──────────────────────────────────────────────
+console.log('\n9. sections — paid products and free apps')
+{
+  const { doc, window, errors } = boot()
+  await tick()
+  const seg = doc.querySelector('#segment')
+  const tab = (name) => doc.querySelector(`#segment [data-section="${name}"]`)
+  ok('the switch shows once the apps load', seg.hidden === false)
+  ok('paid is the starting section', tab('paid').getAttribute('aria-selected') === 'true')
+  tab('free').click()
+  await tick()
+  const cards = doc.querySelectorAll('#grid .card.app:not(.freebot)')
+  ok('free shows every program', cards.length === apps.apps.length, `${cards.length}/${apps.apps.length}`)
+  const fb = doc.querySelector('#grid .card.freebot a.get')
+  ok('the free store bot leads the section', !!fb && fb.href === `https://t.me/${catalog.bot}?start=freebot`)
+  ok('category chips hide in free', doc.querySelector('#filters').hidden === true)
+  ok('the title follows the section', doc.querySelector('#section-title').textContent === 'تطبيقات مجانية')
+  const get = cards[0].querySelector('a.get')
+  ok('each card carries a direct download', !!get && get.href.startsWith('https://') && get.target === '_blank')
+  ok('details link to a real site section', cards[0].querySelector('a.go').href.includes('/programs#programs-'))
+  ok('no paid product leaks into free', doc.querySelectorAll('#grid .card:not(.app)').length === 0)
+  const input = doc.querySelector('#search')
+  input.value = 'VerityScope'
+  input.dispatchEvent(new window.Event('input'))
+  await tick()
+  ok('search works inside free', doc.querySelectorAll('#grid .card.app').length === 1)
+  input.value = ''
+  input.dispatchEvent(new window.Event('input'))
+  tab('paid').click()
+  await tick()
+  ok('back to paid restores the products', doc.querySelectorAll('#grid .card:not(.app)').length === catalog.products.length)
+  ok('no runtime errors', errors.length === 0, errors.join(' | ') || 'clean')
+  window.close()
+}
+{
+  const { doc, window, errors } = boot({ noApps: true })
+  await tick()
+  ok('without apps.json the switch stays hidden', doc.querySelector('#segment').hidden === true)
+  ok('and the products still render', doc.querySelectorAll('#grid .card').length === catalog.products.length)
+  ok('a missing apps.json is not an error', errors.length === 0, errors.join(' | ') || 'clean')
+  window.close()
+}
+
+// ── 10. Theme choice beats the OS and Telegram ───────────────────────────
+console.log('\n10. theme choice — marked so CSS lets it win')
+{
+  const { doc, window } = boot({ storedTheme: 'light', colorScheme: 'dark' })
+  await tick()
+  const r = doc.documentElement
+  ok('a stored choice sets the forced marker', r.getAttribute('data-theme-forced') === '1')
+  ok('and the stored scheme', r.getAttribute('data-theme') === 'light')
+  window.close()
+}
+{
+  const { doc, window } = boot()
+  await tick()
+  ok('no choice, no marker', !doc.documentElement.hasAttribute('data-theme-forced'))
+  window.close()
+}
+{
+  const opened = []
+  const telegram = {
+    initData: 'query_id=x', colorScheme: 'dark', onEvent() {}, ready() {}, expand() {},
+    openLink: (u) => opened.push(u),
+  }
+  const { doc, window, errors } = boot({ telegram })
+  await tick()
+  const r = doc.documentElement
+  ok('inside Telegram the client scheme is followed', r.getAttribute('data-theme') === 'dark' && r.hasAttribute('data-tg'))
+  doc.querySelector('#theme').click()
+  ok('and the toggle works there too', r.getAttribute('data-theme') === 'light' && r.getAttribute('data-theme-forced') === '1')
+  doc.querySelector('#segment [data-section="free"]').click()
+  await tick()
+  doc.querySelector('#grid .card.app a.get').click()
+  ok('downloads open in the browser, not over the Mini App', opened.length === 1 && opened[0].startsWith('https://'))
+  ok('no runtime errors', errors.length === 0, errors.join(' | ') || 'clean')
+  window.close()
+}
+
+// ── 11. What happens after you pay; products not on sale yet ────────────
+console.log('\n11. sheet details — after you pay, what you need, coming soon')
+{
+  const { doc, window, errors } = boot()
+  const opened = []
+  window.open = (url) => {
+    opened.push(url)
+    return { focus() {} }
+  }
+  await tick()
+  const open = (sku) => doc.querySelector(`#grid .card[data-sku="${sku}"]`).dispatchEvent(new window.Event('click'))
+  const basic = catalog.products.find((p) => p.sku === 'store-bot-basic')
+  open('store-bot-basic')
+  await tick()
+  ok('the steps after paying are listed', doc.querySelectorAll('#sheet-after li').length === basic.after.length && doc.querySelector('#sheet-after-box').hidden === false)
+  ok('what the buyer needs is listed', doc.querySelectorAll('#sheet-needs li').length === basic.needs.length)
+  ok('how to get it running is listed', doc.querySelectorAll('#sheet-setup li').length === basic.setup.length && basic.setup.length > 0)
+  ok('steps are the catalogue text, not markup', doc.querySelector('#sheet-after li').textContent === basic.after[0])
+
+  const soon = catalog.products.find((p) => p.soon)
+  ok('unbuilt products are marked soon, with no invoice', !!soon && !soon.invoice)
+  ok('a soon card says so', doc.querySelector(`#grid .card[data-sku="${soon.sku}"] .badge.soon`) !== null)
+  open(soon.sku)
+  await tick()
+  ok('a soon product hides the empty sections', doc.querySelector('#sheet-after-box').hidden === true)
+  const buy = doc.querySelector('#sheet-buy')
+  ok('its button asks instead of buying', buy.textContent.includes('اسأل'))
+  buy.click()
+  ok('and opens the bot chat, never a purchase', opened.length === 1 && !opened[0].includes('start=buy_'), opened[0])
+  ok('no runtime errors', errors.length === 0, errors.join(' | ') || 'clean')
+  window.close()
+}
+
+// ── 12. Opening offer: coupon, countdown, struck prices ──────────────────
+console.log('\n12. opening offer')
+{
+  const { doc, window, errors } = boot()
+  await tick()
+  const coupon = doc.querySelector('#offer')
+  const live = catalog.offer && Date.parse(catalog.offer.ends) > Date.now()
+  ok('the coupon shows while the offer runs', coupon.hidden === !live)
+  if (live) {
+    ok('it carries the discount', doc.querySelector('#offer-pct').textContent === catalog.offer.pct + '%')
+    ok('and a live countdown', doc.querySelector('#offer-left').textContent.startsWith('ينتهي خلال'))
+    const basic = catalog.products.find((p) => p.sku === 'store-bot-basic')
+    const was = doc.querySelector('#grid .card[data-sku="store-bot-basic"] .was')
+    ok('the old price is struck through', !!was && was.textContent === basic.stars_full.toLocaleString('en-US'))
+  }
+  ok('section switches use drawn icons, not emoji', doc.querySelectorAll('#segment button svg').length === 2 && !/[💎🎁]/u.test(doc.querySelector('#segment').textContent))
+  ok('no runtime errors', errors.length === 0, errors.join(' | ') || 'clean')
+  window.close()
+}
+{
+  const saved = catalog.offer
+  catalog.offer = { pct: 50, ends: '2020-01-01T00:00:00Z' }
+  const { doc, window } = boot()
+  await tick()
+  ok('an ended offer hides the coupon', doc.querySelector('#offer').hidden === true)
+  catalog.offer = saved
+  window.close()
 }
 
 console.log(`\n${fails ? fails + ' CHECK(S) FAILED' : 'all store checks passed'}`)

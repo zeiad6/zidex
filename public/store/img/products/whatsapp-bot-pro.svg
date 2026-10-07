@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#047857"/><stop offset="1" stop-color="#0e7490"/></linearGradient>
+    <radialGradient id="gloss" cx=".3" cy=".1" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0v32" fill="none" stroke="#fff" stroke-opacity=".07" stroke-width="2"/></pattern>
+    <filter id="lift" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity=".28"/></filter>
+    <clipPath id="tile"><rect width="512" height="512" rx="116"/></clipPath>
+  </defs>
+  <g clip-path="url(#tile)">
+    <rect width="512" height="512" fill="url(#bg)"/>
+    <rect width="512" height="512" fill="url(#grid)"/>
+    <circle cx="430" cy="430" r="190" fill="#bbf7d0" opacity=".16"/>
+    <rect width="512" height="512" fill="url(#gloss)"/>
+  </g>
+  <g filter="url(#lift)" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round" stroke-linejoin="round">
+    <style>.a{stroke:#bbf7d0;fill:none} circle.a{fill:#bbf7d0;stroke:none}</style>
+    <path d="M140 168h168a28 28 0 0 1 28 28v84a28 28 0 0 1-28 28h-96l-52 40v-40h-20a28 28 0 0 1-28-28v-84a28 28 0 0 1 28-28z"/><path class="a" d="M352 236h20a28 28 0 0 1 28 28v76a28 28 0 0 1-28 28h-14v34l-42-34h-60a28 28 0 0 1-28-28v-12"/><path class="a" d="M190 238l24 24 48-48"/>
+  </g>
+  <g transform="translate(392 52)">
+    <rect width="68" height="68" rx="20" fill="#fff" fill-opacity=".18" stroke="#fff" stroke-opacity=".35" stroke-width="2"/>
+    <path d="M22 22h24L22 46h24" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

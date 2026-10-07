@@ -1,0 +1,82 @@
+{
+ "store-bot-basic": [
+  "#4f3fd9",
+  "#00a88c",
+  "#7ef2d9"
+ ],
+ "store-bot-pro": [
+  "#7c3aed",
+  "#db2777",
+  "#ffd166"
+ ],
+ "store-bot-hosting": [
+  "#0e7490",
+  "#2563eb",
+  "#5eead4"
+ ],
+ "post-50": [
+  "#4338ca",
+  "#0891b2",
+  "#a5b4fc"
+ ],
+ "pin-month": [
+  "#e11d48",
+  "#f59e0b",
+  "#fde68a"
+ ],
+ "archive-5k": [
+  "#b45309",
+  "#dc2626",
+  "#fed7aa"
+ ],
+ "panel-pro": [
+  "#0369a1",
+  "#7c3aed",
+  "#bae6fd"
+ ],
+ "group-bot": [
+  "#1d4ed8",
+  "#0f766e",
+  "#86efac"
+ ],
+ "support-bot": [
+  "#0f766e",
+  "#6d28d9",
+  "#fbcfe8"
+ ],
+ "booking-bot": [
+  "#c2410c",
+  "#7c3aed",
+  "#fde68a"
+ ],
+ "subs-bot": [
+  "#6d28d9",
+  "#0891b2",
+  "#a5f3fc"
+ ],
+ "quiz-bot": [
+  "#ca8a04",
+  "#db2777",
+  "#fef08a"
+ ],
+ "ai-bot": [
+  "#111827",
+  "#6d5cff",
+  "#5eead4"
+ ],
+ "multibot-crm": [
+  "#1e3a8a",
+  "#0d9488",
+  "#99f6e4"
+ ],
+ "workflow-engine": [
+  "#9333ea",
+  "#0369a1",
+  "#f0abfc"
+ ],
+ "whatsapp-bot-pro": [
+  "#047857",
+  "#0e7490",
+  "#bbf7d0"
+ ]
+}

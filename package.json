@@ -6,7 +6,7 @@
   "description": "Ghost 778 — TikTok hub, link hub and blog",
   "scripts": {
     "dev": "vite",
-    "build": "npm run sync-meta && tsc -b && vite build && node scripts/prerender.mjs",
+    "build": "npm run sync-meta && node scripts/store-apps.mjs && tsc -b && vite build && node scripts/prerender.mjs && esbuild dist/store/store.js --minify --target=es2017 --legal-comments=none --allow-overwrite --outfile=dist/store/store.js",
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "lint": "eslint .",
@@ -16,7 +16,7 @@
     "indexnow": "node scripts/indexnow.mjs",
     "test:license": "node scripts/test-license.mjs",
     "test:botlic": "node scripts/test-bot-licensing.mjs",
-    "test": "node scripts/test-bots.mjs && node scripts/test-license.mjs && node scripts/test-bot-licensing.mjs && node scripts/test-store-app.mjs",
+    "test": "node scripts/test-bots.mjs && node scripts/test-whatsapp.mjs && node scripts/test-license.mjs && node scripts/test-bot-licensing.mjs && node scripts/test-store-app.mjs",
     "gen:license-keys": "node scripts/gen-license-keys.mjs --env",
     "test:store": "node scripts/test-store-app.mjs"
   },

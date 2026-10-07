@@ -13,6 +13,7 @@ import { Reveal } from '@/components/ui/Reveal'
 import { PostCard } from '@/components/blog/PostCard'
 import { ProgramCard } from '@/components/programs/ProgramCard'
 import { StoreTeaser } from '@/components/store/organisms/StoreTeaser'
+import { OpeningOffer } from '@/components/store/organisms/OpeningOffer'
 import { useCatalog } from '@/lib/store'
 
 /* ------------------------------------------------------------------ *
@@ -443,7 +444,7 @@ function Hero() {
   const { t } = useI18n()
   const { catalog } = useCatalog()
   const botCount = catalog?.products.filter((p) => p.category === 'types' || (p.category === 'bots' && !p.monthly)).length
-  const trialLink = catalog ? `https://t.me/${catalog.bot}?start=trial` : '/shop'
+  const trialLink = catalog ? `https://t.me/${catalog.bot}?start=freebot` : '/shop'
 
   return (
     <section
@@ -470,8 +471,8 @@ function Hero() {
 
           <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-white/70">
             {t(
-              'متاجر رقمية، إدارة مجموعات، خدمة عملاء، حجوزات واشتراكات — بدفع بالنجوم والكريمي، وبوتك الخاص مجاناً 3 أيام قبل أن تقرر.',
-              'Digital stores, group management, support, bookings and subscriptions — paid in Stars or via Kuraimi, with your own bot free for 3 days before you decide.',
+              'متاجر رقمية، إدارة مجموعات، خدمة عملاء، حجوزات واشتراكات — بدفع بالنجوم والكريمي. ابدأ ببوت متجر مجاني لمدة شهر، أو جرّب بوتك الكامل يومين.',
+              'Digital stores, group management, support, bookings and subscriptions — paid in Stars or via Kuraimi. Start with a free store bot for a month, or try your full bot for two days.',
             )}
           </p>
 
@@ -487,7 +488,7 @@ function Hero() {
               className="hover:text-ink flex h-12 items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-6 text-[14px] font-black text-white transition-colors hover:bg-white"
             >
               <Gift className="size-4" aria-hidden="true" />
-              {t('بوتك مجاناً 3 أيام', 'Your bot free for 3 days')}
+              {t('بوت متجر مجاني لمدة شهر', 'A free store bot for a month')}
             </a>
           </div>
         </div>
@@ -501,7 +502,7 @@ function Hero() {
           />
           <HeroFact
             label={t('تجربة مجانية', 'Free trial')}
-            value={t('3 أيام', '3 days')}
+            value={t('يومين', '2 days')}
             sub={t('على توكن بوتك، مرة واحدة لكل شخص', 'on your own bot token, once per person')}
             delay={0.2}
           />
@@ -532,6 +533,7 @@ export default function Home() {
 
   return (
     <div className="container-app flex flex-col gap-6 py-6 lg:gap-8 lg:py-8">
+      <OpeningOffer />
       <Hero />
 
       <Reveal delay={0.06}>

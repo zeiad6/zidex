@@ -14,6 +14,8 @@ export type StoreProduct = {
   description: string
   description_en: string
   stars: number
+  /** Price before the opening offer; absent or equal when nothing is discounted. */
+  stars_full?: number
   category: 'bots' | 'channel' | string
   monthly: boolean
   featured: boolean
@@ -21,6 +23,7 @@ export type StoreProduct = {
   features_en: string[]
   /** Price on the website for methods other than Stars. */
   usd: number
+  usd_full?: number
   /** The product's own mark (scripts/product-marks.py). */
   image?: string
   /** /demo key in the bot ("store", "group", …); empty when there is no demo. */
@@ -38,7 +41,16 @@ export type Payments = {
   kuraimi_transfer?: { accounts: Partial<Record<'USD' | 'YER' | 'SAR', string>>; name?: string }
 }
 
-export type Catalog = { bot: string; currency: string; payments?: Payments; whatsapp?: string; products: StoreProduct[] }
+export type Offer = { pct: number; ends: string }
+
+export type Catalog = {
+  bot: string
+  currency: string
+  payments?: Payments
+  whatsapp?: string
+  offer?: Offer | null
+  products: StoreProduct[]
+}
 
 export const STORE_LOGO = '/store/img/zeidex-bot.webp'
 export const STORE_SHOT = '/store/img/storefront-ar.webp'

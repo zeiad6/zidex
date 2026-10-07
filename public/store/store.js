@@ -78,9 +78,12 @@
 
   if (inTg) {
     root.setAttribute('data-tg', '')
-    // Telegram owns the palette, but our brand surfaces (the hero gradient,
-    // the price pill) still need to know which way to render.
-    root.setAttribute('data-theme', tg.colorScheme === 'light' ? 'light' : 'dark')
+    // A theme change inside the client re-runs the same rules as everything else.
+    try {
+      tg.onEvent('themeChanged', applyTheme)
+    } catch (e) {
+      /* ignore */
+    }
   }
 
   var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null
@@ -89,21 +92,17 @@
     return mq && mq.matches ? 'dark' : 'light'
   }
 
+  /** One rule everywhere: an explicit choice → Telegram's scheme → the OS.
+   *  data-theme-forced is what lets the choice win in CSS too: both the OS media block
+   *  and the Telegram palette key off its absence. Nothing ever set it, so "day" on a
+   *  dark phone stayed dark, and inside Telegram the toggle was hidden and inert. */
   function applyTheme() {
-    if (inTg) {
-      // A theme change inside the client changes themeParams; re-read them.
-      try {
-        tg.ready()
-        tg.onEvent('themeChanged', function () {
-          root.setAttribute('data-theme', tg.colorScheme === 'light' ? 'light' : 'dark')
-        })
-      } catch (e) {
-        /* ignore */
-      }
-      return
-    }
     var forced = store(THEME_KEY)
-    root.setAttribute('data-theme', forced === 'dark' || forced === 'light' ? forced : systemTheme())
+    var chosen = forced === 'dark' || forced === 'light'
+    if (chosen) root.setAttribute('data-theme-forced', '1')
+    else root.removeAttribute('data-theme-forced')
+    var scheme = chosen ? forced : inTg ? (tg.colorScheme === 'light' ? 'light' : 'dark') : systemTheme()
+    root.setAttribute('data-theme', scheme)
     var btn = $('#theme')
     if (btn) {
       var dark = root.getAttribute('data-theme') === 'dark'
@@ -149,6 +148,23 @@
     billing: ['الدفع', 'Billing'],
     tryBot: ['جرّب البوت', 'Try the bot'],
     getStars: ['شراء نجوم', 'Buy Stars'],
+    paidApps: ['المدفوعة', 'Paid'],
+    freeApps: ['المجانية', 'Free'],
+    offerOff: ['خصم', 'off'],
+    offerTitle: ['افتتاح متجر ZeidexSoft: نصف السعر على كل البوتات', 'ZeidexSoft opening: every bot at half price'],
+    was: ['بدل', 'was'],
+    freeTitle: ['تطبيقات مجانية', 'Free apps'],
+    download: ['تنزيل مجاني', 'Free download'],
+    appPage: ['التفاصيل', 'Details'],
+    countApps: ['تطبيق', 'apps'],
+    afterTitle: ['ماذا يحدث بعد الشراء', 'What happens after you pay'],
+    needsTitle: ['المطلوب منك', 'What you will need'],
+    setupTitle: ['التهيئة للعمل', 'Getting it running'],
+    soon: ['قريباً', 'Coming soon'],
+    askBot: ['💬 اسأل عنه في البوت', '💬 Ask about it in the bot'],
+    freeBot: ['بوت متجر مجاني — دائماً', 'A free store bot — forever'],
+    freeBotText: ['متجرك على تيليجرام باسمك: حتى 20 منتجاً بالنجوم، يعمل على السحابة 24/7.', 'Your own Telegram store: up to 20 products paid in Stars, running in the cloud 24/7.'],
+    freeBotGo: ['احصل عليه', 'Get it'],
     close: ['إغلاق', 'Close'],
     done: ['تم ✓', 'Done ✓'],
     buyNow: ['اطلب الآن', 'Order now'],
@@ -249,9 +265,16 @@
     return [h, (h + 42) % 360]
   }
 
+  var tints = {}
+
   function art(product, big) {
     var hv = hues(product.sku)
     var box = el('div', { class: 'art' })
+    var tint = tints[product.sku]
+    if (tint) {
+      box.style.setProperty('--t1', tint[0])
+      box.style.setProperty('--t2', tint[1])
+    }
     box.style.setProperty('--a', 'hsl(' + hv[0] + ' 62% 46%)')
     box.style.setProperty('--b', 'hsl(' + hv[1] + ' 64% 36%)')
     if (product.image) {
@@ -291,12 +314,14 @@
         role: 'button',
         'aria-label': title,
         'data-sku': product.sku,
+        'data-cat': product.category || '',
       },
       [],
     )
     node.style.setProperty('--i', String(i))
 
-    if (product.featured) node.appendChild(el('span', { class: 'badge', text: t('mostPopular') }))
+    if (product.soon) node.appendChild(el('span', { class: 'badge soon', text: t('soon') }))
+    else if (product.featured) node.appendChild(el('span', { class: 'badge', text: t('mostPopular') }))
 
     var head = el('div', {}, [art(product)])
     if (product.monthly) head.appendChild(el('span', { class: 'per', text: t('monthly') }))
@@ -311,20 +336,24 @@
     price.appendChild(el('span', { text: Number(product.stars).toLocaleString('en-US') }))
 
     var go = el('span', { class: 'go' }, [])
-    go.appendChild(el('span', { text: t('buyNow') }))
-    go.appendChild(
+    go.appendChild(el('span', { text: product.soon ? t('soon') : t('buyNow') }))
+    // The arrow promises an action; a product that is not on sale has none.
+    if (!product.soon) go.appendChild(
       el('span', {
         class: 'arrow-nudge',
         html: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block"><path d="M19 12H5m6-6-6 6 6 6"/></svg>',
       }),
     )
 
+    var cut = product.stars_full && product.stars_full > product.stars
+    var was = cut ? el('s', { class: 'was', text: Number(product.stars_full).toLocaleString('en-US') }) : null
+
     node.appendChild(head)
     node.appendChild(
       el('div', { class: 'body' }, [
         el('h3', { text: title }),
         el('p', { text: desc }),
-        el('div', { class: 'row' }, [price, go]),
+        el('div', { class: 'row' }, [el('span', { class: 'cost' }, [was, price]), go]),
       ]),
     )
 
@@ -350,12 +379,84 @@
   window.__store = { norm: norm, matches: matches }
 
   /* ---------------------------------------------------------------- *
+   * Free apps — the site's downloadable programs (apps.json, generated
+   * from src/data/programs.ts at build time). No payment, so no sheet:
+   * the card itself carries the download.
+   * ---------------------------------------------------------------- */
+
+  var GLYPH = {
+    windows:
+      '<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>',
+    android:
+      '<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18h2"/></svg>',
+  }
+
+  /** Inside Telegram a plain link would navigate the Mini App away; openLink hands
+   *  it to the browser and keeps the store open behind it. */
+  function openOut(href) {
+    if (!inTg || !tg.openLink) return false
+    try {
+      tg.openLink(href)
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  function outLink(cls, href, text) {
+    var a = el('a', { class: cls, href: href, target: '_blank', rel: 'noopener', text: text })
+    a.addEventListener('click', function (e) {
+      haptic('light')
+      if (openOut(href)) e.preventDefault()
+    })
+    return a
+  }
+
+  /** The free store bot leads the free section: it is the one free thing that is ours to give. */
+  function freeBotCard() {
+    var node = el('article', { class: 'card app freebot' }, [])
+    var pic = art({ sku: 'freebot' })
+    node.appendChild(el('div', {}, [pic]))
+    node.appendChild(
+      el('div', { class: 'body' }, [
+        el('h3', { text: '🎁 ' + t('freeBot') }),
+        el('p', { text: t('freeBotText') }),
+        el('div', { class: 'row' }, [outLink('get', 'https://t.me/' + catalog.bot + '?start=freebot', t('freeBotGo'))]),
+      ]),
+    )
+    return node
+  }
+
+  function appCard(app, i) {
+    var node = el('article', { class: 'card app', 'data-slug': app.slug }, [])
+    node.style.setProperty('--i', String(i))
+    var pic = art({ sku: app.slug })
+    pic.textContent = ''
+    pic.appendChild(el('div', { class: 'star', html: GLYPH[app.kind] || GLYPH.android }))
+    var head = el('div', {}, [pic])
+    head.appendChild(el('span', { class: 'per', text: lang === 'en' ? app.kind_label_en : app.kind_label }))
+    var dl = app.downloads[0]
+    node.appendChild(head)
+    node.appendChild(
+      el('div', { class: 'body' }, [
+        el('h3', { text: lang === 'en' ? app.name_en : app.name }),
+        el('p', { text: lang === 'en' ? app.tagline_en : app.tagline }),
+        el('small', { class: 'meta', text: 'v' + app.version + ' · ' + app.platform + (dl ? ' · ' + dl.size : '') }),
+        el('div', { class: 'row' }, [dl ? outLink('get', dl.href, t('download')) : null, outLink('go', app.page, t('appPage'))]),
+      ]),
+    )
+    return node
+  }
+
+  /* ---------------------------------------------------------------- *
    * Render
    * ---------------------------------------------------------------- */
 
   var catalog = null
   var filter = 'all'
   var query = ''
+  var section = 'paid' // 'paid' | 'free'
+  var apps = []
 
   function visible() {
     if (!catalog) return []
@@ -367,19 +468,34 @@
     })
   }
 
+  function visibleApps() {
+    var whole = norm(query)
+    var words = whole ? whole.split(' ').filter(Boolean) : []
+    return apps.filter(function (a) {
+      if (!words.length) return true
+      var hay = norm([a.name, a.name_en, a.tagline, a.tagline_en, a.platform, a.kind_label, a.kind_label_en].join(' '))
+      if (hay.indexOf(whole) > -1) return true
+      return words.some(function (w) {
+        return hay.indexOf(w) > -1
+      })
+    })
+  }
+
   function render() {
     var grid = $('#grid')
     if (!grid || !catalog) return
 
-    var list = visible()
+    var free = section === 'free'
+    var list = free ? visibleApps() : visible()
     grid.textContent = ''
 
+    if (free && catalog.bot && !query) grid.appendChild(freeBotCard())
     list.forEach(function (p, i) {
-      grid.appendChild(card(p, i))
+      grid.appendChild(free ? appCard(p, i) : card(p, i))
     })
 
     var count = $('#count')
-    if (count) count.textContent = list.length + ' ' + t('count')
+    if (count) count.textContent = list.length + ' ' + t(free ? 'countApps' : 'count')
 
     var empty = $('#empty')
     if (empty) empty.hidden = list.length > 0
@@ -401,6 +517,10 @@
   function renderFilters() {
     var box = $('#filters')
     if (!box || !catalog) return
+    if (section === 'free') {
+      box.hidden = true
+      return
+    }
     var seen = {}
     catalog.products.forEach(function (p) {
       seen[p.category] = (seen[p.category] || 0) + 1
@@ -504,7 +624,12 @@
       )
     })
 
-    $('#sheet-price').textContent = Number(p.stars).toLocaleString('en-US') + ' ⭐️' + (p.usd ? ' · $' + p.usd : '')
+    fillList('#sheet-after', '#sheet-after-box', lang === 'en' ? p.after_en : p.after)
+    fillList('#sheet-setup', '#sheet-setup-box', lang === 'en' ? p.setup_en : p.setup)
+    fillList('#sheet-needs', '#sheet-needs-box', lang === 'en' ? p.needs_en : p.needs)
+
+    var fullNote = p.stars_full && p.stars_full > p.stars ? ' (' + t('was') + ' ' + Number(p.stars_full).toLocaleString('en-US') + ')' : ''
+    $('#sheet-price').textContent = Number(p.stars).toLocaleString('en-US') + ' ⭐️' + fullNote + (p.usd ? ' · $' + p.usd : '')
     $('#sheet-billing').textContent = p.monthly ? t('monthly') : t('oneTime')
 
     var bot = catalog ? catalog.bot : ''
@@ -513,10 +638,11 @@
     // must show a fresh button, not the green check from last time.
     clearTimeout(okTimer)
     buy.classList.remove('ok')
-    buy.textContent = t('buyNow')
+    buy.textContent = p.soon ? t('askBot') : t('buyNow')
     buy.onclick = function () {
       haptic('medium')
-      buyLink(p)
+      if (p.soon) askInBot()
+      else buyLink(p)
     }
     var demo = $('#sheet-demo')
     if (p.demo) {
@@ -538,7 +664,7 @@
     // no way to be bought from.
     if (inTg) {
       try {
-        tg.MainButton.setText(t('buyNow') + ' · ' + Number(p.stars).toLocaleString('en-US') + ' ⭐️')
+        tg.MainButton.setText(p.soon ? t('askBot') : t('buyNow') + ' · ' + Number(p.stars).toLocaleString('en-US') + ' ⭐️')
         tg.MainButton.show()
         tg.MainButton.offClick(handlerMain)
         tg.MainButton.onClick(handlerMain)
@@ -548,8 +674,29 @@
     }
   }
 
+  /** "after" / "needs" from the catalogue; the whole section hides when a product has none. */
+  function fillList(listSel, boxSel, items) {
+    var list = $(listSel)
+    var box = $(boxSel)
+    if (!list || !box) return
+    list.textContent = ''
+    ;(items || []).forEach(function (text) {
+      list.appendChild(el('li', { text: text }))
+    })
+    box.hidden = !(items && items.length)
+  }
+
+  /** A product that is not on sale yet: the question goes to the bot, never a payment. */
+  function askInBot() {
+    var url = 'https://t.me/' + (catalog ? catalog.bot : '')
+    if (!openOut(url)) window.open(url, '_blank', 'noopener')
+  }
+
   function handlerMain() {
-    if (sheetProduct) {
+    if (sheetProduct && sheetProduct.soon) {
+      haptic('medium')
+      askInBot()
+    } else if (sheetProduct) {
       haptic('medium')
       buyLink(sheetProduct)
     }
@@ -643,6 +790,25 @@
   function wire() {
     var themeBtn = $('#theme')
     if (themeBtn) themeBtn.addEventListener('click', toggleTheme)
+
+    var seg = $('#segment')
+    if (seg)
+      seg.addEventListener('click', function (e) {
+        var b = e.target.closest && e.target.closest('[data-section]')
+        if (!b || b.getAttribute('data-section') === section) return
+        section = b.getAttribute('data-section')
+        haptic('light')
+        Array.prototype.forEach.call(seg.querySelectorAll('[data-section]'), function (x) {
+          x.setAttribute('aria-selected', String(x === b))
+        })
+        var title = $('#section-title')
+        if (title) {
+          title.setAttribute('data-i18n', section === 'free' ? 'freeTitle' : 'products')
+          title.textContent = t(title.getAttribute('data-i18n'))
+        }
+        renderFilters()
+        render()
+      })
     if (mq && mq.addEventListener) {
       // Follow the OS while the visitor has not made an explicit choice.
       mq.addEventListener('change', function () {
@@ -657,6 +823,7 @@
         store(LANG_KEY, lang)
         haptic('light')
         applyLang()
+        if (catalog) renderOffer(catalog)
       })
 
     var s = $('#search')
@@ -716,6 +883,77 @@
   applyLang()
   wire()
 
+  /* ---------------------------------------------------------------- *
+   * Opening offer — a coupon with a live countdown, hidden once it ends.
+   * ---------------------------------------------------------------- */
+
+  function plural(n, one, two, few, many) {
+    if (n === 1) return one
+    if (n === 2) return two
+    return n + ' ' + (n >= 3 && n <= 10 ? few : many)
+  }
+
+  function leftText(ms) {
+    var d = Math.floor(ms / 864e5)
+    var h = Math.floor((ms % 864e5) / 36e5)
+    var m = Math.max(1, Math.floor((ms % 36e5) / 6e4))
+    if (lang === 'en') return 'Ends in ' + (d ? d + 'd ' + h + 'h' : h ? h + 'h ' + m + 'm' : m + 'm')
+    var dd = plural(d, 'يوم', 'يومين', 'أيام', 'يوماً')
+    var hh = plural(h, 'ساعة', 'ساعتين', 'ساعات', 'ساعة')
+    var mm = plural(m, 'دقيقة', 'دقيقتين', 'دقائق', 'دقيقة')
+    return 'ينتهي خلال ' + (d ? dd + (h ? ' و' + hh : '') : h ? hh + ' و' + mm : mm)
+  }
+
+  var offerTimer = null
+  function renderOffer(data) {
+    var box = $('#offer')
+    if (!box) return
+    var ends = data && data.offer ? Date.parse(data.offer.ends) : NaN
+    function tick() {
+      var left = ends - Date.now()
+      if (!(left > 0)) {
+        box.hidden = true
+        clearInterval(offerTimer)
+        return
+      }
+      box.hidden = false
+      $('#offer-pct').textContent = data.offer.pct + '%'
+      $('#offer-left').textContent = leftText(left)
+    }
+    clearInterval(offerTimer)
+    tick()
+    if (!box.hidden) offerTimer = setInterval(tick, 60000)
+  }
+
+  // Each mark's own colours, for its card backdrop. Optional: without them the backdrop is neutral.
+  fetch('/store/img/products/tints.json', { cache: 'no-cache' })
+    .then(function (r) {
+      return r.ok ? r.json() : {}
+    })
+    .catch(function () {
+      return {}
+    })
+    .then(function (data) {
+      tints = data || {}
+      if (catalog) render()
+    })
+
+  // The free apps load beside the catalogue; without them only the switch is hidden.
+  var segment = $('#segment')
+  if (segment) segment.hidden = true
+  fetch('/store/apps.json', { cache: 'no-cache' })
+    .then(function (r) {
+      return r.ok ? r.json() : { apps: [] }
+    })
+    .catch(function () {
+      return { apps: [] }
+    })
+    .then(function (data) {
+      apps = (data && data.apps) || []
+      if (segment) segment.hidden = !apps.length
+      if (section === 'free') render()
+    })
+
   fetch('/store/catalog.json', { cache: 'no-cache' })
     .then(function (r) {
       if (!r.ok) throw new Error(String(r.status))
@@ -730,6 +968,7 @@
       }
       renderFilters()
       renderFeature(catalog)
+      renderOffer(catalog)
       render()
       if (inTg) {
         try {

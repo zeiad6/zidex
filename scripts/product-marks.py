@@ -67,6 +67,21 @@ MARKS = {
     "ai-bot": ("#111827", "#6d5cff", "#5eead4",
         '<rect x="160" y="160" width="192" height="192" rx="34"/><path d="M208 122v38M304 122v38M208 352v38M304 352v38M122 208h38M122 304h38M352 208h38M352 304h38"/>'
         '<path class="a" d="M256 206l12 32 32 12-32 12-12 32-12-32-32-12 32-12z"/>'),
+    # Multi-bot CRM: four bot panels wired to one hub.
+    "multibot-crm": ("#1e3a8a", "#0d9488", "#99f6e4",
+        '<rect x="132" y="132" width="96" height="96" rx="24"/><rect x="284" y="132" width="96" height="96" rx="24"/>'
+        '<rect x="132" y="284" width="96" height="96" rx="24"/><rect x="284" y="284" width="96" height="96" rx="24"/>'
+        '<circle class="a" cx="256" cy="256" r="22"/><path class="a" d="M228 228l14 14M284 228l-14 14M228 284l14-14M284 284l-14-14"/>'),
+    # Workflow engine: three steps joined into one automated path.
+    "workflow-engine": ("#9333ea", "#0369a1", "#f0abfc",
+        '<rect x="128" y="150" width="104" height="72" rx="20"/><rect x="280" y="290" width="104" height="72" rx="20"/>'
+        '<path d="M232 186h40a36 36 0 0 1 36 36v68"/>'
+        '<path class="a" d="M180 222v58a36 36 0 0 0 36 36h64M262 296l18 20-18 20"/>'),
+    # WhatsApp suite: two conversations kept in sync (a generic chat mark, not the logo).
+    "whatsapp-bot-pro": ("#047857", "#0e7490", "#bbf7d0",
+        '<path d="M140 168h168a28 28 0 0 1 28 28v84a28 28 0 0 1-28 28h-96l-52 40v-40h-20a28 28 0 0 1-28-28v-84a28 28 0 0 1 28-28z"/>'
+        '<path class="a" d="M352 236h20a28 28 0 0 1 28 28v76a28 28 0 0 1-28 28h-14v34l-42-34h-60a28 28 0 0 1-28-28v-12"/>'
+        '<path class="a" d="M190 238l24 24 48-48"/>'),
 }
 
 TEMPLATE = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
@@ -98,4 +113,9 @@ if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     for sku, (a, b, c, glyph) in MARKS.items():
         (OUT / f"{sku}.svg").write_text(TEMPLATE.format(a=a, b=b, c=c, glyph=glyph), encoding="utf-8")
+    # The storefront tints each card's backdrop from its own mark, so no two read alike.
+    import json
+
+    tints = {sku: [a, b, c] for sku, (a, b, c, _) in MARKS.items()}
+    (OUT / "tints.json").write_text(json.dumps(tints, indent=1) + "\n", encoding="utf-8")
     print(f"{len(MARKS)} marks → {OUT}")

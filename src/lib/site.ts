@@ -12,9 +12,9 @@ export const site = {
   handleBare: 'ghost.7784',
   tagline: 'الموقع الرسمي',
   description:
-    'نبني بوتات تيليجرام ومتاجر رقمية وبرمجيات احترافية: دفع بالنجوم والكريمي، تجربة مجانية 3 أيام، وحماية من الدرجة الأولى.',
+    'نبني بوتات تيليجرام ومتاجر رقمية وبرمجيات احترافية: دفع بالنجوم والكريمي، بوت متجر مجاني لمدة شهر وتجربة يومين، وحماية من الدرجة الأولى.',
   descriptionEn:
-    'We build Telegram bots, digital stores and professional software: Stars and Kuraimi payments, a free 3-day trial, and security first.',
+    'We build Telegram bots, digital stores and professional software: Stars and Kuraimi payments, a free store bot for a month, a 2-day trial, and security first.',
   /** Company inbox, routed by Cloudflare Email Routing to the owner's mailbox. */
   email: 'info@zeidexsoft.com',
   whatsapp: 'https://wa.me/qr/2EZCWPVVO3DUE1?s=v',

@@ -42,7 +42,7 @@ async function notifyAdmins(env: OrdersEnv, text: string) {
       fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ chat_id, text, parse_mode: 'HTML', disable_web_page_preview: true }),
+        body: JSON.stringify({ chat_id, text, parse_mode: 'HTML', link_preview_options: { is_disabled: true } }),
       }).then((r) => r.ok, () => false),
     ),
   )

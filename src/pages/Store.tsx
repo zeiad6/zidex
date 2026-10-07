@@ -15,6 +15,7 @@ import { Reveal } from '@/components/ui/Reveal'
 import { AuroraBackdrop } from '@/components/ui/AuroraBackdrop'
 import { ArrowNudge, LiveDot, SweepLink } from '@/components/ui/Motion'
 import { ChatDemo } from '@/components/store/organisms/ChatDemo'
+import { OpeningOffer } from '@/components/store/organisms/OpeningOffer'
 import { PackageCard } from '@/components/store/organisms/PackageCard'
 import { Magnetic } from '@/components/ui/Interactive'
 import { StoreSection } from '@/components/store/templates/StoreSection'
@@ -97,6 +98,7 @@ export default function Store() {
       </section>
 
       <div className="container-app flex flex-col gap-16 pb-16 sm:pb-20">
+        <OpeningOffer />
         <StoreSection
           id="shop-packages"
           title={t('باقات بوت المتجر', 'Store-bot packages')}

@@ -1,0 +1,84 @@
+{
+  "apps": [
+    {
+      "slug": "edms-archive-pro",
+      "name": "أرشيف برو EDMS",
+      "name_en": "Archive Pro EDMS",
+      "tagline": "نظام إدارة وثائق إلكترونية: بحث نصي كامل، إصدارات غير قابلة للاستبدال، سير عمل، وتوقيع رقمي.",
+      "tagline_en": "Electronic document management: full-text search, immutable versions, workflows, and digital signatures.",
+      "version": "1.0.6",
+      "platform": "Windows x64",
+      "kind": "windows",
+      "kind_label": "تطبيقات ويندوز",
+      "kind_label_en": "Windows apps",
+      "page": "https://zeidexsoft.com/programs#programs-windows",
+      "downloads": [
+        {
+          "href": "https://github.com/zeiad6/Edms-archive/releases/download/v1.0.6/EDMS-Archive-1.0.6-Setup-x64.exe",
+          "host": "GitHub",
+          "size": "238.6 MB"
+        },
+        {
+          "href": "https://www.mediafire.com/file/cezytgi4hqxmorc/EDMS-Archive-1.0.6-Setup-x64.exe/file",
+          "host": "MediaFire",
+          "size": "238.6 MB"
+        },
+        {
+          "href": "https://drive.google.com/file/d/1AkBwaNUwlovtOPS4SyCvkz0LSU7hvDbn/view?usp=drivesdk",
+          "host": "Google Drive",
+          "size": "238.6 MB"
+        }
+      ]
+    },
+    {
+      "slug": "edms-archive-android",
+      "name": "أرشيف برو EDMS — أندرويد",
+      "name_en": "Archive Pro EDMS — Android",
+      "tagline": "عميل أندرويد أصلي لنظام الأرشفة نفسه: يعمل كاملاً على الجهاز بقاعدة بيانات وملفات محلية، أو يتصل بالنسخة المكتبية عبر بوابة HTTPS بشهادة مثبّتة. نقل القاعدة وكلمات المرور والملفات في الاتجاهين بلا تحويل.",
+      "tagline_en": "The native Android client for the same system: run it fully on-device with a local database and file store, or pair with the desktop build over a certificate-pinned HTTPS gateway. Database, passwords and files move both ways with no conversion.",
+      "version": "1.0.1",
+      "platform": "Android 8.0+",
+      "kind": "android",
+      "kind_label": "تطبيقات أندرويد",
+      "kind_label_en": "Android apps",
+      "page": "https://zeidexsoft.com/programs#programs-android",
+      "downloads": [
+        {
+          "href": "https://www.mediafire.com/file/inn8lf6tznv95nx/app-debug.apk/file",
+          "host": "MediaFire",
+          "size": "APK"
+        },
+        {
+          "href": "https://drive.google.com/uc?export=download&id=1FxWSMfMpix-uE33fNSd3layuidLGIbQu",
+          "host": "Google Drive",
+          "size": "APK"
+        }
+      ]
+    },
+    {
+      "slug": "verityscope",
+      "name": "VerityScope — كاشف التزييف العميق",
+      "name_en": "VerityScope — AI Deepfake Detector",
+      "tagline": "تطبيق أندرويد يكشف التزييف العميق في الصور والفيديو والنصوص والصوت بـ 5 نماذج ذكاء اصطناعي محلية + خوارزميات طب شرعي رقمي (ELA, FFT, noise) — كل شيء على الجهاز، بياناتك لا تغادر.",
+      "tagline_en": "Android app that detects deepfakes in images, video, text and audio using 5 on-device AI models + digital forensic algorithms (ELA, FFT, noise) — everything runs locally, your data never leaves.",
+      "version": "0.4.0",
+      "platform": "Android 8.0+",
+      "kind": "android",
+      "kind_label": "تطبيقات أندرويد",
+      "kind_label_en": "Android apps",
+      "page": "https://zeidexsoft.com/programs#programs-android",
+      "downloads": [
+        {
+          "href": "https://www.mediafire.com/file/0taluz31zdblh8y/VerityScope-v0.4.0-release.apk/file",
+          "host": "MediaFire",
+          "size": "81 MB"
+        },
+        {
+          "href": "https://drive.google.com/file/d/1skhcwx208qWlxhQinNK7lU_XZuCjSC5_/view?usp=drivesdk",
+          "host": "Google Drive",
+          "size": "81 MB"
+        }
+      ]
+    }
+  ]
+}

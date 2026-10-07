@@ -73,3 +73,11 @@ simple = { limit = 1, period = 60 }
 # LIKECARD_PHONE
 # LIKECARD_HASH_KEY
 # SUPPLIER_PRODUCTS
+# WA_VERIFY_TOKEN           (WhatsApp Cloud API webhook: any string, also typed into the Meta app)
+# WA_APP_SECRET             (Meta app → Settings → Basic → App secret; signs every webhook)
+# WA_TOKEN                  (permanent System User access token with whatsapp_business_messaging)
+# WA_PHONE_ID               (WhatsApp → API Setup → Phone number ID)
+
+# Workers AI: smart answers for paid hosted shops (free allocation: 10,000 neurons/day).
+[ai]
+binding = "AI"

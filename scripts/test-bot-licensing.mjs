@@ -25,6 +25,9 @@ const env = {
   DOWNLOADS: { get: async (k) => store.get(k) ?? null, put: async (k, v) => void store.set(k, v), delete: async (k) => void store.delete(k) },
   BOTS_KEY: btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32)))),
   BOTS_ADMIN_TOKEN: 'bots-admin-token-xyz',
+  // Licences are minted from the platform bot only (worker/bots.ts LICENSE_COMMANDS);
+  // test-bots.mjs proves a hosted shop's owner gets nothing from the same commands.
+  BOT_PLATFORM_ID: '123456789',
   LICENSE_SIGNING_KEY: pkcs8Der.toString('base64url'),
   LICENSE_KID: 'bot-test',
 }

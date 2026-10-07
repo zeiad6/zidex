@@ -8,6 +8,11 @@ export function Price({ product, size = 'md', showUsd = false }: { product: Stor
   const { t } = useI18n()
   return (
     <span className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+      {product.stars_full && product.stars_full > product.stars ? (
+        <s className="text-subtle text-[13px] font-semibold tabular-nums decoration-[#e0a100] decoration-2">
+          {product.stars_full.toLocaleString('en-US')}
+        </s>
+      ) : null}
       <StarAmount
         value={product.stars}
         className={cn('text-app', size === 'lg' ? 'text-4xl' : 'text-2xl')}
