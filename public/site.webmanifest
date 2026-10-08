@@ -1,6 +1,9 @@
 {
   "name": "ZeidexSoft",
   "short_name": "ZeidexSoft",
+  "id": "/",
+  "scope": "/",
+  "description": "بوتات تيليجرام ومتاجر رقمية وبرمجيات احترافية — متجر ZeidexSoft الرسمي",
   "start_url": "/",
   "display": "standalone",
   "dir": "rtl",

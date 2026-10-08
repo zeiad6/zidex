@@ -289,6 +289,19 @@ const send = (token: string, chat_id: number, text: string, extra: Record<string
   // link_preview_options, not the deprecated disable_web_page_preview (Bot API 7.0).
   tg(token, 'sendMessage', { chat_id, text, parse_mode: 'HTML', link_preview_options: { is_disabled: true }, ...extra })
 
+/** Message reactions (Bot API 7.x): a silent, modern confirmation layered on top of a
+ *  reply — 🎉 on the buyer's successful-payment message, 👍 on the owner's /send command.
+ *  Fire-and-forget and never thrown: a reaction that fails must not disturb the flow. */
+const react = (token: string, chat_id: number, message_id: number | undefined, emoji: string) =>
+  message_id === undefined
+    ? Promise.resolve()
+    : tg(token, 'setMessageReaction', { chat_id, message_id, reaction: [{ type: 'emoji', emoji }] }).catch(() => undefined)
+
+/** The "typing…" indicator, shown while a smart answer is being generated, so the wait
+ *  reads as activity instead of silence. Also fire-and-forget. */
+const typing = (token: string, chat_id: number) =>
+  tg(token, 'sendChatAction', { chat_id, action: 'typing' }).catch(() => undefined)
+
 const load = async (env: BotsEnv, id: string) => {
   const cached = configCache.get(String(id))
   if (cached && Date.now() - cached.at < 60000) return cached.cfg
@@ -1074,6 +1087,8 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     }
     cfg.stars += m.successful_payment.total_amount
     await save(env, cfg).catch(() => undefined)
+    // 🎉 on the buyer's own payment message: a paid order ends on a celebration, not silence.
+    await react(token, chat, m.message_id, '🎉')
     return
   }
 
@@ -1277,6 +1292,9 @@ async function smartAnswer(env: BotsEnv, token: string, chat: number, cfg: Cfg, 
     `<shop>\nالمنتجات:\n${products}\n\nالأسئلة الشائعة:\n${faqs}\n</shop>`,
   ].join('\n')
   try {
+    // The customer sees "typing…" while the answer is generated — a wait that reads as
+    // activity, not silence.
+    await typing(token, chat)
     // Separate roles, never one concatenated prompt: the customer's text is data (LLM01).
     const out = await env.AI.run(env.AI_MODEL || AI_DEFAULT_MODEL, {
       messages: [
@@ -1465,6 +1483,7 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
         [f.type]: f.file_id,
         caption: '📦 ملف من ZeidexSoft\n\n📩 أرسله لك المشرف مباشرة.',
       })
+      if (out.ok) await react(token, chat, m?.message_id, '👍')
       await say(out.ok
         ? `✅ أُرسل «${esc(f.title)}» إلى <code>${target}</code>.`
         : `❌ تعذّر الإرسال إلى <code>${target}</code> — ${esc(String(out.description ?? 'تأكد أن الشخص بدأ محادثة مع البوت أولاً.'))}`)

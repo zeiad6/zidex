@@ -76,9 +76,11 @@ assert.deepEqual(answers, [true, false])
 calls.length = 0
 const realPut = env.DOWNLOADS.put
 env.DOWNLOADS.put = async () => { throw new Error('KV write limit') }
-await deliver({ message: { chat: { id: 50, type: 'private' }, from: { id: 50, first_name: 'Ali' }, successful_payment: { total_amount: 150, currency: 'XTR' } } })
+await deliver({ message: { chat: { id: 50, type: 'private' }, from: { id: 50, first_name: 'Ali' }, message_id: 77, successful_payment: { total_amount: 150, currency: 'XTR' } } })
 env.DOWNLOADS.put = realPut
 assert.equal(calls.filter((c) => c.method === 'sendMessage').length, 2)
+// A paid order ends on a celebration: 🎉 lands on the buyer's own payment message.
+assert.ok(calls.some((c) => c.method === 'setMessageReaction' && c.body.chat_id === 50 && c.body.message_id === 77 && c.body.reaction?.[0]?.emoji === '🎉'), 'a successful payment gets a 🎉 reaction on the buyer\'s message')
 
 // Contact uses force_reply (no KV write); a reply to the prompt reaches the owner.
 calls.length = 0
@@ -426,6 +428,8 @@ assert.equal(store.get('tb:123456789'), undefined)
     assert.equal(aiCalls.length, 0, 'a search hit never spends AI')
     await say(80, 'هل الشحن مجاني؟')
     assert.equal(aiCalls.length, 1)
+    // The wait reads as activity: "typing…" is shown while the model works.
+    assert.ok(sent.some((c) => c.method === 'sendChatAction' && c.body.chat_id === 80 && c.body.action === 'typing'), 'a smart answer is preceded by a typing indicator')
     const msgs = aiCalls[0].input.messages
     assert.deepEqual(msgs.map((m) => m.role), ['system', 'user'], 'customer text is its own message')
     assert.equal(msgs[1].content, 'هل الشحن مجاني؟')
@@ -687,6 +691,7 @@ assert.equal(store.get('tb:123456789'), undefined)
       message: {
         chat: { id: 60, type: 'private' },
         from: { id: 60, first_name: 'Buyer' },
+        message_id: 901,
         successful_payment: { total_amount: armed.stars, currency: 'XTR', invoice_payload: `t${ID}:${armed.id}` },
       },
     })
@@ -697,6 +702,8 @@ assert.equal(store.get('tb:123456789'), undefined)
     // The owner is notified of the paid order, by product name.
     const ownerNote = texts().find((t) => t.includes('طلب مدفوع') && t.includes('Course'))
     assert.ok(ownerNote, 'the owner is notified of the paid order with the product name')
+    // The buyer's own payment message gets 🎉 — a paid order ends on a celebration.
+    assert.ok(sent.some((c) => c.method === 'setMessageReaction' && c.body.chat_id === 60 && c.body.reaction?.[0]?.emoji === '🎉'), 'the buyer\'s payment message gets a 🎉 reaction')
 
     // Clear delivery with /deliver <n> -: the next buyer falls back to manual delivery.
     sent.length = 0
@@ -925,7 +932,10 @@ assert.equal(store.get('tb:123456789'), undefined)
     const secret = rec().secret
     const post = (update) =>
       b.botWebhook(new Request(`https://zeidexsoft.com/tg/${ID}`, { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': secret }, body: JSON.stringify(update) }), env, String(ID))
-    const say = (from, text, reply) => post({ message: { chat: { id: from, type: 'private' }, from: { id: from, first_name: 'X' }, ...(reply ? { reply_to_message: reply } : {}), text } })
+    // Every owner message gets a message_id, so reaction assertions can pin the exact
+    // command message a 👍 lands on.
+    let mid = 0
+    const say = (from, text, reply) => post({ message: { chat: { id: from, type: 'private' }, from: { id: from, first_name: 'X' }, message_id: ++mid, ...(reply ? { reply_to_message: reply } : {}), text } })
     const texts = () => sent.filter((c) => c.method === 'sendMessage').map((c) => c.body.text)
     const CH = -1002002002
     const CHANNEL = { id: CH, type: 'channel', title: 'Zeidex Files' }
@@ -981,6 +991,7 @@ assert.equal(store.get('tb:123456789'), undefined)
     assert.equal(fwd.body.chat_id, 50, 'to the person the admin named')
     assert.equal(fwd.body.document, 'DOCAAA', 'by its stored file_id')
     assert.ok(texts().some((t) => t.includes('أُرسل «بوت المتجر الذكي» إلى <code>50</code>')), 'the admin gets a confirmation')
+    assert.ok(sent.some((c) => c.method === 'setMessageReaction' && c.body.chat_id === OWNER && c.body.reaction?.[0]?.emoji === '👍'), 'a successful /send reacts 👍 on the owner\'s command')
 
     // A failed send (the stub answers ok:false for sendDocument) is reported, not swallowed.
     sent.length = 0

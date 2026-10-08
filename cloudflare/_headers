@@ -30,6 +30,12 @@
   ! Cache-Control
   Cache-Control: public, max-age=3600
 
+# The service worker must revalidate on every hit: a long-cached SW would pin
+# every visitor to the offline logic of the deploy they first visited.
+/sw.js
+  ! Cache-Control
+  Cache-Control: public, max-age=0, must-revalidate
+
 /sitemap.xml
   ! Cache-Control
   Cache-Control: public, max-age=3600
