@@ -4,7 +4,7 @@
 //   • never touch /tg/, /api/ or /admin/ — webhook traffic and admin auth must
 //     always hit the network, and none of it belongs in a browser cache;
 //   • navigations: network-first. A deploy is visible the moment the visitor is
-//     online; offline, the last copy of that page; no copy at all → /offline.html;
+//     online; offline, the last copy of that page; no copy at all → /offline;
 //   • /assets/* (content-hashed) and the Google Fonts files: cache-first — they
 //     are immutable, so a second visit renders the whole app even offline;
 //   • other same-origin GETs (the shop catalogue, images): network-first with the
