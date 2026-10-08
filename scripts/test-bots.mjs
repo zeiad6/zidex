@@ -899,6 +899,123 @@ assert.equal(store.get('tb:123456789'), undefined)
   }
 }
 
+// ── The private storage channel and the admin's /send ──────────────────────
+// A closed channel the owner runs with the bot as an admin: every file posted
+// there is indexed (cfg.files) and re-sendable by file_id on the owner's
+// command. The owner can also hand the bot a file directly in private chat.
+// Everything below runs against a fresh bot so the record starts clean.
+{
+  const ID = 676767676
+  const TOK = `${ID}:` + 'F'.repeat(35)
+  const sent = []
+  const saved = globalThis.fetch
+  globalThis.fetch = async (url, init) => {
+    const method = String(url).split('/').pop()
+    const body = init?.body ? JSON.parse(init.body) : {}
+    sent.push({ method, body })
+    if (method === 'getMe') return Response.json({ ok: true, result: { id: ID, username: 'files_bot', first_name: 'Files' } })
+    // A send to chat 99 fails: the stub's stand-in for a user who never started the bot.
+    if (method === 'sendDocument' && body.chat_id === 99) return Response.json({ ok: false, description: 'bad request: chat not found' })
+    return Response.json({ ok: true, result: {} })
+  }
+  try {
+    const OWNER = 7
+    await admin('POST', '/admin/bots', { token: TOK, owner_id: OWNER, plan: 'paid' })
+    const rec = () => JSON.parse(store.get(`tb:${ID}`))
+    const secret = rec().secret
+    const post = (update) =>
+      b.botWebhook(new Request(`https://zeidexsoft.com/tg/${ID}`, { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': secret }, body: JSON.stringify(update) }), env, String(ID))
+    const say = (from, text, reply) => post({ message: { chat: { id: from, type: 'private' }, from: { id: from, first_name: 'X' }, ...(reply ? { reply_to_message: reply } : {}), text } })
+    const texts = () => sent.filter((c) => c.method === 'sendMessage').map((c) => c.body.text)
+    const CH = -1002002002
+    const CHANNEL = { id: CH, type: 'channel', title: 'Zeidex Files' }
+
+    // Provisioning asks for channel_post too — the storage channel is dead
+    // without it, and the webhook simply never hears a file being posted.
+    assert.deepEqual(sent.find((c) => c.method === 'setWebhook').body.allowed_updates,
+      ['message', 'callback_query', 'pre_checkout_query', 'channel_post'],
+      'the webhook must subscribe to channel_post for the storage channel')
+
+    // The very first channel post captures the channel — the owner never types an id.
+    await post({ channel_post: { chat: CHANNEL, message_id: 11, document: { file_id: 'DOCAAA', file_name: 'bot.zip' }, caption: 'بوت المتجر الذكي' } })
+    assert.equal(rec().filesChannel.id, CH, 'the first channel post captures the storage channel')
+    assert.equal(rec().filesChannel.title, 'Zeidex Files')
+    assert.equal(rec().files.length, 1, 'the posted document is indexed')
+    assert.equal(rec().files[0].title, 'بوت المتجر الذكي', 'the caption names the file')
+    assert.equal(rec().files[0].file_id, 'DOCAAA')
+    assert.ok(texts().some((t) => t.includes('خُزّن الملف رقم')), 'the owner is told the number to /send')
+
+    // A second file: no caption, so the file name names it. Numbers keep growing.
+    await post({ channel_post: { chat: CHANNEL, message_id: 12, document: { file_id: 'DOCBBB', file_name: 'app.apk' } } })
+    assert.equal(rec().files.length, 2)
+    assert.equal(rec().files[1].title, 'app.apk', 'the file name is the fallback title')
+
+    // A channel the bot is admin in but is NOT the storage channel: never mixed in.
+    await post({ channel_post: { chat: { id: -1009999999, type: 'channel', title: 'Other' }, message_id: 13, document: { file_id: 'DOCXXX', file_name: 'other.zip' } } })
+    assert.equal(rec().files.length, 2, 'a second channel must not feed this bot\'s storage')
+
+    // A plain text post in the storage channel: nothing to index, no error.
+    await post({ channel_post: { chat: CHANNEL, message_id: 14, text: 'ملاحظة فقط' } })
+    assert.equal(rec().files.length, 2, 'a text post is not a file')
+
+    // The owner can also hand the bot a file directly in private chat — same index,
+    // and the largest photo of a set is the one kept.
+    sent.length = 0
+    await post({ message: { chat: { id: OWNER, type: 'private' }, from: { id: OWNER }, photo: [{ file_id: 'SMALL' }, { file_id: 'PHOTOBIG' }], caption: 'لقطة' } })
+    assert.equal(rec().files.length, 3, 'an owner\'s direct file joins the index')
+    assert.equal(rec().files[2].type, 'photo')
+    assert.equal(rec().files[2].file_id, 'PHOTOBIG', 'the largest photo is the stored one')
+
+    // /files lists the storage with the channel it belongs to.
+    sent.length = 0
+    await say(OWNER, '/files')
+    const list = texts().at(-1)
+    assert.ok(list.includes('3/200') && list.includes('Zeidex Files'), '/files shows the count and the channel')
+    assert.ok(list.includes('1. بوت المتجر الذكي') && list.includes('2. app.apk'), '/files numbers every stored file')
+
+    // The admin hands a stored file to a person: /send <uid> <file#>.
+    sent.length = 0
+    await say(OWNER, '/send 50 1')
+    const fwd = sent.find((c) => c.method === 'sendDocument')
+    assert.ok(fwd, '/send re-sends the file')
+    assert.equal(fwd.body.chat_id, 50, 'to the person the admin named')
+    assert.equal(fwd.body.document, 'DOCAAA', 'by its stored file_id')
+    assert.ok(texts().some((t) => t.includes('أُرسل «بوت المتجر الذكي» إلى <code>50</code>')), 'the admin gets a confirmation')
+
+    // A failed send (the stub answers ok:false for sendDocument) is reported, not swallowed.
+    sent.length = 0
+    await say(OWNER, '/send 99 1')
+    assert.ok(!texts().some((t) => t.includes('✅ أُرسل')), 'a failed send is not confirmed')
+    assert.ok(texts().some((t) => t.includes('تعذّر الإرسال إلى')), 'the admin sees the failure')
+
+    // Replying to any file with /send <uid> sends that file, indexed or not.
+    sent.length = 0
+    await say(OWNER, '/send 50', { chat: { id: OWNER, type: 'private' }, from: { id: OWNER }, video: { file_id: 'VIDNEW' }, caption: 'فيديو مشترك' })
+    assert.equal(sent.find((c) => c.method === 'sendVideo').body.chat_id, 50, 'a replied-to file wins over the index')
+    assert.equal(rec().files.length, 3, 'and sending it does not add it to the index')
+
+    // /send without a usable target is usage, not an error.
+    sent.length = 0
+    await say(OWNER, '/send')
+    assert.ok(texts().at(-1).includes('/send رقم_الشخص رقم_الملف'), 'a bare /send is answered with usage')
+
+    // /filedel removes an index entry; the numbering closes the gap.
+    await say(OWNER, '/filedel 2')
+    assert.equal(rec().files.length, 2)
+    assert.equal(rec().files[1].title, 'لقطة', 'the numbering closes the gap')
+    await say(OWNER, '/filedel 9')
+    assert.ok(texts().at(-1).includes('الاستخدام'), 'an out-of-range delete is usage, not a crash')
+
+    // A customer never reaches any of it: storage commands are owner-only.
+    sent.length = 0
+    await say(50, '/send 50 1')
+    await say(50, '/files')
+    assert.equal(sent.length, 0, 'storage commands are owner-only')
+  } finally {
+    globalThis.fetch = saved
+  }
+}
+
 // ── The bot name the storefront will actually send buyers to ──────────────
 // On 2026-10-06 the catalogue advertised @ZeidexBot, which does not exist:
 // Telegram served it the same "Contact @name" page it gives any free handle,

@@ -30,11 +30,12 @@ const tg = async (method, body) => {
 
 // One update at a time: each update rewrites the whole KV record, so parallel
 // deliveries would overwrite each other (mirrors worker/bots.ts provisioning).
+// channel_post feeds the storage channel (files the owner posts there are indexed for /send).
 await tg('setWebhook', {
   url,
   secret_token: secret,
   max_connections: 1,
-  allowed_updates: ['message', 'callback_query', 'pre_checkout_query'],
+  allowed_updates: ['message', 'callback_query', 'pre_checkout_query', 'channel_post'],
   drop_pending_updates: true,
 })
 

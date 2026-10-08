@@ -58,6 +58,16 @@ type Item = {
     file?: { id: string; type: 'document' | 'photo' | 'video' | 'audio' | 'voice' }
   }
 }
+
+/** A file held in the bot's storage: Telegram's file_id, re-sendable by this bot on demand
+ *  (the same mechanism /deliver uses for auto-delivery). Indexed only by the owner. */
+type StoredFile = {
+  id: number
+  title: string
+  type: 'document' | 'photo' | 'video' | 'audio' | 'voice'
+  file_id: string
+}
+
 type Cfg = {
   id: number
   username: string
@@ -82,6 +92,12 @@ type Cfg = {
   /** Owner-defined product sections ("التطبيقات", "الألعاب", …) and info pages. */
   sections?: { id: number; name: string }[]
   pages?: { title: string; body: string }[]
+  /** The private, closed storage channel: the owner's own channel with this bot added as an
+   *  admin. Captured automatically on the first channel post — Telegram delivers channel
+   *  posts to admin bots only, so receiving one is itself proof of the setup. */
+  filesChannel?: { id: number; title?: string }
+  /** Files indexed from the storage channel, or sent straight to the bot by the owner. */
+  files?: StoredFile[]
 }
 
 const DEFAULT_ORIGIN = 'https://zeidexsoft.com'
@@ -93,6 +109,9 @@ const FREE_MAX_FAQS = 30
 const FREE_DAYS = 30
 const MAX_SECTIONS = 12
 const MAX_PAGES = 8
+/** How many files the storage index holds per bot. Telegram file_ids never expire for the
+ *  bot that received them, so this is a real archive, not a cache. */
+const MAX_FILES = 200
 /** What the platform's /freebot checks before provisioning: an older Worker ignores "plan"
  *  and would host a free bot with no limits at all. */
 const PLANS = ['free', 'paid'] as const
@@ -211,6 +230,19 @@ async function deliverItem(token: string, chat: number, item: Item) {
   }
 }
 
+/** The file a message or channel post carries, if any — the document, the video, the audio,
+ *  the voice, or the largest of a photo set. Returns null for plain text. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function fileOf(m: Record<string, any>): { title: string; type: StoredFile['type']; file_id: string } | null {
+  const cap = String(m?.caption ?? '').trim().slice(0, 60)
+  if (m?.document?.file_id) return { title: cap || String(m.document.file_name ?? 'ملف').slice(0, 60), type: 'document', file_id: String(m.document.file_id) }
+  if (m?.video?.file_id) return { title: cap || 'فيديو', type: 'video', file_id: String(m.video.file_id) }
+  if (m?.audio?.file_id) return { title: cap || 'صوت', type: 'audio', file_id: String(m.audio.file_id) }
+  if (m?.voice?.file_id) return { title: cap || 'رسالة صوتية', type: 'voice', file_id: String(m.voice.file_id) }
+  if (m?.photo?.length) return { title: cap || 'صورة', type: 'photo', file_id: String(m.photo.at(-1).file_id) }
+  return null
+}
+
 // ── crypto ──────────────────────────────────────────────────────────
 const b64 = (u: Uint8Array) => btoa(String.fromCharCode(...u))
 const unb64 = (s: string) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0))
@@ -273,6 +305,7 @@ const load = async (env: BotsEnv, id: string) => {
     cfg.paused = !!cfg.paused
     cfg.sections = cfg.sections || []
     cfg.pages = cfg.pages || []
+    cfg.files = cfg.files || []
   }
   configCache.set(String(id), { cfg, at: Date.now() })
   return cfg
@@ -567,10 +600,58 @@ export async function botWebhook(request: Request, env: BotsEnv, id: string): Pr
   return new Response('ok')
 }
 
+// A fresh id for a list the owner appends to. One past the current max — never a clock:
+// two /adds in the same millisecond used to mint the same id, and a tap aimed at one item
+// then bought the other (its invoice, its card). Ids are monotonic and never repeat.
+function nextId(list: { id: number }[]): number {
+  return (list.length ? Math.max(...list.map((x) => x.id)) : 0) + 1
+}
+
+/** Index a post in the storage channel. The first post ever seen captures the channel id, so
+ *  the owner never types an id; a second channel where the bot is also admin is simply ignored
+ *  — storages never mix. Receiving the post at all is the authorization: Telegram delivers
+ *  channel posts to admin bots only. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function onChannelPost(env: BotsEnv, cfg: Cfg, token: string, post: Record<string, any>) {
+  const chat = post.chat
+  if (!chat || chat.type !== 'channel') return
+  if (!cfg.filesChannel) cfg.filesChannel = { id: chat.id, title: String(chat.title ?? '').slice(0, 60) || undefined }
+  if (cfg.filesChannel.id !== chat.id) return
+  await storeFile(env, cfg, token, cfg.owner, post)
+}
+
+/** Append a file to the storage index and tell the owner its number — the number is what
+ *  /send takes. Returns it, or null when there was no file or the index is full. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function storeFile(env: BotsEnv, cfg: Cfg, token: string, chat: number, m: Record<string, any>) {
+  const f = fileOf(m)
+  if (!f) return null
+  // Normalized here, not just in load(): a cached cfg (from provisioning, before any KV read)
+  // can still lack the field, and a throw here dies inside botWebhook's silent catch — the
+  // exact trap load()'s normalization comment documents.
+  cfg.files = cfg.files || []
+  if (cfg.files.length >= MAX_FILES) {
+    await send(token, chat, `⚠️ حد التخزين ${MAX_FILES} ملفاً. احذف بعضها بـ <code>/filedel رقم</code> ثم أعد النشر.`).catch(() => undefined)
+    return null
+  }
+  cfg.files.push({ id: nextId(cfg.files), ...f })
+  const n = cfg.files!.length
+  await save(env, cfg)
+  await send(token, chat,
+    `📁 خُزّن الملف رقم <b>${n}</b>: «${esc(f.title)}»\n\n` +
+    `لإرساله لشخص: <code>/send رقم_الشخص ${n}</code>`)
+  return n
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, any>) {
   const isOwner = (uid?: number) => uid === cfg.owner
   const isPlatform = cfg.id === platformBotId(env)
+
+  // The storage channel: a private, closed channel the owner runs with this bot as an admin.
+  // Every file posted there is indexed for /send; the channel itself stays private — the bot
+  // only ever re-sends by file_id, on the owner's command.
+  if (u.channel_post) return void (await onChannelPost(env, cfg, token, u.channel_post))
 
   if (u.pre_checkout_query) {
     const q = u.pre_checkout_query
@@ -770,6 +851,13 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     } else if (data === 't:adm_faqs') {
       if (!isOwner(q.from.id)) return
       await send(token, chat, cfg.faqs.map((f, n) => `${n + 1}. ${esc(f.q)}`).join('\n') || 'لا أسئلة مسجلة بعد.')
+    } else if (data === 't:adm_files') {
+      if (!isOwner(q.from.id)) return
+      const list = cfg.files!.map((f, n) => `${n + 1}. ${esc(f.title)}`).join('\n')
+      await send(token, chat,
+        `📁 <b>ملفات التخزين</b> (${cfg.files!.length}/${MAX_FILES})\n${list || 'لا ملفات بعد.'}\n\nللإرسال لأحد: <code>/send رقم_الشخص رقم_الملف</code>`,
+        { reply_markup: { inline_keyboard: [[{ text: '🔙 لوحة التحكم', callback_data: 't:adm_refresh' }]] } }
+      )
     } else if (data === 't:adm_toggle_pause') {
       if (!isOwner(q.from.id)) return
       cfg.paused = !cfg.paused
@@ -794,6 +882,7 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
       const adminRows = [
         [{ text: '🎁 أخذ أي شيء من المتجر مجاناً (للأدمن)', callback_data: 't:adm_take_any' }],
         [{ text: '📦 قائمة المنتجات', callback_data: 't:adm_items' }, { text: '❓ الأسئلة الشائعة', callback_data: 't:adm_faqs' }],
+        [{ text: '📁 الملفات المخزنة', callback_data: 't:adm_files' }],
         [{ text: '🤖 تفعيل بوت بدون دفع', callback_data: 't:adm_freebot' }],
         [{ text: cfg.paused ? '▶️ استئناف البوت' : '⏸ إيقاف للصيانة', callback_data: 't:adm_toggle_pause' }, { text: '🔄 تحديث الإحصاءات', callback_data: 't:adm_refresh' }]
       ]
@@ -989,6 +1078,10 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
   }
 
   if (lapsed(cfg) && !isOwner(uid)) return void (await send(token, chat, LAPSED_TEXT))
+
+  // An owner's file, sent straight to the bot, joins the same storage index as the channel:
+  // forwarding anything here is the quick path in, and it is /send-able at once.
+  if (isOwner(uid) && fileOf(m)) return void (await storeFile(env, cfg, token, chat, m))
 
   if (text.startsWith('/start')) {
     if (!isOwner(uid) && uid && !cfg.users.includes(uid) && cfg.users.length < MAX_USERS) {
@@ -1231,12 +1324,12 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
       let sec = cfg.sections!.find((x) => x.name === name)
       if (!sec) {
         if (cfg.sections!.length >= MAX_SECTIONS) return void (await say(`الحد ${MAX_SECTIONS} قسماً.`))
-        sec = { id: Date.now() % 1e9, name }
+        sec = { id: nextId(cfg.sections!), name }
         cfg.sections!.push(sec)
       }
       section = sec.id
     }
-    cfg.items.push({ id: Date.now() % 1e9 + 1, title: parts[0].slice(0, 32), stars, desc: (parts[2] || parts[0]).slice(0, 255), ...(section ? { section } : {}) })
+    cfg.items.push({ id: nextId(cfg.items), title: parts[0].slice(0, 32), stars, desc: (parts[2] || parts[0]).slice(0, 255), ...(section ? { section } : {}) })
     await save(env, cfg)
     await say('✅ أُضيف المنتج.')
   } else if (cmd === 'section') {
@@ -1245,7 +1338,7 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     if (sub === 'add' && rest) {
       if (cfg.sections!.length >= MAX_SECTIONS) return void (await say(`الحد ${MAX_SECTIONS} قسماً.`))
       if (cfg.sections!.some((x) => x.name === rest.slice(0, 30))) return void (await say('القسم موجود.'))
-      cfg.sections!.push({ id: Date.now() % 1e9, name: rest.slice(0, 30) })
+      cfg.sections!.push({ id: nextId(cfg.sections!), name: rest.slice(0, 30) })
       await save(env, cfg)
       return void (await say(`✅ أُضيف قسم «${esc(rest.slice(0, 30))}».`))
     }
@@ -1329,6 +1422,53 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     await say(`${list}\n\n<code>/page add العنوان | النص</code> · <code>/page del رقم</code>`)
   } else if (cmd === 'items') {
     await say(cfg.items.map((i, n) => `${n + 1}. ${esc(i.title)} — ⭐️ ${i.stars}`).join('\n') || 'لا منتجات.')
+  } else if (cmd === 'files' || cmd === 'filedel' || cmd === 'send' || cmd === 'sendfile') {
+    // The storage: a private, closed channel the owner runs with the bot as an admin.
+    // /files lists the index, /filedel drops an entry, /send hands a file to a person.
+    if (cmd === 'files') {
+      const ch = cfg.filesChannel
+        ? `\nالقناة: «${esc(cfg.filesChannel.title ?? String(cfg.filesChannel.id))}»`
+        : '\nلا قناة تخزين بعد — اجعل البوت أدمن في قناتك الخاصة (مغلقة) وانشر أي ملف فيها، فيُربط ويُخزّن فوراً.'
+      await say(
+        `📁 <b>ملفات التخزين</b> (${cfg.files!.length}/${MAX_FILES})${ch}\n` +
+        (cfg.files!.map((f, n) => `${n + 1}. ${esc(f.title)}`).join('\n') || 'لا ملفات بعد.') +
+        '\n\n' +
+        'التخزين: انشر أي ملف في القناة — أو أرسله هنا مباشرة — فيُخزّن ويُرقّم فوراً.\n' +
+        'الإرسال لشخص: <code>/send رقم_الشخص رقم_الملف</code> — أو ردّ على أي ملف بـ <code>/send رقم_الشخص</code>\n' +
+        'الحذف: <code>/filedel رقم_الملف</code>')
+    } else if (cmd === 'filedel') {
+      const n = Number(arg)
+      if (!Number.isInteger(n) || n < 1 || n > cfg.files!.length) return void (await say(`الاستخدام: <code>/filedel رقم_الملف</code> — الأرقام في <code>/files</code>.`))
+      const [gone] = cfg.files!.splice(n - 1, 1)
+      await save(env, cfg)
+      await say(`🗑 حُذف «${esc(gone.title)}» من الفهرس (القناة نفسها لم تُمَس).`)
+    } else {
+      const [tStr, nStr] = arg.split(/\s+/)
+      const target = Number(tStr)
+      if (!Number.isInteger(target) || target <= 0) {
+        return void (await say(
+          '<b>📤 إرسال ملف لشخص</b>\n' +
+          '• من الفهرس: <code>/send رقم_الشخص رقم_الملف</code>\n' +
+          '• أي ملف أمامك: ردّ عليه بـ <code>/send رقم_الشخص</code>\n\n' +
+          'رقم الشخص تجده في كل رسالة تصل من عميل (كما في <code>/reply</code>)، وشرط تيليجرام أن يكون قد بدأ محادثة مع البوت أولاً.'))
+      }
+      // A reply to any file wins: the owner can forward a file here and send it on the spot,
+      // without indexing it first.
+      const src = m?.reply_to_message
+      const byReply = src ? fileOf(src) : null
+      const n = Number(nStr)
+      const byIndex = Number.isInteger(n) && n >= 1 && n <= cfg.files!.length ? cfg.files![n - 1] : null
+      const f = byReply ?? byIndex
+      if (!f) return void (await say('لم أجد الملف. حدد رقمه من <code>/files</code>، أو ردّ على ملف مع إرسال الأمر.'))
+      const out = await tg(token, FILE_METHOD[f.type], {
+        chat_id: target,
+        [f.type]: f.file_id,
+        caption: '📦 ملف من ZeidexSoft\n\n📩 أرسله لك المشرف مباشرة.',
+      })
+      await say(out.ok
+        ? `✅ أُرسل «${esc(f.title)}» إلى <code>${target}</code>.`
+        : `❌ تعذّر الإرسال إلى <code>${target}</code> — ${esc(String(out.description ?? 'تأكد أن الشخص بدأ محادثة مع البوت أولاً.'))}`)
+    }
   } else if (cmd === 'del' || cmd === 'delfaq') {
     const list = cmd === 'del' ? cfg.items : cfg.faqs
     const n = Number(arg)
@@ -1370,6 +1510,7 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     const adminRows = [
       [{ text: '🎁 أخذ أي شيء من المتجر مجاناً (للأدمن)', callback_data: 't:adm_take_any' }],
       [{ text: '📦 قائمة المنتجات', callback_data: 't:adm_items' }, { text: '❓ الأسئلة الشائعة', callback_data: 't:adm_faqs' }],
+      [{ text: '📁 الملفات المخزنة', callback_data: 't:adm_files' }],
       [{ text: '🤖 تفعيل بوت بدون دفع', callback_data: 't:adm_freebot' }],
       [{ text: cfg.paused ? '▶️ استئناف البوت' : '⏸ إيقاف للصيانة', callback_data: 't:adm_toggle_pause' }, { text: '🔄 تحديث الإحصاءات', callback_data: 't:adm_refresh' }]
     ]
@@ -1390,6 +1531,8 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
       `• تعديل الترحيب: <code>/welcome النص</code>\n` +
       `• إضافة سؤال: <code>/faq سؤال | جواب</code>\n` +
       `• الرد على عميل: <code>/reply رقم_العميل النص</code>\n` +
+      `• تخزين الملفات: اجعل البوت أدمن في قناتك الخاصة (مغلقة) وانشر الملفات فيها — أو أرسلها هنا مباشرة (<code>/files</code>)\n` +
+      `• إرسال ملف لشخص: <code>/send رقم_الشخص رقم_الملف</code> (أو ردّ على أي ملف بـ <code>/send رقم_الشخص</code>)\n` +
       `• قسم جديد: <code>/section add التطبيقات</code> · منتج في قسم: <code>/add اسم | 100 | وصف | القسم</code>\n` +
       `• صفحة: <code>/page add من نحن | النص</code>\n` +
       `• ربط موقعك: <code>/site https://موقعك.com</code>` +
@@ -1641,7 +1784,7 @@ async function provision(
   // Re-provisioning (new token, new owner) keeps the shop: products, FAQs, customers.
   const prev = await load(env, String(me.result.id))
   const cfg: Cfg = {
-    items: [], faqs: [], users: [], sections: [], pages: [], orders: 0, stars: 0, paused: false, created: new Date().toISOString(),
+    items: [], faqs: [], users: [], sections: [], pages: [], files: [], orders: 0, stars: 0, paused: false, created: new Date().toISOString(),
     welcome: (prev?.welcome || `أهلاً بك في ${me.result.first_name} 👋\nتصفح المنتجات من الأزرار أدناه، أو أرسل كلمة للبحث.`).slice(0, 500),
     ...(prev ?? {}),
     id: me.result.id, username: me.result.username, owner: ownerId, token: await seal(env, plainToken), secret,
@@ -1661,7 +1804,8 @@ async function provision(
     // One update at a time per bot: each update rewrites the whole KV record, so parallel
     // deliveries would overwrite each other (a product added during a /start vanishes).
     max_connections: 1,
-    allowed_updates: ['message', 'callback_query', 'pre_checkout_query'],
+    // channel_post feeds the storage channel (files the owner posts there are indexed for /send).
+    allowed_updates: ['message', 'callback_query', 'pre_checkout_query', 'channel_post'],
   })
   if (!hook.ok)
     return { ok: false, error: String(hook.description ?? 'webhook failed'), status: 502, userText: `تعذّر تسجيل الويبهوك: ${esc(String(hook.description ?? ''))}\nأعد المحاولة بعد قليل.` }
