@@ -12,7 +12,9 @@
 // Bump CACHE_VERSION to retire every stored copy at once.
 const CACHE_VERSION = 'v1'
 const CACHE = `zeidex-${CACHE_VERSION}`
-const OFFLINE_URL = '/offline.html'
+// Extensionless on purpose: Cloudflare's assets "pretty URLs" 307 /offline.html
+// to /offline, and the offline fallback must be a redirect-free, cacheable hit.
+const OFFLINE_URL = '/offline'
 const NEVER_CACHE = [/^\/tg\//, /^\/api\//, /^\/admin\//]
 const FONT_HOSTS = new Set(['fonts.googleapis.com', 'fonts.gstatic.com'])
 
