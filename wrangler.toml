@@ -1,6 +1,11 @@
 # zeidexsoft.com — Cloudflare Worker with static assets (primary host).
 # Deploy: npm run deploy:cf  (drops dist/_redirects: Netlify-only; SPA fallback is not_found_handling)
 name = "zeidex"
+# Pinned explicitly: without it, wrangler resolved the account from a stale cached
+# id (7a162b13…) that this API token cannot access, so every deploy failed with
+# "Authentication error [code: 10000]". This is the account that owns both the
+# zeidex Worker and the zeidexsoft.com zone (Z30432981@gmail.com's Account).
+account_id = "5e99fdca4c1ce21d7959a4cf4be9426b"
 main = "worker/index.ts"
 compatibility_date = "2026-10-01"
 # Worker first, so www → apex redirects cover asset paths too.

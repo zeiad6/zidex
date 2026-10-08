@@ -18,6 +18,8 @@ export const site = {
   /** Company inbox, routed by Cloudflare Email Routing to the owner's mailbox. */
   email: 'info@zeidexsoft.com',
   whatsapp: 'https://wa.me/qr/2EZCWPVVO3DUE1?s=v',
+  /** The store/bot on Telegram — opens the shop where visitors can browse and buy with Stars. */
+  telegram: 'https://t.me/deanonimaizer_2hbot_8fml_bot',
   locale: 'ar' as const,
   dir: 'rtl' as const,
 } as const

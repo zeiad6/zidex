@@ -107,12 +107,27 @@ export async function waWebhook(request: Request, env: WhatsAppEnv): Promise<Res
 
   // Signed by Meta from here on. Always 200: a non-2xx makes Meta retry the same batch.
   try {
-    type Incoming = { from?: string; type?: string; interactive?: { button_reply?: { id?: string } } }
+    type Incoming = {
+      from?: string
+      type?: string
+      text?: { body?: string }
+      interactive?: { button_reply?: { id?: string } }
+    }
     const update = JSON.parse(raw) as { entry?: { changes?: { value?: { messages?: Incoming[] } }[] }[] }
     for (const entry of update.entry ?? []) {
       for (const change of entry.changes ?? []) {
         for (const m of change.value?.messages ?? []) {
-          const choice = m.type === 'interactive' ? String(m.interactive?.button_reply?.id ?? '') : ''
+          let choice = m.type === 'interactive' ? String(m.interactive?.button_reply?.id ?? '') : ''
+          if (!choice && m.type === 'text' && m.text?.body) {
+            const txt = m.text.body.trim().toLowerCase()
+            if (txt.includes('منتج') || txt.includes('متجر') || txt.includes('شراء') || txt.includes('أسعار') || txt.includes('اسعار') || txt === 'shop') {
+              choice = 'shop'
+            } else if (txt.includes('تطبيق') || txt.includes('مجاني') || txt.includes('برامج') || txt === 'free' || txt === 'apps') {
+              choice = 'free'
+            } else if (txt.includes('تواصل') || txt.includes('مالك') || txt.includes('دعم') || txt.includes('ادمن') || txt.includes('أدمن') || txt === 'contact') {
+              choice = 'contact'
+            }
+          }
           if (m.from) await answer(env, String(m.from), choice)
         }
       }

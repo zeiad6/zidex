@@ -35,7 +35,29 @@ export type BotsEnv = {
   ORIGIN?: string
 } & LicenseEnv
 
-type Item = { id: number; title: string; stars: number; desc: string; section?: number }
+type Item = {
+  id: number
+  title: string
+  stars: number
+  desc: string
+  section?: number
+  /** Optional bullet points (from the catalog) rendered as a product card before checkout. */
+  features?: string[]
+  /** Optional approximate USD price, shown so buyers can weigh the Stars against a real price. */
+  usd?: number
+  /** Optional demo link surfaced on the product card. */
+  demo?: string
+  /** Optional post-purchase steps (from the catalog "after"): what the buyer does next. Shown
+   *  on the product card and again after checkout, so the flow is never a mystery. */
+  after?: string[]
+  /** What the buyer receives the instant they pay — the store's whole promise. Set with /deliver:
+   *  either a secret (code/link/password) sent as text, or a file the owner once forwarded to the
+   *  bot, re-sent by its Telegram file_id. When absent, the order just notifies the owner. */
+  deliver?: {
+    text?: string
+    file?: { id: string; type: 'document' | 'photo' | 'video' | 'audio' | 'voice' }
+  }
+}
 type Cfg = {
   id: number
   username: string
@@ -131,6 +153,63 @@ const faqCap = (cfg: Cfg) => (isFree(cfg) ? FREE_MAX_FAQS : MAX_FAQS)
 /** The free plan's whole price: one line under the welcome. */
 const footer = (cfg: Cfg) => (isFree(cfg) ? '\n\n<i>⚡️ متجر مجاني — مدعوم من ZeidexSoft</i>' : '')
 const esc = (s: unknown) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
+
+/** Does this item carry enough detail to justify a product card instead of a one-tap buy?
+ *  Simple owner-added items (just title/desc/stars) stay one-tap; catalog items with a feature
+ *  list get a richer card so buyers see what they are paying for before the invoice. */
+const hasCard = (i: Item) => !!i.features?.length || (i.usd != null && i.usd > 0) || !!i.demo || !!i.after?.length
+
+/** A product's detail card, shown before checkout. Exported so the storefront and the tests share
+ *  the exact same rendering. */
+export function productCard(i: Item) {
+  const lines = [
+    `🛍 <b>${esc(i.title)}</b>`,
+    `━━━━━━━━━━━━━━━━━━━━━`,
+    ``,
+    esc(i.desc),
+  ]
+  if (i.features?.length) {
+    lines.push(``, `<b>المميزات:</b>`)
+    for (const f of i.features.slice(0, 10)) lines.push(`▫️ ${esc(f)}`)
+  }
+  if (i.after?.length) {
+    lines.push(``, `<b>ما بعد الشراء:</b>`)
+    i.after.slice(0, 6).forEach((s, k) => lines.push(`${k + 1}️⃣ ${esc(s)}`))
+  }
+  lines.push(``, `━━━━━━━━━━━━━━━━━━━━━`)
+  const price = i.usd != null && i.usd > 0 ? `⭐️ <b>${i.stars}</b> نجمة (~$${i.usd})` : `⭐️ <b>${i.stars}</b> نجمة`
+  lines.push(`💰 السعر: ${price}`)
+  if (i.demo) lines.push(`🔗 معاينة: ${esc(i.demo)}`)
+  if (i.deliver) lines.push(`⚡️ <b>تسليم تلقائي فوري بعد الدفع</b>`)
+  return lines.join('\n')
+}
+
+/** The file-send method for each kind of media an owner can attach as auto-delivery. */
+const FILE_METHOD = { document: 'sendDocument', photo: 'sendPhoto', video: 'sendVideo', audio: 'sendAudio', voice: 'sendVoice' } as const
+
+/** Hand the buyer what they paid for, the moment the Stars land. Returns true if anything was
+ *  delivered, so the caller can fall back to "the owner will contact you" when an item has no
+ *  auto-delivery set. Never throws — a delivery hiccup must not lose the paid order. */
+async function deliverItem(token: string, chat: number, item: Item) {
+  const d = item.deliver
+  if (!d) return false
+  try {
+    if (d.file) {
+      await tg(token, FILE_METHOD[d.file.type] ?? 'sendDocument', {
+        chat_id: chat,
+        [d.file.type]: d.file.id,
+        caption: `🎁 <b>${esc(item.title)}</b>\n\n✅ تم الاستلام تلقائياً بعد الدفع. شكراً لك!`,
+        parse_mode: 'HTML',
+      })
+    }
+    if (d.text) {
+      await send(token, chat, `🎁 <b>${esc(item.title)}</b>\n━━━━━━━━━━━━━━━━━━━━━\n\n<code>${esc(d.text)}</code>\n\n✅ شكراً لشرائك!`)
+    }
+    return true
+  } catch {
+    return false
+  }
+}
 
 // ── crypto ──────────────────────────────────────────────────────────
 const b64 = (u: Uint8Array) => btoa(String.fromCharCode(...u))
@@ -254,20 +333,96 @@ const knownOwnerOf = (id: string | number, ttl: number) => {
 
 const CONTACT_PROMPT = 'اكتب رسالتك للمالك ردّاً على هذه الرسالة.'
 
+const FREEBOT_INTRO =
+  '🎁 <b>إنشاء بوت متجر مجاني باسمك — شهر كامل</b>\n' +
+  '━━━━━━━━━━━━━━━━━━━━━\n\n' +
+  '⚡️ <b>استضافة سحابية متكاملة 24/7 على Cloudflare Workers</b>\n' +
+  'بدون الحاجة لخادم وبدون أي إعدادات معقدة:\n\n' +
+  '✨ <b>أبرز مميزات متجرك:</b>\n' +
+  '▫️ بيع حتى 30 منتجاً وقبول نجوم تيليجرام ⭐️ مباشرة\n' +
+  '▫️ 30 سؤالاً شائعاً مع ردود آلية ذكية وفورية\n' +
+  '▫️ تصنيف المتجر لأقسام وصفحات تعريفية\n' +
+  '▫️ لوحة تحكم وإحصاءات كاملة من داخل البوت (<code>/admin</code>)\n\n' +
+  '━━━━━━━━━━━━━━━━━━━━━\n' +
+  '🚀 <b>خطوات التفعيل في دقيقة واحدة:</b>\n' +
+  '1️⃣ افتح @BotFather وأرسل <code>/newbot</code> واختر اسماً لمتجرك\n' +
+  '2️⃣ انسخ التوكن (API Token) الذي يعطيك إياه\n' +
+  '3️⃣ أرسل التوكن هنا مباشرة في المحادثة — وسينطلق متجرك فوراً!\n\n' +
+  '🔒 <i>التوكن يُخزَّن مشفّراً (AES-GCM) ولا يظهر لأي شخص.</i>'
+const FREEBOT_ROWS: KbButton[][] = [
+  [{ text: '🤖 فتح BotFather', url: 'https://t.me/BotFather' }],
+  [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }],
+]
+
+/** A customer sent a fresh bot token to the platform bot: host it as a free shop, end to end.
+ *  Cap at SELF_SERVE_BOTS per Telegram user; never downgrade a bot already on the paid plan. */
+async function freeBotProvision(env: BotsEnv, shopToken: string, chat: number, uid: number, plainToken: string) {
+  if (!env.BOTS_KEY) return void (await send(shopToken, chat, '⚠️ التفعيل الذاتي غير مهيأ حالياً — جرّب لاحقاً أو راسل المالك.'))
+  const idxRaw = await env.DOWNLOADS.get(`tbowner:${uid}`)
+  const owned = idxRaw ? (JSON.parse(idxRaw) as number[]) : []
+  if (owned.length >= SELF_SERVE_BOTS)
+    return void (await send(shopToken, chat,
+      `⚖️ وصلت حد ${SELF_SERVE_BOTS} بوت مستضاف لكل حساب.\nلاستضافة المزيد اطلب الباقة الأساسية من المتجر:`,
+      { reply_markup: { inline_keyboard: [[{ text: '🛍 باقات المتاجر', url: `${originOf(env)}/store/` }], ...FREEBOT_ROWS.slice(1)] } }))
+  // The token itself carries the bot id; a bot already hosted on the paid plan must not
+  // be silently downgraded by a /freebot round trip.
+  const existing = await load(env, plainToken.split(':')[0])
+  if (existing?.plan === 'paid')
+    return void (await send(shopToken, chat, '💎 هذا البوت مستضاف بالفعل على <b>الباقة المدفوعة</b> — لا حاجة لإعادة التفعيل.'))
+  const made = await provision(env, plainToken, uid, 'free')
+  if (!made.ok) return void (await send(shopToken, chat, made.userText, { reply_markup: { inline_keyboard: FREEBOT_ROWS } }))
+  await send(shopToken, chat,
+    `🎉 <b>متجرك جاهز ويعمل الآن!</b>\n\n` +
+      `🤖 البوت: @${esc(made.cfg.username)}\n` +
+      `⏳ الخطة المجانية: ${FREE_DAYS} يوماً — تنتهي ${day(made.cfg.expires)}\n\n` +
+      `<b>ابدأ من هنا:</b>\n` +
+      `• افتح بوتك وأرسل <code>/admin</code> للوحة التحكم\n` +
+      `• أضف أول منتج: <code>/add اسم_المنتج | السعر_بالنجوم | وصف</code>\n` +
+      `• عدّل الترحيب: <code>/welcome نص</code>`,
+    { reply_markup: { inline_keyboard: [[{ text: '🚀 افتح متجرك', url: `https://t.me/${made.cfg.username}` }], ...FREEBOT_ROWS.slice(1)] } })
+}
+
+/** An admin requested a bot without paying: full paid plan, lifetime, no limits. */
+async function adminBotProvision(env: BotsEnv, shopToken: string, chat: number, uid: number, plainToken: string) {
+  if (!env.BOTS_KEY) return void (await send(shopToken, chat, '⚠️ النظام غير مهيأ حالياً — تحقق من BOTS_KEY.'))
+  const made = await provision(env, plainToken, uid, 'paid')
+  if (!made.ok) return void (await send(shopToken, chat, made.userText, { reply_markup: { inline_keyboard: FREEBOT_ROWS } }))
+  await send(shopToken, chat,
+    `👑 <b>تم إنشاء وتفعيل البوت كمسؤول بنجاح!</b>\n\n` +
+      `🤖 البوت: @${esc(made.cfg.username)}\n` +
+      `💎 الباقة: <b>مدفوعة كاملة (بدون دفع — مجاني للمسؤول)</b>\n` +
+      `⏳ الصلاحية: <b>دائمة ومستمرة بدون انتهاء</b>\n\n` +
+      `<b>ابدأ من هنا:</b>\n` +
+      `• افتح بوتك وأرسل <code>/admin</code> للوحة التحكم\n` +
+      `• أضف أول منتج: <code>/add اسم_المنتج | السعر_بالنجوم | وصف</code>\n` +
+      `• خصص متجرك بدون أي قيود`,
+    { reply_markup: { inline_keyboard: [[{ text: '🚀 افتح متجرك الآن', url: `https://t.me/${made.cfg.username}` }], [{ text: '🔙 لوحة التحكم', callback_data: 't:adm_refresh' }]] } })
+}
+
 const menu = { inline_keyboard: [[{ text: '🛍 المنتجات', callback_data: 't:items' }, { text: '❓ الأسئلة', callback_data: 't:faqs' }], [{ text: '💬 راسل المالك', callback_data: 't:contact' }]] }
 
 type KbButton = { text: string; callback_data?: string; url?: string }
 /** The /start and "main menu" keyboard: one builder, so the two can never disagree. */
-function menuFor(env: BotsEnv, cfg: Cfg) {
+function menuFor(env: BotsEnv, cfg: Cfg, uid?: number) {
   const rows: KbButton[][] = []
+  const owner = uid !== undefined && (uid === cfg.owner || (env.ADMIN_UID ? String(uid) === env.ADMIN_UID : false))
   if (cfg.id === platformBotId(env)) {
     rows.push(
-      [{ text: '🤖 بوتات ومتاجر رقمية', callback_data: 't:sec:1' }, { text: '🎁 أنشئ متجرك مجاناً', callback_data: 't:freebot' }],
+      [{ text: '🛍 المتجر والمنتجات', callback_data: 't:items' }, { text: '🎁 أنشئ متجرك مجاناً', callback_data: 't:freebot' }],
       [{ text: '📱 تطبيقات أندرويد', callback_data: 't:android' }, { text: '💻 تطبيقات ويندوز', callback_data: 't:windows' }],
       [{ text: '🌐 تطبيقات موقعي', callback_data: 't:myapps' }, { text: '💖 تبرع', callback_data: 't:donate' }],
     )
   }
+  if (owner) {
+    rows.push(
+      [{ text: '🎁 أخذ أي شيء من المتجر مجاناً (للأدمن)', callback_data: 't:adm_take_any' }],
+      [{ text: '🤖 تفعيل بوت بدون دفع', callback_data: 't:adm_freebot' }]
+    )
+  }
   rows.push(...menu.inline_keyboard.map((row) => [...row]))
+  if (owner) {
+    rows.push([{ text: '⚙️ لوحة تحكم الإدارة (/admin)', callback_data: 't:adm_refresh' }])
+  }
   const pages = (cfg.pages ?? []).map((pg, i) => ({ text: `📄 ${pg.title}`, callback_data: `t:page:${i}` }))
   for (let i = 0; i < pages.length; i += 2) rows.push(pages.slice(i, i + 2))
   if (cfg.site?.verified) rows.push([{ text: '🌐 موقعنا', url: cfg.site.url }])
@@ -285,10 +440,22 @@ const btnRow = (b: Btn): Btn[] => [b]
 const SEARCH_ITEM_CAP = 8
 const SEARCH_FAQ_CAP = 5
 const SEARCH_HINT =
-  '🔎 أرسل الكلمة التي تبحث عنها، مثال: <code>/search مثال</code>\n<code>/catalog</code> يعرض كل المنتجات — أو افتح القائمة من الأزرار.'
+  '🔎 <b>البحث في المتجر:</b>\n' +
+  '━━━━━━━━━━━━━━━━━━━━━\n' +
+  'أرسل الكلمة التي تبحث عنها، مثال: <code>/search مثال</code>\n' +
+  'أو استخدم <code>/catalog</code> لعرض كل المنتجات، أو تصفح الأقسام من الأزرار.'
 const HELP_TEXT =
-  '<b>الأوامر</b>\n/start — القائمة الرئيسية\n/search — ابحث في المنتجات\n/catalog — كل المنتجات\n/clear — مسح المحادثة\n/help — هذه القائمة'
-const PLATFORM_HELP = '\n/apps — تطبيقاتنا (أندرويد وويندوز)\n/donate — دعم وتبرع\n/freebot — إنشاء بوت متجر مجاني'
+  '🤖 <b>دليل أوامر البوت</b>\n' +
+  '━━━━━━━━━━━━━━━━━━━━━\n' +
+  '• /start — 🏠 القائمة الرئيسية والترحيب\n' +
+  '• /catalog — 📦 استعراض كل المنتجات\n' +
+  '• /search — 🔎 البحث في المنتجات والأسئلة\n' +
+  '• /clear — 🧹 مسح المحادثة\n' +
+  '• /help — ❓ دليل الأوامر'
+const PLATFORM_HELP =
+  '\n• /apps — 📱 تطبيقاتنا (أندرويد وويندوز)\n' +
+  '• /freebot — 🎁 إنشاء متجر مجاني باسمك\n' +
+  '• /donate — 💖 دعم ومساندة المنصة'
 /** ZeidexSoft's own apps and donation (with its bank accounts) belong to the platform bot.
  *  Every hosted shop answered them too — a customer's store showing our accounts. */
 const PLATFORM_COMMANDS = new Set(['apps', 'myapps', 'android', 'windows', 'donate', 'freebot', 'bots'])
@@ -432,92 +599,110 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     if (!isPlatform && PLATFORM_CALLBACK.test(data)) return
     if (data === 't:android') {
       const text =
-        '📱 <b>تطبيقات الأندرويد من ZeidexSoft</b>\n\n' +
-        '1️⃣ <b>أرشيف برو EDMS</b> (v1.0.1)\nنظام إدارة وأرشفة الوثائق الإلكترونية، يعمل على الهاتف محلياً مع إمكانية المزامنة الآمنة مع الحاسوب.\n\n' +
-        '2️⃣ <b>VerityScope — كاشف التزييف العميق</b> (v0.4.0)\nكشف التزييف في الصور والفيديو والنصوص والصوت بـ 5 نماذج ذكاء اصطناعي محلية + تحليلات رقمية جنائية.'
+        '📱 <b>تطبيقات الأندرويد الرسمية — ZeidexSoft</b>\n' +
+        '━━━━━━━━━━━━━━━━━━━━━\n\n' +
+        '1️⃣ <b>أرشيف برو EDMS</b> <code>(v1.0.1)</code>\n' +
+        '▫️ نظام متطور لإدارة وأرشفة الوثائق والمستندات الإلكترونية.\n' +
+        '▫️ يعمل على الهاتف مباشرة مع ميزة المزامنة المشفرة مع الحاسوب.\n\n' +
+        '2️⃣ <b>VerityScope — كاشف التزييف</b> <code>(v0.4.0)</code>\n' +
+        '▫️ كشف التزييف العميق (Deepfake) في الصور والفيديو والصوت والنصوص.\n' +
+        '▫️ يعتمد على 5 نماذج ذكاء اصطناعي مدمجة مع تحليلات رقمية جنائية.\n\n' +
+        '━━━━━━━━━━━━━━━━━━━━━\n' +
+        '📥 <i>اختر التطبيق للتحميل المباشر بصيغة APK:</i>'
       const rows = [
-        [{ text: '📥 تحميل أرشيف برو (MediaFire)', url: 'https://www.mediafire.com/file/inn8lf6tznv95nx/app-debug.apk/file' }],
-        [{ text: '📥 تحميل VerityScope (MediaFire)', url: 'https://www.mediafire.com/file/0taluz31zdblh8y/VerityScope-v0.4.0-release.apk/file' }],
-        [{ text: '🌐 استعراض البرامج على الموقع', url: 'https://zeidexsoft.com/programs' }],
+        [{ text: '📥 تحميل أرشيف برو EDMS (APK)', url: 'https://www.mediafire.com/file/inn8lf6tznv95nx/app-debug.apk/file' }],
+        [{ text: '📥 تحميل VerityScope (APK)', url: 'https://www.mediafire.com/file/0taluz31zdblh8y/VerityScope-v0.4.0-release.apk/file' }],
+        [{ text: '🌐 صفحة البرامج على موقعنا', url: 'https://zeidexsoft.com/programs' }],
         [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
       ]
       await send(token, chat, text, { reply_markup: { inline_keyboard: rows } })
     } else if (data === 't:windows') {
       const text =
-        '💻 <b>تطبيقات ويندوز من ZeidexSoft</b>\n\n' +
-        '🔹 <b>أرشيف برو EDMS</b> (v1.0.6 - x64)\nنظام مكتبي متطور لإدارة وأرشفة الوثائق والمستندات: بحث نصي كامل، إصدارات غير قابلة للاستبدال، وسير عمل إلكتروني.'
+        '💻 <b>تطبيقات نظام ويندوز — ZeidexSoft</b>\n' +
+        '━━━━━━━━━━━━━━━━━━━━━\n\n' +
+        '🔹 <b>أرشيف برو EDMS للكمبيوتر</b> <code>(v1.0.6 - x64)</code>\n\n' +
+        '▫️ نظام مكتبي فائق الأداء لإدارة وتنظيم وأرشفة الوثائق الورقية والإلكترونية.\n' +
+        '▫️ بحث نصي شامل وسريع داخل كافة الملفات والمستندات.\n' +
+        '▫️ حماية قصوى مع سجلات تدقيق وإصدارات غير قابلة للاستبدال.\n' +
+        '▫️ سير عمل إلكتروني وصلاحيات مستخدمين متعددة.\n\n' +
+        '━━━━━━━━━━━━━━━━━━━━━\n' +
+        '📥 <i>اختر رابط التنزيل المباشر للإصدار:</i>'
       const rows = [
-        [{ text: '📥 تحميل الإعداد (GitHub)', url: 'https://github.com/zeiad6/Edms-archive/releases/download/v1.0.6/EDMS-Archive-1.0.6-Setup-x64.exe' }],
-        [{ text: '📥 مرآة التحميل (MediaFire)', url: 'https://www.mediafire.com/file/cezytgi4hqxmorc/EDMS-Archive-1.0.6-Setup-x64.exe/file' }],
-        [{ text: '🌐 صفحة البرنامج على الموقع', url: 'https://zeidexsoft.com/programs#programs-windows' }],
+        [{ text: '📥 تحميل مباشر من GitHub (Setup.exe)', url: 'https://github.com/zeiad6/Edms-archive/releases/download/v1.0.6/EDMS-Archive-1.0.6-Setup-x64.exe' }],
+        [{ text: '📥 رابط بديل MediaFire (Setup.exe)', url: 'https://www.mediafire.com/file/cezytgi4hqxmorc/EDMS-Archive-1.0.6-Setup-x64.exe/file' }],
+        [{ text: '🌐 تفاصيل البرنامج على الموقع', url: 'https://zeidexsoft.com/programs#programs-windows' }],
         [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
       ]
       await send(token, chat, text, { reply_markup: { inline_keyboard: rows } })
     } else if (data === 't:myapps') {
       const rows = [
-        [{ text: '📱 تطبيقات أندرويد', callback_data: 't:android' }, { text: '💻 تطبيقات ويندوز', callback_data: 't:windows' }],
-        [{ text: '🌐 جميع البرامج على الموقع', url: 'https://zeidexsoft.com/programs' }],
+        [{ text: '📱 تطبيقات أندرويد (Android)', callback_data: 't:android' }],
+        [{ text: '💻 تطبيقات ويندوز (Windows)', callback_data: 't:windows' }],
+        [{ text: '🌐 استعراض وتحميل البرامج من الموقع', url: 'https://zeidexsoft.com/programs' }],
         [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
       ]
-      await send(token, chat, '🌐 <b>برمجيات وتطبيقات موقعنا</b>\nاختر المنصة لاستعراض وتحميل التطبيقات المتاحة:', { reply_markup: { inline_keyboard: rows } })
+      await send(token, chat,
+        '🌐 <b>برمجيات وتطبيقات منصة ZeidexSoft</b>\n' +
+        '━━━━━━━━━━━━━━━━━━━━━\n' +
+        'نوفر برمجيات متقدمة ومفتوحة المصدر مصممة بأعلى معايير الأمان والسرعة.\n\n' +
+        'اختر المنصة التي تود تحميل التطبيقات لها:',
+        { reply_markup: { inline_keyboard: rows } }
+      )
     } else if (data === 't:freebot') {
-      const text =
-        '🎁 <b>إنشاء بوت متجر رقمي مجاني باسمك — لمدة شهر كامل</b>\n\n' +
-        'نوفر لك استضافة سحابية كاملة لبوت متجر خاص بك مجاناً:\n' +
-        '• بيع حتى 30 منتجاً وقبول نجوم تيليجرام (Telegram Stars)\n' +
-        '• 30 سؤالاً شائعاً مع ردود تلقائية\n' +
-        '• تقسيم المتجر إلى أقسام وصفحات\n' +
-        '• استضافة سحابية 24/7 على Cloudflare Workers بدون خادم\n\n' +
-        '<b>كيف تبدأ؟</b>\n' +
-        '1. افتح @BotFather وأنشئ بوتاً جديداً بأمر <code>/newbot</code>\n' +
-        '2. انسخ توكن البوت (API Token)\n' +
-        '3. أرسل التوكن للمطور لتفعيله لك فوراً، أو اطلب الباقة الأساسية من المتجر:'
-      const rows = [
-        [{ text: '💬 تواصل مع المطور للتفعيل', callback_data: 't:contact' }],
-        [{ text: '🛍 باقات المتاجر في الموقع', url: 'https://zeidexsoft.com/shop' }],
-        [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
-      ]
-      await send(token, chat, text, { reply_markup: { inline_keyboard: rows } })
+      await send(token, chat, FREEBOT_INTRO, { reply_markup: { inline_keyboard: FREEBOT_ROWS } })
     } else if (data === 't:donate') {
       const rows = [
-        [{ text: '⭐️ تبرع بالنجوم (Telegram Stars)', callback_data: 't:don_stars' }],
-        [{ text: '🏦 حسابات بنك الكريمي', callback_data: 't:don_kuraimi' }],
-        [{ text: '💎 تبرع بالعملات الرقمية (Crypto)', callback_data: 't:don_crypto' }],
-        [{ text: '🌐 التبرع عبر المتجر الإلكتروني', url: 'https://zeidexsoft.com/shop' }],
+        [{ text: '⭐️ التبرع بنجوم تيليجرام (Stars)', callback_data: 't:don_stars' }],
+        [{ text: '🏦 التحويل عبر بنك الكريمي', callback_data: 't:don_kuraimi' }],
+        [{ text: '💎 التبرع بالعملات الرقمية (Crypto)', callback_data: 't:don_crypto' }],
+        [{ text: '🌐 الدفع عبر المتجر الإلكتروني', url: 'https://zeidexsoft.com/shop' }],
         [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
       ]
-      await send(token, chat, '💖 <b>تبرع لدعم تطوير مشاريع ZeidexSoft</b>\nاختر وسيلة الدفع التي تناسبك:', { reply_markup: { inline_keyboard: rows } })
+      await send(token, chat,
+        '💖 <b>دعم وتطوير مشاريع ZeidexSoft</b>\n' +
+        '━━━━━━━━━━━━━━━━━━━━━\n' +
+        'مساهمتك تمكننا من الاستمرار في صيانة واستضافة الأدوات المجانية، تطوير البوتات، ونشر التطبيقات المفيدة للجميع.\n\n' +
+        'اختر وسيلة التبرع المناسبة لك أدناه 👇',
+        { reply_markup: { inline_keyboard: rows } }
+      )
     } else if (data === 't:don_kuraimi') {
       const text =
-        '🏦 <b>حسابات بنك الكريمي للتبرع والدعم:</b>\n\n' +
-        '• دولار (USD): <code>3212959129</code>\n' +
-        '• ريال يمني (YER): <code>3179177535</code>\n' +
-        '• ريال سعودي (SAR): <code>3212932816</code>\n\n' +
-        '<i>اضغط زر النسخ تحت الحساب. بعد التحويل راسل المالك عبر البوت لتأكيد الدعم.</i>'
-      // copy_text (Bot API 7.11): one tap copies the exact number — no misread digit.
+        '🏦 <b>حسابات بنك الكريمي للدعم والتبرع</b>\n' +
+        '━━━━━━━━━━━━━━━━━━━━━\n\n' +
+        '💵 <b>حساب الدولار (USD):</b>\n' +
+        '└ <code>3212959129</code>\n\n' +
+        '🇾🇪 <b>حساب الريال اليمني (YER):</b>\n' +
+        '└ <code>3179177535</code>\n\n' +
+        '🇸🇦 <b>حساب الريال السعودي (SAR):</b>\n' +
+        '└ <code>3212932816</code>\n\n' +
+        '━━━━━━━━━━━━━━━━━━━━━\n' +
+        '📋 <i>اضغط على زر النسخ أدناه لنسخ رقم الحساب بنقرة واحدة، ثم أرسل إشعاراً للمطور عبر البوت.</i>'
       const rows = [
-        [{ text: '📋 نسخ حساب الدولار', copy_text: { text: '3212959129' } }],
-        [{ text: '📋 نسخ حساب الريال اليمني', copy_text: { text: '3179177535' } }],
-        [{ text: '📋 نسخ حساب الريال السعودي', copy_text: { text: '3212932816' } }],
-        [{ text: '💬 إرسال إشعار للمالك', callback_data: 't:contact' }],
-        [{ text: '🔙 رجوع لخيارات التبرع', callback_data: 't:donate' }]
+        [{ text: '📋 نسخ حساب الدولار (USD)', copy_text: { text: '3212959129' } }],
+        [{ text: '📋 نسخ حساب الريال اليمني (YER)', copy_text: { text: '3179177535' } }],
+        [{ text: '📋 نسخ حساب الريال السعودي (SAR)', copy_text: { text: '3212932816' } }],
+        [{ text: '💬 إرسال إشعار / رسالة للمالك', callback_data: 't:contact' }],
+        [{ text: '🔙 رجوع لخيارات الدعم', callback_data: 't:donate' }]
       ]
       await send(token, chat, text, { reply_markup: { inline_keyboard: rows } })
     } else if (data === 't:don_crypto') {
       const text =
-        '💎 <b>التبرع بالعملات الرقمية (TON / USDT):</b>\n\n' +
-        '• عنوان محفظة TON الخاصة بنا:\n' +
+        '💎 <b>التبرع بالعملات المشفرة (TON / USDT)</b>\n' +
+        '━━━━━━━━━━━━━━━━━━━━━\n\n' +
+        '🔹 <b>عنوان محفظة TON المعتمد:</b>\n' +
         '<code>UQCndGV2Qs1BqWvNjAzjv6K_LSfleQp9_V5PL76_EfuKX0LD</code>\n\n' +
-        '• يمكنك التبرع بنجوم تيليجرام وشحنها عبر TON من Fragment، أو التحويل المباشر عبر صفحة المتجر الإلكتروني.\n\n' +
-        '🌐 تفضل بزيارة صفحة الدفع الرقمي على موقعنا:'
+        '▫️ يدعم شبكة <b>The Open Network (TON)</b> وعملة <b>USDT (TON Jetton)</b>.\n' +
+        '▫️ يمكنك أيضاً شراء النجوم وشحنها لحسابك عبر موقع <b>Fragment</b> بالـ TON.\n\n' +
+        '━━━━━━━━━━━━━━━━━━━━━\n' +
+        '📋 <i>اضغط على الزر أدناه لنسخ العنوان فوراً:</i>'
       const rows = [
-        [{ text: '📋 نسخ عنوان المحفظة', copy_text: { text: 'UQCndGV2Qs1BqWvNjAzjv6K_LSfleQp9_V5PL76_EfuKX0LD' } }],
-        [{ text: '🌐 فتح صفحة الدفع الرقمي', url: 'https://zeidexsoft.com/shop' }],
-        [{ text: '🔙 رجوع لخيارات التبرع', callback_data: 't:donate' }]
+        [{ text: '📋 نسخ عنوان محفظة TON', copy_text: { text: 'UQCndGV2Qs1BqWvNjAzjv6K_LSfleQp9_V5PL76_EfuKX0LD' } }],
+        [{ text: '🌐 فتح صفحة المتجر والدفع الرقمي', url: 'https://zeidexsoft.com/shop' }],
+        [{ text: '🔙 رجوع لخيارات الدعم', callback_data: 't:donate' }]
       ]
       await send(token, chat, text, { reply_markup: { inline_keyboard: rows } })
     } else if (data === 't:main') {
-      await send(token, chat, esc(cfg.welcome) + footer(cfg), { reply_markup: menuFor(env, cfg) })
+      await send(token, chat, esc(cfg.welcome) + footer(cfg), { reply_markup: menuFor(env, cfg, q.from.id) })
     } else if (data === 't:don_stars') {
       const rows = [
         [{ text: '⭐️ 50', callback_data: 't:don:50' }, { text: '⭐️ 100', callback_data: 't:don:100' }],
@@ -537,12 +722,18 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
       const count = (id: number) => cfg.items.filter((i) => i.section === id).length
       const rows: KbButton[][] = cfg.sections!.map((sec) => [{ text: `🗂 ${sec.name} (${count(sec.id)})`, callback_data: `t:sec:${sec.id}` }])
       rows.push([{ text: `📦 كل المنتجات (${cfg.items.length})`, callback_data: 't:sec:all' }])
+      if (isOwner(q.from.id)) {
+        rows.unshift([{ text: '🎁 أخذ أي شيء من المتجر مجاناً (للأدمن)', callback_data: 't:adm_take_any' }])
+      }
       await send(token, chat, '🛍 <b>الأقسام</b>', { reply_markup: { inline_keyboard: rows } })
     } else if (data === 't:items' || data.startsWith('t:sec:')) {
       const key = data.slice(6)
       const sec = cfg.sections!.find((x) => String(x.id) === key)
       const list = sec ? cfg.items.filter((i) => i.section === sec.id) : cfg.items
       const rows: KbButton[][] = list.map((i) => [{ text: `⭐️ ${i.stars} — ${i.title}`, callback_data: `t:buy:${i.id}` }])
+      if (isOwner(q.from.id)) {
+        rows.unshift([{ text: '🎁 أخذ أي شيء من المتجر مجاناً (للأدمن)', callback_data: 't:adm_take_any' }])
+      }
       if (cfg.sections!.length) rows.push([{ text: '🔙 الأقسام', callback_data: 't:items' }])
       const head = sec ? `🗂 <b>${esc(sec.name)}</b>` : '🛍 <b>المنتجات</b>'
       await send(token, chat, list.length ? head : 'لا منتجات هنا بعد.', { reply_markup: { inline_keyboard: rows } })
@@ -552,11 +743,24 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
       const pg = cfg.pages![Number(data.slice(7))]
       if (pg) await send(token, chat, `<b>${esc(pg.title)}</b>\n\n${esc(pg.body)}`, { reply_markup: { inline_keyboard: mainRows() } })
     } else if (data === 't:faqs') {
-      const rows = cfg.faqs.map((f, i) => [{ text: f.q, callback_data: `t:faq:${i}` }])
-      await send(token, chat, cfg.faqs.length ? '❓ <b>الأسئلة الشائعة</b>' : 'لا أسئلة بعد.', { reply_markup: { inline_keyboard: rows } })
+      const rows = cfg.faqs.map((f, i) => [{ text: `❓ ${f.q}`, callback_data: `t:faq:${i}` }])
+      rows.push([{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }])
+      await send(token, chat,
+        cfg.faqs.length
+          ? '❓ <b>الأسئلة الشائعة والإجابات</b>\n━━━━━━━━━━━━━━━━━━━━━\nاختر أي سؤال للاطلاع على تفاصيل الإجابة:'
+          : 'لا توجد أسئلة مسجلة بعد.',
+        { reply_markup: { inline_keyboard: rows } }
+      )
     } else if (data.startsWith('t:faq:')) {
       const f = cfg.faqs[Number(data.slice(6))]
-      if (f) await send(token, chat, `<b>${esc(f.q)}</b>\n${esc(f.a)}`)
+      if (f) {
+        await send(token, chat,
+          `❓ <b>${esc(f.q)}</b>\n` +
+          '━━━━━━━━━━━━━━━━━━━━━\n\n' +
+          `💡 <b>الإجابة:</b>\n${esc(f.a)}`,
+          { reply_markup: { inline_keyboard: [[{ text: '🔙 الأسئلة الشائعة', callback_data: 't:faqs' }], [{ text: '🏠 القائمة الرئيسية', callback_data: 't:main' }]] } }
+        )
+      }
     } else if (data === 't:contact') {
       // force_reply, not a KV flag: a tap must cost no KV write (free tier: 1,000/day).
       await send(token, chat, CONTACT_PROMPT, { reply_markup: { force_reply: true, input_field_placeholder: 'رسالتك…' } })
@@ -571,10 +775,26 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
       cfg.paused = !cfg.paused
       await save(env, cfg)
       await send(token, chat, cfg.paused ? '⏸ تم إيقاف البوت مؤقتاً للعملاء.' : '▶️ تم استئناف تشغيل البوت للعملاء.')
+    } else if (data === 't:adm_freebot') {
+      if (!isOwner(q.from.id)) return
+      await send(token, chat,
+        `🎁 <b>أخذ / إنشاء بوت مجاناً للأدمن (باقة مدفوعة كاملة)</b>\n\n` +
+        `بصفتك المسؤول، يمكنك تفعيل واستضافة أي بوت متجر رقمي بدون دفع أي نجوم، وبمميزات الباقة المدفوعة بالكامل:\n` +
+        `• خطة مدفوعة كاملة (Paid) دائمة بدون انتهاء صلاحية\n` +
+        `• حتى 50 منتجاً و 50 سؤالاً شائعاً وأقسام وصفحات كاملة\n\n` +
+        `<b>طريقة التفعيل الفوري:</b>\n` +
+        `1️⃣ افتح @BotFather وأنشئ بوتاً جديداً بأمر <code>/newbot</code>\n` +
+        `2️⃣ انسخ توكن البوت وأرسله هنا مباشرة في المحادثة\n` +
+        `أو استخدم الأمر: <code>/createbot التوكن</code>\n\n` +
+        `وسيقوم النظام بتشغيل البوت سحابياً فوراً مجاناً!`,
+        { reply_markup: { inline_keyboard: [[{ text: '🤖 فتح BotFather', url: 'https://t.me/BotFather' }], [{ text: '🔙 لوحة التحكم', callback_data: 't:adm_refresh' }]] } }
+      )
     } else if (data === 't:adm_refresh') {
       if (!isOwner(q.from.id)) return
       const adminRows = [
+        [{ text: '🎁 أخذ أي شيء من المتجر مجاناً (للأدمن)', callback_data: 't:adm_take_any' }],
         [{ text: '📦 قائمة المنتجات', callback_data: 't:adm_items' }, { text: '❓ الأسئلة الشائعة', callback_data: 't:adm_faqs' }],
+        [{ text: '🤖 تفعيل بوت بدون دفع', callback_data: 't:adm_freebot' }],
         [{ text: cfg.paused ? '▶️ استئناف البوت' : '⏸ إيقاف للصيانة', callback_data: 't:adm_toggle_pause' }, { text: '🔄 تحديث الإحصاءات', callback_data: 't:adm_refresh' }]
       ]
       await send(token, chat,
@@ -588,7 +808,9 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
         `الخطة: <b>${isFree(cfg) ? `🎁 مجانية حتى ${day(cfg.expires)}${lapsed(cfg) ? ' (انتهت)' : ''}` : '💎 مدفوعة'}</b>\n` +
         `الأقسام: <b>${cfg.sections!.length}</b> · الصفحات: <b>${cfg.pages!.length}</b>\n\n` +
         `<i>أوامر الإدارة المباشرة:</i>\n` +
+        `• أخذ بوت بدون دفع: <code>/createbot التوكن</code>\n` +
         `• إضافة منتج: <code>/add اسم | سعر_النجوم | وصف</code>\n` +
+        `• تسليم تلقائي فوري بعد الدفع: <code>/deliver رقم_المنتج الكود</code> (أو ردّ على ملف بـ <code>/deliver رقم_المنتج</code>)\n` +
         `• تعديل الترحيب: <code>/welcome النص</code>\n` +
         `• إضافة سؤال: <code>/faq سؤال | جواب</code>\n` +
         `• الرد على عميل: <code>/reply رقم_العميل النص</code>\n` +
@@ -598,8 +820,128 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
         (cfg.id === platformBotId(env) ? `\n• إصدار تراخيص Pro: <code>/licnew 2 365 1</code>` : ''),
         { reply_markup: { inline_keyboard: adminRows } }
       )
+    } else if (data === 't:adm_take_any') {
+      if (!isOwner(q.from.id)) return
+      const rows: KbButton[][] = []
+      for (const it of cfg.items) {
+        rows.push([{ text: `🎁 أخذ: ${it.title} (⭐️ 0)`, callback_data: `t:adm_claim:${it.id}` }])
+      }
+      rows.push([{ text: '🤖 تفعيل واستضافة بوت جديد (مجاناً)', callback_data: 't:adm_freebot' }])
+      if (cfg.id === platformBotId(env)) {
+        rows.push([{ text: '🔑 إصدار ترخيص Pro دائم (مجاناً)', callback_data: 't:adm_free_lic' }])
+      }
+      rows.push([{ text: '🔙 لوحة التحكم', callback_data: 't:adm_refresh' }])
+      await send(token, chat,
+        `👑 <b>أخذ أي شيء من المتجر مجاناً (صلاحيات المسؤول)</b>\n━━━━━━━━━━━━━━━━━━━━━\n` +
+        `اختر أي منتج أو خدمة من القائمة لاستلامها وتفعيلها فوراً دون الحاجة لدفع أي نجوم:`,
+        { reply_markup: { inline_keyboard: rows } }
+      )
+    } else if (data === 't:adm_free_lic') {
+      if (!isOwner(q.from.id)) return
+      if (!env.LICENSE_SIGNING_KEY) {
+        await send(token, chat, '⚠️ <code>LICENSE_SIGNING_KEY</code> غير مُعدّ في بيئة العمل.')
+        return
+      }
+      const { key, license } = await issueLicense(env, {
+        seats: 2, days: 0, tg: q.from.id, note: 'Admin Free Take'
+      })
+      await send(token, chat,
+        `👑 <b>تم تسليم ترخيص Pro دائم بنجاح (بدون دفع)!</b>\n━━━━━━━━━━━━━━━━━━━━━\n\n` +
+        `🔑 مفتاح الترخيص: <code>${esc(key)}</code>\n` +
+        `🆔 رقم الترخيص: <code>${license.id}</code>\n` +
+        `💻 الأجهزة: 2 مقاعد\n` +
+        `⏳ الصلاحية: <b>دائم (Lifetime) مدى الحياة</b>\n\n` +
+        `⚠️ انسخ المفتاح الآن واحتفظ به.`,
+        { reply_markup: { inline_keyboard: [[{ text: '🎁 أخذ شيء آخر', callback_data: 't:adm_take_any' }], [{ text: '🔙 لوحة التحكم', callback_data: 't:adm_refresh' }]] } }
+      )
     } else if (data.startsWith('t:buy:') && q.message.chat.type === 'private') {
       const item = cfg.items.find((i) => i.id === Number(data.slice(6)))
+      if (item) {
+        if (isOwner(q.from.id)) {
+          await send(token, chat,
+            `👑 <b>أنت مالك المتجر (المسؤول)</b>\n\n` +
+            `المنتج المختار: <b>${esc(item.title)}</b> (⭐️ ${item.stars})\n` +
+            `الوصف: ${esc(item.desc)}\n\n` +
+            `بصفتك المسؤول، يمكنك أخذ هذا المنتج واستلامه فوراً <b>بدون أي دفع</b> على الباقة المدفوعة الدائمة:`,
+            {
+              reply_markup: {
+                inline_keyboard: [
+                  [{ text: '🎁 أخذ هذا المنتج فوراً مجاناً (بدون دفع)', callback_data: `t:adm_claim:${item.id}` }],
+                  [{ text: '⭐️ تجربة فاتورة النجوم', callback_data: `t:adm_invoice:${item.id}` }],
+                  [{ text: '🔙 المنتجات', callback_data: 't:items' }]
+                ]
+              }
+            }
+          )
+          return
+        }
+        // Rich catalog items get a detail card first (features + price); a dedicated buy button
+        // then fires the invoice, so a buyer confirms what they want instead of being thrown
+        // straight into payment. Simple owner-added items keep the one-tap invoice.
+        if (hasCard(item)) {
+          await send(token, chat, productCard(item), {
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: `⭐️ شراء الآن (${item.stars} نجمة)`, callback_data: `t:pay:${item.id}` }],
+                ...(item.demo ? [[{ text: '🔗 معاينة', url: item.demo }]] : []),
+                [{ text: '🔙 المنتجات', callback_data: 't:items' }],
+              ]
+            }
+          })
+          return
+        }
+        await tg(token, 'sendInvoice', {
+          chat_id: chat, title: item.title, description: item.desc, payload: `t${cfg.id}:${item.id}`,
+          provider_token: '', currency: 'XTR', prices: [{ label: item.title, amount: item.stars }],
+        })
+      }
+    } else if (data.startsWith('t:pay:') && q.message.chat.type === 'private') {
+      // The "buy now" button on a product card: same invoice as one-tap buy, reached deliberately.
+      const item = cfg.items.find((i) => i.id === Number(data.slice(6)))
+      if (item) {
+        await tg(token, 'sendInvoice', {
+          chat_id: chat, title: item.title, description: item.desc, payload: `t${cfg.id}:${item.id}`,
+          provider_token: '', currency: 'XTR', prices: [{ label: item.title, amount: item.stars }],
+        })
+      }
+    } else if (data.startsWith('t:adm_claim:') && q.message.chat.type === 'private') {
+      if (!isOwner(q.from.id)) return
+      const item = cfg.items.find((i) => i.id === Number(data.slice(12)))
+      const title = item?.title ?? 'المنتج'
+      if (/ترخيص|pro|licen/i.test(title) && cfg.id === platformBotId(env) && env.LICENSE_SIGNING_KEY) {
+        const { key, license } = await issueLicense(env, {
+          seats: 2, days: 0, tg: q.from.id, note: `Admin Free: ${title}`
+        })
+        await send(token, chat,
+          `👑 <b>تم استلام وتفعيل «${esc(title)}» مجاناً للأدمن!</b>\n━━━━━━━━━━━━━━━━━━━━━\n\n` +
+          `📦 المنتج: <b>${esc(title)}</b>\n` +
+          `💰 السعر للأدمن: <b>⭐️ 0 (مجاناً)</b>\n\n` +
+          `🔑 مفتاح الترخيص: <code>${esc(key)}</code>\n` +
+          `🆔 رقم الترخيص: <code>${license.id}</code>\n` +
+          `⏳ الصلاحية: <b>دائم (Lifetime)</b>\n\n` +
+          `تم تفعيل المنتج لحسابك فوراً.`,
+          { reply_markup: { inline_keyboard: [[{ text: '🎁 أخذ منتج آخر', callback_data: 't:adm_take_any' }], [{ text: '🔙 المنتجات', callback_data: 't:items' }]] } }
+        )
+        return
+      }
+      await send(token, chat,
+        `👑 <b>تم اعتماد استلام «${esc(title)}» مجاناً للأدمن (⭐️ 0)</b>\n━━━━━━━━━━━━━━━━━━━━━\n\n` +
+        `📦 المنتج: <b>${esc(title)}</b>\n` +
+        `💎 الحالة: <b>مفعل بالكامل بدون أي دفع</b>\n\n` +
+        `🚀 <b>طريقة التفعيل والتشغيل الفوري:</b>\n` +
+        `1️⃣ أنشئ البوت من @BotFather بأمر <code>/newbot</code>\n` +
+        `2️⃣ انسخ التوكن وأرسله هنا مباشرة في الشات، أو استخدم:\n` +
+        `<code>/createbot التوكن</code>\n\n` +
+        `سيتم تفعيله واستضافته سحابياً على باقتك المدفوعة الدائمة فوراً!`,
+        { reply_markup: { inline_keyboard: [
+          [{ text: '🤖 فتح BotFather', url: 'https://t.me/BotFather' }],
+          [{ text: '🎁 أخذ شيء آخر', callback_data: 't:adm_take_any' }],
+          [{ text: '🔙 المنتجات', callback_data: 't:items' }]
+        ] } }
+      )
+    } else if (data.startsWith('t:adm_invoice:') && q.message.chat.type === 'private') {
+      if (!isOwner(q.from.id)) return
+      const item = cfg.items.find((i) => i.id === Number(data.slice(14)))
       if (item) {
         await tg(token, 'sendInvoice', {
           chat_id: chat, title: item.title, description: item.desc, payload: `t${cfg.id}:${item.id}`,
@@ -622,9 +964,24 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
       await send(token, chat, '✅ <b>شكراً لتبرعك السخي!</b> دعمك يعني لنا الكثير.')
       await send(token, cfg.owner, `💖 تبرع جديد: ⭐️ ${m.successful_payment.total_amount} من ${esc(m.from?.first_name)} (<code>${uid}</code>)`)
     } else {
-      await send(token, chat, '✅ <b>تم الدفع، شكراً لك!</b> سيتواصل معك المالك.')
-      await send(token, cfg.owner, `🛒 طلب مدفوع: ⭐️ ${m.successful_payment.total_amount} من ${esc(m.from?.first_name)} (<code>${uid}</code>)`)
       cfg.orders += 1
+      const p = m.successful_payment
+      // The payload is `t<botId>:<itemId>`; look up what was bought so it can be auto-delivered.
+      const item = cfg.items.find((i) => i.id === Number(String(p.invoice_payload).split(':')[1]))
+      const delivered = item ? await deliverItem(token, chat, item) : false
+      // When nothing was auto-delivered but the product ships with post-purchase steps, show them
+      // right away instead of a bare "the owner will contact you" — the buyer knows the plan.
+      const next = !delivered && item?.after?.length
+        ? `\n\n🚀 <b>الخطوات التالية:</b>\n` + item.after.slice(0, 6).map((s, k) => `${k + 1}️⃣ ${esc(s)}`).join('\n')
+        : ''
+      await send(token, chat,
+        delivered
+          ? '✅ <b>تم الدفع بنجاح!</b>\n\n🎁 وصلك منتجك بالأعلى — تسليم تلقائي فوري.'
+          : `✅ <b>تم الدفع، شكراً لك!</b>\n\nسيتواصل معك المالك لإكمال التسليم.${next}`)
+      const label = item ? ` «${esc(item.title)}»` : ''
+      await send(token, cfg.owner,
+        `🛒 طلب مدفوع: ⭐️ ${p.total_amount} من ${esc(m.from?.first_name)} (<code>${uid}</code>)${label}\n` +
+        (delivered ? '⚡️ تم التسليم التلقائي للمشتري.' : '📬 يلزم التسليم اليدوي — لا يوجد تسليم تلقائي لهذا المنتج.'))
     }
     cfg.stars += m.successful_payment.total_amount
     await save(env, cfg).catch(() => undefined)
@@ -644,7 +1001,7 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
       : ''
     const hint = isOwner(uid) ? `\n\n<i>أنت المالك: /admin للوحة التحكم.</i>${ended}` : ''
     
-    await send(token, chat, esc(cfg.welcome) + hint + footer(cfg), { reply_markup: menuFor(env, cfg) })
+    await send(token, chat, esc(cfg.welcome) + hint + footer(cfg), { reply_markup: menuFor(env, cfg, uid) })
     return
   }
 
@@ -661,60 +1018,99 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     }))
   }
   if (!isPlatform && PLATFORM_COMMANDS.has(cmd)) return
+  if (isPlatform && cmd === 'freebot') {
+    return void (await send(token, chat, FREEBOT_INTRO, { reply_markup: { inline_keyboard: FREEBOT_ROWS } }))
+  }
   if (cmd === 'catalog') {
     const rows = cfg.items.map((i) => btnRow({ text: `⭐️ ${i.stars} — ${i.title}`, callback_data: `t:buy:${i.id}` }))
+    if (isOwner(uid)) {
+      rows.unshift([{ text: '🎁 أخذ أي شيء من المتجر مجاناً (للأدمن)', callback_data: 't:adm_take_any' }])
+    }
     const kb = rows.length ? [...rows, ...mainRows()] : mainRows()
     return void (await send(token, chat, rows.length ? '🛍 <b>المنتجات</b>' : 'لا منتجات بعد.', { reply_markup: { inline_keyboard: kb } }))
   }
   if (cmd === 'apps' || cmd === 'myapps') {
     const rows = [
-      [{ text: '📱 تطبيقات أندرويد', callback_data: 't:android' }, { text: '💻 تطبيقات ويندوز', callback_data: 't:windows' }],
-      [{ text: '🌐 جميع البرامج على الموقع', url: 'https://zeidexsoft.com/programs' }],
+      [{ text: '📱 تطبيقات أندرويد (Android)', callback_data: 't:android' }],
+      [{ text: '💻 تطبيقات ويندوز (Windows)', callback_data: 't:windows' }],
+      [{ text: '🌐 استعراض وتحميل البرامج من الموقع', url: 'https://zeidexsoft.com/programs' }],
       [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
     ]
-    return void (await send(token, chat, '🌐 <b>برمجيات وتطبيقات موقعنا</b>\nاختر المنصة لاستعراض وتحميل التطبيقات المتاحة:', { reply_markup: { inline_keyboard: rows } }))
+    return void (await send(token, chat,
+      '🌐 <b>برمجيات وتطبيقات منصة ZeidexSoft</b>\n' +
+      '━━━━━━━━━━━━━━━━━━━━━\n' +
+      'نوفر برمجيات متقدمة ومفتوحة المصدر مصممة بأعلى معايير الأمان والسرعة.\n\n' +
+      'اختر المنصة التي تود تحميل التطبيقات لها:',
+      { reply_markup: { inline_keyboard: rows } }
+    ))
   }
   if (cmd === 'android') {
     const text =
-      '📱 <b>تطبيقات الأندرويد من ZeidexSoft</b>\n\n' +
-      '1️⃣ <b>أرشيف برو EDMS</b> (v1.0.1)\nنظام إدارة وأرشفة الوثائق الإلكترونية، يعمل على الهاتف محلياً مع إمكانية المزامنة الآمنة مع الحاسوب.\n\n' +
-      '2️⃣ <b>VerityScope — كاشف التزييف العميق</b> (v0.4.0)\nكشف التزييف في الصور والفيديو والنصوص والصوت بـ 5 نماذج ذكاء اصطناعي محلية + تحليلات رقمية جنائية.'
+      '📱 <b>تطبيقات الأندرويد الرسمية — ZeidexSoft</b>\n' +
+      '━━━━━━━━━━━━━━━━━━━━━\n\n' +
+      '1️⃣ <b>أرشيف برو EDMS</b> <code>(v1.0.1)</code>\n' +
+      '▫️ نظام متطور لإدارة وأرشفة الوثائق والمستندات الإلكترونية.\n' +
+      '▫️ يعمل على الهاتف مباشرة مع ميزة المزامنة المشفرة مع الحاسوب.\n\n' +
+      '2️⃣ <b>VerityScope — كاشف التزييف</b> <code>(v0.4.0)</code>\n' +
+      '▫️ كشف التزييف العميق (Deepfake) في الصور والفيديو والصوت والنصوص.\n' +
+      '▫️ يعتمد على 5 نماذج ذكاء اصطناعي مدمجة مع تحليلات رقمية جنائية.\n\n' +
+      '━━━━━━━━━━━━━━━━━━━━━\n' +
+      '📥 <i>اختر التطبيق للتحميل المباشر بصيغة APK:</i>'
     const rows = [
-      [{ text: '📥 تحميل أرشيف برو (MediaFire)', url: 'https://www.mediafire.com/file/inn8lf6tznv95nx/app-debug.apk/file' }],
-      [{ text: '📥 تحميل VerityScope (MediaFire)', url: 'https://www.mediafire.com/file/0taluz31zdblh8y/VerityScope-v0.4.0-release.apk/file' }],
-      [{ text: '🌐 استعراض البرامج على الموقع', url: 'https://zeidexsoft.com/programs' }],
+      [{ text: '📥 تحميل أرشيف برو EDMS (APK)', url: 'https://www.mediafire.com/file/inn8lf6tznv95nx/app-debug.apk/file' }],
+      [{ text: '📥 تحميل VerityScope (APK)', url: 'https://www.mediafire.com/file/0taluz31zdblh8y/VerityScope-v0.4.0-release.apk/file' }],
+      [{ text: '🌐 صفحة البرامج على موقعنا', url: 'https://zeidexsoft.com/programs' }],
       [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
     ]
     return void (await send(token, chat, text, { reply_markup: { inline_keyboard: rows } }))
   }
   if (cmd === 'windows') {
     const text =
-      '💻 <b>تطبيقات ويندوز من ZeidexSoft</b>\n\n' +
-      '🔹 <b>أرشيف برو EDMS</b> (v1.0.6 - x64)\nنظام مكتبي متطور لإدارة وأرشفة الوثائق والمستندات: بحث نصي كامل، إصدارات غير قابلة للاستبدال، وسير عمل إلكتروني.'
+      '💻 <b>تطبيقات نظام ويندوز — ZeidexSoft</b>\n' +
+      '━━━━━━━━━━━━━━━━━━━━━\n\n' +
+      '🔹 <b>أرشيف برو EDMS للكمبيوتر</b> <code>(v1.0.6 - x64)</code>\n\n' +
+      '▫️ نظام مكتبي فائق الأداء لإدارة وتنظيم وأرشفة الوثائق الورقية والإلكترونية.\n' +
+      '▫️ بحث نصي شامل وسريع داخل كافة الملفات والمستندات.\n' +
+      '▫️ حماية قصوى مع سجلات تدقيق وإصدارات غير قابلة للاستبدال.\n' +
+      '▫️ سير عمل إلكتروني وصلاحيات مستخدمين متعددة.\n\n' +
+      '━━━━━━━━━━━━━━━━━━━━━\n' +
+      '📥 <i>اختر رابط التنزيل المباشر للإصدار:</i>'
     const rows = [
-      [{ text: '📥 تحميل الإعداد (GitHub)', url: 'https://github.com/zeiad6/Edms-archive/releases/download/v1.0.6/EDMS-Archive-1.0.6-Setup-x64.exe' }],
-      [{ text: '📥 مرآة التحميل (MediaFire)', url: 'https://www.mediafire.com/file/cezytgi4hqxmorc/EDMS-Archive-1.0.6-Setup-x64.exe/file' }],
-      [{ text: '🌐 صفحة البرنامج على الموقع', url: 'https://zeidexsoft.com/programs#programs-windows' }],
+      [{ text: '📥 تحميل مباشر من GitHub (Setup.exe)', url: 'https://github.com/zeiad6/Edms-archive/releases/download/v1.0.6/EDMS-Archive-1.0.6-Setup-x64.exe' }],
+      [{ text: '📥 رابط بديل MediaFire (Setup.exe)', url: 'https://www.mediafire.com/file/cezytgi4hqxmorc/EDMS-Archive-1.0.6-Setup-x64.exe/file' }],
+      [{ text: '🌐 تفاصيل البرنامج على الموقع', url: 'https://zeidexsoft.com/programs#programs-windows' }],
       [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
     ]
     return void (await send(token, chat, text, { reply_markup: { inline_keyboard: rows } }))
   }
   if (cmd === 'donate') {
     const rows = [
-      [{ text: '⭐️ تبرع بالنجوم (Telegram Stars)', callback_data: 't:don_stars' }],
-      [{ text: '🏦 حسابات بنك الكريمي', callback_data: 't:don_kuraimi' }],
-      [{ text: '💎 تبرع بالعملات الرقمية (Crypto)', callback_data: 't:don_crypto' }],
-      [{ text: '🌐 التبرع عبر المتجر الإلكتروني', url: 'https://zeidexsoft.com/shop' }],
+      [{ text: '⭐️ التبرع بنجوم تيليجرام (Stars)', callback_data: 't:don_stars' }],
+      [{ text: '🏦 التحويل عبر بنك الكريمي', callback_data: 't:don_kuraimi' }],
+      [{ text: '💎 التبرع بالعملات الرقمية (Crypto)', callback_data: 't:don_crypto' }],
+      [{ text: '🌐 الدفع عبر المتجر الإلكتروني', url: 'https://zeidexsoft.com/shop' }],
       [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
     ]
-    return void (await send(token, chat, '💖 <b>تبرع لدعم تطوير مشاريع ZeidexSoft</b>\nاختر وسيلة الدفع التي تناسبك:', { reply_markup: { inline_keyboard: rows } }))
+    return void (await send(token, chat,
+      '💖 <b>دعم وتطوير مشاريع ZeidexSoft</b>\n' +
+      '━━━━━━━━━━━━━━━━━━━━━\n' +
+      'مساهمتك تمكننا من الاستمرار في صيانة واستضافة الأدوات المجانية، تطوير البوتات، ونشر التطبيقات المفيدة للجميع.\n\n' +
+      'اختر وسيلة التبرع المناسبة لك أدناه 👇',
+      { reply_markup: { inline_keyboard: rows } }
+    ))
   }
   if (cmd === 'help') {
     const help = HELP_TEXT + (isPlatform ? PLATFORM_HELP : '')
     return void (await send(token, chat, help, { reply_markup: { inline_keyboard: mainRows() } }))
   }
 
-  if (isOwner(uid) && text.startsWith('/')) return void (await owner(env, cfg, token, chat, text))
+  // A pasted bot token is not a search — it is an activation, whoever sends it.
+  if (isPlatform && uid && TOKEN_RE.test(text.trim())) {
+    if (isOwner(uid)) return void (await adminBotProvision(env, token, chat, uid, text.trim()))
+    return void (await freeBotProvision(env, token, chat, uid, text.trim()))
+  }
+
+  if (isOwner(uid) && text.startsWith('/')) return void (await owner(env, cfg, token, chat, text, m))
 
   const isContactReply = m.reply_to_message?.from?.id === cfg.id && m.reply_to_message?.text === CONTACT_PROMPT
   if (uid && isContactReply) {
@@ -814,7 +1210,8 @@ async function smartAnswer(env: BotsEnv, token: string, chat: number, cfg: Cfg, 
  *  all and the power to revoke other customers' licences by id. */
 const LICENSE_COMMANDS = new Set(['licnew', 'licextend', 'lExtend', 'licrevoke', 'lRevoke', 'licrelease', 'lRelease'])
 
-async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: string, m?: Record<string, any>) {
   const [head, ...rest] = text.split(' ')
   const cmd = head.slice(1).split('@')[0]
   const arg = rest.join(' ').trim()
@@ -870,6 +1267,48 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     else it.section = cfg.sections![b - 1].id
     await save(env, cfg)
     await say('✅ نُقل المنتج.')
+  } else if (cmd === 'deliver') {
+    // Auto-delivery: the instant a buyer pays, they get the product. Three ways to set it:
+    //   /deliver <n> <secret>   → a code/link/password sent as text
+    //   reply to a file with /deliver <n>  → the file is re-sent by its Telegram file_id
+    //   /deliver <n> -          → clear it (order falls back to manual delivery)
+    const [nStr, ...secretParts] = arg.split(/\s+/)
+    const n = Number(nStr)
+    const it = cfg.items[n - 1]
+    if (!it || !Number.isInteger(n) || n < 1 || n > cfg.items.length) {
+      return void (await say(
+        '⚡️ <b>التسليم التلقائي</b>\n\n' +
+        `الاستخدام:\n` +
+        `• نص/كود/رابط: <code>/deliver رقم_المنتج المحتوى</code>\n` +
+        `• ملف: ردّ على الملف بـ <code>/deliver رقم_المنتج</code>\n` +
+        `• إلغاء: <code>/deliver رقم_المنتج -</code>\n\n` +
+        `أرقام المنتجات: <code>/items</code>`))
+    }
+    // A file attached by replying to it. Grab the largest photo, else the document/video/audio/voice.
+    const src = m?.reply_to_message
+    let attached: NonNullable<Item['deliver']>['file'] | undefined
+    if (src) {
+      if (src.document) attached = { id: src.document.file_id, type: 'document' }
+      else if (src.video) attached = { id: src.video.file_id, type: 'video' }
+      else if (src.audio) attached = { id: src.audio.file_id, type: 'audio' }
+      else if (src.voice) attached = { id: src.voice.file_id, type: 'voice' }
+      else if (src.photo?.length) attached = { id: src.photo.at(-1).file_id, type: 'photo' }
+    }
+    const secret = secretParts.join(' ').trim()
+    if (attached) {
+      it.deliver = { ...(it.deliver ?? {}), file: attached }
+      await save(env, cfg)
+      return void (await say(`✅ سيُرسل الملف المرفق تلقائياً لكل مشترٍ لـ «${esc(it.title)}».`))
+    }
+    if (secret === '-') {
+      delete it.deliver
+      await save(env, cfg)
+      return void (await say(`🗑 أُلغي التسليم التلقائي لـ «${esc(it.title)}» — سيلزم التسليم اليدوي.`))
+    }
+    if (!secret) return void (await say('أرفق المحتوى: <code>/deliver رقم_المنتج الكود</code> أو ردّ على ملف بـ <code>/deliver رقم_المنتج</code>.'))
+    it.deliver = { ...(it.deliver ?? {}), text: secret.slice(0, 1000) }
+    await save(env, cfg)
+    await say(`✅ سيُسلَّم هذا المحتوى تلقائياً لكل مشترٍ لـ «${esc(it.title)}»:\n<code>${esc(secret.slice(0, 60))}</code>`)
   } else if (cmd === 'page') {
     const [sub, ...words] = arg.split(/\s+/)
     const rest = words.join(' ').trim()
@@ -914,9 +1353,24 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     cfg.paused = cmd === 'pause'
     await save(env, cfg)
     await say(cfg.paused ? '⏸ البوت متوقف للعملاء.' : '▶️ عاد البوت للعمل.')
+  } else if (cmd === 'createbot' || cmd === 'claimbot' || cmd === 'newbot') {
+    const candidate = arg.split(/\s+/)[0]
+    if (!candidate || !TOKEN_RE.test(candidate)) {
+      return void (await say(
+        '👑 <b>أخذ / إنشاء بوت مجاناً للأدمن (باقة مدفوعة كاملة):</b>\n\n' +
+        'الاستخدام: <code>/createbot التوكن</code>\n\n' +
+        '1️⃣ أنشئ البوت في @BotFather بأمر /newbot\n' +
+        '2️⃣ انسخ التوكن وضعه بعد الأمر:\n' +
+        'مثال: <code>/createbot 123456789:ABCDefgh...</code>\n\n' +
+        'سيتم ربط البوت وتفعيله فوراً بالباقة المدفوعة الدائمة بدون أي رسوم.'
+      ))
+    }
+    return void (await adminBotProvision(env, token, chat, cfg.owner, candidate))
   } else if (cmd === 'admin') {
     const adminRows = [
+      [{ text: '🎁 أخذ أي شيء من المتجر مجاناً (للأدمن)', callback_data: 't:adm_take_any' }],
       [{ text: '📦 قائمة المنتجات', callback_data: 't:adm_items' }, { text: '❓ الأسئلة الشائعة', callback_data: 't:adm_faqs' }],
+      [{ text: '🤖 تفعيل بوت بدون دفع', callback_data: 't:adm_freebot' }],
       [{ text: cfg.paused ? '▶️ استئناف البوت' : '⏸ إيقاف للصيانة', callback_data: 't:adm_toggle_pause' }, { text: '🔄 تحديث الإحصاءات', callback_data: 't:adm_refresh' }]
     ]
     await send(token, chat,
@@ -930,7 +1384,9 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
         `الخطة: <b>${isFree(cfg) ? `🎁 مجانية حتى ${day(cfg.expires)}${lapsed(cfg) ? ' (انتهت)' : ''}` : '💎 مدفوعة'}</b>\n` +
         `الأقسام: <b>${cfg.sections!.length}</b> · الصفحات: <b>${cfg.pages!.length}</b>\n\n` +
       `<i>أوامر الإدارة المباشرة:</i>\n` +
+      `• أخذ بوت بدون دفع: <code>/createbot التوكن</code>\n` +
       `• إضافة منتج: <code>/add اسم | سعر_النجوم | وصف</code>\n` +
+      `• تسليم تلقائي فوري بعد الدفع: <code>/deliver رقم_المنتج الكود</code> (أو ردّ على ملف بـ <code>/deliver رقم_المنتج</code>)\n` +
       `• تعديل الترحيب: <code>/welcome النص</code>\n` +
       `• إضافة سؤال: <code>/faq سؤال | جواب</code>\n` +
       `• الرد على عميل: <code>/reply رقم_العميل النص</code>\n` +
@@ -1156,6 +1612,78 @@ function adminOk(request: Request, env: BotsEnv) {
   return !!env.BOTS_ADMIN_TOKEN && auth.startsWith('Bearer ') && safeEqual(auth.slice(7), env.BOTS_ADMIN_TOKEN)
 }
 
+/** A Telegram bot token, exactly as the admin API accepts it. */
+const TOKEN_RE = /^\d{6,12}:[A-Za-z0-9_-]{30,50}$/
+/** How many hosted bots one Telegram user may self-serve. Stops a token farm from
+ *  squatting the free tier's KV writes; the admin API is not bound by it. */
+const SELF_SERVE_BOTS = 2
+
+/**
+ * Provision one bot end-to-end: validate the token against Telegram, keep the
+ * previous shop if the bot was hosted before, set the webhook to this Worker,
+ * register the customer commands, and notify the owner.
+ *
+ * One function for both callers — the admin API (POST /admin/bots) and the
+ * platform bot's self-service /freebot flow — so the two can never drift apart.
+ */
+async function provision(
+  env: BotsEnv,
+  plainToken: string,
+  ownerId: number,
+  plan: 'free' | 'paid' | undefined,
+): Promise<{ ok: true; cfg: Cfg } | { ok: false; error: string; userText: string; status: number }> {
+  if (!TOKEN_RE.test(plainToken))
+    return { ok: false, error: 'bad request', status: 400, userText: 'صيغة التوكن غير صحيحة. انسخه كاملاً من @BotFather (مثال: <code>123456:AAE…</code>).' }
+  const me = await tg(plainToken, 'getMe', {})
+  if (!me.ok || !me.result?.id)
+    return { ok: false, error: 'invalid token', status: 400, userText: 'التوكن مرفوض من تيليجرام — أنشئ بوتاً جديداً من @BotFather بأمر /newbot وانسخ توكنه.' }
+  const secret = await webhookSecret(env, me.result.id)
+  // Re-provisioning (new token, new owner) keeps the shop: products, FAQs, customers.
+  const prev = await load(env, String(me.result.id))
+  const cfg: Cfg = {
+    items: [], faqs: [], users: [], sections: [], pages: [], orders: 0, stars: 0, paused: false, created: new Date().toISOString(),
+    welcome: (prev?.welcome || `أهلاً بك في ${me.result.first_name} 👋\nتصفح المنتجات من الأزرار أدناه، أو أرسل كلمة للبحث.`).slice(0, 500),
+    ...(prev ?? {}),
+    id: me.result.id, username: me.result.username, owner: ownerId, token: await seal(env, plainToken), secret,
+    // An explicit plan wins; a re-provision without one keeps what the bot had.
+    plan: plan ?? prev?.plan ?? 'paid',
+  }
+  // The free month starts once per bot. Re-provisioning keeps the original end, so neither a
+  // new token nor a repeated /freebot round trip can stretch it.
+  cfg.expires = isFree(cfg)
+    ? prev?.plan === 'free' && prev.expires
+      ? prev.expires
+      : new Date(Date.now() + FREE_DAYS * 864e5).toISOString()
+    : undefined
+  await save(env, cfg)
+  const hook = await tg(plainToken, 'setWebhook', {
+    url: `${originOf(env)}/tg/${cfg.id}`, secret_token: secret, drop_pending_updates: true,
+    // One update at a time per bot: each update rewrites the whole KV record, so parallel
+    // deliveries would overwrite each other (a product added during a /start vanishes).
+    max_connections: 1,
+    allowed_updates: ['message', 'callback_query', 'pre_checkout_query'],
+  })
+  if (!hook.ok)
+    return { ok: false, error: String(hook.description ?? 'webhook failed'), status: 502, userText: `تعذّر تسجيل الويبهوك: ${esc(String(hook.description ?? ''))}\nأعد المحاولة بعد قليل.` }
+  // The customer's three entry points, so the Telegram "/" menu offers them without typing.
+  await tg(plainToken, 'setMyCommands', {
+    commands: [
+      { command: 'start', description: 'القائمة الرئيسية' },
+      { command: 'search', description: 'ابحث في المنتجات' },
+      { command: 'catalog', description: 'كل المنتجات' },
+      { command: 'help', description: 'المساعدة' },
+    ],
+  })
+  // The per-owner index the admin API comment promised: one key lists a user's hosted bots,
+  // which is what makes the self-service cap checkable at all.
+  const idxRaw = await env.DOWNLOADS.get(`tbowner:${ownerId}`)
+  let idx = idxRaw ? (JSON.parse(idxRaw) as number[]) : []
+  if (!idx.includes(cfg.id)) idx = [...idx, cfg.id]
+  await env.DOWNLOADS.put(`tbowner:${ownerId}`, JSON.stringify(idx)).catch(() => undefined)
+  await send(plainToken, ownerId, `🚀 <b>بوتك @${esc(cfg.username)} يعمل الآن على سحابة ZeidexSoft</b>\nافتحه وأرسل /admin للوحة التحكم.`)
+  return { ok: true, cfg }
+}
+
 export async function botsAdmin(request: Request, env: BotsEnv, url: URL): Promise<Response> {
   if (!env.BOTS_KEY || !env.BOTS_ADMIN_TOKEN) return new Response('not configured', { status: 503 })
   if (!adminOk(request, env)) return new Response('forbidden', { status: 403 })
@@ -1165,47 +1693,15 @@ export async function botsAdmin(request: Request, env: BotsEnv, url: URL): Promi
   if (request.method === 'POST' && !id) {
     const body = (await request.json().catch(() => ({}))) as { token?: string; owner_id?: number; welcome?: string; plan?: string }
     const token = String(body.token ?? '')
-    if (!/^\d{6,12}:[A-Za-z0-9_-]{30,50}$/.test(token) || !Number.isInteger(body.owner_id)) return new Response('bad request', { status: 400 })
-    const me = await tg(token, 'getMe', {})
-    if (!me.ok) return new Response('invalid token', { status: 400 })
-    const secret = await webhookSecret(env, me.result.id)
-    // Re-provisioning (new token, new owner) keeps the shop: products, FAQs, customers.
-    const prev = await load(env, String(me.result.id))
-    const cfg: Cfg = {
-      items: [], faqs: [], users: [], sections: [], pages: [], orders: 0, stars: 0, paused: false, created: new Date().toISOString(),
-      welcome: (body.welcome || `أهلاً بك في ${me.result.first_name} 👋`).slice(0, 500),
-      ...(prev ?? {}),
-      id: me.result.id, username: me.result.username, owner: body.owner_id!, token: await seal(env, token), secret,
-      // An explicit plan wins; a re-provision without one keeps what the bot had.
-      plan: body.plan === 'free' || body.plan === 'paid' ? body.plan : (prev?.plan ?? 'paid'),
+    if (!TOKEN_RE.test(token) || !Number.isInteger(body.owner_id)) return new Response('bad request', { status: 400 })
+    const plan = body.plan === 'free' || body.plan === 'paid' ? body.plan : undefined
+    const made = await provision(env, token, body.owner_id!, plan)
+    if (!made.ok) return new Response(made.error, { status: made.status })
+    if (body.welcome) {
+      made.cfg.welcome = String(body.welcome).slice(0, 500)
+      await save(env, made.cfg)
     }
-    // The free month starts once per bot. Re-provisioning keeps the original end, so neither a
-    // new token nor a repeated /freebot round trip can stretch it.
-    cfg.expires = isFree(cfg)
-      ? prev?.plan === 'free' && prev.expires
-        ? prev.expires
-        : new Date(Date.now() + FREE_DAYS * 864e5).toISOString()
-      : undefined
-    await save(env, cfg)
-    const hook = await tg(token, 'setWebhook', {
-      url: `${originOf(env)}/tg/${cfg.id}`, secret_token: secret, drop_pending_updates: true,
-      // One update at a time per bot: each update rewrites the whole KV record, so parallel
-      // deliveries would overwrite each other (a product added during a /start vanishes).
-      max_connections: 1,
-      allowed_updates: ['message', 'callback_query', 'pre_checkout_query'],
-    })
-    if (!hook.ok) return Response.json({ error: hook.description }, { status: 502 })
-    // The customer's three entry points, so the Telegram "/" menu offers them without typing.
-    await tg(token, 'setMyCommands', {
-      commands: [
-        { command: 'start', description: 'القائمة الرئيسية' },
-        { command: 'search', description: 'ابحث في المنتجات' },
-        { command: 'catalog', description: 'كل المنتجات' },
-        { command: 'help', description: 'المساعدة' },
-      ],
-    })
-    await send(token, cfg.owner, `🚀 <b>بوتك @${esc(cfg.username)} يعمل الآن على سحابة ZeidexSoft</b>\nافتحه وأرسل /admin للوحة التحكم.`)
-    return Response.json({ bot_id: cfg.id, username: cfg.username, plan: cfg.plan, expires: cfg.expires })
+    return Response.json({ bot_id: made.cfg.id, username: made.cfg.username, plan: made.cfg.plan, expires: made.cfg.expires })
   }
 
   if (request.method === 'GET' && !id) {

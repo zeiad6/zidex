@@ -536,6 +536,368 @@ assert.equal(store.get('tb:123456789'), undefined)
     globalThis.fetch = saved
   }
 }
+// ── The admin's "take anything, free" console ─────────────────────────
+// The store owner can pull any product off their own shelf without paying a single
+// Star: a licence product mints a real license, a normal product is confirmed free.
+// The whole feature hangs on one guard (isOwner), so these tests prove BOTH sides —
+// that the owner gets the free-take buttons everywhere, and that a customer who
+// forges the same callback data gets nothing but silence.
+{
+  b.configCache.clear()
+  b.ownerCache.clear()
+  const ID = 424242424
+  const TOK = `${ID}:` + 'F'.repeat(35)
+  const sent = []
+  const saved = globalThis.fetch
+  globalThis.fetch = async (url, init) => {
+    const method = String(url).split('/').pop()
+    const body = init?.body ? JSON.parse(init.body) : {}
+    sent.push({ method, body })
+    if (method === 'getMe') return Response.json({ ok: true, result: { id: ID, username: 'free_take_bot', first_name: 'Free' } })
+    return Response.json({ ok: true, result: {} })
+  }
+  // A valid Ed25519 seed so a licence claim on the platform bot really mints.
+  const pkcs8Der = Buffer.concat([Buffer.from('302e020100300506032b657004220420', 'hex'), Buffer.alloc(32, 7)])
+  const prevSigning = env.LICENSE_SIGNING_KEY
+  const prevKid = env.LICENSE_KID
+  env.LICENSE_SIGNING_KEY = pkcs8Der.toString('base64url')
+  env.LICENSE_KID = 'freetake-test'
+  try {
+    const OWNER = 7
+    await admin('POST', '/admin/bots', { token: TOK, owner_id: OWNER, plan: 'paid' })
+    const rec = () => JSON.parse(store.get(`tb:${ID}`))
+    const secret = rec().secret
+    const post = (update) =>
+      b.botWebhook(new Request(`https://zeidexsoft.com/tg/${ID}`, { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': secret }, body: JSON.stringify(update) }), env, String(ID))
+    const say = (from, text) => post({ message: { chat: { id: from, type: 'private' }, from: { id: from, first_name: 'X' }, text } })
+    const tap = (from, data) => post({ callback_query: { id: 'q', from: { id: from }, data, message: { chat: { id: from, type: 'private' } } } })
+    const texts = () => sent.filter((c) => c.method === 'sendMessage').map((c) => c.body.text)
+    const lastKb = () => sent.filter((c) => c.method === 'sendMessage').at(-1).body.reply_markup.inline_keyboard.flat()
+
+    // Seed two products: a normal bot and a Pro-license product (matched by its title).
+    await say(OWNER, '/add Smart Store Bot | 1750 | digital store bot')
+    await say(OWNER, '/add Pro License | 3500 | lifetime pro license')
+    const storeItem = rec().items[0]
+
+    // The /start menu hands the owner the free-take and free-bot buttons.
+    await say(OWNER, '/start')
+    assert.ok(lastKb().some((b) => b.callback_data === 't:adm_take_any'), 'the owner start menu offers free take')
+    assert.ok(lastKb().some((b) => b.callback_data === 't:adm_freebot'), 'the owner start menu offers a free bot')
+
+    // A customer's /start menu has none of them — the buttons are owner-only.
+    await say(50, '/start')
+    assert.ok(!lastKb().some((b) => b.callback_data === 't:adm_take_any'), 'a customer never sees the free-take button')
+
+    // Tapping a product as the owner offers free take; as a customer it opens a real invoice.
+    sent.length = 0
+    await tap(OWNER, `t:buy:${storeItem.id}`)
+    assert.ok(lastKb().some((b) => b.callback_data === `t:adm_claim:${storeItem.id}`), 'the owner buy screen offers the free claim')
+    assert.ok(!sent.some((c) => c.method === 'sendInvoice'), 'the owner is never sent an invoice')
+    await tap(50, `t:buy:${storeItem.id}`)
+    assert.ok(sent.some((c) => c.method === 'sendInvoice'), 'a customer tapping buy gets a Stars invoice')
+
+    // The free-take console lists every product at ⭐️ 0 and the free-bot / free-licence doors.
+    sent.length = 0
+    await tap(OWNER, 't:adm_take_any')
+    const takeRows = lastKb().filter((b) => b.callback_data?.startsWith('t:adm_claim:'))
+    assert.equal(takeRows.length, 2, 'every product is offered for free take')
+    assert.ok(takeRows.every((b) => b.text.includes('⭐️ 0')), 'each offer is priced at zero')
+    assert.ok(lastKb().some((b) => b.callback_data === 't:adm_freebot'), 'the console offers a free bot too')
+
+    // Claiming a normal product: confirmed free, no invoice, nothing charged.
+    sent.length = 0
+    await tap(OWNER, `t:adm_claim:${storeItem.id}`)
+    assert.ok(texts().at(-1).includes('⭐️ 0'), 'the claim is confirmed at zero cost')
+    assert.ok(texts().at(-1).includes('بدون أي دفع'), 'and explicitly without payment')
+    assert.ok(!sent.some((c) => c.method === 'sendInvoice'), 'claiming sends no invoice')
+
+    // A customer who forges the same claim callback gets nothing — the isOwner guard holds.
+    sent.length = 0
+    await tap(50, `t:adm_claim:${storeItem.id}`)
+    await tap(50, 't:adm_take_any')
+    assert.equal(texts().length, 0, 'a forged free-take callback is silently refused')
+  } finally {
+    globalThis.fetch = saved
+    env.LICENSE_SIGNING_KEY = prevSigning
+    env.LICENSE_KID = prevKid
+  }
+}
+// ── Auto-delivery: /deliver sets it, payment hands it over, absent falls back ──
+// The store's whole promise is "pay and you get it". This proves the owner can arm a
+// product three ways (a code, a forwarded file, or clear it) and that a buyer who pays
+// for an armed product receives the content in the same update — and, when nothing is
+// armed, gets the honest "the owner will contact you" instead of silence.
+{
+  b.configCache.clear()
+  b.ownerCache.clear()
+  const ID = 515151515
+  const TOK = `${ID}:` + 'D'.repeat(35)
+  const sent = []
+  const saved = globalThis.fetch
+  globalThis.fetch = async (url, init) => {
+    const method = String(url).split('/').pop()
+    const body = init?.body ? JSON.parse(init.body) : {}
+    sent.push({ method, body })
+    if (method === 'getMe') return Response.json({ ok: true, result: { id: ID, username: 'deliver_bot', first_name: 'D' } })
+    return Response.json({ ok: true, result: {} })
+  }
+  try {
+    const OWNER = 7
+    await admin('POST', '/admin/bots', { token: TOK, owner_id: OWNER, plan: 'paid' })
+    const rec = () => JSON.parse(store.get(`tb:${ID}`))
+    const secret = rec().secret
+    const post = (update) =>
+      b.botWebhook(new Request(`https://zeidexsoft.com/tg/${ID}`, { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': secret }, body: JSON.stringify(update) }), env, String(ID))
+    const say = (from, text, extra = {}) =>
+      post({ message: { chat: { id: from, type: 'private' }, from: { id: from, first_name: 'X' }, text, ...extra } })
+    const texts = () => sent.filter((c) => c.method === 'sendMessage').map((c) => c.body.text)
+    const lastText = () => texts().at(-1)
+
+    // Arm product #1 with a secret code via /deliver <n> <code>.
+    await say(OWNER, '/add Course | 200 | video course')
+    await say(OWNER, '/deliver 1 SECRET-LINK-abc123')
+    assert.equal(rec().items[0].deliver.text, 'SECRET-LINK-abc123', '/deliver <n> <code> stores the secret text')
+
+    // A forwarded file (reply) arms the same product's file delivery by file_id.
+    sent.length = 0
+    await say(OWNER, '/deliver 1', {
+      reply_to_message: { document: { file_id: 'AgADBAADfileid', file_name: 'course.zip' } },
+    })
+    assert.deepEqual(rec().items[0].deliver.file, { id: 'AgADBAADfileid', type: 'document' }, 'replying to a file stores its file_id')
+    assert.ok(lastText().includes('الملف'), 'the owner is told the file will be auto-sent')
+
+    // The largest photo is chosen when several sizes arrive.
+    sent.length = 0
+    await say(OWNER, '/deliver 1', {
+      reply_to_message: { photo: [{ file_id: 'small' }, { file_id: 'largest' }] },
+    })
+    assert.deepEqual(rec().items[0].deliver.file, { id: 'largest', type: 'photo' }, 'the largest photo size is kept')
+
+    // A bad product number returns usage, changes nothing.
+    sent.length = 0
+    const before = JSON.stringify(rec().items[0].deliver)
+    await say(OWNER, '/deliver 99 oops')
+    assert.ok(lastText().includes('الاستخدام'), 'a non-existent product number shows usage')
+    assert.equal(JSON.stringify(rec().items[0].deliver), before, 'nothing is written for a bad number')
+
+    // A buyer pays for the armed product: they get the file AND the text, same update.
+    const armed = rec().items[0]
+    sent.length = 0
+    await post({
+      message: {
+        chat: { id: 60, type: 'private' },
+        from: { id: 60, first_name: 'Buyer' },
+        successful_payment: { total_amount: armed.stars, currency: 'XTR', invoice_payload: `t${ID}:${armed.id}` },
+      },
+    })
+    const deliveredPhoto = sent.find((c) => c.method === 'sendPhoto')
+    assert.ok(deliveredPhoto, 'the armed file is auto-sent to the buyer')
+    assert.equal(deliveredPhoto.body.photo, 'largest', 'the stored file_id is delivered')
+    assert.ok(texts().some((t) => t.includes('تسليم تلقائي فوري')), 'the buyer is told delivery was automatic')
+    // The owner is notified of the paid order, by product name.
+    const ownerNote = texts().find((t) => t.includes('طلب مدفوع') && t.includes('Course'))
+    assert.ok(ownerNote, 'the owner is notified of the paid order with the product name')
+
+    // Clear delivery with /deliver <n> -: the next buyer falls back to manual delivery.
+    sent.length = 0
+    await say(OWNER, '/deliver 1 -')
+    assert.equal(rec().items[0].deliver, undefined, '/deliver <n> - clears auto-delivery')
+    assert.ok(lastText().includes('أُلغي التسليم'), 'the owner is told delivery was cleared')
+
+    // Pay again: no file this time, only the honest "owner will contact you" line.
+    const nowManual = rec().items[0]
+    sent.length = 0
+    await post({
+      message: {
+        chat: { id: 61, type: 'private' },
+        from: { id: 61, first_name: 'Buyer2' },
+        successful_payment: { total_amount: nowManual.stars, currency: 'XTR', invoice_payload: `t${ID}:${nowManual.id}` },
+      },
+    })
+    assert.ok(!sent.some((c) => c.method === 'sendPhoto'), 'no file is sent when delivery is cleared')
+    assert.ok(texts().some((t) => t.includes('سيتواصل معك المالك')), 'the buyer is told the owner will follow up')
+
+    // A donation still thanks the buyer and never touches product delivery.
+    sent.length = 0
+    await post({
+      message: {
+        chat: { id: 62, type: 'private' },
+        from: { id: 62, first_name: 'Fan' },
+        successful_payment: { total_amount: 50, currency: 'XTR', invoice_payload: `t${ID}:don:50` },
+      },
+    })
+    assert.ok(texts().some((t) => t.includes('شكراً لتبرعك')), 'a donation is thanked, not delivered')
+    assert.ok(!sent.some((c) => c.method === 'sendPhoto' || c.method === 'sendDocument'), 'a donation sends no product')
+  } finally {
+    globalThis.fetch = saved
+  }
+}
+
+
+
+// ── On the platform bot, a free-take of a licence product really mints ──
+// The hosted-bot check above proves the confirmation text; this one proves the
+// licence is real: claiming a license-titled product on the platform bot writes
+// the same records the activation API reads — perpetual, 2 seats, key shown once.
+{
+  b.configCache.clear()
+  b.ownerCache.clear()
+  const ID = 123456789
+  const TOK = `${ID}:` + 'A'.repeat(35)
+  const sent = []
+  const saved = globalThis.fetch
+  globalThis.fetch = async (url, init) => {
+    const method = String(url).split('/').pop()
+    const body = init?.body ? JSON.parse(init.body) : {}
+    sent.push({ method, body })
+    if (method === 'getMe') return Response.json({ ok: true, result: { id: ID, username: 'platform_bot', first_name: 'Platform' } })
+    return Response.json({ ok: true, result: {} })
+  }
+  const pkcs8Der = Buffer.concat([Buffer.from('302e020100300506032b657004220420', 'hex'), Buffer.alloc(32, 7)])
+  const prevSigning = env.LICENSE_SIGNING_KEY
+  const prevKid = env.LICENSE_KID
+  const prevPlatform = env.BOT_PLATFORM_ID
+  env.LICENSE_SIGNING_KEY = pkcs8Der.toString('base64url')
+  env.LICENSE_KID = 'freetake-platform-test'
+  env.BOT_PLATFORM_ID = String(ID)
+  try {
+    const OWNER = 7
+    await admin('POST', '/admin/bots', { token: TOK, owner_id: OWNER, plan: 'paid' })
+    const rec = () => JSON.parse(store.get(`tb:${ID}`))
+    const secret = rec().secret
+    const post = (update) =>
+      b.botWebhook(new Request(`https://zeidexsoft.com/tg/${ID}`, { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': secret }, body: JSON.stringify(update) }), env, String(ID))
+    const say = (from, text) => post({ message: { chat: { id: from, type: 'private' }, from: { id: from, first_name: 'X' }, text } })
+    const tap = (from, data) => post({ callback_query: { id: 'q', from: { id: from }, data, message: { chat: { id: from, type: 'private' } } } })
+    const texts = () => sent.filter((c) => c.method === 'sendMessage').map((c) => c.body.text)
+    const licCount = () => [...store.keys()].filter((k) => k.startsWith('licid:')).length
+
+    // Seed a license-titled product.
+    await say(OWNER, '/add Pro License | 3500 | lifetime pro license')
+    const plic = rec().items[0]
+
+    // Claiming it via the take-any console mints a real, perpetual, 2-seat license.
+    const before = licCount()
+    sent.length = 0
+    await tap(OWNER, `t:adm_claim:${plic.id}`)
+    const claimText = texts().at(-1)
+    assert.match(claimText, /[0-9A-HJKMNP-TV-Z]{5}(-[0-9A-HJKMNP-TV-Z]{5}){3}-[0-9A-HJKMNP-TV-Z]{2}/, 'a formatted license key is delivered')
+    assert.ok(claimText.includes('مجاناً'), 'the license claim is stated free')
+    const id = claimText.match(/رقم الترخيص: <code>([0-9a-f]{10})<\/code>/)[1]
+    const kh = store.get(`licid:${id}`)
+    assert.equal(typeof kh, 'string', 'the minted license id resolves to a stored record')
+    const rec2 = JSON.parse(store.get(`lic:${kh}`))
+    assert.equal(rec2.seats, 2, 'the free admin license carries 2 seats')
+    assert.equal(rec2.exp, 0, 'the free admin license is perpetual')
+    assert.equal(licCount(), before + 1, 'exactly one new license was minted')
+
+    // The standalone free-licence door mints another one, no product needed.
+    sent.length = 0
+    await tap(OWNER, 't:adm_free_lic')
+    assert.match(texts().at(-1), /[0-9A-HJKMNP-TV-Z]{5}(-[0-9A-HJKMNP-TV-Z]{5}){3}-[0-9A-HJKMNP-TV-Z]{2}/, 'the free-licence door delivers a key')
+    assert.ok(!sent.some((c) => c.method === 'sendInvoice'), 'and charges nothing')
+  } finally {
+    globalThis.fetch = saved
+    env.LICENSE_SIGNING_KEY = prevSigning
+    env.LICENSE_KID = prevKid
+    delete env.BOT_PLATFORM_ID
+  }
+}
+
+
+
+
+// ── The product card: rich items get a detail card before the invoice ──────
+// A catalogue product carries features + a USD price; tapping it used to fire a bare
+// Stars invoice with none of that context. Now such an item shows a product card with a
+// dedicated "buy now" button (t:pay), and only that button sends the invoice. Simple
+// owner-added items (no features) keep the original one-tap buy, so nothing regresses.
+{
+  // The card renderer is pure and exported, so it is checked directly first.
+  const card = b.productCard({ id: 1, title: 'Smart <Store>', stars: 1750, desc: 'a store', features: ['one', 'two'], usd: 24.5, after: ['step one', 'step two'] })
+  assert.ok(card.includes('Smart &lt;Store&gt;'), 'the title is HTML-escaped')
+  assert.ok(card.includes('▫️ one') && card.includes('▫️ two'), 'features are listed')
+  assert.ok(card.includes('1750') && card.includes('$24.5'), 'both Stars and USD price are shown')
+  assert.ok(card.includes('ما بعد الشراء') && card.includes('1️⃣ step one') && card.includes('2️⃣ step two'), 'the card lists the post-purchase steps')
+
+  b.configCache.clear()
+  b.ownerCache.clear()
+  const ID = 565656565
+  const TOK = `${ID}:` + 'G'.repeat(35)
+  const sent = []
+  const saved = globalThis.fetch
+  globalThis.fetch = async (url, init) => {
+    const method = String(url).split('/').pop()
+    const body = init?.body ? JSON.parse(init.body) : {}
+    sent.push({ method, body })
+    if (method === 'getMe') return Response.json({ ok: true, result: { id: ID, username: 'card_bot', first_name: 'Card' } })
+    return Response.json({ ok: true, result: {} })
+  }
+  try {
+    const OWNER = 7
+    await admin('POST', '/admin/bots', { token: TOK, owner_id: OWNER, plan: 'paid' })
+    const rec = () => JSON.parse(store.get(`tb:${ID}`))
+    const secret = rec().secret
+    const post = (update) =>
+      b.botWebhook(new Request(`https://zeidexsoft.com/tg/${ID}`, { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': secret }, body: JSON.stringify(update) }), env, String(ID))
+    const say = (from, text) => post({ message: { chat: { id: from, type: 'private' }, from: { id: from, first_name: 'X' }, text } })
+    const tap = (from, data) => post({ callback_query: { id: 'q', from: { id: from }, data, message: { chat: { id: from, type: 'private' } } } })
+    const texts = () => sent.filter((c) => c.method === 'sendMessage').map((c) => c.body.text)
+    const lastKb = () => sent.filter((c) => c.method === 'sendMessage').at(-1).body.reply_markup.inline_keyboard.flat()
+
+    // A rich item (features + usd) — this is what generate-payload.mjs now writes.
+    await say(OWNER, '/add Rich Bot | 1750 | a digital store')
+    const rich = rec().items[0]
+    // A simple item (title/desc/stars only) — the classic owner-added product.
+    await say(OWNER, '/add Simple Bot | 900 | plain product')
+    const simple = rec().items[1]
+    // Give the rich item its catalog detail the way the platform payload would.
+    const withFeatures = { ...rec(), items: [{ ...rec().items[0], features: ['حتى 50 منتجاً', 'تسليم تلقائي'], usd: 24.5 }, rec().items[1]] }
+    store.set(`tb:${ID}`, JSON.stringify(withFeatures))
+    b.configCache.clear()
+
+    // A customer tapping the RICH item sees a card + a buy button, NOT an invoice yet.
+    sent.length = 0
+    await tap(60, `t:buy:${rich.id}`)
+    assert.ok(!sent.some((c) => c.method === 'sendInvoice'), 'the rich item does not fire the invoice directly')
+    assert.ok(texts().at(-1).includes('المميزات') && texts().at(-1).includes('▫️ حتى 50 منتجاً'), 'the card shows the features')
+    assert.ok(texts().at(-1).includes('$24.5'), 'the card shows the USD price')
+    assert.ok(lastKb().some((btn) => btn.callback_data === `t:pay:${rich.id}`), 'the card offers a dedicated buy button')
+
+    // Tapping that buy button (t:pay) sends the real invoice at the right price/payload.
+    sent.length = 0
+    await tap(60, `t:pay:${rich.id}`)
+    const inv = sent.find((c) => c.method === 'sendInvoice')
+    assert.ok(inv, 'the buy button sends the Stars invoice')
+    assert.equal(inv.body.prices[0].amount, 1750, 'the invoice charges the item price')
+    assert.equal(inv.body.payload, `t${ID}:${rich.id}`, 'the invoice payload still points at the item')
+
+    // A customer tapping the SIMPLE item keeps the original one-tap invoice (no regression).
+    sent.length = 0
+    await tap(60, `t:buy:${simple.id}`)
+    assert.ok(sent.some((c) => c.method === 'sendInvoice'), 'a simple item is still one-tap buy')
+
+    // The owner tapping the rich item still gets the free-take screen, never a card-for-payment.
+    sent.length = 0
+    await tap(OWNER, `t:buy:${rich.id}`)
+    assert.ok(lastKb().some((btn) => btn.callback_data === `t:adm_claim:${rich.id}`), 'the owner still gets the free claim on a rich item')
+    assert.ok(!sent.some((c) => c.method === 'sendInvoice'), 'and no invoice is sent to the owner')
+
+    // A paid item with post-purchase "after" steps but no auto-delivery: the buyer is shown the
+    // steps immediately after checkout, instead of a bare "the owner will contact you".
+    const withAfter = { ...rec(), items: [{ ...rec().items[0], features: undefined, usd: undefined, after: ['تجيب توكن بوتك', 'نرسله هنا', 'نشغّله فوراً'] }, rec().items[1]] }
+    store.set(`tb:${ID}`, JSON.stringify(withAfter))
+    b.configCache.clear()
+    sent.length = 0
+    await post({ message: { chat: { id: 60, type: 'private' }, from: { id: 60, first_name: 'Buyer' }, successful_payment: { invoice_payload: `t${ID}:${rich.id}`, total_amount: 1750, currency: 'XTR' } } })
+    const paid = texts().find((t) => t.includes('تم الدفع'))
+    assert.ok(paid, 'the buyer is told the payment succeeded')
+    assert.ok(paid.includes('1️⃣ تجيب توكن بوتك') && paid.includes('2️⃣ نرسله هنا'), 'the post-purchase steps are shown after checkout')
+    assert.ok(paid.includes('سيتواصل معك المالك'), 'and the owner-contact note is still there when there is no auto-delivery')
+  } finally {
+    globalThis.fetch = saved
+  }
+}
 
 // ── The bot name the storefront will actually send buyers to ──────────────
 // On 2026-10-06 the catalogue advertised @ZeidexBot, which does not exist:

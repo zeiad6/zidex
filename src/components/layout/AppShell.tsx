@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { FloatingWhatsApp } from '@/components/store/organisms/FloatingWhatsApp'
+import { FloatingTelegram } from '@/components/store/organisms/FloatingTelegram'
 import { AmbientField } from '@/components/ui/AmbientField'
 import { Glyph } from '@/components/ui/Glyphs'
 import { Link, NavLink, useLocation } from 'react-router-dom'
@@ -506,6 +507,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </div>
 
+      <FloatingTelegram />
       <FloatingWhatsApp />
 
       {/* Phone bottom nav, as in the template: four sections plus the full menu. */}

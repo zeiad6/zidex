@@ -47,3 +47,17 @@ coverage/
 .dev.vars
 .dev.vars.*
 .wrangler/
+
+# Generated bot payload (sealed token + derived webhook secret) — never commit
+payload.json
+
+# WhatsApp account-bot session credentials (Baileys auth state) — never commit
+.wa-session/
+
+# API key validation scratch data (contains provider keys) — never commit
+keycheck/
+*.pckey.txt
+
+# Python caches
+__pycache__/
+*.pyc
