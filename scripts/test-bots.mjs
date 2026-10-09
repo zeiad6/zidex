@@ -273,7 +273,7 @@ assert.equal(JSON.parse(store.get('tb:123456789')).owner, 8)
 await admin('DELETE', '/admin/bots/123456789')
 assert.equal(store.get('tb:123456789'), undefined)
 
-// ── Plans: the free tier is capped and signed; platform commands stay on the platform ──
+// ── Plans: one 7-day trial for every self-serve path; the free month is retired ──
 {
   b.configCache.clear()
   b.ownerCache.clear()
@@ -289,9 +289,10 @@ assert.equal(store.get('tb:123456789'), undefined)
     return Response.json({ ok: true, result: {} })
   }
   try {
-    assert.deepEqual(await (await admin('GET', '/admin/bots')).json(), { plans: ['free', 'trial', 'paid'] }, 'the capability probe /freebot (and /trial) reads first')
-    const made = await (await admin('POST', '/admin/bots', { token: FREE_TOKEN, owner_id: 9, plan: 'free' })).json()
-    assert.equal(made.plan, 'free')
+    assert.deepEqual(await (await admin('GET', '/admin/bots')).json(), { plans: ['trial', 'paid'] }, 'the capability probe /trial reads first')
+    assert.equal((await admin('POST', '/admin/bots', { token: FREE_TOKEN, owner_id: 9, plan: 'free' })).status, 400, 'the free month is retired — nothing provisions one anymore')
+    const made = await (await admin('POST', '/admin/bots', { token: FREE_TOKEN, owner_id: 9, plan: 'trial' })).json()
+    assert.equal(made.plan, 'trial')
     const rec = () => JSON.parse(store.get(`tb:${FREE_ID}`))
     const secret = rec().secret
     const say = (from, text) =>
@@ -306,21 +307,18 @@ assert.equal(store.get('tb:123456789'), undefined)
       )
     const lastText = () => [...sent].reverse().find((c) => c.method === 'sendMessage')?.body.text ?? ''
 
-    // A mid-range month: 30 products, then a refusal that points at the paid plan.
+    // The one self-serve plan runs the full store: no cap, no signature.
     for (let i = 0; i < 31; i++) await say(9, `/add P${i} | 10`)
-    assert.equal(rec().items.length, 30, 'the free plan caps products at 30')
-    assert.ok(lastText().includes('الحد 30'), 'the 31st /add explains the cap')
-
-    // One month, set once: re-provisioning cannot move the end date.
-    const ends = Date.parse(rec().expires)
-    assert.ok(Math.abs(ends - Date.now() - 30 * 864e5) < 60e3, 'free month = 30 days')
-    await admin('POST', '/admin/bots', { token: FREE_TOKEN, owner_id: 9, plan: 'free' })
-    assert.equal(Date.parse(rec().expires), ends, 're-provisioning never extends the month')
-
-    // The signature rides on the welcome — on free bots only.
+    assert.equal(rec().items.length, 31, 'the trial caps nothing — the full 50-product store')
     await say(70, '/start')
-    assert.ok(lastText().includes('مدعوم من ZeidexSoft'), 'free bots carry the ZeidexSoft line')
-    assert.ok(!lastText().includes('zeidexsoft.com'), 'free accounts are not linked to the platform site')
+    assert.ok(!lastText().includes('مدعوم من ZeidexSoft'), 'trials are unsigned')
+    assert.ok(!lastText().includes('zeidexsoft.com'), 'trials are not linked to the platform site')
+
+    // Seven days, set once: re-provisioning cannot move the end date.
+    const ends = Date.parse(rec().expires)
+    assert.ok(Math.abs(ends - Date.now() - 7 * 864e5) < 60e3, 'trial = 7 days')
+    await admin('POST', '/admin/bots', { token: FREE_TOKEN, owner_id: 9, plan: 'trial' })
+    assert.equal(Date.parse(rec().expires), ends, 're-provisioning never extends the trial')
 
     // A customer's shop never answers with the platform's apps or its bank accounts.
     sent.length = 0
@@ -332,17 +330,62 @@ assert.equal(store.get('tb:123456789'), undefined)
 
     // Re-provisioning without a plan keeps it; an explicit plan changes it.
     await admin('POST', '/admin/bots', { token: FREE_TOKEN, owner_id: 9 })
-    assert.equal(rec().plan, 'free')
-    assert.equal(rec().items.length, 30, 're-provisioning keeps the shop')
+    assert.equal(rec().plan, 'trial')
+    assert.equal(rec().items.length, 31, 're-provisioning keeps the shop')
     await admin('POST', '/admin/bots', { token: FREE_TOKEN, owner_id: 9, plan: 'paid' })
     assert.equal(rec().plan, 'paid')
-    await say(70, '/start')
-    assert.ok(!lastText().includes('مدعوم من ZeidexSoft'), 'paid bots are unsigned')
     assert.equal((await (await admin('GET', `/admin/bots/${FREE_ID}`)).json()).plan, 'paid')
   } finally {
     globalThis.fetch = saved
   }
 }
+
+// ── Legacy free-month records: nothing writes them anymore; the wild's are honoured ──
+{
+  b.configCache.clear()
+  b.ownerCache.clear()
+  const FREE_ID = 555000444
+  const sent = []
+  const saved = globalThis.fetch
+  globalThis.fetch = async (url, init) => {
+    const method = String(url).split('/').pop()
+    const body = init?.body ? JSON.parse(init.body) : {}
+    sent.push({ method, body })
+    if (method === 'getMe') return Response.json({ ok: true, result: { id: FREE_ID, username: 'legacy_free_bot', first_name: 'Legacy' } })
+    return Response.json({ ok: true, result: {} })
+  }
+  try {
+    // No API provisions a free month anymore — the only way one exists is that it was
+    // written before the retirement, so the test writes it exactly that way.
+    await admin('POST', '/admin/bots', { token: `${FREE_ID}:` + 'V'.repeat(35), owner_id: 9, plan: 'trial' })
+    store.set(`tb:${FREE_ID}`, JSON.stringify({ ...JSON.parse(store.get(`tb:${FREE_ID}`)), plan: 'free', items: [], expires: new Date(Date.now() + 864e5).toISOString() }))
+    b.configCache.clear()
+    b.ownerCache.clear()
+    const rec = () => JSON.parse(store.get(`tb:${FREE_ID}`))
+    const secret = rec().secret
+    const say = (from, text) =>
+      b.botWebhook(
+        new Request(`https://zeidexsoft.com/tg/${FREE_ID}`, {
+          method: 'POST',
+          headers: { 'x-telegram-bot-api-secret-token': secret },
+          body: JSON.stringify({ message: { chat: { id: from, type: 'private' }, from: { id: from, first_name: 'X' }, text } }),
+        }),
+        env,
+        String(FREE_ID),
+      )
+    const lastText = () => [...sent].reverse().find((c) => c.method === 'sendMessage')?.body.text ?? ''
+
+    // The retired plan's promises still hold for the records already out there.
+    await say(70, '/start')
+    assert.ok(lastText().includes('مدعوم من ZeidexSoft'), 'legacy free records keep their footer')
+    for (let i = 0; i < 31; i++) await say(9, `/add L${i} | 10`)
+    assert.equal(rec().items.length, 30, 'legacy free records stay capped at 30')
+    assert.ok(lastText().includes('الحد 30'), 'the 31st /add explains the legacy cap')
+  } finally {
+    globalThis.fetch = saved
+  }
+}
+
 
 // ── Hosted shops: no licence powers, a provable site link, grounded smart answers ──
 {
@@ -441,11 +484,14 @@ assert.equal(store.get('tb:123456789'), undefined)
     assert.ok(texts().at(-1).includes('لم أجد شيئاً'), 'a failing model falls back to search')
     env.__aiFails = false
 
-    // The free plan has no smart answers.
-    await admin('POST', '/admin/bots', { token: TOK, owner_id: 11, plan: 'free' })
+    // A legacy free record has no smart answers — the month is retired, so the record
+    // is flipped in place, exactly the way the wild wrote it before the retirement.
+    store.set(`tb:${ID}`, JSON.stringify({ ...rec(), plan: 'free' }))
+    b.configCache.clear()
+    b.ownerCache.clear()
     aiCalls.length = 0
     await say(80, 'سؤال لا تطابقه كلمة')
-    assert.equal(aiCalls.length, 0, 'free shops never call the model')
+    assert.equal(aiCalls.length, 0, 'legacy free records never call the model')
   } finally {
     globalThis.fetch = saved
     delete env.AI
@@ -468,7 +514,7 @@ assert.equal(store.get('tb:123456789'), undefined)
   delete env.BOT_PLATFORM_ID
 }
 
-// ── Sections, pages, and the end of a free month ─────────────────────────
+// ── Sections, pages, and the end of a trial ─────────────────────────────
 {
   b.configCache.clear()
   b.ownerCache.clear()
@@ -484,7 +530,7 @@ assert.equal(store.get('tb:123456789'), undefined)
     return Response.json({ ok: true, result: {} })
   }
   try {
-    await admin('POST', '/admin/bots', { token: TOK, owner_id: 12, plan: 'free' })
+    await admin('POST', '/admin/bots', { token: TOK, owner_id: 12, plan: 'trial' })
     const rec = () => JSON.parse(store.get(`tb:${ID}`))
     const secret = rec().secret
     const post = (update) =>
@@ -514,7 +560,7 @@ assert.equal(store.get('tb:123456789'), undefined)
     await tap(80, 't:page:0')
     assert.ok(last().text.includes('متجر &lt;b&gt;صغير&lt;/b&gt;'), 'page text is escaped')
 
-    // The month ends: customers see a closed sign, payments are refused, the owner keeps access.
+    // The trial ends: customers see a closed sign, payments are refused, the owner keeps access.
     const lapsedRec = { ...rec(), expires: new Date(Date.now() - 1000).toISOString() }
     store.set(`tb:${ID}`, JSON.stringify(lapsedRec))
     b.configCache.clear()
@@ -524,9 +570,9 @@ assert.equal(store.get('tb:123456789'), undefined)
     sent.length = 0
     const item = rec().items[0]
     await post({ pre_checkout_query: { id: 'pc', from: { id: 81 }, currency: 'XTR', total_amount: item.stars, invoice_payload: `t${ID}:${item.id}` } })
-    assert.equal(sent.find((c) => c.method === 'answerPreCheckoutQuery').body.ok, false, 'no sales after the month')
+    assert.equal(sent.find((c) => c.method === 'answerPreCheckoutQuery').body.ok, false, 'no sales after the trial')
     await say(12, '/start')
-    assert.ok(last().text.includes('انتهى الشهر المجاني'), 'the owner is told why, with the upgrade path')
+    assert.ok(last().text.includes('انتهت فترة التجربة'), 'the owner is told why, with the upgrade path')
 
     // /clear sweeps the chat in 100-id batches after a confirmation tap.
     store.set(`tb:${ID}`, JSON.stringify({ ...rec(), expires: new Date(Date.now() + 864e5).toISOString() }))
@@ -1063,6 +1109,13 @@ assert.equal(store.get('tb:123456789'), undefined)
     await post({ message: { chat: { id: OWNER, type: 'private' }, from: { id: OWNER, first_name: 'X' }, text: '/trial' } })
     assert.ok(texts().at(-1).includes('/trial التوكن'), 'bare /trial explains the token step')
 
+    // The retired flow's surfaces all land on the same single onboarding.
+    sent.length = 0
+    await post({ message: { chat: { id: OWNER, type: 'private' }, from: { id: OWNER, first_name: 'X' }, text: '/freebot' } })
+    assert.ok(texts().at(-1).includes('تجربة مجانية كاملة'), '/freebot is an alias for the trial onboarding')
+    await post({ message: { chat: { id: OWNER, type: 'private' }, from: { id: OWNER, first_name: 'X' }, text: '/start trial' } })
+    assert.ok(texts().at(-1).includes('تجربة مجانية كاملة'), 'the web store trial card (?start=trial) lands on the onboarding')
+
     // The owner's /trial <token> provisions the trial on the second host.
     sent.length = 0
     await post({ message: { chat: { id: OWNER, type: 'private' }, from: { id: OWNER, first_name: 'X' }, text: `/trial ${TRIAL}:` + 'D'.repeat(35) } })
@@ -1431,10 +1484,14 @@ assert.equal(store.get('tb:123456789'), undefined)
     await ownerSays('/wa off')
     assert.equal(JSON.parse(store.get(`tb:${ID}`)).wa, undefined, '/wa off unlinks the number')
 
-    // All three are paid capabilities: a free-plan shop is refused with the gate text,
-    // the same policy as the smart answers — and the full trial keeps every power.
+    // All three are paid capabilities: a legacy free record is refused with the gate
+    // text, the same policy as the smart answers — and the full trial keeps every power.
     const FREE_ID = 555000666
-    await admin('POST', '/admin/bots', { token: `${FREE_ID}:` + 'L'.repeat(35), owner_id: OWNER, plan: 'free' })
+    await admin('POST', '/admin/bots', { token: `${FREE_ID}:` + 'L'.repeat(35), owner_id: OWNER, plan: 'trial' })
+    // The month is retired — flip an existing record to legacy free, the way the wild did.
+    store.set(`tb:${FREE_ID}`, JSON.stringify({ ...JSON.parse(store.get(`tb:${FREE_ID}`)), plan: 'free' }))
+    b.configCache.clear()
+    b.ownerCache.clear()
     const freeSecret = JSON.parse(store.get(`tb:${FREE_ID}`)).secret
     const freeSay = (text) =>
       b.botWebhook(
@@ -1452,9 +1509,361 @@ assert.equal(store.get('tb:123456789'), undefined)
     }
     assert.equal(JSON.parse(store.get(`tb:${FREE_ID}`)).workflow, undefined, 'a free shop cannot link the automation engine')
     assert.equal(JSON.parse(store.get(`tb:${FREE_ID}`)).wa, undefined, 'a free shop cannot link WhatsApp')
-    await admin('POST', '/admin/bots', { token: `${FREE_ID}:` + 'L'.repeat(35), owner_id: OWNER, plan: 'trial' })
+    store.set(`tb:${FREE_ID}`, JSON.stringify({ ...JSON.parse(store.get(`tb:${FREE_ID}`)), plan: 'trial' }))
+    b.configCache.clear()
+    b.ownerCache.clear()
     await freeSay('/wf https://n8n.example/hook')
     assert.equal(JSON.parse(store.get(`tb:${FREE_ID}`)).workflow, 'https://n8n.example/hook', 'the full trial keeps every power')
+  } finally {
+    globalThis.fetch = saved
+  }
+}
+
+// ── The WhatsApp product's native setup: Meta credentials pasted on the platform bot ──
+// A buyer of the whatsapp-bot-pro item may own no hosted bot, so their Meta Cloud
+// number rides the platform record itself as a guest link: their WhatsApp lands in
+// their own chat, and their replies go out as their own /ware. Nothing in this path
+// may ever walk them into a BotFather/Telegram-token flow.
+{
+  b.configCache.clear()
+  b.ownerCache.clear()
+  const PLAT = 555111000
+  const BUYER = 812345678
+  const OWNER = 777
+  const prevPlatform = env.BOT_PLATFORM_ID
+  env.BOT_PLATFORM_ID = String(PLAT)
+  const graph = [] // WhatsApp Graph API calls
+  const sent = [] // Telegram calls
+  const saved = globalThis.fetch
+  const badPair = '1098000001'
+  globalThis.fetch = async (url, init) => {
+    const u = String(url)
+    if (u.startsWith('https://graph.facebook.com/')) {
+      graph.push({ path: u, auth: init?.headers?.authorization, body: init?.body ? JSON.parse(init.body) : null })
+      // The link-check GET: Meta rejects exactly one phone-id/token pair, so the refusal path is covered too.
+      if (u.includes(`/${badPair}?`) || (u.includes(`/${badPair}/`) && init?.method !== 'POST'))
+        return Response.json({ error: { type: 'OAuthException' } }, { status: 401 })
+      return Response.json(init?.method === 'POST' ? { messages: [{ id: 'wamid.g1' }] } : { display_phone_number: '+967 77 111 000', quality_rating: 'GREEN' })
+    }
+    if (u.startsWith('https://api.telegram.org/')) {
+      const method = u.split('/').pop()
+      const body = init?.body ? JSON.parse(init.body) : {}
+      sent.push({ method, body })
+      if (method === 'getMe') {
+        const tok = u.slice('https://api.telegram.org/bot'.length, u.lastIndexOf('/'))
+        const id = Number(tok.split(':')[0])
+        return Response.json({ ok: true, result: { id, username: `bot_${id}`, first_name: 'B' } })
+      }
+      return Response.json({ ok: true, result: {} })
+    }
+    return Response.json({ ok: true, result: {} })
+  }
+  try {
+    await admin('POST', '/admin/bots', { token: `${PLAT}:` + 'W'.repeat(35), owner_id: OWNER, plan: 'paid' })
+    // The platform record carries the catalog's WhatsApp product: demo:'whatsapp' is its
+    // marker sentinel — never a URL, so no link button is ever rendered from it.
+    const plat = JSON.parse(store.get(`tb:${PLAT}`))
+    plat.items = [{ id: 12, title: 'بوت واتساب للأعمال والربط المزدوج', stars: 5500, desc: 'واتساب للأعمال', features: [], section: 2, demo: 'whatsapp', sku: 'whatsapp-bot-pro', after: ['أرسل /wa هنا مباشرة'] }]
+    store.set(`tb:${PLAT}`, JSON.stringify(plat))
+    b.configCache.clear()
+    const secret = JSON.parse(store.get(`tb:${PLAT}`)).secret
+    const post = (update) =>
+      b.botWebhook(new Request(`https://zeidexsoft.com/tg/${PLAT}`, { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': secret }, body: JSON.stringify(update) }), env, String(PLAT))
+    const say = (from, text) => post({ message: { chat: { id: from, type: 'private' }, from: { id: from, first_name: 'W' }, text } })
+    const buyerTexts = () => sent.filter((c) => c.method === 'sendMessage' && c.body.chat_id === BUYER).map((c) => c.body.text)
+
+    // A bare /wa is the native Meta setup — the exact paste format, and no BotFather anywhere.
+    sent.length = 0
+    await say(BUYER, '/wa')
+    const intro = buyerTexts().at(-1)
+    assert.ok(intro.includes('Meta for Developers'), 'a bare /wa shows the native Meta setup')
+    assert.ok(intro.includes('/wa رقم_الهاتف_الدائمي التوكن_الدائمي سر_التطبيق'), 'the exact paste format is shown')
+    assert.ok(!intro.includes('BotFather'), 'no BotFather in the WhatsApp buyer path')
+
+    // The store's free-try deep link (t.me/<bot>?start=demo_whatsapp) opens the product card.
+    sent.length = 0
+    await say(BUYER, '/start demo_whatsapp')
+    const card = sent.filter((c) => c.method === 'sendMessage' && c.body.chat_id === BUYER).at(-1)
+    const rows = card.body.reply_markup.inline_keyboard.flat()
+    assert.ok(rows.some((x) => x.callback_data === 't:wa_trial'), 'the WhatsApp product deep-link offers its own trial button')
+    assert.ok(!rows.some((x) => x.url && String(x.url).includes('whatsapp')), 'the demo sentinel never becomes a URL button')
+    assert.ok(!rows.some((x) => x.callback_data === 't:trial'), 'a WhatsApp buyer is not walked into the Telegram-token trial flow')
+
+    // The storefront's buy deep link (t.me/<bot>?start=buy_<sku>) lands on the product's own
+    // checkout card — the same card the 🛍 buttons open, with the item's buy button on it.
+    // The SKU match is by the item's own sku field: the Arabic titles can never normalise
+    // into a Latin SKU, so the fallbacks cannot save an item without one.
+    sent.length = 0
+    await say(BUYER, '/start buy_whatsapp-bot-pro')
+    const buyLink = sent.filter((c) => c.method === 'sendMessage' && c.body.chat_id === BUYER).at(-1)
+    assert.ok(buyLink.body.reply_markup.inline_keyboard.flat().some((x) => x.callback_data === 't:pay:12'),
+      'the buy_<sku> deep link lands on the item\'s own checkout card')
+
+    // The trial button on the card and the t:wa_trial callback both open the same native setup.
+    await post({ callback_query: { id: 'wq1', from: { id: BUYER }, data: 't:wa_trial', message: { chat: { id: BUYER, type: 'private' } } } })
+    assert.ok(buyerTexts().at(-1).includes('Meta for Developers'), 't:wa_trial opens the native setup too')
+
+    // A pair Meta rejects is refused, and nothing is stored.
+    sent.length = 0
+    await say(BUYER, `/wa ${badPair} EAAG-bad-permanent-token-123456 bad-app-secret-123456`)
+    assert.ok(buyerTexts().at(-1).includes('رفضت Meta'), 'a pair Meta rejects is refused')
+    assert.equal(JSON.parse(store.get(`tb:${PLAT}`)).waGuests, undefined, 'no guest link is stored on rejection')
+
+    // A valid pair links the buyer's number as a guest: sealed, 7-day trial, Meta config shown.
+    sent.length = 0
+    const waToken = 'EAAG-wa-guest-permanent-token'
+    const appSecret = 'guest-app-secret-1234567890'
+    await say(BUYER, `/wa 1098765432 ${waToken} ${appSecret}`)
+    const linked = buyerTexts().at(-1)
+    assert.ok(linked.includes('رُبط واتساب للأعمال'), 'the link is confirmed')
+    assert.ok(linked.includes(`/api/wa/${PLAT}`) && linked.includes('Verify token'), 'the Meta webhook config is shown')
+    assert.ok(!linked.includes('BotFather'), 'no BotFather in the link confirmation')
+    const g = JSON.parse(store.get(`tb:${PLAT}`)).waGuests[0]
+    assert.equal(g.uid, BUYER, 'the guest link belongs to the buyer')
+    assert.ok(!store.get(`tb:${PLAT}`).includes(waToken) && !store.get(`tb:${PLAT}`).includes(appSecret), 'both guest secrets are stored sealed')
+    const left = (Date.parse(g.exp) - Date.now()) / 864e5
+    assert.ok(left > 6.99 && left <= 7, 'an unpaid link is a 7-day trial')
+
+    // Meta verifies the webhook with the derived hub token — a guest-only record works too.
+    const hub = await b.waVerifyToken(env, String(PLAT))
+    assert.equal(await (await b.waBotWebhook(new Request(`https://zeidexsoft.com/api/wa/${PLAT}?hub.mode=subscribe&hub.verify_token=${hub}&hub.challenge=wa42`), env, String(PLAT))).text(), 'wa42', 'hub verification echoes the challenge for a guest link')
+    assert.equal((await b.waBotWebhook(new Request(`https://zeidexsoft.com/api/wa/${PLAT}?hub.mode=subscribe&hub.verify_token=wrong&hub.challenge=x`), env, String(PLAT))).status, 403, 'a wrong hub token is refused')
+
+    // A signed batch on the buyer's number: everything lands in the buyer's own chat, never the owner's.
+    const enc = new TextEncoder()
+    const key = await crypto.subtle.importKey('raw', enc.encode(appSecret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+    const waMsg = async (from, text) => {
+      const payload = JSON.stringify({ entry: [{ id: '1098765432', changes: [{ value: { messages: [{ from, type: 'text', text: { body: text } }] } }] }] })
+      const sig = 'sha256=' + Array.from(new Uint8Array(await crypto.subtle.sign('HMAC', key, enc.encode(payload))), (x) => x.toString(16).padStart(2, '0')).join('')
+      return b.waBotWebhook(new Request(`https://zeidexsoft.com/api/wa/${PLAT}`, { method: 'POST', headers: { 'x-hub-signature-256': sig }, body: payload }), env, String(PLAT))
+    }
+    sent.length = 0
+    assert.equal((await waMsg('967773111222', 'عندي استفسار عن الشحن')).status, 200)
+    assert.ok(buyerTexts().some((t) => t.includes('عندي استفسار') && t.includes('/ware')), 'a guest message lands in the buyer chat with the /ware hint')
+    assert.ok(!sent.some((c) => c.method === 'sendMessage' && c.body.chat_id === OWNER), 'and never in the platform owner chat')
+    assert.equal(JSON.parse(store.get(`tb:${PLAT}`)).waGuests[0].lastFrom, '967773111222', 'lastFrom remembers who is waiting for the buyer')
+
+    // /ware replies and /wasend sends through the buyer's own link, with the sealed token reopened.
+    graph.length = 0
+    await say(BUYER, '/ware أهلاً وسهلاً')
+    assert.ok(graph.some((x) => x.body?.to === '967773111222' && (x.body.text?.body ?? '').includes('أهلاً')), '/ware replies through the buyer guest link')
+    await say(BUYER, '/wasend 967775554444 إعلان تجريبي')
+    assert.ok(graph.some((x) => x.body?.to === '967775554444' && (x.body.text?.body ?? '').includes('إعلان')), '/wasend sends to any number through the guest link')
+    // Paying for the product: the receipt hands back the native setup, and the link stops expiring.
+    sent.length = 0
+    await post({ message: { chat: { id: BUYER, type: 'private' }, from: { id: BUYER }, successful_payment: { total_amount: 5500, currency: 'XTR', invoice_payload: `t${PLAT}:12` } } })
+    const paid = buyerTexts().at(-1)
+    assert.ok(paid.includes('تم الدفع بنجاح') && paid.includes('Meta for Developers') && paid.includes('/wa رقم_الهاتف_الدائمي'), 'a paid buyer gets the native WhatsApp setup steps')
+    assert.ok(!paid.includes('سيتواصل معك المالك'), 'not the generic contact-the-owner text')
+    assert.ok(!paid.includes('BotFather'), 'no BotFather after the purchase either')
+    const recPaid = JSON.parse(store.get(`tb:${PLAT}`))
+    assert.ok(recPaid.waPaid.includes(BUYER), 'the payment is remembered')
+    assert.equal(recPaid.waGuests[0].exp, undefined, 'a paid link never expires')
+
+    // An expired trial: the batch is a silent 200 (Meta must not retry), /ware is refused.
+    const raw = JSON.parse(store.get(`tb:${PLAT}`))
+    raw.waGuests[0].exp = new Date(Date.now() - 864e5).toISOString()
+    store.set(`tb:${PLAT}`, JSON.stringify(raw))
+    b.configCache.clear()
+    sent.length = 0
+    assert.equal((await waMsg('967773111222', 'لاحقاً')).status, 200, 'an expired guest batch is still a 200')
+    assert.equal(buyerTexts().length, 0, 'and relays nothing')
+    await say(BUYER, '/ware رد')
+    assert.ok(buyerTexts().at(-1).includes('انتهت تجربة الواتساب'), 'an expired trial cannot /ware')
+
+    // /wa off unlinks the guest link.
+    await say(BUYER, '/wa off')
+    assert.equal(JSON.parse(store.get(`tb:${PLAT}`)).waGuests.length, 0, '/wa off unlinks the guest')
+
+    // The shipped surfaces agree: catalog and payload both keep the WhatsApp product on /wa.
+    const cat = JSON.parse(readFileSync('public/store/catalog.json', 'utf8'))
+    const prod = cat.products.find((x) => x.sku === 'whatsapp-bot-pro')
+    assert.equal(prod.demo, 'whatsapp', "the catalog's WhatsApp product carries the demo marker")
+    assert.ok(prod.after.some((s) => s.includes('/wa ')), 'its post-purchase steps stay on /wa')
+    const pl = JSON.parse(readFileSync('payload.json', 'utf8'))
+    const pi = pl.items.find((x) => x.demo === 'whatsapp')
+    assert.ok(pi && pi.after.some((s) => s.includes('/wa ')), 'payload.json agrees on the /wa steps')
+    // The storefront's buy_<sku> deep link can only land when the payload carries the SKU:
+    // the catalog's titles are Arabic and norm() never folds an Arabic title into a Latin
+    // SKU, so itemBySku()'s fallbacks cannot save a payload without one — every storefront
+    // buy tap would land on the bare welcome instead of the product it asked for.
+    for (const p of cat.products) assert.ok(pl.items.some((i) => i.sku === p.sku),
+      `${p.sku}: payload.json must carry the catalog's sku so the storefront's buy deep link lands`)
+  } finally {
+    globalThis.fetch = saved
+    if (prevPlatform === undefined) delete env.BOT_PLATFORM_ID
+    else env.BOT_PLATFORM_ID = prevPlatform
+  }
+}
+
+// ── The browser dashboard (/web): a signed link only the owner's own chat holds ──
+// The code rides the URL fragment, the dashboard presents it as a Bearer token, and
+// botsDash() re-derives the same MAC before granting any power. The state read must
+// paint the whole dashboard without ever leaking a sealed secret, and every write
+// path carries the same guardrails its Telegram twin enforces.
+{
+  b.configCache.clear()
+  b.ownerCache.clear()
+  const DASH = 555333000
+  const OWNER = 555
+  const sent = [] // Telegram calls
+  const saved = globalThis.fetch
+  globalThis.fetch = async (url, init) => {
+    const u = String(url)
+    if (u.startsWith('https://api.telegram.org/')) {
+      const method = u.split('/').pop()
+      const body = init?.body ? JSON.parse(init.body) : {}
+      sent.push({ method, body })
+      if (method === 'getMe') {
+        const id = Number(u.slice('https://api.telegram.org/bot'.length, u.lastIndexOf('/')).split(':')[0])
+        return Response.json({ ok: true, result: { id, username: `bot_${id}`, first_name: 'D' } })
+      }
+      return Response.json({ ok: true, result: {} })
+    }
+    return Response.json({ ok: true, result: {} })
+  }
+  try {
+    await admin('POST', '/admin/bots', { token: `${DASH}:` + 'D'.repeat(35), owner_id: OWNER, plan: 'paid' })
+    const secret = JSON.parse(store.get(`tb:${DASH}`)).secret
+    const say = (from, text) =>
+      b.botWebhook(
+        new Request(`https://zeidexsoft.com/tg/${DASH}`, {
+          method: 'POST',
+          headers: { 'x-telegram-bot-api-secret-token': secret },
+          body: JSON.stringify({ message: { chat: { id: from, type: 'private' }, from: { id: from, first_name: 'D' }, text } }),
+        }),
+        env,
+        String(DASH),
+      )
+    const dash = (method, path, body, code) =>
+      b.botsDash(
+        new Request(`https://zeidexsoft.com/api/dash/${path}`, {
+          method,
+          headers: code ? { authorization: `Bearer ${code}` } : {},
+          body: body ? JSON.stringify(body) : undefined,
+        }),
+        env,
+        new URL(`https://zeidexsoft.com/api/dash/${path}`),
+      )
+
+    // /web hands the owner a personal link; the code is derived, never stored, and a
+    // customer never sees one.
+    sent.length = 0
+    await say(OWNER, '/web')
+    const link = [...sent].reverse().find((c) => c.method === 'sendMessage' && c.body.chat_id === OWNER)?.body.text ?? ''
+    const code = (link.match(/k=([0-9]+\.[A-Za-z0-9]+)/) || [])[1]
+    assert.ok(code, 'the /web answer carries the dashboard code')
+    assert.ok(link.includes(`/dash/#id=${DASH}`), 'the link points at the owner\'s own dashboard')
+    assert.ok(!store.get(`tb:${DASH}`).includes(code), 'the code is derived, never stored in KV')
+    await say(777, '/web')
+    assert.ok(!sent.some((c) => c.method === 'sendMessage' && c.body.chat_id === 777 && c.body.text.includes('/dash/')),
+      "a customer never sees the owner's dashboard link")
+
+    // The code is the only key: a missing one, a wrong one, and another bot's are all refused.
+    assert.equal((await dash('GET', `${DASH}/state`)).status, 403, 'no code is refused')
+    assert.equal((await dash('GET', `${DASH}/state`, null, '9999.deadbeef')).status, 403, 'a wrong code is refused')
+    assert.equal((await dash('GET', `${DASH}/state`, null, await b.dashCode(env, 999888777))).status, 403,
+      "another bot's code is refused")
+    assert.equal((await dash('GET', '12/state', null, code)).status, 400, 'a bad id is a 400')
+
+    // State paints the whole dashboard in one read, and never leaks a sealed secret.
+    const state = await (await dash('GET', `${DASH}/state`, null, code)).json()
+    assert.equal(state.bot.id, DASH)
+    assert.ok(Array.isArray(state.items) && Array.isArray(state.faqs) && Array.isArray(state.sections), 'state carries the shop')
+    assert.ok(!('token' in state.bot) && !('secret' in state.bot), 'the bot summary never carries a secret field')
+    assert.ok(!JSON.stringify(state).includes('D'.repeat(20)), 'the sealed token material never appears in state')
+
+    // Products: add with the same guardrails /add enforces, and the web store's SKU rides
+    // on the item so the storefront's buy_<sku> deep link can land on it.
+    assert.equal((await dash('POST', `${DASH}/items`, { title: 'E-book', stars: 250 }, code)).status, 200)
+    assert.equal((await dash('POST', `${DASH}/items`, { title: '', stars: 250 }, code)).status, 400, 'an empty title is refused')
+    assert.equal((await dash('POST', `${DASH}/items`, { title: 'X', stars: 0 }, code)).status, 400, 'zero stars is refused')
+    assert.equal((await dash('POST', `${DASH}/items`, { title: 'X', stars: 10, section: 9 }, code)).status, 400,
+      'an unknown section is refused')
+    const added = await (await dash('POST', `${DASH}/items`, { title: 'Course', stars: 500, sku: 'E-COURSE!', usd: 7, features: ['A', 'B'], after: ['Step 1'] }, code)).json()
+    assert.equal(added.item.sku, 'e-course', 'the sku is normalised the way the storefront builds its deep links')
+    assert.equal((await dash('POST', `${DASH}/items`, { title: 'Twin', stars: 100, sku: 'e-course' }, code)).status, 400,
+      'a duplicate sku is refused')
+
+    // Editing moves only the sent fields, so a small GUI form can never wipe the rest.
+    assert.equal((await dash('PUT', `${DASH}/items/1`, { title: 'E-book v2' }, code)).status, 200)
+    assert.equal(JSON.parse(store.get(`tb:${DASH}`)).items[0].stars, 250, 'an unsent field keeps its value')
+    assert.equal((await dash('PUT', `${DASH}/items/1`, { stars: 0 }, code)).status, 400, 'a bad edit is refused')
+    assert.equal((await dash('PUT', `${DASH}/items/999`, { title: 'X' }, code)).status, 404, 'an unknown item is a 404')
+    assert.equal((await dash('PUT', `${DASH}/items/1`, { sku: 'e-course' }, code)).status, 400,
+      'tying a second item to a taken sku is refused')
+    const tied = await (await dash('PUT', `${DASH}/items/1`, { sku: 'e-book' }, code)).json()
+    assert.equal(tied.item.sku, 'e-book', 'the tie lands')
+    // The whole point of the tie: the storefront's buy_<sku> deep link now lands on the item.
+    sent.length = 0
+    await say(900, '/start buy_e-book')
+    const card = sent.filter((c) => c.method === 'sendInvoice').at(-1)
+    assert.ok(card && card.body.payload === `t${DASH}:1` && card.body.prices?.[0]?.amount === 250,
+      'a dashboard-tied sku lands its storefront deep link on the item (here: its one-tap invoice)')
+    const untied = await (await dash('PUT', `${DASH}/items/1`, { sku: '' }, code)).json()
+    assert.equal(untied.item.sku, undefined, 'an empty sku unties the item')
+
+    // Auto-delivery: a secret text or a stored file — exactly what /deliver sets.
+    assert.equal((await dash('POST', `${DASH}/deliver`, { item: 1, text: 'SECRET-DELIVERY-TEXT' }, code)).status, 200)
+    assert.equal(JSON.parse(store.get(`tb:${DASH}`)).items[0].deliver.text, 'SECRET-DELIVERY-TEXT')
+    assert.equal((await dash('POST', `${DASH}/deliver`, { item: 999, text: 'x' }, code)).status, 400, 'an unknown item is refused')
+    assert.equal((await dash('POST', `${DASH}/deliver`, { item: 1 }, code)).status, 400, 'nothing to deliver is refused')
+    const withFile = JSON.parse(store.get(`tb:${DASH}`))
+    withFile.files = [{ id: 3, title: 'Guide.pdf', type: 'document', file_id: 'FID3' }]
+    store.set(`tb:${DASH}`, JSON.stringify(withFile))
+    b.configCache.clear()
+    assert.equal((await dash('POST', `${DASH}/deliver`, { item: 1, file: 3 }, code)).status, 200)
+    assert.deepEqual(JSON.parse(store.get(`tb:${DASH}`)).items[0].deliver, { file: { id: 'FID3', type: 'document' } })
+    assert.equal((await dash('POST', `${DASH}/deliver`, { item: 1, file: 42 }, code)).status, 400, 'an unknown file is refused')
+    assert.equal((await dash('POST', `${DASH}/deliver`, { item: 1, clear: true }, code)).status, 200)
+    assert.equal(JSON.parse(store.get(`tb:${DASH}`)).items[0].deliver, undefined, 'clear removes the delivery')
+
+    // Deleting: the item goes, and an unknown one is a 404.
+    assert.equal((await dash('DELETE', `${DASH}/items/1`, null, code)).status, 200)
+    assert.equal(JSON.parse(store.get(`tb:${DASH}`)).items.length, 1)
+    assert.equal((await dash('DELETE', `${DASH}/items/999`, null, code)).status, 404)
+
+    // FAQs: the same cap /faq enforces.
+    assert.equal((await dash('POST', `${DASH}/faqs`, { q: 'كيف أدفع؟', a: 'بالنجوم' }, code)).status, 200)
+    assert.equal((await dash('POST', `${DASH}/faqs`, { q: '', a: 'x' }, code)).status, 400, 'an empty question is refused')
+    const full = JSON.parse(store.get(`tb:${DASH}`))
+    full.faqs = Array.from({ length: 50 }, (_, i) => ({ q: `q${i}`, a: 'a' }))
+    store.set(`tb:${DASH}`, JSON.stringify(full))
+    b.configCache.clear()
+    assert.equal((await dash('POST', `${DASH}/faqs`, { q: 'one more', a: 'x' }, code)).status, 409, 'the faq cap is enforced')
+    assert.equal((await dash('DELETE', `${DASH}/faqs/0`, null, code)).status, 200)
+    assert.equal(JSON.parse(store.get(`tb:${DASH}`)).faqs.length, 49)
+    assert.equal((await dash('DELETE', `${DASH}/faqs/99`, null, code)).status, 404, 'an unknown faq is a 404')
+
+    // The welcome text, and pause/resume with one tap.
+    assert.equal((await dash('POST', `${DASH}/welcome`, { text: 'أهلاً بكم في متجري الجديد' }, code)).status, 200)
+    assert.equal(JSON.parse(store.get(`tb:${DASH}`)).welcome, 'أهلاً بكم في متجري الجديد')
+    assert.equal((await dash('POST', `${DASH}/welcome`, { text: '   ' }, code)).status, 400, 'an empty welcome is refused')
+    await dash('POST', `${DASH}/pause`, {}, code)
+    assert.equal(JSON.parse(store.get(`tb:${DASH}`)).paused, true, 'pause flips the maintenance flag')
+    await dash('POST', `${DASH}/pause`, { paused: false }, code)
+    assert.equal(JSON.parse(store.get(`tb:${DASH}`)).paused, false, 'and resume flips it back')
+
+    // The stored files: sending uses the same method /send uses, and the index stays lean.
+    sent.length = 0
+    assert.equal((await dash('POST', `${DASH}/files/send`, { file: 3, user: 555 }, code)).status, 200)
+    assert.ok(sent.some((c) => c.method === 'sendDocument' && c.body.chat_id === 555 && c.body.document === 'FID3'),
+      'a stored file is sent to a customer')
+    assert.equal((await dash('POST', `${DASH}/files/send`, { file: 42, user: 555 }, code)).status, 400, 'an unknown file is refused')
+    assert.equal((await dash('DELETE', `${DASH}/files/3`, null, code)).status, 200)
+    assert.equal(JSON.parse(store.get(`tb:${DASH}`)).files.length, 0)
+    assert.equal((await dash('DELETE', `${DASH}/files/9`, null, code)).status, 404, 'an unknown file delete is a 404')
+
+    // The item cap is the store's, not the GUI's.
+    const fullItems = JSON.parse(store.get(`tb:${DASH}`))
+    fullItems.items = Array.from({ length: 50 }, (_, i) => ({ id: i + 1, title: `p${i}`, stars: 10, desc: 'd' }))
+    store.set(`tb:${DASH}`, JSON.stringify(fullItems))
+    b.configCache.clear()
+    assert.equal((await dash('POST', `${DASH}/items`, { title: 'Cap', stars: 10 }, code)).status, 409, 'the item cap is enforced')
+
+    // Anything else the GUI never sends is a plain 405.
+    assert.equal((await dash('GET', `${DASH}/items`, null, code)).status, 405)
+    assert.equal((await dash('POST', `${DASH}/state`, {}, code)).status, 405)
   } finally {
     globalThis.fetch = saved
   }

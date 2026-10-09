@@ -45,7 +45,7 @@ await tg('setMyCommands', {
     { command: 'start', description: 'القائمة الرئيسية' },
     { command: 'search', description: 'ابحث في المنتجات' },
     { command: 'catalog', description: 'كل المنتجات' },
-    { command: 'freebot', description: 'أنشئ متجرك المجاني' },
+    { command: 'trial', description: 'تجربة كاملة 7 أيام' },
     { command: 'apps', description: 'تطبيقات أندرويد وويندوز' },
     { command: 'donate', description: 'دعم وتبرع' },
     { command: 'help', description: 'المساعدة' },

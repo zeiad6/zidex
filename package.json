@@ -16,9 +16,10 @@
     "indexnow": "node scripts/indexnow.mjs",
     "test:license": "node scripts/test-license.mjs",
     "test:botlic": "node scripts/test-bot-licensing.mjs",
-    "test": "node scripts/test-bots.mjs && node scripts/test-whatsapp.mjs && node scripts/test-license.mjs && node scripts/test-bot-licensing.mjs && node scripts/test-store-app.mjs && node scripts/test-anthropic-proxy.mjs",
+    "test": "node scripts/test-bots.mjs && node scripts/test-whatsapp.mjs && node scripts/test-license.mjs && node scripts/test-bot-licensing.mjs && node scripts/test-store-app.mjs && node scripts/test-dash-app.mjs && node scripts/test-anthropic-proxy.mjs",
     "gen:license-keys": "node scripts/gen-license-keys.mjs --env",
     "test:store": "node scripts/test-store-app.mjs",
+    "test:dash": "node scripts/test-dash-app.mjs",
     "wa:bot": "node scripts/wa-account-bot.mjs"
   },
   "dependencies": {

@@ -165,7 +165,7 @@ async function startBot() {
         const reply =
           `📱 *تطبيقات وبرمجيات ZeidexSoft المجانية:*\n━━━━━━━━━━━━━━━━━━━━━\n\n` +
           appList +
-          `\n\n🎁 إنشاء بوت متجر خاص بك مجاناً:\n${botUrl}?start=freebot\n\n` +
+          `\n\n🧪 جرّب متجر تيليجرام الخاص بك مجاناً 7 أيام:\n${botUrl}?start=trial\n\n` +
           `أرسل *0* للعودة للقائمة الرئيسية.`
         await sock.sendMessage(from, { text: reply })
       } else if (clean === '3' || clean.includes('تواصل') || clean.includes('دعم') || clean.includes('ادمن') || clean.includes('أدمن')) {

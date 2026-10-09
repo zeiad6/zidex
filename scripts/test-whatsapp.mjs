@@ -66,7 +66,7 @@ await post(message({ type: 'interactive', interactive: { button_reply: { id: 'sh
 assert.ok(sent.at(-1).body.text.body.includes(catalog.products[0].title), 'shop lists catalogue products')
 assert.ok(sent.at(-1).body.text.body.includes(`https://t.me/${catalog.bot}`), 'buying points at the Telegram bot')
 await post(message({ type: 'interactive', interactive: { button_reply: { id: 'free' } } }))
-assert.ok(sent.at(-1).body.text.body.includes('?start=freebot'), 'free offers the free store bot')
+assert.ok(sent.at(-1).body.text.body.includes('?start=trial'), 'free offers the store-bot trial')
 
 // A malformed but signed batch is acknowledged, not retried forever.
 const raw = '{"entry": [oops'

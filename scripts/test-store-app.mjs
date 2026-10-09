@@ -117,7 +117,11 @@ console.log('\n1. render — the page that never rendered before')
   ok('no skeleton left behind', skeletons.length === 0, `${skeletons.length} skeletons`)
   ok('count line filled', doc.querySelector('#count').textContent.trim().length > 0, doc.querySelector('#count').textContent)
   ok('featured banner revealed', doc.querySelector('#feature').hidden === false)
-  ok('category filters built', doc.querySelectorAll('#filters button').length === 4, `${doc.querySelectorAll('#filters button').length} tabs`)
+  // The filters are built from the catalogue's own categories, so the count is
+  // derived, not hardcoded: a catalogue that adds a category gains a tab.
+  const tabs = 1 + new Set(catalog.products.map((p) => p.category)).size
+  const built = doc.querySelectorAll('#filters button').length
+  ok('category filters built', built === tabs, `${built} tabs`)
   ok('first card carries a title', cards[0].querySelector('h3').textContent.length > 0, cards[0].querySelector('h3').textContent.slice(0, 40))
   ok('cards are keyboard-reachable', cards[0].getAttribute('tabindex') === '0' && cards[0].getAttribute('role') === 'button')
   ok('no runtime errors', errors.length === 0, errors.join(' | ') || 'clean')
@@ -387,7 +391,7 @@ console.log('\n9. sections — paid products and free apps')
   const cards = doc.querySelectorAll('#grid .card.app:not(.freebot)')
   ok('free shows every program', cards.length === apps.apps.length, `${cards.length}/${apps.apps.length}`)
   const fb = doc.querySelector('#grid .card.freebot a.get')
-  ok('the free store bot leads the section', !!fb && fb.href === `https://t.me/${catalog.bot}?start=freebot`)
+  ok('the store-bot trial leads the section', !!fb && fb.href === `https://t.me/${catalog.bot}?start=trial`)
   ok('category chips hide in free', doc.querySelector('#filters').hidden === true)
   ok('the title follows the section', doc.querySelector('#section-title').textContent === 'تطبيقات مجانية')
   const get = cards[0].querySelector('a.get')
@@ -476,7 +480,9 @@ console.log('\n11. sheet details — after you pay, what you need, coming soon')
   ok('a soon card says so', doc.querySelector(`#grid .card[data-sku="${soon.sku}"] .badge.soon`) !== null)
   open(soon.sku)
   await tick()
-  ok('a soon product hides the empty sections', doc.querySelector('#sheet-after-box').hidden === true)
+  // An empty section hides regardless of which product is first-soon: a soon
+  // product that does carry steps shows them, one without hides the box.
+  ok('a soon product hides the empty sections', doc.querySelector('#sheet-after-box').hidden === ((soon.after || []).length === 0))
   const buy = doc.querySelector('#sheet-buy')
   ok('its button asks instead of buying', buy.textContent.includes('اسأل'))
   buy.click()

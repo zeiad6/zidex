@@ -82,7 +82,7 @@ async function answer(env: WhatsAppEnv, to: string, choice: string) {
   if (choice === 'free') {
     const apps = (await json<{ apps: App[] }>(env, '/store/apps.json'))?.apps ?? []
     const lines = apps.map((a) => `• ${a.name} v${a.version} (${a.platform})\n  ${a.downloads[0]?.href ?? ''}`)
-    return graph(env, text(to, `🎁 *تطبيقات مجانية*\n${lines.join('\n')}\n\n🤖 بوت متجر مجاني لك: ${bot}?start=freebot`))
+    return graph(env, text(to, `🎁 *تطبيقات مجانية*\n${lines.join('\n')}\n\n🧪 جرّب متجر تيليجرام الخاص بك مجاناً 7 أيام: ${bot}?start=trial`))
   }
   if (choice === 'contact') {
     return graph(env, text(to, `💬 نردّ عليك هنا، أو أسرع على تيليجرام: ${bot}`))

@@ -728,12 +728,60 @@
       "after": [
         "تدفع بنجوم تيليجرام — ويصلك فوراً إيصال بمعرّف العملية",
         "جهّز رقم أعمال واتساب: Meta for Developers ← WhatsApp ← API Setup",
-        "أرسل /wa رقم_الهاتف الدائمي التوكن السر في بوتك — وتبدأ رسائل واتساب بالوصول إليك فوراً"
+        "أرسل /wa رقم_الهاتف_الدائمي التوكن السر هنا في هذا البوت مباشرة — وتبدأ رسائل واتساب بالوصول إليك فوراً"
       ],
       "after_en": [
         "You pay in Telegram Stars and get a receipt with the transaction id at once",
         "Prepare a WhatsApp Business number: Meta for Developers ← WhatsApp ← API Setup",
-        "Send /wa <phone_id> <token> <secret> in your bot — WhatsApp messages reach you immediately"
+        "Send /wa <phone_id> <token> <secret> right here in this bot — WhatsApp messages reach you immediately"
+      ]
+    },
+    {
+      "sku": "aifake-pro",
+      "title": "AiFake Pro — تطبيق أندرويد",
+      "title_en": "AiFake Pro — Android App",
+      "description": "النسخة الاحترافية الكاملة من تطبيق AiFake لأندرويد (ملف APK): بلا إعلانات، بلا قيود، مع التحديثات مجاناً مدى الحياة عبر قناة التخزين الخاصة. يُسلَّم ملف التطبيق تلقائياً وفوراً بعد الدفع.",
+      "description_en": "The full Pro edition of the AiFake Android app (APK): no ads, no limits, free lifetime updates through the private storage channel. The APK is delivered automatically right after payment.",
+      "stars": 2250,
+      "category": "apps",
+      "monthly": false,
+      "featured": false,
+      "soon": true,
+      "usd": 30,
+      "image": "/img/aifake-1.webp",
+      "features": [
+        "النسخة الاحترافية الكاملة — كل الميزات مفتوحة",
+        "بلا إعلانات وبلا اشتراك — مرة واحدة وتملكه",
+        "ملف APK رسمي وموقّع — يُسلَّم تلقائياً بعد الدفع",
+        "تحديثات مجانية مدى الحياة عبر قناة التخزين الخاصة",
+        "دعم فني مباشر من فريق ZeidexSoft"
+      ],
+      "features_en": [
+        "Full Pro edition — every feature unlocked",
+        "No ads, no subscription — one payment, yours forever",
+        "Official signed APK — auto-delivered right after payment",
+        "Free lifetime updates through the private storage channel",
+        "Direct support from the ZeidexSoft team"
+      ],
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك فوراً إيصال بمعرّف العملية",
+        "يصلك ملف APK للتطبيق تلقائياً في نفس المحادثة بعد الدفع",
+        "فعّل «تثبيت من مصادر غير معروفة» لهذا الملف ثم ثبّت التطبيق",
+        "تنضم لقناة التخزين الخاصة لتصلك التحديثات أولاً بأول"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt with the transaction id at once",
+        "The app's APK file is delivered automatically in the same chat right after payment",
+        "Enable \"install from unknown sources\" for this file, then install the app",
+        "You join the private storage channel and receive every update first"
+      ],
+      "needs": [
+        "جهاز أندرويد 8.0 أو أحدث",
+        "رصيد نجوم تيليجرام (يُشحن من تيليجرام أو Fragment)"
+      ],
+      "needs_en": [
+        "An Android 8.0+ device",
+        "Telegram Stars balance (top up in Telegram or on Fragment)"
       ]
     },
     {

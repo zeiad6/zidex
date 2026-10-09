@@ -162,8 +162,8 @@
     setupTitle: ['التهيئة للعمل', 'Getting it running'],
     soon: ['قريباً', 'Coming soon'],
     askBot: ['💬 اسأل عنه في البوت', '💬 Ask about it in the bot'],
-    freeBot: ['بوت متجر مجاني — دائماً', 'A free store bot — forever'],
-    freeBotText: ['متجرك على تيليجرام باسمك: حتى 20 منتجاً بالنجوم، يعمل على السحابة 24/7.', 'Your own Telegram store: up to 20 products paid in Stars, running in the cloud 24/7.'],
+    freeBot: ['متجر تيليجرام — تجربة 7 أيام', 'A Telegram store — 7-day free trial'],
+    freeBotText: ['متجرك على تيليجرام باسمك: كل مميزات الباقة المدفوعة 7 أيام كاملة، على السحابة 24/7 بدون دفع.', 'Your own Telegram store: every paid feature for 7 full days, running in the cloud 24/7 — no payment.'],
     freeBotGo: ['احصل عليه', 'Get it'],
     close: ['إغلاق', 'Close'],
     done: ['تم ✓', 'Done ✓'],
@@ -183,6 +183,7 @@
   var CATEGORY = {
     bots: ['باقات البوت', 'Bot packages'],
     types: ['بوت لكل نشاط', 'A bot for every business'],
+    apps: ['تطبيقات', 'Apps'],
     channel: ['خدمات', 'Services'],
     all: ['الكل', 'All'],
   }
@@ -412,16 +413,17 @@
     return a
   }
 
-  /** The free store bot leads the free section: it is the one free thing that is ours to give. */
+  /** The store-bot trial leads the free section: the one free thing that is ours to give
+   *  is a full 7-day trial — the free month is retired. */
   function freeBotCard() {
     var node = el('article', { class: 'card app freebot' }, [])
     var pic = art({ sku: 'freebot' })
     node.appendChild(el('div', {}, [pic]))
     node.appendChild(
       el('div', { class: 'body' }, [
-        el('h3', { text: '🎁 ' + t('freeBot') }),
+        el('h3', { text: '🧪 ' + t('freeBot') }),
         el('p', { text: t('freeBotText') }),
-        el('div', { class: 'row' }, [outLink('get', 'https://t.me/' + catalog.bot + '?start=freebot', t('freeBotGo'))]),
+        el('div', { class: 'row' }, [outLink('get', 'https://t.me/' + catalog.bot + '?start=trial', t('freeBotGo'))]),
       ]),
     )
     return node

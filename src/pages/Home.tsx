@@ -444,7 +444,7 @@ function Hero() {
   const { t } = useI18n()
   const { catalog } = useCatalog()
   const botCount = catalog?.products.filter((p) => p.category === 'types' || (p.category === 'bots' && !p.monthly)).length
-  const trialLink = catalog ? `https://t.me/${catalog.bot}?start=freebot` : '/shop'
+  const trialLink = catalog ? `https://t.me/${catalog.bot}?start=trial` : '/shop'
 
   return (
     <section
@@ -471,8 +471,8 @@ function Hero() {
 
           <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-white/70">
             {t(
-              'متاجر رقمية، إدارة مجموعات، خدمة عملاء، حجوزات واشتراكات — بدفع بالنجوم والكريمي. ابدأ ببوت متجر مجاني لمدة شهر، أو جرّب بوتك الكامل يومين.',
-              'Digital stores, group management, support, bookings and subscriptions — paid in Stars or via Kuraimi. Start with a free store bot for a month, or try your full bot for two days.',
+              'متاجر رقمية، إدارة مجموعات، خدمة عملاء، حجوزات واشتراكات — بدفع بالنجوم والكريمي. جرّب بوتك الكامل بكل المميزات 7 أيام مجاناً.',
+              'Digital stores, group management, support, bookings and subscriptions — paid in Stars or via Kuraimi. Try your full bot with every feature free for 7 days.',
             )}
           </p>
 

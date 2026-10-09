@@ -51,6 +51,9 @@ type Item = {
   usd?: number
   /** Optional demo link surfaced on the product card. */
   demo?: string
+  /** The web store's SKU, carried from the catalog so the deep link t.me/<bot>?start=buy_<sku>
+   *  (what the site's "اطلب الآن" button opens) can land on this exact item. */
+  sku?: string
   /** Optional post-purchase steps (from the catalog "after"): what the buyer does next. Shown
    *  on the product card and again after checkout, so the flow is never a mystery. */
   after?: string[]
@@ -86,7 +89,7 @@ type Cfg = {
   orders: number
   stars: number
   created: string
-  /** "free": self-served from the platform bot's /freebot — capped, with a small signature.
+  /** Legacy records only — the free month is retired. "trial": the one self-serve plan.
    *  Absent on records made before plans existed, which are paid. */
   plan?: 'free' | 'trial' | 'paid'
   /** The owner's own website. Shown to customers only once verified (/site). */
@@ -119,6 +122,14 @@ type Cfg = {
    *  else lands in the owner's Telegram chat for /ware. token (the permanent access
    *  token) and secret (the app secret) are sealed like the bot token itself. */
   wa?: { phoneId: string; token: string; secret: string; lastFrom?: string }
+  /** Buyers' WhatsApp Business links hosted on the platform record itself (the WhatsApp
+   *  product's native setup): its buyers may own no hosted bot, so their Meta number
+   *  rides this record as a guest — their WhatsApp lands in their own chat, and replies
+   *  go out as their own /ware. Sealed like every other secret; exp = end of the free
+   *  7-day trial, absent once they have paid. */
+  waGuests?: { phoneId: string; uid: number; token: string; secret: string; exp?: string; lastFrom?: string }[]
+  /** Telegram ids that paid for the WhatsApp product: their guest link never expires. */
+  waPaid?: number[]
 }
 
 const DEFAULT_ORIGIN = 'https://zeidexsoft.com'
@@ -128,10 +139,10 @@ const originOf = (env: BotsEnv) => env.ORIGIN || DEFAULT_ORIGIN
  *  primary. Shared by provision and the one-time webhook sync so they agree. */
 const hostOf = (env: BotsEnv, cfg: Cfg) => (isTrial(cfg) && env.TRIAL_ORIGIN) || originOf(env)
 const MAX_ITEMS = 50
-// The free plan is a mid-range store for one month: enough to run a real shop and decide.
+// The free month is retired — the 7-day trial is the only self-serve plan now. These caps
+// stay only for the legacy free records already out there: honoured, never re-provisioned.
 const FREE_MAX_ITEMS = 30
 const FREE_MAX_FAQS = 30
-const FREE_DAYS = 30
 // The trial is the full paid store for a short window: every capability, so the decision
 // to buy is made on the real product, not on its capped shadow.
 const TRIAL_DAYS = 7
@@ -151,9 +162,9 @@ const HOOK_UPDATES = ['message', 'callback_query', 'pre_checkout_query', 'channe
 /** Bump when HOOK_UPDATES (or any other webhook setting) changes: every live bot
  *  whose record still carries the old revision re-registers itself, once. */
 const HOOK_REVISION = 2
-/** What the platform's /freebot checks before provisioning: an older Worker ignores "plan"
- *  and would host a free bot with no limits at all. */
-const PLANS = ['free', 'trial', 'paid'] as const
+/** What the platform's /trial checks before provisioning: an older Worker ignores "plan"
+ *  and would host a trial bot with no limits at all. The free month is retired. */
+const PLANS = ['trial', 'paid'] as const
 
 /**
  * The platform's own bot, which gets the extra menu rows (the app downloads and
@@ -201,9 +212,11 @@ export function __expireOwnerCache() {
 
 const MAX_FAQS = 50
 const MAX_USERS = 5000
+/** Legacy records only: the free month is retired, but records already in the wild keep
+ *  working — capped, signed, lapsed on their own date, upgradeable to paid. */
 const isFree = (cfg: Cfg) => cfg.plan === 'free'
-/** A trial runs the full paid store for a fixed window, then lapses like a free month:
- *  closed to customers, every byte of the shop kept for the upgrade decision. */
+/** The one self-serve plan: the full paid store for a fixed window, then lapsed like a
+ *  legacy free month — closed to customers, every byte kept for the upgrade decision. */
 const isTrial = (cfg: Cfg) => cfg.plan === 'trial'
 /** A free month or a trial window that is over: closed to customers, every byte kept. */
 const lapsed = (cfg: Cfg) => (isFree(cfg) || isTrial(cfg)) && !!cfg.expires && Date.now() > Date.parse(cfg.expires)
@@ -222,6 +235,41 @@ const hasCard = (i: Item) => !!i.features?.length || (i.usd != null && i.usd > 0
 
 /** A product's detail card, shown before checkout. Exported so the storefront and the tests share
  *  the exact same rendering. */
+/** The web store deep link's landing: t.me/<bot>?start=buy_<sku>. The SKU is matched
+ *  against the catalog items' own SKU first, then a normalised title, so even a record
+ *  provisioned before SKUs existed still lands on its product instead of a dead welcome. */
+function itemBySku(cfg: Cfg, sku: string): Item | undefined {
+  const key = norm(sku)
+  return (
+    cfg.items.find((i) => i.sku === sku) ||
+    cfg.items.find((i) => norm(i.sku || '') === key) ||
+    cfg.items.find((i) => norm(i.title) === key)
+  )
+}
+
+/** The product's own checkout view: its card first when there is one to show, straight to
+ *  the invoice when there is not. One builder shared by the 🛍 buttons, the /search results
+ *  and the web store's buy_<sku> deep link, so every path sells the exact same thing. */
+async function sendBuyCard(token: string, chat: number, cfg: Cfg, item: Item) {
+  if (hasCard(item)) {
+    await send(token, chat, productCard(item), {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: `⭐️ شراء الآن (${item.stars} نجمة)`, callback_data: `t:pay:${item.id}` }],
+          ...(item.demo && /^https?:\/\//.test(item.demo) ? [[{ text: '🔗 معاينة', url: item.demo }]] : []),
+          ...(WA_ITEM(item) ? [[{ text: '📱 ربط واتساب — تجربة 7 أيام', callback_data: 't:wa_trial' }]] : []),
+          [{ text: '🔙 المنتجات', callback_data: 't:items' }],
+        ],
+      },
+    })
+    return
+  }
+  await tg(token, 'sendInvoice', {
+    chat_id: chat, title: item.title, description: item.desc, payload: `t${cfg.id}:${item.id}`,
+    provider_token: '', currency: 'XTR', prices: [{ label: item.title, amount: item.stars }],
+  })
+}
+
 export function productCard(i: Item) {
   const lines = [
     `🛍 <b>${esc(i.title)}</b>`,
@@ -240,7 +288,7 @@ export function productCard(i: Item) {
   lines.push(``, `━━━━━━━━━━━━━━━━━━━━━`)
   const price = i.usd != null && i.usd > 0 ? `⭐️ <b>${i.stars}</b> نجمة (~$${i.usd})` : `⭐️ <b>${i.stars}</b> نجمة`
   lines.push(`💰 السعر: ${price}`)
-  if (i.demo) lines.push(`🔗 معاينة: ${esc(i.demo)}`)
+  if (i.demo && /^https?:\/\//.test(i.demo)) lines.push(`🔗 معاينة: ${esc(i.demo)}`)
   if (i.deliver) lines.push(`⚡️ <b>تسليم تلقائي فوري بعد الدفع</b>`)
   return lines.join('\n')
 }
@@ -323,6 +371,28 @@ export async function waVerifyToken(env: BotsEnv, botId: string | number) {
   const k = await crypto.subtle.importKey('raw', unb64(env.BOTS_KEY!), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
   const mac = new Uint8Array(await crypto.subtle.sign('HMAC', k, new TextEncoder().encode(`wa:${botId}`)))
   return b64(mac).replace(/[^A-Za-z0-9]/g, '').slice(0, 48)
+}
+
+// ── The browser dashboard (public/dash/) ─────────────────────────────
+/** The /web command's login key. Derived, never stored: an HMAC over the bot id and the
+ *  code's own expiry, so nothing in KV can leak it and it self-expires. The link carries
+ *  it in the URL fragment (never sent to a server); the dashboard presents it as a Bearer
+ *  token and botsDash() recomputes the same MAC before granting any power. */
+export const DASH_TTL_DAYS = 7
+const dashMac = async (env: BotsEnv, botId: string | number, exp: number) => {
+  const k = await crypto.subtle.importKey('raw', unb64(env.BOTS_KEY!), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+  const mac = new Uint8Array(await crypto.subtle.sign('HMAC', k, new TextEncoder().encode(`dash:${botId}:${exp}`)))
+  return b64(mac).replace(/[^A-Za-z0-9]/g, '').slice(0, 48)
+}
+export async function dashCode(env: BotsEnv, botId: string | number) {
+  const exp = Math.floor(Date.now() / 1000) + DASH_TTL_DAYS * 86400
+  return `${exp}.${await dashMac(env, botId, exp)}`
+}
+export async function dashOk(env: BotsEnv, botId: string | number, code: string) {
+  const [exp, mac] = String(code ?? '').split('.')
+  if (!/^\d{1,12}$/.test(exp) || !mac) return false
+  if (Number(exp) * 1000 < Date.now()) return false
+  return safeEqual(mac, await dashMac(env, botId, Number(exp)))
 }
 
 export function safeEqual(a: string, b: string) {
@@ -417,14 +487,23 @@ async function hmacHex(secret: string, body: string) {
 }
 
 const WA_GRAPH_VERSION = 'v23.0'
+/** How many buyers' WhatsApp links one platform record hosts. */
+const WA_MAX_GUESTS = 25
+/** The catalog's WhatsApp product carries demo:"whatsapp" as its marker — the same value
+ *  the web store's free-try button deep-links with (t.me/<bot>?start=demo_whatsapp).
+ *  It is a sentinel, never a URL, so every demo-link render must exclude it. */
+const WA_ITEM = (i: Item) => i.demo === 'whatsapp'
+/** A guest link's trial window: the same 7 days as every other self-serve trial. */
+const waGuestLive = (g: { exp?: string }) => !g.exp || Date.now() < Date.parse(g.exp)
 
-/** Send one text through the owner's WhatsApp Business number (Meta Cloud API). */
-async function waSend(env: BotsEnv, cfg: Cfg, to: string, body: string): Promise<{ ok: boolean; status?: number }> {
-  if (!cfg.wa) return { ok: false }
+/** Send one text through a linked WhatsApp Business number (Meta Cloud API) — the owner's
+ *  own link or a buyer's guest link, the same Graph API either way. */
+async function waSend(env: BotsEnv, link: { phoneId: string; token: string } | undefined, to: string, body: string): Promise<{ ok: boolean; status?: number }> {
+  if (!link) return { ok: false }
   try {
-    const res = await fetch(`https://graph.facebook.com/${WA_GRAPH_VERSION}/${cfg.wa.phoneId}/messages`, {
+    const res = await fetch(`https://graph.facebook.com/${WA_GRAPH_VERSION}/${link.phoneId}/messages`, {
       method: 'POST',
-      headers: { authorization: `Bearer ${await open(env, cfg.wa.token)}`, 'content-type': 'application/json' },
+      headers: { authorization: `Bearer ${await open(env, link.token)}`, 'content-type': 'application/json' },
       body: JSON.stringify({ messaging_product: 'whatsapp', to, type: 'text', text: { body: body.slice(0, 4096), preview_url: true } }),
     })
     return { ok: res.ok, status: res.status }
@@ -501,60 +580,18 @@ const knownOwnerOf = (id: string | number, ttl: number) => {
 
 const CONTACT_PROMPT = 'اكتب رسالتك للمالك ردّاً على هذه الرسالة.'
 
-const FREEBOT_INTRO =
-  '🎁 <b>إنشاء بوت متجر مجاني باسمك — شهر كامل</b>\n' +
-  '━━━━━━━━━━━━━━━━━━━━━\n\n' +
-  '⚡️ <b>استضافة سحابية متكاملة 24/7 على Cloudflare Workers</b>\n' +
-  'بدون الحاجة لخادم وبدون أي إعدادات معقدة:\n\n' +
-  '✨ <b>أبرز مميزات متجرك:</b>\n' +
-  '▫️ بيع حتى 30 منتجاً وقبول نجوم تيليجرام ⭐️ مباشرة\n' +
-  '▫️ 30 سؤالاً شائعاً مع ردود آلية ذكية وفورية\n' +
-  '▫️ تصنيف المتجر لأقسام وصفحات تعريفية\n' +
-  '▫️ لوحة تحكم وإحصاءات كاملة من داخل البوت (<code>/admin</code>)\n\n' +
-  '━━━━━━━━━━━━━━━━━━━━━\n' +
-  '🚀 <b>خطوات التفعيل في دقيقة واحدة:</b>\n' +
-  '1️⃣ افتح @BotFather وأرسل <code>/newbot</code> واختر اسماً لمتجرك\n' +
-  '2️⃣ انسخ التوكن (API Token) الذي يعطيك إياه\n' +
-  '3️⃣ أرسل التوكن هنا مباشرة في المحادثة — وسينطلق متجرك فوراً!\n\n' +
-  '🔒 <i>التوكن يُخزَّن مشفّراً (AES-GCM) ولا يظهر لأي شخص.</i>'
-const FREEBOT_ROWS: KbButton[][] = [
+/** The trial onboarding's buttons: open BotFather (the token still comes from there),
+ *  or go back. Named for the one self-serve flow there is now. */
+const TRIAL_ROWS: KbButton[][] = [
   [{ text: '🤖 فتح BotFather', url: 'https://t.me/BotFather' }],
   [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }],
 ]
-
-/** A customer sent a fresh bot token to the platform bot: host it as a free shop, end to end.
- *  Cap at SELF_SERVE_BOTS per Telegram user; never downgrade a bot already on the paid plan. */
-async function freeBotProvision(env: BotsEnv, shopToken: string, chat: number, uid: number, plainToken: string) {
-  if (!env.BOTS_KEY) return void (await send(shopToken, chat, '⚠️ التفعيل الذاتي غير مهيأ حالياً — جرّب لاحقاً أو راسل المالك.'))
-  const idxRaw = await env.DOWNLOADS.get(`tbowner:${uid}`)
-  const owned = idxRaw ? (JSON.parse(idxRaw) as number[]) : []
-  if (owned.length >= SELF_SERVE_BOTS)
-    return void (await send(shopToken, chat,
-      `⚖️ وصلت حد ${SELF_SERVE_BOTS} بوت مستضاف لكل حساب.\nلاستضافة المزيد اطلب الباقة الأساسية من المتجر:`,
-      { reply_markup: { inline_keyboard: [[{ text: '🛍 باقات المتاجر', url: `${originOf(env)}/store/` }], ...FREEBOT_ROWS.slice(1)] } }))
-  // The token itself carries the bot id; a bot already hosted on the paid plan must not
-  // be silently downgraded by a /freebot round trip.
-  const existing = await load(env, plainToken.split(':')[0])
-  if (existing?.plan === 'paid')
-    return void (await send(shopToken, chat, '💎 هذا البوت مستضاف بالفعل على <b>الباقة المدفوعة</b> — لا حاجة لإعادة التفعيل.'))
-  const made = await provision(env, plainToken, uid, 'free')
-  if (!made.ok) return void (await send(shopToken, chat, made.userText, { reply_markup: { inline_keyboard: FREEBOT_ROWS } }))
-  await send(shopToken, chat,
-    `🎉 <b>متجرك جاهز ويعمل الآن!</b>\n\n` +
-      `🤖 البوت: @${esc(made.cfg.username)}\n` +
-      `⏳ الخطة المجانية: ${FREE_DAYS} يوماً — تنتهي ${day(made.cfg.expires)}\n\n` +
-      `<b>ابدأ من هنا:</b>\n` +
-      `• افتح بوتك وأرسل <code>/admin</code> للوحة التحكم\n` +
-      `• أضف أول منتج: <code>/add اسم_المنتج | السعر_بالنجوم | وصف</code>\n` +
-      `• عدّل الترحيب: <code>/welcome نص</code>`,
-    { reply_markup: { inline_keyboard: [[{ text: '🚀 افتح متجرك', url: `https://t.me/${made.cfg.username}` }], ...FREEBOT_ROWS.slice(1)] } })
-}
 
 /** An admin requested a bot without paying: full paid plan, lifetime, no limits. */
 async function adminBotProvision(env: BotsEnv, shopToken: string, chat: number, uid: number, plainToken: string) {
   if (!env.BOTS_KEY) return void (await send(shopToken, chat, '⚠️ النظام غير مهيأ حالياً — تحقق من BOTS_KEY.'))
   const made = await provision(env, plainToken, uid, 'paid')
-  if (!made.ok) return void (await send(shopToken, chat, made.userText, { reply_markup: { inline_keyboard: FREEBOT_ROWS } }))
+  if (!made.ok) return void (await send(shopToken, chat, made.userText, { reply_markup: { inline_keyboard: TRIAL_ROWS } }))
   await send(shopToken, chat,
     `👑 <b>تم إنشاء وتفعيل البوت كمسؤول بنجاح!</b>\n\n` +
       `🤖 البوت: @${esc(made.cfg.username)}\n` +
@@ -580,10 +617,26 @@ const TRIAL_INTRO =
   '1️⃣ افتح @BotFather وأرسل <code>/newbot</code>\n' +
   '2️⃣ انسخ التوكن (API Token)\n' +
   `3️⃣ أرسله هنا بهذا الشكل: <code>/trial التوكن</code>\n\n` +
-  '⏳ بعد 7 أيام يتوقف المتجر للعملاء وتبقى كل بياناتك — رقِّها للباقة المدفوعة من المتجر، أو أكمل على الخطة المجانية (30 يوماً).'
+  '⏳ بعد 7 أيام يتوقف المتجر للعملاء وتبقى كل بياناتك — رقِّها للباقة المدفوعة من المتجر لتبقى يعمل.'
+
+/** The WhatsApp product's native onboarding: everything comes from Meta for Developers,
+ *  and the credentials are pasted right here — a Telegram token is never part of it. */
+const WA_SETUP_INTRO =
+  '📱 <b>إعداد واتساب للأعمال — الربط المزدوج</b>\n' +
+  '━━━━━━━━━━━━━━━━━━━━━\n\n' +
+  'كل ما تحتاجه من لوحة <b>Meta for Developers</b>:\n\n' +
+  '1️⃣ افتح <code>developers.facebook.com</code> وأنشئ تطبيقاً (أو اختر تطبيقك)\n' +
+  '2️⃣ من قائمة <b>WhatsApp ← API Setup</b> انسخ:\n' +
+  '▫️ <b>Phone number ID</b> — رقم الهاتف الدائمي\n' +
+  '▫️ <b>Permanent access token</b> — التوكن الدائمي\n' +
+  '3️⃣ من <b>WhatsApp ← Configuration ← Basic</b> انسخ <b>App secret</b>\n\n' +
+  'ثم أرسلها هنا مباشرة بهذا الشكل:\n' +
+  '<code>/wa رقم_الهاتف_الدائمي التوكن_الدائمي سر_التطبيق</code>\n\n' +
+  `⏳ <b>تجربة مجانية ${TRIAL_DAYS} أيام كاملة:</b> اربط رقمك الآن بدون أي دفع — رسائل واتساب تصلك هنا، وترد عليها من نفس المحادثة.`
 
 /** A customer asked for the full experience on trial: every paid capability for TRIAL_DAYS,
- *  self-served from the platform bot's /trial — same self-serve cap as the free month. */
+ *  self-served from the platform bot's /trial — the one self-serve plan, reached the same
+ *  way by /trial <token>, a bare pasted token, and every retired /freebot path. */
 async function trialBotProvision(env: BotsEnv, shopToken: string, chat: number, uid: number, plainToken: string) {
   if (!env.BOTS_KEY) return void (await send(shopToken, chat, '⚠️ التجربة غير مهيأة حالياً — جرّب لاحقاً أو راسل المالك.'))
   const idxRaw = await env.DOWNLOADS.get(`tbowner:${uid}`)
@@ -591,14 +644,14 @@ async function trialBotProvision(env: BotsEnv, shopToken: string, chat: number, 
   if (owned.length >= SELF_SERVE_BOTS)
     return void (await send(shopToken, chat,
       `⚖️ وصلت حد ${SELF_SERVE_BOTS} بوت مستضاف لكل حساب.\nللتجربة أو الاستضافة اطلب الباقة الأساسية من المتجر:`,
-      { reply_markup: { inline_keyboard: [[{ text: '🛍 باقات المتاجر', url: `${originOf(env)}/store/` }], ...FREEBOT_ROWS.slice(1)] } }))
+      { reply_markup: { inline_keyboard: [[{ text: '🛍 باقات المتاجر', url: `${originOf(env)}/store/` }], ...TRIAL_ROWS.slice(1)] } }))
   // A bot already on the paid plan gains nothing from a trial; a free bot may upgrade into
   // one to feel the full store before deciding — the trial never downgrades anyone.
   const existing = await load(env, plainToken.split(':')[0])
   if (existing?.plan === 'paid')
     return void (await send(shopToken, chat, '💎 هذا البوت على <b>الباقة المدفوعة</b> بالفعل — التجربة لا تضيف شيئاً.'))
   const made = await provision(env, plainToken, uid, 'trial')
-  if (!made.ok) return void (await send(shopToken, chat, made.userText, { reply_markup: { inline_keyboard: FREEBOT_ROWS } }))
+  if (!made.ok) return void (await send(shopToken, chat, made.userText, { reply_markup: { inline_keyboard: TRIAL_ROWS } }))
   await send(shopToken, chat,
     `🧪 <b>تجربتك الكاملة جاهزة وتعمل الآن!</b>\n\n` +
       `🤖 البوت: @${esc(made.cfg.username)}\n` +
@@ -607,7 +660,7 @@ async function trialBotProvision(env: BotsEnv, shopToken: string, chat: number, 
       `• أرسل <code>/admin</code> في بوتك للوحة التحكم الكاملة\n` +
       `• أضف منتجاً: <code>/add اسم_المنتج | السعر_بالنجوم | وصف</code>\n` +
       `• ربط قناة التخزين: اجعل البوت مشرفاً في قناتك الخاصة وانشر ملفاً فيها`,
-    { reply_markup: { inline_keyboard: [[{ text: '🚀 افتح متجرك', url: `https://t.me/${made.cfg.username}` }], ...FREEBOT_ROWS.slice(1)] } })
+    { reply_markup: { inline_keyboard: [[{ text: '🚀 افتح متجرك', url: `https://t.me/${made.cfg.username}` }], ...TRIAL_ROWS.slice(1)] } })
 }
 
 const menu = { inline_keyboard: [[{ text: '🛍 المنتجات', callback_data: 't:items' }, { text: '❓ الأسئلة', callback_data: 't:faqs' }], [{ text: '💬 راسل المالك', callback_data: 't:contact' }]] }
@@ -619,8 +672,7 @@ function menuFor(env: BotsEnv, cfg: Cfg, uid?: number) {
   const owner = uid !== undefined && (uid === cfg.owner || (env.ADMIN_UID ? String(uid) === env.ADMIN_UID : false))
   if (cfg.id === platformBotId(env)) {
     rows.push(
-      [{ text: '🛍 المتجر والمنتجات', callback_data: 't:items' }, { text: '🎁 أنشئ متجرك مجاناً', callback_data: 't:freebot' }],
-      [{ text: '🧪 تجربة كاملة 7 أيام (كل المميزات)', callback_data: 't:trial' }],
+      [{ text: '🛍 المتجر والمنتجات', callback_data: 't:items' }, { text: '🧪 تجربة كاملة 7 أيام (كل المميزات)', callback_data: 't:trial' }],
       [{ text: '📱 تطبيقات أندرويد', callback_data: 't:android' }, { text: '💻 تطبيقات ويندوز', callback_data: 't:windows' }],
       [{ text: '🌐 تطبيقات موقعي', callback_data: 't:myapps' }, { text: '💖 تبرع', callback_data: 't:donate' }],
     )
@@ -666,7 +718,7 @@ const HELP_TEXT =
   '• /help — ❓ دليل الأوامر'
 const PLATFORM_HELP =
   '\n• /apps — 📱 تطبيقاتنا (أندرويد وويندوز)\n' +
-  '• /freebot — 🎁 إنشاء متجر مجاني باسمك\n' +
+  '\n• /wa — 📱 ربط واتساب للأعمال بحسابك (تجربة أو شراء)\n' +
   '• /trial — 🧪 تجربة كاملة بكل المميزات (7 أيام)\n' +
   '• /donate — 💖 دعم ومساندة المنصة'
 /** ZeidexSoft's own apps and donation (with its bank accounts) belong to the platform bot.
@@ -951,9 +1003,23 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
         { reply_markup: { inline_keyboard: rows } }
       )
     } else if (data === 't:freebot') {
-      await send(token, chat, FREEBOT_INTRO, { reply_markup: { inline_keyboard: FREEBOT_ROWS } })
+      // The retired flow's buttons still float in old chats — every one of them lands
+      // on the one onboarding there is now: the 7-day trial.
+      await send(token, chat, TRIAL_INTRO, { reply_markup: { inline_keyboard: TRIAL_ROWS } })
     } else if (data === 't:trial') {
-      await send(token, chat, TRIAL_INTRO, { reply_markup: { inline_keyboard: FREEBOT_ROWS } })
+      await send(token, chat, TRIAL_INTRO, { reply_markup: { inline_keyboard: TRIAL_ROWS } })
+    } else if (data === 't:wa_trial') {
+      // The WhatsApp product's own trial: its Meta credentials pasted right here — never
+      // the freebot card, which would walk a WhatsApp buyer into a Telegram-token flow.
+      const waItemId = cfg.items.find(WA_ITEM)?.id
+      await send(token, chat, WA_SETUP_INTRO, {
+        reply_markup: {
+          inline_keyboard: [
+            ...(waItemId ? [[{ text: '⭐️ شراء الباقة الكاملة', callback_data: `t:buy:${waItemId}` }]] : []),
+            [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }],
+          ],
+        },
+      })
     } else if (data === 't:donate') {
       const rows = [
         [{ text: '⭐️ التبرع بنجوم تيليجرام (Stars)', callback_data: 't:don_stars' }],
@@ -1190,22 +1256,9 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
         // Rich catalog items get a detail card first (features + price); a dedicated buy button
         // then fires the invoice, so a buyer confirms what they want instead of being thrown
         // straight into payment. Simple owner-added items keep the one-tap invoice.
-        if (hasCard(item)) {
-          await send(token, chat, productCard(item), {
-            reply_markup: {
-              inline_keyboard: [
-                [{ text: `⭐️ شراء الآن (${item.stars} نجمة)`, callback_data: `t:pay:${item.id}` }],
-                ...(item.demo ? [[{ text: '🔗 معاينة', url: item.demo }]] : []),
-                [{ text: '🔙 المنتجات', callback_data: 't:items' }],
-              ]
-            }
-          })
-          return
-        }
-        await tg(token, 'sendInvoice', {
-          chat_id: chat, title: item.title, description: item.desc, payload: `t${cfg.id}:${item.id}`,
-          provider_token: '', currency: 'XTR', prices: [{ label: item.title, amount: item.stars }],
-        })
+        // The card-then-invoice flow itself lives in sendBuyCard, shared with the web
+        // store's buy_<sku> deep link, so the two paths can never sell differently.
+        await sendBuyCard(token, chat, cfg, item)
       }
     } else if (data.startsWith('t:pay:') && q.message.chat.type === 'private') {
       // The "buy now" button on a product card: same invoice as one-tap buy, reached deliberately.
@@ -1281,15 +1334,34 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
       // The payload is `t<botId>:<itemId>`; look up what was bought so it can be auto-delivered.
       const item = cfg.items.find((i) => i.id === Number(String(p.invoice_payload).split(':')[1]))
       const delivered = item ? await deliverItem(token, chat, item) : false
-      // When nothing was auto-delivered but the product ships with post-purchase steps, show them
-      // right away instead of a bare "the owner will contact you" — the buyer knows the plan.
-      const next = !delivered && item?.after?.length
-        ? `\n\n🚀 <b>الخطوات التالية:</b>\n` + item.after.slice(0, 6).map((s, k) => `${k + 1}️⃣ ${esc(s)}`).join('\n')
-        : ''
-      await send(token, chat,
-        delivered
-          ? '✅ <b>تم الدفع بنجاح!</b>\n\n🎁 وصلك منتجك بالأعلى — تسليم تلقائي فوري.'
-          : `✅ <b>تم الدفع، شكراً لك!</b>\n\nسيتواصل معك المالك لإكمال التسليم.${next}`)
+      // The WhatsApp product sets itself up natively, right here, with Meta credentials:
+      // the generic "the owner will contact you" would send a paying buyer nowhere, and
+      // the product's own flow must never walk them into a Telegram-token setup.
+      if (!delivered && item && WA_ITEM(item)) {
+        if (uid && !(cfg.waPaid ?? []).includes(uid)) cfg.waPaid = [...(cfg.waPaid ?? []), uid]
+        const g = (cfg.waGuests ?? []).find((x) => x.uid === uid)
+        if (g?.exp) delete g.exp
+        await save(env, cfg).catch(() => undefined)
+        await send(token, chat,
+          '✅ <b>تم الدفع بنجاح!</b>\n\n' +
+          '📱 <b>بوت واتساب للأعمال — إعدادك يبدأ من هنا:</b>\n' +
+          '━━━━━━━━━━━━━━━━━━━━━\n' +
+          '1️⃣ من لوحة <b>Meta for Developers ← WhatsApp ← API Setup</b> انسخ <b>رقم الهاتف الدائمي</b> و<b>التوكن الدائمي</b>\n' +
+          '2️⃣ من <b>WhatsApp ← Configuration ← Basic</b> انسخ <b>سر التطبيق</b>\n' +
+          '3️⃣ أرسلها هنا مباشرة: <code>/wa رقم_الهاتف_الدائمي التوكن السر</code>\n\n' +
+          `⏳ أو جرّبه الآن مجاناً ${TRIAL_DAYS} أيام بنفس الخطوات — وربطك بعد الشراء يصبح دائماً.`,
+          { reply_markup: { inline_keyboard: [[{ text: '📱 ربط واتساب الآن', callback_data: 't:wa_trial' }], [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]] } })
+      } else {
+        // When nothing was auto-delivered but the product ships with post-purchase steps, show them
+        // right away instead of a bare "the owner will contact you" — the buyer knows the plan.
+        const next = !delivered && item?.after?.length
+          ? `\n\n🚀 <b>الخطوات التالية:</b>\n` + item.after.slice(0, 6).map((s, k) => `${k + 1}️⃣ ${esc(s)}`).join('\n')
+          : ''
+        await send(token, chat,
+          delivered
+            ? '✅ <b>تم الدفع بنجاح!</b>\n\n🎁 وصلك منتجك بالأعلى — تسليم تلقائي فوري.'
+            : `✅ <b>تم الدفع، شكراً لك!</b>\n\nسيتواصل معك المالك لإكمال التسليم.${next}`)
+      }
       const label = item ? ` «${esc(item.title)}»` : ''
       await send(token, cfg.owner,
         `🛒 طلب مدفوع: ⭐️ ${p.total_amount} من ${esc(m.from?.first_name)} (<code>${uid}</code>)${label}\n` +
@@ -1319,10 +1391,59 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     }
     if (cfg.paused && !isOwner(uid)) return void (await send(token, chat, '🛠 البوت في صيانة قصيرة — عُد بعد قليل.'))
     const ended = lapsed(cfg)
-      ? `\n\n⏳ <b>انتهى الشهر المجاني</b> — متجرك متوقف للعملاء وكل بياناته محفوظة. فعّله بالترقية: ${originOf(env)}/store/`
+      ? `\n\n⏳ <b>انتهت فترة التجربة</b> — متجرك متوقف للعملاء وكل بياناته محفوظة. فعّله بالترقية: ${originOf(env)}/store/`
       : ''
     const hint = isOwner(uid) ? `\n\n<i>أنت المالك: /admin للوحة التحكم.</i>${ended}` : ''
-    
+
+    // The web store sells the same catalog this bot sells. Its "اطلب الآن" button opens
+    // t.me/<bot>?start=buy_<sku> and its trial button opens ?start=demo_<sku> — both used
+    // to land on the bare welcome, losing the tap's whole context. They now land on the
+    // product's own checkout view, exactly like the 🛍 المنتجات button does.
+    const startArg = text.slice(6).trim()
+    if (startArg.startsWith('buy_')) {
+      const item = itemBySku(cfg, startArg.slice(4))
+      if (item) return void (await sendBuyCard(token, chat, cfg, item))
+    } else if (startArg.startsWith('demo_')) {
+      const item = cfg.items.find((i) => i.demo === startArg.slice(5)) || itemBySku(cfg, startArg.slice(5))
+      if (item) {
+        // The WhatsApp product's free try is its own native setup path: the generic
+        // trial button would walk a WhatsApp buyer into a Telegram-token flow.
+        const rows = WA_ITEM(item)
+          ? [
+              [{ text: `⭐️ شراء الآن (${item.stars} نجمة)`, callback_data: `t:pay:${item.id}` }],
+              [{ text: '📱 ربط واتساب الآن — تجربة 7 أيام', callback_data: 't:wa_trial' }],
+              [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }],
+            ]
+          : [
+              [{ text: `⭐️ شراء الآن (${item.stars} نجمة)`, callback_data: `t:pay:${item.id}` }],
+              [{ text: '🧪 جرّب متجرك 7 أيام', callback_data: 't:trial' }],
+              [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }],
+            ]
+        await send(token, chat, productCard(item), { reply_markup: { inline_keyboard: rows } })
+        return
+      }
+    } else if ((startArg === 'trial' || startArg === 'freebot') && isPlatform) {
+      // The web store's trial card deep-links here (?start=trial) — and the retired
+      // free month's old links (?start=freebot) land on the same single onboarding.
+      return void (await send(token, chat, TRIAL_INTRO, { reply_markup: { inline_keyboard: TRIAL_ROWS } }))
+    } else if (startArg === 'buystars') {
+      // The sheet's "شحن النجوم" question: how a buyer tops up the wallet that pays here.
+      await send(token, chat,
+        '⭐️ <b>شحن نجوم تيليجرام — 3 طرق</b>\n' +
+        '━━━━━━━━━━━━━━━━━━━━━\n\n' +
+        '1️⃣ <b>من داخل تيليجرام</b> (الأسهل): الإعدادات ← <b>النجوم (Stars)</b> ← شحن رصيدك — يُدفع ببطاقتك أو متجرك التطبيقي مباشرة.\n' +
+        '2️⃣ <b>عبر Fragment</b>: افتح fragment.com وسجّل الدخول بحسابك ثم اشترِ النجوم.\n' +
+        '3️⃣ <b>التحويل من صديق</b>: يمكن لأي شخص تحويل نجوم لك من داخل المحادثة.\n\n' +
+        'بعد الشحن عُد إلى هنا واختر منتجك — الدفع يكتمل بضغطة واحدة.',
+        { reply_markup: { inline_keyboard: [
+          [{ text: '🛍 المنتجات', callback_data: 't:items' }],
+          [{ text: '🌐 Fragment — شراء النجوم', url: 'https://fragment.com/stars' }],
+          [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }],
+        ] } }
+      )
+      return
+    }
+
     await send(token, chat, esc(cfg.welcome) + hint + footer(cfg), { reply_markup: menuFor(env, cfg, uid) })
     return
   }
@@ -1341,14 +1462,16 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
   }
   if (!isPlatform && PLATFORM_COMMANDS.has(cmd)) return
   if (isPlatform && cmd === 'freebot') {
-    return void (await send(token, chat, FREEBOT_INTRO, { reply_markup: { inline_keyboard: FREEBOT_ROWS } }))
+    // Retired, kept as an alias only: old chats and old menus still offer /freebot, and
+    // every one of them lands on the single 7-day trial onboarding now.
+    return void (await send(token, chat, TRIAL_INTRO, { reply_markup: { inline_keyboard: TRIAL_ROWS } }))
   }
   if (isPlatform && cmd === 'trial') {
     // /trial bare shows the way in; /trial <token> provisions the full paid experience on
-    // the spot — the token rides the command, so the pasted-token path stays free-only.
+    // the spot — the token rides the command, exactly like a bare pasted token does.
     const candidate = arg.split(/\s+/)[0]
     if (!candidate || !TOKEN_RE.test(candidate))
-      return void (await send(token, chat, TRIAL_INTRO, { reply_markup: { inline_keyboard: FREEBOT_ROWS } }))
+      return void (await send(token, chat, TRIAL_INTRO, { reply_markup: { inline_keyboard: TRIAL_ROWS } }))
     return void (await trialBotProvision(env, token, chat, uid, candidate))
   }
   if (cmd === 'catalog') {
@@ -1434,10 +1557,91 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     return void (await send(token, chat, help, { reply_markup: { inline_keyboard: mainRows() } }))
   }
 
-  // A pasted bot token is not a search — it is an activation, whoever sends it.
+  // The WhatsApp product's native setup, for its buyers and triers, right here on the
+  // platform bot: they may own no hosted bot of their own, so their Meta Cloud number
+  // rides this record as a guest link — their WhatsApp lands in their own chat, and
+  // their replies go out as their own /ware. Nothing in this path ever asks for a
+  // Telegram token; Meta's Graph API alone confirms the credentials, and both secrets
+  // are sealed exactly like the bot token itself.
+  if (isPlatform && uid && !isOwner(uid) && (cmd === 'wa' || cmd === 'ware' || cmd === 'wasend')) {
+    const g = (cfg.waGuests ?? []).find((x) => x.uid === uid)
+    const live = !!g && waGuestLive(g)
+    if (cmd === 'wa') {
+      if (arg === 'off') {
+        if (g) {
+          cfg.waGuests = (cfg.waGuests ?? []).filter((x) => x !== g)
+          await save(env, cfg)
+          return void (await send(token, chat, '🔌 فُصل واتساب من حسابك.'))
+        }
+        return void (await send(token, chat, 'لا يوجد ربط واتساب على حسابك بعد.\n\n' + WA_SETUP_INTRO))
+      }
+      const a = arg.split(/\s+/).filter(Boolean)
+      if (a.length < 3) {
+        const status = g
+          ? live
+            ? `📱 واتساب مربوط بحسابك برقم <code>${esc(g.phoneId)}</code>.\nالرد على آخر رسالة: <code>/ware نصك</code> · الإرسال لأي رقم: <code>/wasend رقم نصك</code> · الفصل: <code>/wa off</code>\n\n`
+            : `⏳ انتهت تجربة الواتساب (<code>${esc(g.phoneId)}</code>) — ربط جديد بعد الشراء يصبح دائماً.\n\n`
+          : ''
+        const waItemId = cfg.items.find(WA_ITEM)?.id
+        return void (await send(token, chat, status + WA_SETUP_INTRO, {
+          reply_markup: {
+            inline_keyboard: [
+              ...(waItemId ? [[{ text: '⭐️ شراء الباقة الكاملة', callback_data: `t:buy:${waItemId}` }]] : []),
+              [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }],
+            ],
+          },
+        }))
+      }
+      const [phoneId, waToken, appSecret] = a
+      if (!/^\d{6,}$/.test(phoneId) || waToken.length < 20 || appSecret.length < 16)
+        return void (await send(token, chat, '⚠️ الصيغة: <code>/wa رقم_الهاتف_الدائمي التوكن_الدائمي سر_التطبيق</code> — كلها من لوحة Meta for Developers ← WhatsApp.'))
+      // Meta alone can confirm the pair — the same Graph check the owner's own link runs.
+      let valid = false
+      try {
+        const res = await fetch(`https://graph.facebook.com/${WA_GRAPH_VERSION}/${phoneId}?access_token=${encodeURIComponent(waToken)}`)
+        valid = res.ok
+      } catch {
+        valid = false
+      }
+      if (!valid) return void (await send(token, chat, '⚠️ رفضت Meta هذا الزوج (رقم الهاتف / التوكن الدائمي) — تحقق منهما من لوحة Meta for Developers ثم أعد الأمر.'))
+      if (!g && (cfg.waGuests ?? []).length >= WA_MAX_GUESTS)
+        return void (await send(token, chat, '⚠️ اكتملت السعة مؤقتاً — تواصل مع الدعم لإتمام ربط واتساب.'))
+      const paid = (cfg.waPaid ?? []).includes(uid)
+      const link = {
+        phoneId, uid,
+        token: await seal(env, waToken), secret: await seal(env, appSecret),
+        ...(paid ? {} : { exp: new Date(Date.now() + TRIAL_DAYS * 864e5).toISOString() }),
+      }
+      cfg.waGuests = [...(cfg.waGuests ?? []).filter((x) => x !== g), link]
+      await save(env, cfg)
+      const verify = await waVerifyToken(env, cfg.id)
+      return void (await send(token, chat,
+        `📱 <b>رُبط واتساب للأعمال بحسابك${paid ? '' : ` — تجربة ${TRIAL_DAYS} أيام`}</b>\n\n` +
+        `في تطبيقك على Meta for Developers ← WhatsApp ← Configuration:\n` +
+        `• رابط الويبهوك: <code>${originOf(env)}/api/wa/${cfg.id}</code>\n` +
+        `• Verify token: <code>${esc(verify)}</code>\n\n` +
+        `رسائل واتساب ستصلك هنا — والرد عليها: <code>/ware نصك</code>\n` +
+        `إرسال لأي رقم: <code>/wasend رقم نصك</code> · الفصل: <code>/wa off</code>`))
+    }
+    if (!g) return void (await send(token, chat, 'لا يوجد ربط واتساب على حسابك بعد.\n\n' + WA_SETUP_INTRO))
+    if (!live) return void (await send(token, chat, `⏳ انتهت تجربة الواتساب (<code>${esc(g.phoneId)}</code>) — ربط جديد بعد الشراء يصبح دائماً.`))
+    if (cmd === 'ware') {
+      if (!g.lastFrom) return void (await send(token, chat, 'لا رسالة واتساب بانتظار الرد — أول واتساب يصلك يحدد وجهة <code>/ware</code>.'))
+      if (!arg) return void (await send(token, chat, 'الاستخدام: <code>/ware نص_الرد</code>'))
+      const r = await waSend(env, g, g.lastFrom, arg)
+      return void (await send(token, chat, r.ok ? '✅ أُرسل عبر واتساب.' : `تعذّر الإرسال (${r.status ?? 'شبكة'}) — تحقق من الربط بـ <code>/wa</code>.`))
+    }
+    const [num, ...words] = arg.split(/\s+/)
+    if (!/^\d{8,}$/.test(num ?? '') || !words.length) return void (await send(token, chat, 'الاستخدام: <code>/wasend رقم_الواتساب نص</code>'))
+    const r = await waSend(env, g, num, words.join(' '))
+    return void (await send(token, chat, r.ok ? '✅ أُرسل.' : `تعذّر الإرسال (${r.status ?? 'شبكة'}).`))
+  }
+
+  // A pasted bot token is not a search — it is an activation, whoever sends it: the
+  // platform's owner activates for life, anyone else starts the one 7-day trial.
   if (isPlatform && uid && TOKEN_RE.test(text.trim())) {
     if (isOwner(uid)) return void (await adminBotProvision(env, token, chat, uid, text.trim()))
-    return void (await freeBotProvision(env, token, chat, uid, text.trim()))
+    return void (await trialBotProvision(env, token, chat, uid, text.trim()))
   }
 
   // A panel step in flight: the owner's next plain message answers it. The step
@@ -1552,8 +1756,8 @@ async function smartAnswer(env: BotsEnv, token: string, chat: number, cfg: Cfg, 
 }
 
 /** ZeidexSoft Pro licences are minted and managed from the platform bot only. Every hosted
- *  shop's owner reached these too — with /freebot open to anyone, that was free Pro keys for
- *  all and the power to revoke other customers' licences by id. */
+ *  shop's owner reached these too — with self-service open to anyone, that was free Pro keys
+ *  for all and the power to revoke other customers' licences by id. */
 const LICENSE_COMMANDS = new Set(['licnew', 'licextend', 'lExtend', 'licrevoke', 'lRevoke', 'licrelease', 'lRelease'])
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1800,6 +2004,10 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
       [{ text: '🤖 تفعيل بوت بدون دفع', callback_data: 't:adm_freebot' }],
       [{ text: cfg.paused ? '▶️ استئناف البوت' : '⏸ إيقاف للصيانة', callback_data: 't:adm_toggle_pause' }, { text: '🔄 تحديث الإحصاءات', callback_data: 't:adm_refresh' }]
     ]
+    // The web dashboard is one tap from the same panel: the link is minted here so
+    // /admin alone is enough to find it — /web also mints a fresh one on demand.
+    if (env.BOTS_KEY)
+      adminRows.splice(1, 0, [{ text: `🌐 لوحة تحكم الويب (${DASH_TTL_DAYS} أيام)`, url: `${originOf(env)}/dash/#id=${cfg.id}&k=${await dashCode(env, cfg.id)}` }])
     await send(token, chat,
       `<b>📊 لوحة تحكم المتجر (ZeidexSoft Admin)</b>\n\n` +
       `👥 العملاء النشطون: <b>${cfg.users.length}</b>\n` +
@@ -1812,6 +2020,7 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
         `الأقسام: <b>${cfg.sections!.length}</b> · الصفحات: <b>${cfg.pages!.length}</b>\n\n` +
       `<i>أوامر الإدارة المباشرة:</i>\n` +
       `• لوحة تفاعلية بالأزرار: <code>/panel</code>\n` +
+      `• لوحة تحكم ويب رسومية من المتصفح: <code>/web</code>\n` +
       `• أخذ بوت بدون دفع: <code>/createbot التوكن</code>\n` +
       `• إضافة منتج: <code>/add اسم | سعر_النجوم | وصف</code>\n` +
       `• تسليم تلقائي فوري بعد الدفع: <code>/deliver رقم_المنتج الكود</code> (أو ردّ على ملف بـ <code>/deliver رقم_المنتج</code>)\n` +
@@ -1872,6 +2081,26 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     await licenseOp(env, say, 'revoke', arg, 'إبطال الترخيص')
   } else if (cmd === 'licrelease' || cmd === 'lRelease') {
     await licenseOp(env, say, 'release', arg, 'تحرير مقعد جهاز')
+  } else if (cmd === 'web' || cmd === 'dash') {
+    // The graphical dashboard's door: a signed link only the owner's own chat ever
+    // holds. The code rides the URL fragment, so it is never sent to any server —
+    // only the dashboard turns it into a Bearer token, and only botsDash accepts it.
+    if (!env.BOTS_KEY) return void (await say('⚠️ لوحة التحكم الويب غير مهيأة حالياً.'))
+    const code = await dashCode(env, cfg.id)
+    await send(token, chat,
+      '🎛 <b>لوحة تحكم المتجر — نسخة الويب</b>\n' +
+      '━━━━━━━━━━━━━━━━━━━━━\n\n' +
+      'نفس صلاحيات <code>/admin</code> و<code>/panel</code>، بواجهة رسومية كاملة من متصفحك:\n\n' +
+      '▫️ إحصاءات لحظية: العملاء والطلبات والأرباح\n' +
+      '▫️ إضافة وتعديل وحذف المنتجات بصياغة رسومية\n' +
+      '▫️ ضبط التسليم التلقائي (نص أو ملف) بنقرة\n' +
+      '▫️ الأسئلة الشائعة والملفات المخزنة والترحيب\n' +
+      '▫️ إيقاف واستئناف المتجر بضغطة واحدة\n\n' +
+      `🔗 <b>رابط لوحتك (صالح ${DASH_TTL_DAYS} أيام):</b>\n` +
+      `<code>${originOf(env)}/dash/#id=${cfg.id}&amp;k=${code}</code>\n\n` +
+      '<i>الرابط شخصي — لا تشاركه مع أحد. جديدها في أي وقت بإرسال /web من جديد.</i>',
+      { reply_markup: { inline_keyboard: [[{ text: '🎛 افتح اللوحة الآن', url: `${originOf(env)}/dash/#id=${cfg.id}&k=${code}` }]] } }
+    )
   } else if (cmd === 'site') {
     await siteCommand(env, cfg, say, arg)
   } else if (cmd === 'reply') {
@@ -2014,13 +2243,13 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     // Reply to the last WhatsApp customer — the other half of the dual link.
     if (!cfg.wa || !cfg.wa.lastFrom) return void (await say('لا رسالة واتساب بانتظار الرد — أول واتساب يصلك يحدد وجهة <code>/ware</code>.'))
     if (!arg) return void (await say('الاستخدام: <code>/ware نص_الرد</code>'))
-    const r = await waSend(env, cfg, cfg.wa.lastFrom, arg)
+    const r = await waSend(env, cfg.wa, cfg.wa.lastFrom, arg)
     await say(r.ok ? '✅ أُرسل عبر واتساب.' : `تعذّر الإرسال (${r.status ?? 'شبكة'}) — تحقق من الربط بـ <code>/wa</code>.`)
   } else if (cmd === 'wasend') {
     if (!cfg.wa) return void (await say('اربط واتساب أولاً: <code>/wa رقم_الهاتف_الدائمي توكن_دائمي سر_التطبيق</code>'))
     const [num, ...words] = arg.split(/\s+/)
     if (!/^\d{8,}$/.test(num ?? '') || !words.length) return void (await say('الاستخدام: <code>/wasend رقم_الواتساب نص</code>'))
-    const r = await waSend(env, cfg, num, words.join(' '))
+    const r = await waSend(env, cfg.wa, num, words.join(' '))
     await say(r.ok ? '✅ أُرسل.' : `تعذّر الإرسال (${r.status ?? 'شبكة'}).`)
   }
 }
@@ -2527,13 +2756,13 @@ const SELF_SERVE_BOTS = 2
  * register the customer commands, and notify the owner.
  *
  * One function for both callers — the admin API (POST /admin/bots) and the
- * platform bot's self-service /freebot flow — so the two can never drift apart.
+ * platform bot's self-service /trial flow — so the two can never drift apart.
  */
 async function provision(
   env: BotsEnv,
   plainToken: string,
   ownerId: number,
-  plan: 'free' | 'trial' | 'paid' | undefined,
+  plan: 'trial' | 'paid' | undefined,
 ): Promise<{ ok: true; cfg: Cfg } | { ok: false; error: string; userText: string; status: number }> {
   if (!TOKEN_RE.test(plainToken))
     return { ok: false, error: 'bad request', status: 400, userText: 'صيغة التوكن غير صحيحة. انسخه كاملاً من @BotFather (مثال: <code>123456:AAE…</code>).' }
@@ -2553,13 +2782,14 @@ async function provision(
     // Fresh provisions register the current webhook settings themselves.
     hook: HOOK_REVISION,
   }
-  // The free month and the trial window each start once per bot. Re-provisioning keeps the
-  // original end, so neither a new token nor a repeated round trip can stretch either.
+  // The trial window starts once per bot. Re-provisioning keeps the original end, so
+  // neither a new token nor a repeated round trip can stretch it. A legacy free-month
+  // record that is re-provisioned now gets the trial window — the month is gone.
   const fixedEnd = (days: number) => new Date(Date.now() + days * 864e5).toISOString()
-  cfg.expires = isFree(cfg)
-    ? prev?.plan === 'free' && prev.expires ? prev.expires : fixedEnd(FREE_DAYS)
-    : isTrial(cfg)
-      ? prev?.plan === 'trial' && prev.expires ? prev.expires : fixedEnd(TRIAL_DAYS)
+  cfg.expires = isTrial(cfg)
+    ? prev?.plan === 'trial' && prev.expires ? prev.expires : fixedEnd(TRIAL_DAYS)
+    : isFree(cfg)
+      ? prev?.plan === 'free' && prev.expires ? prev.expires : fixedEnd(TRIAL_DAYS)
       : undefined
   await save(env, cfg)
   // Trials run on the second host: when TRIAL_ORIGIN names it (the G53208084
@@ -2622,11 +2852,13 @@ export async function wfInbound(request: Request, env: BotsEnv, id: string): Pro
   return new Response(JSON.stringify({ ok: r.ok }), { status: r.ok ? 200 : 502, headers: { 'content-type': 'application/json' } })
 }
 
-/** /api/wa/<id> — the owner's own WhatsApp Business number, linked by /wa. Meta verifies
- *  once with the derived hub token, then POSTs every message signed with the app secret.
- *  A shop question is answered from the bot's own catalog automatically; everything else
- *  lands in the owner's Telegram chat for /ware. Always 200 on a verified POST: a
- *  non-2xx makes Meta retry the same batch forever. */
+/** /api/wa/<id> — the owner's own WhatsApp Business number, linked by /wa, and the
+ *  buyers' guest links of the WhatsApp product, linked by their own /wa on the platform
+ *  bot. Meta verifies once with the derived hub token, then POSTs every message signed
+ *  with that number's own app secret; the batch's phone number id picks whose link it
+ *  is. The owner's flow answers shop questions from the catalog and relays the rest to
+ *  the owner's chat; a buyer's guest link relays everything to the buyer's own chat for
+ *  their /ware. Always 200 on a verified POST: a non-2xx makes Meta retry forever. */
 export async function waBotWebhook(request: Request, env: BotsEnv, id: string): Promise<Response> {
   const url = new URL(request.url)
   if (request.method === 'GET') {
@@ -2635,26 +2867,43 @@ export async function waBotWebhook(request: Request, env: BotsEnv, id: string): 
   }
   if (request.method !== 'POST') return new Response('method not allowed', { status: 405 })
   const cfg = await load(env, id)
-  if (!cfg?.wa) return new Response('not linked', { status: 404 })
+  if (!cfg || (!cfg.wa && !cfg.waGuests?.length)) return new Response('not linked', { status: 404 })
   const raw = await request.text()
-  if (!safeEqual(request.headers.get('x-hub-signature-256') ?? '', `sha256=${await hmacHex(await open(env, cfg.wa.secret), raw)}`)) {
+  // The batch names its number (entry[].id = the business phone number id): the owner's
+  // own link, or one of the buyers' guest links — each sealed with its own app secret,
+  // so the number picks the record and that record's secret checks the signature. A
+  // batch without an id (an older Meta test call) still lands on the owner's link.
+  type WaMsg = { from?: string; type?: string; text?: { body?: string } }
+  type WaUpdate = { entry?: { id?: string; changes?: { value?: { messages?: WaMsg[] } }[] }[] }
+  let update: WaUpdate = {}
+  try {
+    update = JSON.parse(raw) as WaUpdate
+  } catch {
+    // A malformed batch is dropped, not retried forever.
+    return new Response('ok')
+  }
+  const phoneId = String(update.entry?.[0]?.id ?? '')
+  const wa = cfg.wa && (!phoneId || cfg.wa.phoneId === phoneId) ? cfg.wa : undefined
+  const guest = (cfg.waGuests ?? []).find((x) => !phoneId || x.phoneId === phoneId)
+  const secret = wa?.secret ?? guest?.secret
+  if (!secret) return new Response('not linked', { status: 404 })
+  if (!safeEqual(request.headers.get('x-hub-signature-256') ?? '', `sha256=${await hmacHex(await open(env, secret), raw)}`)) {
     return new Response('bad signature', { status: 401 })
   }
-  // Signed by Meta from here on.
-  try {
-    type WaMsg = { from?: string; type?: string; text?: { body?: string } }
-    const update = JSON.parse(raw) as { entry?: { changes?: { value?: { messages?: WaMsg[] } }[] }[] }
-    for (const entry of update.entry ?? []) for (const change of entry.changes ?? []) for (const msg of change.value?.messages ?? []) {
-      const from = String(msg.from ?? '')
-      if (!from) continue
-      const body = String(msg.text?.body ?? '').trim()
+  // An expired guest trial is swallowed, never an error: Meta must not retry it forever.
+  if (!wa && guest && !waGuestLive(guest)) return new Response('ok')
+  for (const entry of update.entry ?? []) for (const change of entry.changes ?? []) for (const msg of change.value?.messages ?? []) {
+    const from = String(msg.from ?? '')
+    if (!from) continue
+    const body = String(msg.text?.body ?? '').trim()
+    if (wa) {
       // Remember who is waiting, so /ware knows where the next reply goes.
-      cfg.wa.lastFrom = from
+      wa.lastFrom = from
       await save(env, cfg)
       const q = norm(body)
       if (body && (q.includes('منتج') || q.includes('متجر') || q.includes('شراء') || q.includes('سعر') || q.includes('اسعار') || q.includes('بضاع'))) {
         const lines = cfg.items.slice(0, 8).map((i) => `• ${i.title} — ⭐️ ${i.stars}`)
-        await waSend(env, cfg, from,
+        await waSend(env, wa, from,
           (lines.length ? `🛍 *منتجاتنا*\n${lines.join('\n')}\n\n` : '🛍 *مرحباً بك*\n') +
           `الشراء والدعم من بوت تيليجرام:\nhttps://t.me/${cfg.username}`)
       } else {
@@ -2662,11 +2911,206 @@ export async function waBotWebhook(request: Request, env: BotsEnv, id: string): 
           `📱 <b>واتساب من <code>${esc(from)}</code>:</b>\n${esc(body.slice(0, 2000)) || '(رسالة غير نصية)'}` +
           (body ? `\n\nللرد: <code>/ware ردك هنا</code>` : ''))
       }
+    } else if (guest) {
+      // A buyer's guest link: everything lands in the buyer's own chat, for their own /ware.
+      guest.lastFrom = from
+      await save(env, cfg)
+      await send(await open(env, cfg.token), guest.uid,
+        `📱 <b>واتساب من <code>${esc(from)}</code>:</b>\n${esc(body.slice(0, 2000)) || '(رسالة غير نصية)'}` +
+        (body ? `\n\nللرد: <code>/ware ردك هنا</code>` : ''))
     }
-  } catch {
-    // A malformed batch is dropped, not retried forever.
   }
   return new Response('ok')
+}
+
+/** The browser dashboard's whole API (public/dash/ → /api/dash/<id>/…). One auth: the
+ *  Bearer code the /web link minted — derived from BOTS_KEY, never stored, self-expiring.
+ *  Everything the Telegram /admin and /panel commands can do, in JSON a GUI can render;
+ *  every mutation goes through the same save() the bot uses, so the two consoles can
+ *  never disagree about what the store contains. */
+export async function botsDash(request: Request, env: BotsEnv, url: URL): Promise<Response> {
+  if (!env.BOTS_KEY) return new Response('not configured', { status: 503 })
+  const parts = url.pathname.split('/').filter(Boolean) // ['api','dash',<id>,…action]
+  const id = parts[2]
+  if (!id || !/^\d{4,15}$/.test(id)) return new Response('bad id', { status: 400 })
+  const auth = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '')
+  if (!auth) return new Response('forbidden', { status: 403 })
+  if (!(await dashOk(env, id, auth))) return new Response('forbidden', { status: 403 })
+  const cfg = await load(env, id)
+  if (!cfg) return new Response('not found', { status: 404 })
+
+  const act = parts.slice(3) // 'state' | 'items' | 'items/<iid>' | 'deliver' | 'faqs' | …
+  const NO_STORE: Record<string, string> = { 'cache-control': 'no-store' }
+  const bad = (msg: string) => new Response(msg, { status: 400, headers: NO_STORE })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const body = () => request.json().catch(() => ({})) as Promise<Record<string, any>>
+
+  // Read side: one call paints the whole dashboard; secrets (token, secret) never included.
+  if (request.method === 'GET' && act[0] === 'state') {
+    return Response.json(
+      {
+        bot: {
+          id: cfg.id, username: cfg.username, paused: !!cfg.paused, plan: cfg.plan ?? 'paid',
+          expires: cfg.expires ?? null, lapsed: lapsed(cfg), orders: cfg.orders, stars: cfg.stars,
+          users: cfg.users.length, welcome: cfg.welcome, site: cfg.site ?? null,
+          created: cfg.created, caps: { items: itemCap(cfg), faqs: faqCap(cfg) },
+        },
+        items: cfg.items,
+        sections: cfg.sections ?? [],
+        faqs: cfg.faqs,
+        files: (cfg.files ?? []).map((f) => ({ id: f.id, title: f.title, type: f.type })),
+      },
+      { headers: NO_STORE },
+    )
+  }
+
+  // Products: add with the same guardrails /add enforces, so a stray GUI entry can never
+  // plant an invalid item the Telegram side would then refuse to price.
+  if (request.method === 'POST' && act[0] === 'items' && !act[1]) {
+    const b = await body()
+    const stars = Number(b.stars)
+    const title = String(b.title ?? '').trim().slice(0, 100)
+    if (!title || !Number.isInteger(stars) || stars < 1 || stars > 10000) return bad('bad item')
+    if (cfg.items.length >= itemCap(cfg)) return new Response('item cap reached', { status: 409, headers: NO_STORE })
+    if (b.section != null && !(cfg.sections ?? []).some((s) => s.id === Number(b.section))) return bad('bad section')
+    // The web store's SKU rides on the item, so its buy_<sku> deep link lands on it.
+    const sku = typeof b.sku === 'string' ? b.sku.trim().toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 64) : ''
+    if (sku && cfg.items.some((i) => i.sku === sku)) return bad('duplicate sku')
+    const item: Item = {
+      id: nextId(cfg.items), title, stars,
+      ...(sku ? { sku } : {}),
+      desc: String(b.desc ?? '').slice(0, 500),
+      ...(b.section != null ? { section: Number(b.section) } : {}),
+      ...(Array.isArray(b.features) && b.features.length ? { features: b.features.slice(0, 8).map((f: string) => String(f).slice(0, 120)) } : {}),
+      ...(Number(b.usd) > 0 ? { usd: Number(b.usd) } : {}),
+      // demo is a URL to render, or the WhatsApp product's 'whatsapp' sentinel — a marker, never a link.
+      ...(typeof b.demo === 'string' && (/^https?:\/\//.test(b.demo) || b.demo === 'whatsapp') ? { demo: b.demo.slice(0, 300) } : {}),
+      ...(Array.isArray(b.after) && b.after.length ? { after: b.after.slice(0, 6).map((s: string) => String(s).slice(0, 120)) } : {}),
+    }
+    cfg.items.push(item)
+    await save(env, cfg)
+    return Response.json({ ok: true, item }, { headers: NO_STORE })
+  }
+
+  // Products: edit — only the fields actually sent move, so the GUI's small forms stay safe.
+  if ((request.method === 'PUT' || request.method === 'PATCH') && act[0] === 'items' && act[1]) {
+    const item = cfg.items.find((i) => i.id === Number(act[1]))
+    if (!item) return new Response('not found', { status: 404, headers: NO_STORE })
+    const b = await body()
+    if (b.title != null) {
+      const t = String(b.title).trim().slice(0, 100)
+      if (!t) return bad('bad title')
+      item.title = t
+    }
+    if (b.stars != null) {
+      const s = Number(b.stars)
+      if (!Number.isInteger(s) || s < 1 || s > 10000) return bad('bad stars')
+      item.stars = s
+    }
+    if (b.desc != null) item.desc = String(b.desc).slice(0, 500)
+    if (b.section != null) {
+      if (!(cfg.sections ?? []).some((s) => s.id === Number(b.section))) return bad('bad section')
+      item.section = Number(b.section)
+    }
+    if (Array.isArray(b.features)) item.features = b.features.slice(0, 8).map((f: string) => String(f).slice(0, 120))
+    if (b.sku !== undefined) {
+      // Tying the item to the web store's SKU: the storefront's buy_<sku> deep link
+      // lands on this item. An empty string unties it; a duplicate is refused.
+      const s = typeof b.sku === 'string' ? b.sku.trim().toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 64) : ''
+      if (s && cfg.items.some((i) => i !== item && i.sku === s)) return bad('duplicate sku')
+      if (s) item.sku = s
+      else delete item.sku
+    }
+    if (b.usd != null) item.usd = Number(b.usd) > 0 ? Number(b.usd) : undefined
+    if (b.demo !== undefined) item.demo = typeof b.demo === 'string' && (/^https?:\/\//.test(b.demo) || b.demo === 'whatsapp') ? b.demo.slice(0, 300) : undefined
+    if (Array.isArray(b.after)) item.after = b.after.slice(0, 6).map((s: string) => String(s).slice(0, 120))
+    await save(env, cfg)
+    return Response.json({ ok: true, item }, { headers: NO_STORE })
+  }
+
+  if (request.method === 'DELETE' && act[0] === 'items' && act[1]) {
+    const i = cfg.items.findIndex((x) => x.id === Number(act[1]))
+    if (i < 0) return new Response('not found', { status: 404, headers: NO_STORE })
+    cfg.items.splice(i, 1)
+    await save(env, cfg)
+    return Response.json({ ok: true }, { headers: NO_STORE })
+  }
+
+  // Auto-delivery: exactly what /deliver sets — a secret text, a stored file, or nothing.
+  if (request.method === 'POST' && act[0] === 'deliver') {
+    const b = await body()
+    const item = cfg.items.find((i) => i.id === Number(b.item))
+    if (!item) return bad('bad item')
+    if (b.clear) item.deliver = undefined
+    else if (b.text) item.deliver = { text: String(b.text).slice(0, 1000) }
+    else if (b.file) {
+      const f = (cfg.files ?? []).find((x) => x.id === Number(b.file))
+      if (!f) return bad('bad file')
+      item.deliver = { file: { id: f.file_id, type: f.type } }
+    } else return bad('nothing to deliver')
+    await save(env, cfg)
+    return Response.json({ ok: true, deliver: item.deliver ?? null }, { headers: NO_STORE })
+  }
+
+  // FAQs: the same cap /faq enforces.
+  if (request.method === 'POST' && act[0] === 'faqs' && !act[1]) {
+    const b = await body()
+    const q = String(b.q ?? '').trim().slice(0, 200)
+    const a = String(b.a ?? '').trim().slice(0, 500)
+    if (!q || !a) return bad('bad faq')
+    if (cfg.faqs.length >= faqCap(cfg)) return new Response('faq cap reached', { status: 409, headers: NO_STORE })
+    cfg.faqs.push({ q, a })
+    await save(env, cfg)
+    return Response.json({ ok: true, faqs: cfg.faqs.length }, { headers: NO_STORE })
+  }
+  if (request.method === 'DELETE' && act[0] === 'faqs' && act[1]) {
+    const i = Number(act[1])
+    if (!Number.isInteger(i) || i < 0 || i >= cfg.faqs.length) return new Response('not found', { status: 404, headers: NO_STORE })
+    cfg.faqs.splice(i, 1)
+    await save(env, cfg)
+    return Response.json({ ok: true }, { headers: NO_STORE })
+  }
+
+  // The stored files: the same index /files shows. Sending uses the same method /send uses.
+  if (request.method === 'POST' && act[0] === 'files' && act[1] === 'send') {
+    const b = await body()
+    const f = (cfg.files ?? []).find((x) => x.id === Number(b.file))
+    const to = Number(b.user)
+    if (!f || !Number.isInteger(to)) return bad('bad send')
+    const r = await tg(await open(env, cfg.token), FILE_METHOD[f.type] ?? 'sendDocument', {
+      chat_id: to, [f.type]: f.file_id, caption: `📎 ${esc(f.title)}`,
+    })
+    if (!r.ok) return new Response(r.description || 'send failed', { status: 502, headers: NO_STORE })
+    return Response.json({ ok: true }, { headers: NO_STORE })
+  }
+  if (request.method === 'DELETE' && act[0] === 'files' && act[1]) {
+    const files = cfg.files ?? []
+    const i = files.findIndex((f) => f.id === Number(act[1]))
+    if (i < 0) return new Response('not found', { status: 404, headers: NO_STORE })
+    files.splice(i, 1)
+    await save(env, cfg)
+    return Response.json({ ok: true }, { headers: NO_STORE })
+  }
+
+  // Welcome text: /start sends esc(cfg.welcome), so plain text is the contract here too.
+  if (request.method === 'POST' && act[0] === 'welcome') {
+    const b = await body()
+    const w = String(b.text ?? '').trim().slice(0, 500)
+    if (!w) return bad('bad welcome')
+    cfg.welcome = w
+    await save(env, cfg)
+    return Response.json({ ok: true }, { headers: NO_STORE })
+  }
+
+  // Pause/resume: the same maintenance flag the interactive panel flips.
+  if (request.method === 'POST' && act[0] === 'pause') {
+    const b = await body()
+    cfg.paused = b.paused == null ? !cfg.paused : !!b.paused
+    await save(env, cfg)
+    return Response.json({ ok: true, paused: cfg.paused }, { headers: NO_STORE })
+  }
+
+  return new Response('method not allowed', { status: 405, headers: NO_STORE })
 }
 
 export async function botsAdmin(request: Request, env: BotsEnv, url: URL): Promise<Response> {
@@ -2679,7 +3123,9 @@ export async function botsAdmin(request: Request, env: BotsEnv, url: URL): Promi
     const body = (await request.json().catch(() => ({}))) as { token?: string; owner_id?: number; welcome?: string; plan?: string }
     const token = String(body.token ?? '')
     if (!TOKEN_RE.test(token) || !Number.isInteger(body.owner_id)) return new Response('bad request', { status: 400 })
-    const plan = body.plan === 'free' || body.plan === 'trial' || body.plan === 'paid' ? body.plan : undefined
+    // The free month is retired: nothing provisions one anymore — not even the admin API.
+    if (body.plan === 'free') return new Response('the free month is retired — use trial or paid', { status: 400 })
+    const plan = body.plan === 'trial' || body.plan === 'paid' ? body.plan : undefined
     const made = await provision(env, token, body.owner_id!, plan)
     if (!made.ok) return new Response(made.error, { status: made.status })
     if (body.welcome) {
@@ -2691,7 +3137,7 @@ export async function botsAdmin(request: Request, env: BotsEnv, url: URL): Promi
 
   if (request.method === 'GET' && !id) {
     // ponytail: no KV list() on this binding type; the main bot keeps the index (hosted_bots).
-    // What this does answer is capability: /freebot reads it before provisioning anything.
+    // What this does answer is capability: /trial reads it before provisioning anything.
     return Response.json({ plans: PLANS })
   }
 

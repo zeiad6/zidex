@@ -36,6 +36,12 @@ const items = products.map((p, idx) => {
     title: p.title,
     stars: p.stars,
     desc: p.description,
+    // The catalog's SKU rides on the item: the storefront's "اطلب الآن" button opens
+    // t.me/<bot>?start=buy_<sku>, and itemBySku() matches by the item's own sku first.
+    // Its title fallback cannot save a record without one — the titles are Arabic and
+    // norm() never folds an Arabic title into a Latin sku — so without this carry
+    // every storefront buy deep link landed on the bare welcome, losing the tap.
+    ...(typeof p.sku === 'string' && p.sku ? { sku: p.sku } : {}),
     ...(section ? { section: section.id } : {}),
     // Carry the catalog's richer detail so the bot shows a product card (features + USD price +
     // post-purchase steps) before the invoice, instead of a bare Stars checkout.
@@ -51,7 +57,7 @@ const sections = Object.values(CATEGORY_SECTIONS).map(({ id, name }) => ({ id, n
 const faqs = [
   { q: 'ما هي طرق الدفع المتاحة؟', a: 'الدفع بنجوم تيليجرام (Telegram Stars) مباشرة، أو عبر بنك الكريمي (USD/YER/SAR) ومحافظ العملات الرقمية TON/USDT عبر المتجر.' },
   { q: 'كيف أستلم البوت بعد الدفع؟', a: 'يتم تسليمك البوت كاملاً مع لوحة التحكم وشرح كافة الأوامر والمفاتيح فور إتمام الطلب.' },
-  { q: 'هل يمكنني تجربة بوت متجر مجاناً؟', a: 'نعم! أرسل /freebot هنا وأنشئ متجرك الخاص مجاناً لمدة شهر كامل — بدون خادم وبدون إعداد.' },
+  { q: 'هل يمكنني تجربة بوت متجر مجاناً؟', a: 'نعم! أرسل /trial هنا وجرّب الباقة المدفوعة كاملة 7 أيام ببوتك الخاص — بدون خادم وبدون دفع وبدون أي قيود.' },
 ]
 
 const cfg = {
@@ -66,7 +72,7 @@ const cfg = {
     '─────────────────────────\n' +
     '🤖 بوتات ومتاجر رقمية تعمل سحابياً 24/7\n' +
     '📱 برمجيات وتطبيقات احترافية لأندرويد وويندوز\n' +
-    '🎁 إنشاء واستضافة متجر مجاني باسمك\n' +
+    '🧪 تجربة متجر كامل باسمك 7 أيام\n' +
     '─────────────────────────\n' +
     'اختر ما يناسبك من الأزرار التفاعلية أدناه 👇',
   paused: false,

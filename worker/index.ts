@@ -3,7 +3,7 @@
 import { onRequestGet, onRequestPost } from '../functions/api/downloads'
 import { createOrder, tonRate, type OrdersEnv } from './orders'
 import { kuraimiCheckUser, kuraimiPay, kuraimiStatus, type KuraimiEnv } from './kuraimi'
-import { botWebhook, botsAdmin, wfInbound, waBotWebhook, type BotsEnv } from './bots'
+import { botWebhook, botsAdmin, botsDash, wfInbound, waBotWebhook, type BotsEnv } from './bots'
 import { activate, confirm, status, licenseAdmin, type LicenseAdminEnv } from './license'
 import { waWebhook, type WhatsAppEnv } from './whatsapp'
 import { anthropicProxy } from './anthropic'
@@ -39,6 +39,8 @@ export default {
     const hosted = url.pathname.match(/^\/tg\/(\d{4,15})$/)
     if (hosted && request.method === 'POST') return botWebhook(request, env, hosted[1])
     if (url.pathname === '/admin/bots' || url.pathname.startsWith('/admin/bots/')) return botsAdmin(request, env, url)
+    // The browser dashboard's API (public/dash/ calls it with the /web link's Bearer code).
+    if (url.pathname.startsWith('/api/dash/')) return botsDash(request, env, url)
     if (url.pathname === '/api/wa') return waWebhook(request, env)
     // A hosted shop's own bridges: the automation engine's send path and the owner's
     // WhatsApp Business number. The bot id in the path picks the record; the derived

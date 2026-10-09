@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>🎛 لوحة تحكم المتجر — ZeidexSoft</title>
+    <meta name="description" content="لوحة تحكم رسومية لمتجر البوت: المنتجات والتسليم التلقائي والأسئلة والملفات والإحصاءات." />
+    <link rel="stylesheet" href="/dash/dash.css" />
+    <script>
+      // Day/night follows the OS; the palette is the store's own, so the two
+      // products of the same platform never feel like different sites.
+      try {
+        if (matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.dataset.theme = 'dark'
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <!-- The door: a /web link (#id=…&k=… fragment) logs straight through it;
+         without one, a pasted code works the same way. -->
+    <main id="login" class="wrap">
+      <div class="panel login-panel">
+        <div class="brand">🎛</div>
+        <h1>لوحة تحكم المتجر</h1>
+        <p class="sub">نفس صلاحيات <code>/admin</code> و<code>/panel</code> في البوت — من متصفحك.</p>
+        <label>رقم البوت <input id="f-id" inputmode="numeric" autocomplete="off" placeholder="8968001501" /></label>
+        <label>مفتاح الدخول <input id="f-key" type="password" autocomplete="off" placeholder="من الأمر /web في البوت" /></label>
+        <button id="f-go" class="primary">دخول</button>
+        <p id="f-err" class="err" hidden></p>
+        <p class="hint">المفتاح يصلك من إرسال <code>/web</code> في بوتك، وهو صالح 7 أيام.</p>
+      </div>
+    </main>
+
+    <!-- The dashboard itself, hidden until the key opens the API. -->
+    <main id="app" hidden>
+      <header class="bar">
+        <div class="who">
+          <strong>@<span id="b-user">…</span></strong>
+          <span id="b-plan" class="pill">…</span>
+          <span id="b-status" class="pill">…</span>
+        </div>
+        <div class="acts">
+          <button id="b-open" class="ghost" title="افتح البوت">🤖 البوت</button>
+          <button id="b-refresh" class="ghost">🔄 تحديث</button>
+          <button id="b-out" class="ghost">خروج</button>
+        </div>
+      </header>
+
+      <nav class="tabs" id="tabs">
+        <button data-tab="stats" class="on">📊 الإحصاءات</button>
+        <button data-tab="items">📦 المنتجات</button>
+        <button data-tab="faqs">❓ الأسئلة الشائعة</button>
+        <button data-tab="files">📁 الملفات</button>
+        <button data-tab="settings">⚙️ الإعدادات</button>
+      </nav>
+
+      <section id="tab-stats" class="wrap">
+        <div class="stats" id="stats"></div>
+      </section>
+
+      <section id="tab-items" class="wrap" hidden>
+        <div class="row space">
+          <h2>المنتجات <span id="i-count" class="count"></span></h2>
+          <button id="i-add" class="primary">＋ منتج جديد</button>
+        </div>
+        <div id="items" class="list"></div>
+      </section>
+
+      <section id="tab-faqs" class="wrap" hidden>
+        <div class="row space">
+          <h2>الأسئلة الشائعة <span id="q-count" class="count"></span></h2>
+          <button id="q-add" class="primary">＋ سؤال جديد</button>
+        </div>
+        <div id="faqs" class="list"></div>
+      </section>
+
+      <section id="tab-files" class="wrap" hidden>
+        <h2>الملفات المخزنة <span id="l-count" class="count"></span></h2>
+        <p class="hint">تُضاف الملفات بإرسالها (أو توجيهها) إلى البوت مباشرة — تظهر هنا فوراً بعد التحديث.</p>
+        <div id="files" class="list"></div>
+      </section>
+
+      <section id="tab-settings" class="wrap" hidden>
+        <div class="panel">
+          <h2>👋 رسالة الترحيب</h2>
+          <textarea id="s-welcome" rows="5"></textarea>
+          <button id="s-save" class="primary">حفظ الترحيب</button>
+        </div>
+        <div class="panel">
+          <h2>🛠 تشغيل المتجر</h2>
+          <p class="hint">الإيقاف يعرض للعملاء رسالة صيانة، ولا يوقف لوحة التحكم.</p>
+          <button id="s-pause" class="ghost big">…</button>
+        </div>
+        <div class="panel">
+          <h2>🔗 روابط مفيدة</h2>
+          <p class="hint">جدد مفتاح اللوحة بإرسال <code>/web</code> في البوت في أي وقت.</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- The one dialog the whole dashboard reuses: products, delivery, FAQs. -->
+    <div id="backdrop" hidden></div>
+    <div id="dialog" class="dialog" hidden></div>
+    <div id="toast" class="toast" hidden></div>
+
+    <script src="/dash/dash.js"></script>
+  </body>
+</html>
