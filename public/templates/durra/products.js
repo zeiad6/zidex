@@ -1,0 +1,163 @@
+/** تشكيلة دُرّة — البيانات الوحيدة التي يديرها صاحب المتجر.
+ *  كل نص مرتين (ar/en) والسعر بالريال السعودي. */
+export const PRODUCTS = [
+    {
+        id: 1,
+        kind: 'dates',
+        cat: 'dates',
+        price: 289,
+        old: 340,
+        badge: { ar: 'الأصلي', en: 'The original' },
+        name: { ar: 'عجوة المدينة — 1 كجم', en: 'Medina Ajwa — 1kg' },
+        desc: {
+            ar: 'عجوة من نخيل المدينة، منتقاة وتفرز يدوياً: طرية داكنة وطعم لا يشبه غيرها — بصمة ضيافة أصيلة.',
+            en: 'Dates from Medina palms, hand-sorted: soft, dark and unlike any other — the signature of true hospitality.',
+        },
+        specs: [
+            { ar: '1 كجم', en: '1kg' },
+            { ar: 'درجة أولى', en: 'Grade A' },
+            { ar: 'حصاد 1447', en: 'Harvest 1447' },
+        ],
+        meta: { ar: 'تُسلّم مبرّدة · صالحة 12 شهراً بالتخزين الجاف', en: 'Delivered chilled · 12 months dry storage' },
+    },
+    {
+        id: 2,
+        kind: 'dates',
+        cat: 'dates',
+        price: 189,
+        name: { ar: 'سكّري القصيم — 1 كجم', en: 'Qassim Sukkari — 1kg' },
+        desc: {
+            ar: 'سكّري قصيمي ذهبي هشّ يذوب في الفم: حلوَته متوازنة ولونه يضيء الصواني — المفضّل عند الأطفال والضيوف.',
+            en: 'Golden Qassim Sukkari, crisp enough to melt in the mouth: balanced sweetness and a color that lights the tray.',
+        },
+        specs: [
+            { ar: '1 كجم', en: '1kg' },
+            { ar: 'درجة ممتازة', en: 'Premium grade' },
+            { ar: 'حصاد 1447', en: 'Harvest 1447' },
+        ],
+        meta: { ar: 'تُسلّم مبرّدة · صالحة 10 أشهر', en: 'Delivered chilled · 10 months shelf life' },
+    },
+    {
+        id: 3,
+        kind: 'dates',
+        cat: 'dates',
+        price: 145,
+        old: 169,
+        name: { ar: 'صُقع الوشيح — 800 غرام', en: 'Weshih Sagga — 800g' },
+        desc: {
+            ar: 'صقع دائري مضغوط وقوامه متماسك: يُشوى قلياً فيعود أرطب، ويعطيك فطوراً بسيطاً بطعم المجالس.',
+            en: 'Round, firm Sagga dates: a light toast brings the moisture back — a simple breakfast with majlis character.',
+        },
+        specs: [
+            { ar: '800 غرام', en: '800g' },
+            { ar: 'مضغوط يدوياً', en: 'Hand-packed' },
+            { ar: 'أصل: الأحساء', en: 'Origin: Al-Ahsa' },
+        ],
+        meta: { ar: 'تُسلّم مبرّدة · صالحة 14 شهراً', en: 'Delivered chilled · 14 months shelf life' },
+    },
+    {
+        id: 4,
+        kind: 'dates',
+        cat: 'dates',
+        price: 165,
+        name: { ar: 'مبروم الخرج — 900 غرام', en: 'Kharj Mabroom — 900g' },
+        desc: {
+            ar: 'مبروم طويل بلح مضغوط وعسل طبيعي على سطحه: شكلٌ يُزيّن الصينية وطعمٌ يثبت في الذاكرة.',
+            en: 'Long Mabroom with pressed flesh and a natural honey sheen: it decorates the tray and stays in memory.',
+        },
+        specs: [
+            { ar: '900 غرام', en: '900g' },
+            { ar: 'درجة أولى', en: 'Grade A' },
+            { ar: 'أصل: الخرج', en: 'Origin: Kharj' },
+        ],
+        meta: { ar: 'تُسلّم مبرّدة · صالحة 12 شهراً', en: 'Delivered chilled · 12 months shelf life' },
+    },
+    {
+        id: 5,
+        kind: 'beans',
+        cat: 'coffee',
+        price: 119,
+        badge: { ar: 'تحميصنا', en: 'House roast' },
+        name: { ar: 'قهوة عربية خفيفة — 500 غرام', en: 'Arabic Coffee, light — 500g' },
+        desc: {
+            ar: 'بنّ عربي محمّص تحميصاً خفيفاً بلمسة زعفران وهيل: تُحضَّر بالدلة وتُقدَّم ساخنة كما هي عادة البيوت.',
+            en: 'Arabic beans roasted light with saffron and cardamom: brew it in the dallah and serve hot, the way homes do.',
+        },
+        specs: [
+            { ar: '500 غرام', en: '500g' },
+            { ar: 'تحميص خفيف', en: 'Light roast' },
+            { ar: 'طحن عند الطلب', en: 'Ground on order' },
+        ],
+        meta: { ar: 'يُحمّص بعد الطلب · يُسلّم خلال 48 ساعة', en: 'Roasted after order · Ships in 48h' },
+    },
+    {
+        id: 6,
+        kind: 'dallah',
+        cat: 'coffee',
+        price: 259,
+        old: 299,
+        name: { ar: 'حزمة الدلة الكاملة', en: 'The Full Dallah Set' },
+        desc: {
+            ar: 'دلة ستانلس مع فرن وملعقة، مع 500 غرام قهوة خفيفة وعلبة هيل: كل ما تحتاجه لتقديم الضيافة من أول يوم.',
+            en: 'A stainless dallah with burner and spoon, 500g of light coffee and cardamom — everything to host from day one.',
+        },
+        specs: [
+            { ar: 'دلة + فرن', en: 'Dallah + burner' },
+            { ar: '500 غ قهوة', en: '500g coffee' },
+            { ar: 'علبة هيل', en: 'Cardamom tin' },
+        ],
+        meta: { ar: 'تغليف إهدائي · ضمان سنة على الدلة', en: 'Gift wrapped · 1-year dallah warranty' },
+    },
+    {
+        id: 7,
+        kind: 'gift',
+        cat: 'gifts',
+        price: 349,
+        badge: { ar: 'الأكثر إهداءً', en: 'Most gifted' },
+        name: { ar: 'علبة ضيافة دُرّة — 4 قطع', en: 'Durra Hospitality Box — 4 pieces' },
+        desc: {
+            ar: 'علبة مخملية: 500 غ عجوة، 250 غ سكّري، قهوة 250 غ، وست فناجين مذهّبة — هدية تصل جاهزة بلا تغيير.',
+            en: 'A velvet box: 500g Ajwa, 250g Sukkari, 250g coffee and six gilded cups — a gift that arrives ready to give.',
+        },
+        specs: [
+            { ar: '4 قطع', en: '4 pieces' },
+            { ar: 'تغليف مخمل', en: 'Velvet wrap' },
+            { ar: 'بطاقة يدوية', en: 'Handwritten card' },
+        ],
+        meta: { ar: 'تُسلّم ببرودة · بطاقة باسم من تحب', en: 'Chilled delivery · Card with any name' },
+    },
+    {
+        id: 8,
+        kind: 'oud',
+        cat: 'gifts',
+        price: 599,
+        name: { ar: 'زاوية العود — دهن ومبخرة', en: 'The Oud Corner — oil & burner' },
+        desc: {
+            ar: 'دهن عود كمبودي 3 مل مع مبخرة نحاسية صغيرة: رائحة المجلس التي تُذكِّر الضيوف بمكانهم، في علبة واحدة.',
+            en: '3ml of Cambodian oud oil with a small brass burner: the majlis scent that reminds guests where they belong.',
+        },
+        specs: [
+            { ar: 'دهن 3 مل', en: '3ml oil' },
+            { ar: 'مبخرة نحاس', en: 'Brass burner' },
+            { ar: 'علبة خشب', en: 'Wooden box' },
+        ],
+        meta: { ar: 'إهدائي · محدود الكمية', en: 'Gift ready · Limited quantity' },
+    },
+    {
+        id: 9,
+        kind: 'tray',
+        cat: 'gifts',
+        price: 199,
+        name: { ar: 'صينية تقديم + 6 فناجين', en: 'Serving tray + 6 cups' },
+        desc: {
+            ar: 'صينية نحاسية مشغولة بيد مع ستّة فناجين قهوة عربية: قطعة تبقى على الطاولة سنوات، لا تُستخدم مرة.',
+            en: 'A hand-hammered brass tray with six Arabic coffee cups: a piece that stays on the table for years.',
+        },
+        specs: [
+            { ar: 'قطعة واحدة', en: 'Single piece' },
+            { ar: 'نحاس مشغول', en: 'Hammered brass' },
+            { ar: '6 فناجين', en: '6 cups' },
+        ],
+        meta: { ar: 'يُلمّع باليد · يُسلّم بكرتون مقوّى', en: 'Hand-polished · Ships reinforced' },
+    },
+];

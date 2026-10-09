@@ -1,0 +1,149 @@
+<!doctype html>
+<!-- عود وعنبر — متجر عطور وعود فاخر · Oud & Amber — ZeidexSoft storefront template.
+     ثنائي اللغة (عربي/إنجليزي) مع قلب RTL/LTR تلقائي، صفر تبعيات خارجية،
+     وسياسة CSP الأشد: default-src 'none'. لا خطوط خارجية، لا تحليلات، لا طلبات. -->
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Strict CSP: nothing loads unless it came from this site's own files.
+         The store collects nothing, fetches nothing, frames nothing. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'self'" />
+    <meta name="description" content="عود وعنبر — متجر عطور وعود فاخر: دهن العود الكمبودي، المباخر، الهدايا. طلب فوري عبر واتساب أو تيليجرام." />
+    <meta name="theme-color" content="#171106" />
+    <title>عود وعنبر — عطور وعود فاخرة</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23171106'/%3E%3Cpath d='M16 6c-2 3-5 5-5 9a5 5 0 0010 0c0-4-3-6-5-9z' fill='%23d4a94e'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="build/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#products" data-i18n="skip">تخطَّ إلى المنتجات</a>
+
+    <header class="bar" id="top">
+      <a class="brand" href="#top" aria-label="عود وعنبر">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" class="mark-bg"/><path d="M16 5c-2.4 3.4-6 5.8-6 10.4a6 6 0 0012 0C22 10.8 18.4 8.4 16 5z" class="mark-drop"/></svg>
+        <b class="brand-name" data-i18n="brand">عود وعنبر</b>
+      </a>
+      <nav class="nav" aria-label="الرئيسية">
+        <a href="#products" data-i18n="navProducts">المنتجات</a>
+        <a href="#why" data-i18n="navWhy">لماذا نحن</a>
+        <a href="#how" data-i18n="navHow">طريقة الطلب</a>
+      </nav>
+      <div class="bar-acts">
+        <button class="ghost" id="lang" type="button" data-i18n="langBtn">English</button>
+        <button class="cart-btn" id="cart-open" type="button" aria-label="السلة">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l-1.2 12.2a2 2 0 01-2 1.8H9.2a2 2 0 01-2-1.8L6 7zm3-2a3 3 0 016 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span data-i18n="cart">السلة</span>
+          <i class="count" id="cart-count" hidden>0</i>
+        </button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="kicker" data-i18n="kicker">عطورٌ تُروى كالحكايات</p>
+        <h1 data-i18n="heroTitle">دهن العود الأصيل،<br />من القلب إلى قلبك</h1>
+        <p class="lead" data-i18n="heroLead">تشكيلة مختارة من دهن العود الكمبودي والعطور الشرقية الفاخرة، معبأة بيد خبراء وموصلة حتى بابك.</p>
+        <div class="hero-acts">
+          <a class="btn primary" href="#products" data-i18n="heroCta">تسوّق التشكيلة</a>
+          <a class="btn ghosty" href="#how" data-i18n="heroHow">كيف تطلب؟</a>
+        </div>
+        <ul class="hero-stats" id="stats">
+          <li><b data-count="40">0</b><span data-i18n="stat1">تشكيلة مختارة</span></li>
+          <li><b data-count="24" data-suffix="+">0</b><span data-i18n="stat2">ساعة توصيل</span></li>
+          <li><b data-count="2500" data-suffix="+">0</b><span data-i18n="stat3">عميل سعيد</span></li>
+        </ul>
+      </div>
+      <div class="hero-art" id="hero-art" aria-hidden="true"></div>
+    </section>
+    <main>
+      <section class="section" id="products">
+        <div class="row space">
+          <h2 data-i18n="gridTitle">التشكيلة</h2>
+          <label class="search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            <input id="search" type="search" autocomplete="off" data-i18n-ph="search" placeholder="ابحث عن عطر…" />
+          </label>
+        </div>
+        <div class="chips" id="chips" role="tablist" aria-label="الأقسام"></div>
+        <div class="grid" id="grid"></div>
+        <p class="hint" id="no-results" hidden data-i18n="noResults">لا نتائج — جرّب كلمة أخرى أو قسماً آخر.</p>
+      </section>
+
+      <section class="section" id="why">
+        <h2 data-i18n="whyTitle">لماذا عود وعنبر؟</h2>
+        <div class="cards">
+          <article class="card why">
+            <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3l3.2 6.9L26 11l-5 5.2 1.1 7.3L16 20.2l-6.1 3.3L11 16.2 6 11l6.8-1.1z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            <h3 data-i18n="why1T">أصالة مضمونة</h3>
+            <p data-i18n="why1D">عود كمبودي ودهن أصلي من مصادره، مع شهادة أصل لكل قطعة.</p>
+          </article>
+          <article class="card why">
+            <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="12" width="22" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M11 12V9a5 5 0 0110 0v3" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+            <h3 data-i18n="why2T">تغليف هدايا فاخر</h3>
+            <p data-i18n="why2D">كل طلب يصل في علبة مخملية مختومة بخيط ذهبي، جاهز للإهداء.</p>
+          </article>
+          <article class="card why">
+            <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 17l5-5 4 3 5-7 4 4 6-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 26h24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <h3 data-i18n="why3T">موصول حتى بابك</h3>
+            <p data-i18n="why3D">توصيل داخل المدينة خلال ٢٤ ساعة، وللخارج عبر شركائنا الموثوقين.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="how">
+        <h2 data-i18n="howTitle">طريقة الطلب — ثلاث خطوات</h2>
+        <ol class="steps">
+          <li><b>1</b><span data-i18n="how1">اختر عطرك وأضِفه إلى السلة</span></li>
+          <li><b>2</b><span data-i18n="how2">أتمم الطلب عبر واتساب أو تيليجرام بضغطة</span></li>
+          <li><b>3</b><span data-i18n="how3">أكّد عنوانك — ويصلك عطرك خلال ٢٤ ساعة</span></li>
+        </ol>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="foot-grid">
+        <div>
+          <b class="brand-name" data-i18n="brand">عود وعنبر</b>
+          <p data-i18n="footTag">عطور تُشعل الذكريات — من قلب التراث إلى بيتك.</p>
+        </div>
+        <nav class="foot-acts" aria-label="تواصل">
+          <a id="wa-link" class="btn ghosty sm" href="#" hidden>واتساب</a>
+          <a id="tg-link" class="btn ghosty sm" href="#" hidden>تيليجرام</a>
+        </nav>
+      </div>
+      <p class="foot-credit">
+        <span data-i18n="footCredit">تصميم وتطوير</span>
+        <a href="https://zeidexsoft.com" rel="noopener" target="_blank">ZeidexSoft</a>
+        <span class="dot">·</span> <span id="year">2026</span>
+      </p>
+    </footer>
+
+    <!-- سلة المشتريات -->
+    <div class="backdrop" id="cart-backdrop" hidden></div>
+    <aside class="drawer" id="cart-drawer" hidden aria-label="سلة المشتريات">
+      <div class="row space">
+        <h2 data-i18n="cartTitle">سلتك</h2>
+        <button class="ghost" id="cart-close" type="button" data-i18n="close">إغلاق</button>
+      </div>
+      <div id="cart-lines"></div>
+      <p class="hint" id="cart-empty" data-i18n="cartEmpty">سلتك فارغة بعد — اختر عطرك المميز من التشكيلة.</p>
+      <div class="cart-foot" id="cart-foot" hidden>
+        <div class="row space total">
+          <span data-i18n="total">الإجمالي</span>
+          <b id="cart-total">$0</b>
+        </div>
+        <button class="btn primary wide" id="order-wa" type="button" data-i18n="orderWa">اطلب عبر واتساب</button>
+        <button class="btn ghosty wide" id="order-tg" type="button" data-i18n="orderTg">اطلب عبر تيليجرام</button>
+        <p class="hint" data-i18n="orderNote">الطلب يصلنا رسالة جاهزة بمنتجاتك — نؤكد العنوان ونشحن فوراً.</p>
+      </div>
+    </aside>
+
+    <!-- العرض السريع للمنتج -->
+    <div class="backdrop" id="modal-backdrop" hidden></div>
+    <div class="modal" id="modal" hidden role="dialog" aria-modal="true"></div>
+
+    <!-- إشعار -->
+    <div class="toast" id="toast" hidden></div>
+  </body>
+</html>

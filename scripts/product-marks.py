@@ -82,6 +82,23 @@ MARKS = {
         '<path d="M140 168h168a28 28 0 0 1 28 28v84a28 28 0 0 1-28 28h-96l-52 40v-40h-20a28 28 0 0 1-28-28v-84a28 28 0 0 1 28-28z"/>'
         '<path class="a" d="M352 236h20a28 28 0 0 1 28 28v76a28 28 0 0 1-28 28h-14v34l-42-34h-60a28 28 0 0 1-28-28v-12"/>'
         '<path class="a" d="M190 238l24 24 48-48"/>'),
+    # Site templates: a perfume bottle for the oud store.
+    "site-oud-amber": ("#1a1206", "#3a2a0d", "#d4a94e",
+        '<path d="M216 200h80v40a40 40 0 0 1-40 40 40 40 0 0 1-40-40z"/>'
+        '<path d="M236 176h40v24h-40z"/><path class="a" d="M256 300v34"/>'
+        '<path d="M196 372h120" />'),
+    # Site templates: a phone with a live pulse for electronics.
+    "site-smart-zone": ("#06080c", "#0e2233", "#22d3ee",
+        '<rect x="186" y="150" width="140" height="212" rx="30"/>'
+        '<rect x="204" y="176" width="104" height="150" rx="12"/>'
+        '<path class="a" d="M214 250h28l14-26 22 52 14-26h20"/>'
+        '<path d="M236 342h.01"/>'),
+    # Site templates: a date cluster hanging off a frond.
+    "site-durra": ("#f1e9db", "#c4562f", "#1e3a2b",
+        '<path d="M150 190q60-60 130 0"/><path d="M256 190v40"/>'
+        '<ellipse class="a" cx="256" cy="300" rx="46" ry="62"/>'
+        '<path d="M256 250v100M226 280q30 14 60 0" />'
+        '<path d="M180 160l-26-18M332 160l26-18"/>'),
 }
 
 TEMPLATE = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">

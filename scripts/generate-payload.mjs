@@ -21,6 +21,7 @@ const CATEGORY_SECTIONS = {
   bots: { id: 1, name: '🤖 بوتات ومتاجر رقمية' },
   types: { id: 2, name: '🧩 بوتات متخصصة وأنظمة أتمتة' },
   channel: { id: 3, name: '📣 خدمات القنوات والتسويق' },
+  sites: { id: 4, name: '🌐 قوالب المتاجر الجاهزة' },
 }
 // Stable order: sections follow this list; items follow the catalog order within each.
 const products = [...catalog.products].sort((a, b) => {

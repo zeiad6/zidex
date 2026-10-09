@@ -18,6 +18,7 @@ import {
   ShoppingBag,
   Star,
   LayoutGrid,
+  LayoutTemplate,
   X,
   type LucideIcon,
 } from 'lucide-react'
@@ -46,6 +47,7 @@ const primaryNav: NavItem[] = [
   { to: '/blog', icon: BookOpen, label: 'المقالات', labelEn: 'Articles', badge: 'posts' },
   { to: '/shop', icon: ShoppingBag, label: 'المتجر', labelEn: 'Store', badge: 'new' },
   { to: '/programs', icon: Package, label: 'البرامج', labelEn: 'Programs' },
+  { to: '/templates', icon: LayoutTemplate, label: 'قوالب المتاجر', labelEn: 'Store templates', badge: 'new' },
   { to: '/dashboard', icon: LayoutGrid, label: 'لوحة التحكم', labelEn: 'Dashboard' },
   { to: '/links', icon: Compass, label: 'الروابط', labelEn: 'Links' },
   { to: '/about', icon: Info, label: 'عن المنصة', labelEn: 'About' },

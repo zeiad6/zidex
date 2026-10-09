@@ -61,3 +61,6 @@ keycheck/
 # Python caches
 __pycache__/
 *.pyc
+
+# قوالب المتاجر — لكل قالب مستودعه الخاص (تُنشر مخرجاته إلى public/templates/)
+store-sites/

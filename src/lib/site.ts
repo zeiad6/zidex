@@ -5,6 +5,8 @@
 
 export const site = {
   name: 'ZeidexSoft',
+  /** Host without protocol — used in copy and previews. */
+  domain: 'zeidexsoft.com',
   /** Default document title; pages that set their own restore this on unmount. */
   title: 'ZeidexSoft — بوتات تيليجرام وبرمجيات احترافية',
   titleEn: 'ZeidexSoft — Telegram bots & professional software',

@@ -83,7 +83,8 @@
         "Add products and sections: /add name | price | description | section",
         "Write your welcome and FAQ: /welcome and /faq",
         "Link your site if you have one: /site — then share your bot's link"
-      ]
+      ],
+      "invoice_item": 1
     },
     {
       "sku": "store-bot-pro",
@@ -152,7 +153,8 @@
         "Add products and sections: /add name | price | description | section",
         "Write your welcome and FAQ: /welcome and /faq",
         "Link your site if you have one: /site — then share your bot's link"
-      ]
+      ],
+      "invoice_item": 2
     },
     {
       "sku": "store-bot-hosting",
@@ -209,7 +211,8 @@
       "setup_en": [
         "Send the admin your bot token from @BotFather when contacted",
         "Check the bot works by sending it /start"
-      ]
+      ],
+      "invoice_item": 3
     },
     {
       "sku": "group-bot",
@@ -276,7 +279,8 @@
         "Add products and sections: /add name | price | description | section",
         "Write your welcome and FAQ: /welcome and /faq",
         "Link your site if you have one: /site — then share your bot's link"
-      ]
+      ],
+      "invoice_item": 4
     },
     {
       "sku": "support-bot",
@@ -343,7 +347,8 @@
         "Add products and sections: /add name | price | description | section",
         "Write your welcome and FAQ: /welcome and /faq",
         "Link your site if you have one: /site — then share your bot's link"
-      ]
+      ],
+      "invoice_item": 5
     },
     {
       "sku": "booking-bot",
@@ -410,7 +415,8 @@
         "Add products and sections: /add name | price | description | section",
         "Write your welcome and FAQ: /welcome and /faq",
         "Link your site if you have one: /site — then share your bot's link"
-      ]
+      ],
+      "invoice_item": 6
     },
     {
       "sku": "subs-bot",
@@ -477,7 +483,8 @@
         "Add products and sections: /add name | price | description | section",
         "Write your welcome and FAQ: /welcome and /faq",
         "Link your site if you have one: /site — then share your bot's link"
-      ]
+      ],
+      "invoice_item": 7
     },
     {
       "sku": "quiz-bot",
@@ -544,7 +551,8 @@
         "Add products and sections: /add name | price | description | section",
         "Write your welcome and FAQ: /welcome and /faq",
         "Link your site if you have one: /site — then share your bot's link"
-      ]
+      ],
+      "invoice_item": 8
     },
     {
       "sku": "ai-bot",
@@ -611,7 +619,8 @@
         "Add products and sections: /add name | price | description | section",
         "Write your welcome and FAQ: /welcome and /faq",
         "Link your site if you have one: /site — then share your bot's link"
-      ]
+      ],
+      "invoice_item": 9
     },
     {
       "sku": "multibot-crm",
@@ -652,7 +661,8 @@
         "You pay in Telegram Stars and get a receipt with the transaction id at once",
         "An admin contacts you and activates the CRM across your hosted bots",
         "Send /mybots in any of your bots — unified stats and remote management"
-      ]
+      ],
+      "invoice_item": 10
     },
     {
       "sku": "workflow-engine",
@@ -693,7 +703,8 @@
         "You pay in Telegram Stars and get a receipt with the transaction id at once",
         "An admin contacts you and activates the automation engine on your bot",
         "Send /wf with your webhook URL in your bot — events start reaching n8n immediately"
-      ]
+      ],
+      "invoice_item": 11
     },
     {
       "sku": "whatsapp-bot-pro",
@@ -734,7 +745,8 @@
         "You pay in Telegram Stars and get a receipt with the transaction id at once",
         "Prepare a WhatsApp Business number: Meta for Developers ← WhatsApp ← API Setup",
         "Send /wa <phone_id> <token> <secret> right here in this bot — WhatsApp messages reach you immediately"
-      ]
+      ],
+      "invoice_item": 12
     },
     {
       "sku": "aifake-pro",
@@ -827,7 +839,8 @@
       "setup_en": [
         "Add the bot to your channel as an admin that can post and pin",
         "Send the admin your channel's id or link"
-      ]
+      ],
+      "invoice_item": 13
     },
     {
       "sku": "pin-month",
@@ -872,7 +885,8 @@
       "setup_en": [
         "Add the bot to your channel as an admin that can post and pin",
         "Send the admin your channel's id or link"
-      ]
+      ],
+      "invoice_item": 14
     },
     {
       "sku": "archive-5k",
@@ -917,7 +931,8 @@
       "setup_en": [
         "Add the bot to your channel as an admin that can post and pin",
         "Send the admin your channel's id or link"
-      ]
+      ],
+      "invoice_item": 15
     },
     {
       "sku": "panel-pro",
@@ -962,7 +977,140 @@
       "setup_en": [
         "Add the bot to your channel as an admin that can post and pin",
         "Send the admin your channel's id or link"
-      ]
+      ],
+      "invoice_item": 16
+    },
+    {
+      "sku": "site-oud-amber",
+      "title": "قالب متجر عود وعنبر — عطور فاخرة",
+      "title_en": "Oud & Amber store template — luxury fragrance",
+      "description": "متجر عطور وعود كامل: هوية ذهبية داكنة، 8 منتجات بصور SVG مرسومة بالكود، عرض سريع وسلة محفوظة، وطلب فوري عبر تيليجرام أو واتساب. عربي أولاً (RTL) بإنجليزية كاملة، صفر تبعيات، ورأس CSP صارم. يشمل النشر على استضافة زيديکس أو استضافتك.",
+      "description_en": "A complete oud and perfume store: dark gold identity, 8 products with code-drawn SVG art, quick view and a saved cart, and instant ordering over Telegram or WhatsApp. Arabic-first (RTL) with full English, zero dependencies and a strict CSP header. Includes deployment on ZidexSoft hosting or yours.",
+      "stars": 7000,
+      "category": "sites",
+      "monthly": false,
+      "featured": true,
+      "usd": 99,
+      "image": "/store/img/products/site-oud-amber.webp",
+      "demo": "",
+      "features": [
+        "هوية ذهبية داكنة فاخرة وغير مكررة",
+        "8 منتجات جاهزة مع صور SVG مرسومة بالكود",
+        "بحث عربي يتجاهل الحركات والهمزات",
+        "سلة محفوظة تُكمل بعد إغلاق الصفحة",
+        "طلب فوري عبر تيليجرام أو واتساب",
+        "صفر تبعيات: index.html + styles.css + build/app.js"
+      ],
+      "features_en": [
+        "A premium dark-gold identity, not a clone",
+        "8 ready products with code-drawn SVG art",
+        "Arabic search ignoring harakat and hamza",
+        "A cart that survives a page reload",
+        "Instant ordering via Telegram or WhatsApp",
+        "Zero dependencies: index.html + styles.css + build/app.js"
+      ],
+      "invoice": "https://t.me/$RrBu7OeCSEZMAQAAsSjBiU4nAsg",
+      "after": [
+        "تجرب المتجر حياً قبل الشراء: zeidexsoft.com/templates/oud-amber",
+        "نرسل لك الكود المصدري الكامل + مجلد build/ الجاهز للنشر",
+        "نغيّر الاسم والشعار والمنتجات والأسعار حسب هويتك",
+        "ننشره على نطاقك أو على استضافة زيديکس، ونربط بوت متجرك على تيليجرام"
+      ],
+      "after_en": [
+        "Try the store live before buying: zeidexsoft.com/templates/oud-amber",
+        "You receive the full source plus the build/ folder ready to deploy",
+        "We change the name, logo, products and prices to your identity",
+        "We deploy on your domain or on ZidexSoft hosting and connect your Telegram store bot"
+      ],
+      "invoice_item": 17
+    },
+    {
+      "sku": "site-smart-zone",
+      "title": "قالب متجر سمارت زون — إلكترونيات",
+      "title_en": "Smart Zone store template — electronics",
+      "description": "متجر إلكترونيات بهوية تقنية داكنة: 9 أجهزة عبر 3 تصنيفات، رقاقات مواصفات، ترتيب بالسعر، عدّادات متحركة، وشريط علامات. مبنيّ لعرض الأجهزة بثقة — ضمان وفحص ودعم. عربي أولاً بإنجليزية كاملة وصفر تبعيات.",
+      "description_en": "An electronics store with a dark tech identity: 9 devices across 3 categories, spec chips, price sorting, animated counters and a brand strip. Built to show devices with confidence — warranty, inspection, support. Arabic-first, full English, zero dependencies.",
+      "stars": 5600,
+      "category": "sites",
+      "monthly": false,
+      "featured": false,
+      "usd": 79,
+      "image": "/store/img/products/site-smart-zone.webp",
+      "demo": "",
+      "features": [
+        "9 أجهزة عبر 3 تصنيفات (هواتف، صوتيات، منزل ذكي)",
+        "ترتيب بالسعر: الأرخص أو الأغلى أولاً",
+        "رقاقات مواصفات لكل جهاز",
+        "شريط علامات متحرك وعدّادات إحصائية",
+        "هوية داكنة عالية التباين",
+        "صفر تبعيات ورؤوس أمان صارمة"
+      ],
+      "features_en": [
+        "9 devices across 3 categories (phones, audio, smart home)",
+        "Price sorting either way",
+        "Spec chips on every device",
+        "Animated brand strip and stat counters",
+        "High-contrast dark identity",
+        "Zero dependencies and strict security headers"
+      ],
+      "invoice": "https://t.me/$9umb3ueCSEZNAQAAqbj8JvnDjJc",
+      "after": [
+        "تجرب المتجر حياً قبل الشراء: zeidexsoft.com/templates/smart-zone",
+        "نرسل لك الكود المصدري الكامل + مجلد build/ الجاهز للنشر",
+        "نغيّر الأجهزة والأسعار والضمانات حسب نشاطك",
+        "ننشره على نطاقك ونربط بوت متجرك على تيليجرام"
+      ],
+      "after_en": [
+        "Try the store live before buying: zeidexsoft.com/templates/smart-zone",
+        "You receive the full source plus the build/ folder ready to deploy",
+        "We change the devices, prices and warranties to your business",
+        "We deploy on your domain and connect your Telegram store bot"
+      ],
+      "invoice_item": 18
+    },
+    {
+      "sku": "site-durra",
+      "title": "قالب متجر دُرّة — تمور وقهوة وضيافة",
+      "title_en": "Durra store template — dates, coffee & hospitality",
+      "description": "متجر ضيافة بهوية صحراوية دافئة: 9 منتجات بين التمور والقهوة وعلب الهدايا، شريط علب هدايا بارز، وقسم آراء عملاء. مناسب لمحامص التمور والقهوة ومتاجر الهدايا الموسمية. عربي أولاً بإنجليزية كاملة وصفر تبعيات.",
+      "description_en": "A hospitality store with a warm desert identity: 9 products across dates, coffee and gift boxes, a prominent gift-box band and a guest voices section. Ideal for date roasters, coffee houses and seasonal gift shops. Arabic-first, full English, zero dependencies.",
+      "stars": 4600,
+      "category": "sites",
+      "monthly": false,
+      "featured": false,
+      "usd": 65,
+      "image": "/store/img/products/site-durra.webp",
+      "demo": "",
+      "features": [
+        "9 منتجات: تمور، قهوة عربية، علب هدايا",
+        "شريط علب هدايا بارز بنداء واضح",
+        "قسم آراء العملاء",
+        "زخرفة هندسية مرسومة SVG",
+        "هوية صحراوية فاتحة أنيقة",
+        "صفر تبعيات ورؤوس أمان صارمة"
+      ],
+      "features_en": [
+        "9 products: dates, Arabic coffee, gift boxes",
+        "A prominent gift-box band with a clear call",
+        "A guest voices section",
+        "Code-drawn geometric ornament",
+        "An elegant light desert identity",
+        "Zero dependencies and strict security headers"
+      ],
+      "invoice": "https://t.me/$ONP0ZueCSEZOAQAAiyF-rec53Sk",
+      "after": [
+        "تجرب المتجر حياً قبل الشراء: zeidexsoft.com/templates/durra",
+        "نرسل لك الكود المصدري الكامل + مجلد build/ الجاهز للنشر",
+        "نغيّر المنتجات والأوزان والأسعار حسب تشكيلتك",
+        "ننشره على نطاقك ونربط بوت متجرك على تيليجرام"
+      ],
+      "after_en": [
+        "Try the store live before buying: zeidexsoft.com/templates/durra",
+        "You receive the full source plus the build/ folder ready to deploy",
+        "We change products, weights and prices to your selection",
+        "We deploy on your domain and connect your Telegram store bot"
+      ],
+      "invoice_item": 19
     }
   ],
   "offer": {

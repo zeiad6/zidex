@@ -1,0 +1,271 @@
+/* عود وعنبر — هوية فاخرة: فحم عميق وذهب دافئ.
+   الخصائص المنطقية (padding-inline-start…) تجعل الصفحة نفسها تنقلب مع
+   اللغة rtl→ltr دون سطر واحد إضافي. لا خطوط خارجية: عائلات النظام فقط. */
+
+:root {
+  --bg: #171106;
+  --bg2: #1f1808;
+  --panel: #251d0c;
+  --line: #3a2f16;
+  --ink: #f3ead8;
+  --ink-dim: #cdbf9f;
+  --gold: #d9ab52;
+  --gold-soft: #e8c37e;
+  --gold-deep: #8a6420;
+  --radius: 14px;
+  --shadow: 0 18px 50px rgba(0, 0, 0, .45);
+}
+
+* { box-sizing: border-box }
+html { scroll-behavior: smooth }
+body {
+  margin: 0;
+  background: radial-gradient(1200px 700px at 85% -10%, #2a210e 0%, var(--bg) 55%);
+  color: var(--ink);
+  font-family: 'Segoe UI', 'Noto Naskh Arabic', 'Geeza Pro', Tahoma, 'Helvetica Neue', sans-serif;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+html[lang='en'] body { font-family: 'Georgia', 'Iowan Old Style', 'Palatino', serif }
+h1, h2, h3, .brand-name {
+  font-family: 'Amiri', 'Sakkal Majalla', 'Geeza Pro', 'Palatino Linotype', serif;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+html[lang='en'] h1, html[lang='en'] h2, html[lang='en'] h3, html[lang='en'] .brand-name {
+  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+}
+
+.skip {
+  position: absolute; inset-inline-start: -999px; top: 0;
+  background: var(--gold); color: #241a06; padding: .5rem 1rem; z-index: 99;
+}
+.skip:focus { inset-inline-start: 0 }
+
+/* ── الشريط العلوي ─────────────────────────────────────────── */
+.bar {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; align-items: center; gap: 1rem;
+  padding: .8rem clamp(1rem, 4vw, 3rem);
+  background: rgba(23, 17, 6, .82);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(14px);
+}
+.brand { display: flex; align-items: center; gap: .6rem; text-decoration: none; color: var(--ink) }
+.mark { width: 34px; height: 34px }
+.mark-bg { fill: var(--gold-deep) }
+.mark-drop { fill: var(--gold) }
+.brand-name { font-size: 1.2rem; color: var(--gold-soft) }
+.nav { display: flex; gap: 1.1rem; margin-inline-start: auto }
+.nav a { color: var(--ink-dim); text-decoration: none; font-size: .95rem }
+.nav a:hover { color: var(--gold-soft) }
+.bar-acts { display: flex; gap: .5rem; align-items: center }
+
+button { font: inherit; cursor: pointer }
+.ghost {
+  background: none; border: 1px solid var(--line); color: var(--ink-dim);
+  border-radius: 9px; padding: .4rem .9rem;
+}
+.ghost:hover { color: var(--gold-soft); border-color: var(--gold-deep) }
+.cart-btn {
+  display: flex; align-items: center; gap: .45rem;
+  background: var(--gold-deep); color: #241a06; border: none;
+  border-radius: 9px; padding: .45rem .95rem; font-weight: 700;
+}
+.cart-btn svg { width: 17px; height: 17px }
+.cart-btn:hover { background: var(--gold) }
+.count {
+  font-style: normal; background: #241a06; color: var(--gold-soft);
+  border-radius: 99px; padding: 0 .5em; font-size: .85rem;
+}
+
+/* ── الأزرار ────────────────────────────────────────────────── */
+.btn {
+  display: inline-block; text-decoration: none; text-align: center;
+  border: none; border-radius: 11px; padding: .7rem 1.5rem; font-weight: 700;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.btn.primary { background: linear-gradient(135deg, var(--gold), var(--gold-deep)); color: #241a06 }
+.btn.primary:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(217, 171, 82, .35) }
+.btn.ghosty { background: none; border: 1px solid var(--gold-deep); color: var(--gold-soft) }
+.btn.ghosty:hover { border-color: var(--gold); color: var(--gold) }
+.btn.sm { padding: .45rem 1rem; font-size: .9rem }
+.btn.wide { width: 100% }
+
+/* ── الواجهة (hero) ─────────────────────────────────────────── */
+.hero {
+  display: grid; grid-template-columns: 1.15fr .85fr; align-items: center;
+  gap: 2rem; padding: clamp(2rem, 6vw, 4.5rem) clamp(1rem, 4vw, 3rem) 3rem;
+  max-width: 1180px; margin: 0 auto;
+}
+.kicker { color: var(--gold); letter-spacing: .35em; font-size: .8rem; margin: 0 0 .6rem }
+.hero h1 { font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.25; margin: 0 0 1rem }
+.lead { color: var(--ink-dim); max-width: 46ch; font-size: 1.05rem }
+.hero-acts { display: flex; gap: .8rem; flex-wrap: wrap; margin: 1.6rem 0 }
+.hero-stats { display: flex; gap: 1.8rem; list-style: none; padding: 0; margin: 0 }
+.hero-stats li { display: grid }
+.hero-stats b { font-size: 1.6rem; color: var(--gold-soft); font-family: Georgia, serif }
+.hero-stats span { color: var(--ink-dim); font-size: .8rem }
+.hero-art { display: grid; place-items: center }
+.hero-svg { width: min(340px, 72vw); height: auto; filter: drop-shadow(0 24px 60px rgba(217, 171, 82, .22)) }
+.hero-float { animation: floaty 6s ease-in-out infinite }
+.spark { animation: twinkle 3.4s ease-in-out infinite }
+.spark.s2 { animation-delay: 1.1s }
+.spark.s3 { animation-delay: 2.2s }
+@keyframes floaty { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-14px) } }
+@keyframes twinkle { 0%, 100% { opacity: .25 } 50% { opacity: 1 } }
+
+@media (max-width: 880px) {
+  .hero { grid-template-columns: 1fr }
+  .hero-art { order: -1 }
+}
+/* ── الأقسام والشبكة ────────────────────────────────────────── */
+.section { max-width: 1180px; margin: 0 auto; padding: 3rem clamp(1rem, 4vw, 3rem) }
+.section h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: var(--gold-soft); margin: 0 0 1.4rem }
+.row { display: flex; align-items: center }
+.row.space { justify-content: space-between; gap: 1rem; flex-wrap: wrap }
+.row.gap { gap: .6rem }
+.row.gap > * { flex: 1 }
+
+.search {
+  display: flex; align-items: center; gap: .5rem;
+  border: 1px solid var(--line); border-radius: 11px; padding: .45rem .9rem;
+  color: var(--ink-dim); background: var(--bg2);
+}
+.search svg { width: 16px; height: 16px; flex: none }
+.search input {
+  background: none; border: none; outline: none; color: var(--ink);
+  font: inherit; width: min(210px, 40vw);
+}
+.search input::placeholder { color: #7c6e4d }
+
+.chips { display: flex; gap: .55rem; flex-wrap: wrap; margin: 1.1rem 0 }
+.chip {
+  background: var(--bg2); color: var(--ink-dim);
+  border: 1px solid var(--line); border-radius: 99px; padding: .38rem 1.05rem;
+  transition: all .18s ease;
+}
+.chip.on { background: var(--gold-deep); color: #241a06; border-color: var(--gold-deep); font-weight: 700 }
+.chip:hover:not(.on) { border-color: var(--gold-deep); color: var(--gold-soft) }
+
+.grid {
+  display: grid; gap: 1.2rem;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+.card {
+  background: linear-gradient(160deg, var(--panel), var(--bg2));
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1rem; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.card:hover, .card:focus-visible { transform: translateY(-5px); border-color: var(--gold-deep); box-shadow: var(--shadow) }
+.card h3 { margin: .2rem 0 .35rem; font-size: 1.05rem; color: var(--ink) }
+.card .desc {
+  color: var(--ink-dim); font-size: .87rem; margin: 0 0 .7rem;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.art-wrap { position: relative; border-radius: 10px; overflow: hidden; background: #201807; margin-bottom: .7rem }
+.art-wrap .art { display: block; width: 100%; height: auto }
+.art-wrap .badge {
+  position: absolute; top: .55rem; inset-inline-start: .55rem;
+  font-style: normal; background: var(--gold-deep); color: #241a06;
+  font-size: .72rem; font-weight: 700; border-radius: 99px; padding: .12rem .6rem;
+}
+.price { display: flex; gap: .5rem; align-items: baseline; margin-bottom: .8rem }
+.price b { color: var(--gold-soft); font-size: 1.15rem; font-family: Georgia, serif }
+.price s { color: #7c6e4d; font-size: .85rem }
+
+.hint { color: var(--ink-dim); font-size: .9rem }
+.hint.center { text-align: center; padding: 2rem 0 }
+
+/* ── لماذا/كيف ──────────────────────────────────────────────── */
+.cards { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) }
+.card.why { padding: 1.4rem }
+.card.why svg { width: 36px; height: 36px; color: var(--gold) }
+.card.why h3 { color: var(--gold-soft); margin: .8rem 0 .4rem }
+.card.why p { color: var(--ink-dim); margin: 0; font-size: .92rem }
+
+.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem }
+.steps li {
+  display: flex; align-items: center; gap: 1rem;
+  background: var(--bg2); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1rem 1.3rem;
+}
+.steps b {
+  flex: none; width: 42px; height: 42px; display: grid; place-items: center;
+  border-radius: 50%; background: var(--gold-deep); color: #241a06;
+  font-size: 1.2rem; font-family: Georgia, serif;
+}
+
+/* ── التذييل ────────────────────────────────────────────────── */
+.foot { border-top: 1px solid var(--line); margin-top: 3rem; padding: 2.4rem clamp(1rem, 4vw, 3rem) 1.6rem }
+.foot-grid {
+  max-width: 1180px; margin: 0 auto; display: flex; gap: 2rem;
+  justify-content: space-between; flex-wrap: wrap; align-items: center;
+}
+.foot-grid p { color: var(--ink-dim); margin: .3rem 0 0 }
+.foot-acts { display: flex; gap: .6rem }
+.foot-credit {
+  max-width: 1180px; margin: 1.6rem auto 0; color: var(--ink-dim); font-size: .85rem;
+  display: flex; gap: .4rem; justify-content: center; flex-wrap: wrap;
+}
+.foot-credit a { color: var(--gold); text-decoration: none }
+.dot { opacity: .5 }
+/* ── السلة ──────────────────────────────────────────────────── */
+.backdrop {
+  position: fixed; inset: 0; background: rgba(10, 7, 2, .6);
+  backdrop-filter: blur(3px); z-index: 40;
+}
+.drawer {
+  position: fixed; z-index: 41; inset-block: 0; inset-inline-end: 0;
+  width: min(420px, 94vw); background: var(--bg2);
+  border-inline-start: 1px solid var(--line);
+  padding: 1.2rem 1.3rem; overflow-y: auto;
+  display: flex; flex-direction: column; gap: .9rem;
+}
+.drawer h2 { margin: 0; color: var(--gold-soft); font-size: 1.3rem }
+.cart-line {
+  display: flex; align-items: center; gap: .8rem;
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 12px; padding: .65rem;
+}
+.art-wrap.sm { width: 52px; flex: none; margin: 0 }
+.grow { min-width: 0; flex: 1 }
+.grow .ln { display: block; font-size: .88rem; color: var(--ink) }
+.grow .price { color: var(--gold-soft); margin: 0; font-size: .82rem }
+.stepper { display: flex; align-items: center; gap: .35rem }
+.step {
+  width: 26px; height: 26px; border-radius: 7px; border: 1px solid var(--line);
+  background: var(--bg); color: var(--gold-soft); display: grid; place-items: center;
+}
+.qty { font-style: normal; min-width: 1.2em; text-align: center }
+.ghost.del { border: none; color: #b06a5a; font-size: 1.05rem }
+.cart-foot { display: grid; gap: .6rem; margin-top: auto }
+.total { font-size: 1.05rem; border-top: 1px dashed var(--line); padding-top: .8rem }
+.total b { color: var(--gold-soft); font-family: Georgia, serif; font-size: 1.25rem }
+
+/* ── النوافذ والإشعار ───────────────────────────────────────── */
+.modal {
+  position: fixed; z-index: 42; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(560px, 94vw); max-height: 88vh; overflow-y: auto;
+  background: var(--bg2); border: 1px solid var(--gold-deep);
+  border-radius: 16px; padding: 1.3rem; box-shadow: var(--shadow);
+}
+.quick { display: grid; grid-template-columns: .8fr 1.2fr; gap: 1.1rem; align-items: center }
+.quick-copy h3 { margin: 0 0 .4rem; color: var(--gold-soft) }
+.quick-copy .desc, .quick-copy .meta { color: var(--ink-dim); font-size: .92rem; margin: 0 0 .6rem }
+.quick-copy .meta { color: var(--gold); font-size: .8rem }
+.quick.demo { grid-template-columns: 1fr; text-align: center; justify-items: center }
+@media (max-width: 520px) { .quick { grid-template-columns: 1fr } }
+
+.toast {
+  position: fixed; z-index: 50; bottom: 1.4rem; left: 50%; transform: translateX(-50%);
+  background: var(--gold-deep); color: #241a06; font-weight: 700;
+  border-radius: 99px; padding: .55rem 1.4rem; box-shadow: var(--shadow);
+  animation: rise .25s ease;
+}
+@keyframes rise { from { opacity: 0; transform: translate(-50%, 10px) } }
+
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important }
+}

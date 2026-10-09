@@ -1316,6 +1316,19 @@ assert.equal(store.get('tb:123456789'), undefined)
       `${p.sku}: invoice must be a t.me/$<code> deep link, got "${p.invoice}"`)
   }
 
+  // An invoice is minted WITH a payload `t<botId>:<itemId>`; the payment handler
+  // delivers whatever item that id names. A later re-ordering of the catalogue
+  // shifts item ids, and every minted link silently starts buying the wrong
+  // product — the shape check above still passes, so this is the only guard.
+  // `invoice_item` records the id the link was minted against and must match
+  // the current payload exactly.
+  const payload = JSON.parse(readFileSync(new URL('../payload.json', import.meta.url), 'utf8'))
+  const itemsById = new Map(payload.items.map((i) => [i.sku, i.id]))
+  for (const p of cat.products.filter((x) => x.invoice_item !== undefined)) {
+    assert.equal(itemsById.get(p.sku), p.invoice_item,
+      `${p.sku}: invoice was minted for item ${p.invoice_item} but the payload now numbers it ${itemsById.get(p.sku)} — re-mint with scripts/mint-invoices.mjs`)
+  }
+
   // Authoritative check, when a token is available: getMe is the bot's own
   // answer to "what is my username", so a comparison against the catalogue is
   // exact. Scraping t.me is deliberately not used here — Telegram rate-limits

@@ -91,6 +91,25 @@ const routes = [
     description: 'برامج وتطبيقات جاهزة للتحميل من ZeidexSoft.',
     body: `<h1>برامج جاهزة للتحميل</h1>${list(programs.map((p) => [p.post ? `/blog/${p.post}` : '/programs', `${p.name} v${p.version} — ${p.tagline}`]))}`,
   },
+  {
+    path: '/templates',
+    title: `قوالب المتاجر — ${SITE}`,
+    description: 'قوالب متاجر إلكترونية جاهزة: عربية أولاً، إنجليزية كاملة، صفر تبعيات، وأعلى معايير الأمان — تُجرَّب حية قبل أن تُشترى.',
+    body: `<h1>قوالب متاجر تُجرَّب قبل أن تُشترى</h1>
+      <p>ثلاثة متاجر كاملة بهويات مختلفة، كل قالب عربي أولاً (RTL) مع إنجليزية كاملة، صفر تبعيات تشغيلية، ورؤوس أمان صارمة.</p>
+      ${list(catalog.products.filter((p) => p.category === 'sites').map((p) => [`/shop/${p.sku}`, `${p.title} — ${p.stars} نجمة أو $${p.usd}`]))}`,
+  },
+  ...catalog.products
+    .filter((p) => p.category === 'sites')
+    .map((p) => ({
+      path: `/shop/${p.sku}`,
+      title: `${p.title} — ${SITE}`,
+      description: p.description,
+      image: `${ORIGIN}/store/img/products/${p.sku}.png`,
+      body: `<h1>${esc(p.title)}</h1><p>${esc(p.description)}</p>
+        <p>السعر: ${p.stars} نجمة تيليجرام${p.usd ? ` — أو $${p.usd} على الموقع` : ''}.</p>
+        ${p.features?.length ? `<h2>ما الذي تحصل عليه</h2><ul>${p.features.map((f) => `<li>${esc(f)}</li>`).join('')}</ul>` : ''}`,
+    })),
   { path: '/links', title: `الروابط — ${SITE}`, description: 'كل الروابط المهمة لـ ZeidexSoft في مكان واحد.', body: '<h1>الروابط</h1>' },
   { path: '/about', title: `عن المنصة — ${SITE}`, description: 'عن تصميم وتقنية ZeidexSoft، وسياسة الخصوصية.', body: '<h1>عن المنصة</h1>' },
 ]

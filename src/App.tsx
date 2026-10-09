@@ -15,6 +15,8 @@ const BlogPost = lazy(() => import('@/pages/BlogPost'))
 const About = lazy(() => import('@/pages/About'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
 const Programs = lazy(() => import('@/pages/Programs'))
+const Templates = lazy(() => import('@/pages/Templates'))
+const TemplatePreview = lazy(() => import('@/pages/TemplatePreview'))
 const Store = lazy(() => import('@/pages/Store'))
 const StoreProduct = lazy(() => import('@/pages/StoreProduct'))
 const Dashboard = lazy(() => import('@/pages/Dashboard'))
@@ -100,6 +102,8 @@ export default function App() {
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/programs" element={<Programs />} />
+                <Route path="/templates" element={<Templates />} />
+                <Route path="/templates/:slug" element={<TemplatePreview />} />
                 <Route path="/shop" element={<Store />} />
                 <Route path="/shop/:sku" element={<StoreProduct />} />
                 <Route path="/dashboard" element={<Dashboard />} />
