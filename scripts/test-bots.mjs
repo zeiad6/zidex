@@ -289,7 +289,7 @@ assert.equal(store.get('tb:123456789'), undefined)
     return Response.json({ ok: true, result: {} })
   }
   try {
-    assert.deepEqual(await (await admin('GET', '/admin/bots')).json(), { plans: ['free', 'paid'] }, 'the capability probe /freebot reads first')
+    assert.deepEqual(await (await admin('GET', '/admin/bots')).json(), { plans: ['free', 'trial', 'paid'] }, 'the capability probe /freebot (and /trial) reads first')
     const made = await (await admin('POST', '/admin/bots', { token: FREE_TOKEN, owner_id: 9, plan: 'free' })).json()
     assert.equal(made.plan, 'free')
     const rec = () => JSON.parse(store.get(`tb:${FREE_ID}`))
@@ -1022,6 +1022,205 @@ assert.equal(store.get('tb:123456789'), undefined)
     await say(50, '/send 50 1')
     await say(50, '/files')
     assert.equal(sent.length, 0, 'storage commands are owner-only')
+  } finally {
+    globalThis.fetch = saved
+  }
+}
+
+// ── Trials: the full store for 7 days, provisioned on the second host ────
+// The second host is the G53208084@gmail.com account's workers.dev deployment
+// (TRIAL_ORIGIN): a trial bot's webhook is registered there, never on the primary.
+{
+  b.configCache.clear()
+  b.ownerCache.clear()
+  const PLAT = 999111222
+  const TRIAL = 999111333
+  const platToken = `${PLAT}:` + 'C'.repeat(35)
+  const sent = []
+  const saved = globalThis.fetch
+  globalThis.fetch = async (url, init) => {
+    const method = String(url).split('/').pop()
+    const body = init?.body ? JSON.parse(init.body) : {}
+    sent.push({ method, body })
+    const id = Number(String(url).match(/\/bot(\d+):/)?.[1] ?? 0)
+    if (method === 'getMe') return Response.json({ ok: true, result: { id: id || PLAT, username: `bot_${id || PLAT}`, first_name: 'Bot' } })
+    return Response.json({ ok: true, result: {} })
+  }
+  const prevPlatform = env.BOT_PLATFORM_ID
+  const prevOrigin = env.TRIAL_ORIGIN
+  env.BOT_PLATFORM_ID = String(PLAT)
+  env.TRIAL_ORIGIN = 'https://zeidex-bots.g53208084.workers.dev'
+  try {
+    const OWNER = 700777 // fresh: the self-serve cap counts bots per owner id
+    await admin('POST', '/admin/bots', { token: platToken, owner_id: OWNER, plan: 'paid' })
+    const secret = JSON.parse(store.get(`tb:${PLAT}`)).secret
+    const post = (update) =>
+      b.botWebhook(new Request(`https://zeidexsoft.com/tg/${PLAT}`, { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': secret }, body: JSON.stringify(update) }), env, String(PLAT))
+    const texts = () => sent.filter((c) => c.method === 'sendMessage').map((c) => c.body.text)
+
+    // /trial without a token shows the way in, not a wall.
+    sent.length = 0
+    await post({ message: { chat: { id: OWNER, type: 'private' }, from: { id: OWNER, first_name: 'X' }, text: '/trial' } })
+    assert.ok(texts().at(-1).includes('/trial التوكن'), 'bare /trial explains the token step')
+
+    // The owner's /trial <token> provisions the trial on the second host.
+    sent.length = 0
+    await post({ message: { chat: { id: OWNER, type: 'private' }, from: { id: OWNER, first_name: 'X' }, text: `/trial ${TRIAL}:` + 'D'.repeat(35) } })
+    const tcfg = JSON.parse(store.get(`tb:${TRIAL}`))
+    assert.equal(tcfg.plan, 'trial', 'the provisioned bot is on the trial plan')
+    assert.equal(tcfg.owner, OWNER)
+    const left = (Date.parse(tcfg.expires) - Date.now()) / 864e5
+    assert.ok(left > 6.99 && left <= 7, 'the trial window is 7 days, once')
+    const hook = sent.find((c) => c.method === 'setWebhook')
+    assert.equal(hook.body.url, `${env.TRIAL_ORIGIN}/tg/${TRIAL}`, 'the trial webhook is registered on the second host')
+    assert.ok(texts().at(-1).includes('تجربتك الكاملة جاهزة'), 'the owner sees the trial is live')
+
+    // A stale trial record re-registers on the second host, never the primary.
+    const rawT = JSON.parse(store.get(`tb:${TRIAL}`))
+    delete rawT.hook
+    store.set(`tb:${TRIAL}`, JSON.stringify(rawT))
+    b.configCache.clear()
+    sent.length = 0
+    await b.botWebhook(
+      new Request(`https://zeidexsoft.com/tg/${TRIAL}`, {
+        method: 'POST',
+        headers: { 'x-telegram-bot-api-secret-token': rawT.secret },
+        body: JSON.stringify({ message: { chat: { id: OWNER, type: 'private' }, from: { id: OWNER, first_name: 'X' }, text: '/start' } }),
+      }),
+      env,
+      String(TRIAL),
+    )
+    const tsync = sent.find((c) => c.method === 'setWebhook')
+    assert.equal(tsync.body.url, `${env.TRIAL_ORIGIN}/tg/${TRIAL}`, 'a healed trial stays on the second host')
+  } finally {
+    globalThis.fetch = saved
+    env.BOT_PLATFORM_ID = prevPlatform
+    if (prevOrigin === undefined) delete env.TRIAL_ORIGIN
+    else env.TRIAL_ORIGIN = prevOrigin
+  }
+}
+
+// ── The interactive panel: tap a view, answer the step, done ──────────────
+{
+  b.configCache.clear()
+  b.ownerCache.clear()
+  const ID = 777000111
+  const sent = []
+  const saved = globalThis.fetch
+  globalThis.fetch = async (url, init) => {
+    const method = String(url).split('/').pop()
+    const body = init?.body ? JSON.parse(init.body) : {}
+    sent.push({ method, body })
+    if (method === 'getMe') return Response.json({ ok: true, result: { id: ID, username: 'panel_bot', first_name: 'Panel' } })
+    return Response.json({ ok: true, result: {} })
+  }
+  try {
+    const OWNER = 7
+    await admin('POST', '/admin/bots', { token: `${ID}:` + 'H'.repeat(35), owner_id: OWNER, plan: 'paid' })
+    const rec = () => JSON.parse(store.get(`tb:${ID}`))
+    const secret = rec().secret
+    const post = (update) =>
+      b.botWebhook(new Request(`https://zeidexsoft.com/tg/${ID}`, { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': secret }, body: JSON.stringify(update) }), env, String(ID))
+    const say = (from, text) => post({ message: { chat: { id: from, type: 'private' }, from: { id: from, first_name: 'X' }, text } })
+    const tap = (from, data) => post({ callback_query: { id: 'q', from: { id: from }, data, message: { chat: { id: from, type: 'private' } } } })
+    const texts = () => sent.filter((c) => c.method === 'sendMessage').map((c) => c.body.text)
+
+    // /panel is the owner's root view; a customer never sees it.
+    sent.length = 0
+    await say(OWNER, '/panel')
+    assert.ok(texts().at(-1).includes('لوحة التحكم التفاعلية'), 'the panel root opens on /panel')
+    sent.length = 0
+    await say(50, '/panel')
+    assert.equal(sent.length, 0, '/panel is owner-only')
+
+    // A stale panel button pressed by anyone but the owner gets silence, not powers.
+    sent.length = 0
+    await tap(50, 'h:items')
+    assert.equal(texts().length, 0, 'panel callbacks are owner-only')
+
+    // The add-item step: the owner's next plain message answers it.
+    sent.length = 0
+    await tap(OWNER, 'h:additem')
+    assert.equal(rec().pending.op, 'item', 'the panel waits for the product line')
+    await say(OWNER, 'لوحة منتج | 30 | وصف اللوحة')
+    const cfg1 = rec()
+    assert.ok(!cfg1.pending, 'one answer consumes the step')
+    assert.equal(cfg1.items.at(-1).title, 'لوحة منتج')
+    assert.equal(cfg1.items.at(-1).stars, 30)
+
+    // A malformed answer keeps the step open instead of silently eating it.
+    await tap(OWNER, 'h:additem')
+    await say(OWNER, 'بدون أسعار')
+    assert.equal(rec().pending.op, 'item', 'a malformed answer keeps the step open')
+    assert.ok(texts().at(-1).includes('الاسم | السعر'), 'and repeats the format')
+    await say(OWNER, '/cancel')
+    assert.ok(!rec().pending, '/cancel closes the open step')
+
+    // An expired step never eats a later message.
+    const raw = rec()
+    raw.pending = { op: 'item', at: Date.now() - 11 * 60_000 }
+    store.set(`tb:${ID}`, JSON.stringify(raw))
+    b.configCache.clear()
+    await say(OWNER, 'رسالة متأخرة | 5 | لا شيء')
+    assert.ok(!rec().pending, 'an expired step is dropped')
+    assert.equal(rec().items.length, 1, 'a late message is not an answer')
+
+    // The FAQ step answers the same way.
+    await tap(OWNER, 'h:addfaq')
+    assert.equal(rec().pending.op, 'faq')
+    await say(OWNER, 'كيف الدفع؟ | بنجوم تيليجرام')
+    assert.ok(!rec().pending, 'the faq step closes on its answer')
+    assert.equal(rec().faqs.at(-1).q, 'كيف الدفع؟')
+
+    // The deliver step is aimed at its product: answer, then clear with '-'.
+    const it = rec().items[0]
+    await tap(OWNER, `h:itdlv:${it.id}`)
+    assert.equal(rec().pending.op, 'deliver', 'the deliver step names its op')
+    assert.equal(rec().pending.target, it.id, 'and its product')
+    await say(OWNER, 'CODE-123')
+    assert.equal(rec().items[0].deliver.text, 'CODE-123', 'the answer becomes the auto-delivery')
+    await tap(OWNER, `h:itdlv:${it.id}`)
+    await say(OWNER, '-')
+    assert.ok(!rec().items[0].deliver, "a '-' clears the auto-delivery")
+
+    // Pause and resume are one toggle.
+    await tap(OWNER, 'h:pause')
+    assert.equal(rec().paused, true, 'a tap pauses the bot')
+    await tap(OWNER, 'h:pause')
+    assert.equal(rec().paused, false, 'a second tap resumes it')
+
+    // Deleting a product from the list view keeps the rest.
+    await tap(OWNER, 'h:additem')
+    await say(OWNER, 'مؤقت | 10 | سيُحذف')
+    const gone = rec().items.at(-1)
+    await tap(OWNER, `h:itdel:${gone.id}`)
+    assert.ok(!rec().items.some((i) => i.id === gone.id), 'the item is gone')
+    assert.equal(rec().items.length, 1, 'and only that one')
+
+    // A bot provisioned before channel_post joined allowed_updates never hears channel
+    // posts — its first update after the bump re-registers its webhook once.
+    const heal = () => {
+      const raw = rec()
+      delete raw.hook // an old record: made before the revision existed
+      store.set(`tb:${ID}`, JSON.stringify(raw))
+      b.configCache.clear()
+    }
+    heal()
+    sent.length = 0
+    await say(50, '/start') // even a customer's message heals it
+    const sync = sent.filter((c) => c.method === 'setWebhook').pop()
+    assert.ok(sync, 'a stale record re-registers its webhook')
+    assert.deepEqual(
+      sync.body.allowed_updates,
+      ['message', 'callback_query', 'pre_checkout_query', 'channel_post'],
+      'with channel_post delivered at last',
+    )
+    assert.equal(sync.body.drop_pending_updates, false, 'a live bot keeps its pending updates')
+    assert.equal(sync.body.url, `https://zeidexsoft.com/tg/${ID}`, 'on the same primary host')
+    assert.equal(rec().hook, 2, 'and stamps its record so it never repeats')
+    sent.length = 0
+    await say(50, '/start')
+    assert.ok(!sent.some((c) => c.method === 'setWebhook'), 'a healed record does not re-register again')
   } finally {
     globalThis.fetch = saved
   }

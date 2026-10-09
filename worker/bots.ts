@@ -33,6 +33,10 @@ export type BotsEnv = {
   AI_MODEL?: string
   /** Public webhook host; defaults to https://zeidexsoft.com */
   ORIGIN?: string
+  /** The second host (G53208084@gmail.com's account, on workers.dev) that serves
+   *  trial bots: their webhooks are registered there, so trial traffic never lands
+   *  on the primary host. */
+  TRIAL_ORIGIN?: string
 } & LicenseEnv
 
 type Item = {
@@ -55,7 +59,7 @@ type Item = {
    *  bot, re-sent by its Telegram file_id. When absent, the order just notifies the owner. */
   deliver?: {
     text?: string
-    file?: { id: string; type: 'document' | 'photo' | 'video' | 'audio' | 'voice' }
+    file?: { id: string; type: 'document' | 'photo' | 'video' | 'animation' | 'audio' | 'voice' }
   }
 }
 
@@ -64,7 +68,7 @@ type Item = {
 type StoredFile = {
   id: number
   title: string
-  type: 'document' | 'photo' | 'video' | 'audio' | 'voice'
+  type: 'document' | 'photo' | 'video' | 'animation' | 'audio' | 'voice'
   file_id: string
 }
 
@@ -84,7 +88,7 @@ type Cfg = {
   created: string
   /** "free": self-served from the platform bot's /freebot — capped, with a small signature.
    *  Absent on records made before plans existed, which are paid. */
-  plan?: 'free' | 'paid'
+  plan?: 'free' | 'trial' | 'paid'
   /** The owner's own website. Shown to customers only once verified (/site). */
   site?: { url: string; verified: boolean }
   /** End of the free month (ISO). Set once per bot: re-provisioning never moves it. */
@@ -98,23 +102,47 @@ type Cfg = {
   filesChannel?: { id: number; title?: string }
   /** Files indexed from the storage channel, or sent straight to the bot by the owner. */
   files?: StoredFile[]
+  /** One conversational step of the control panel: the edit the owner is answering. */
+  pending?: { op: string; target?: number; at: number }
+  /** The webhook settings revision this record was last registered with. A record made
+   *  before a revision lacks the field, so its webhook re-registers itself once —
+   *  Telegram keeps each registration's allowed_updates until the next setWebhook. */
+  hook?: number
 }
 
 const DEFAULT_ORIGIN = 'https://zeidexsoft.com'
 const originOf = (env: BotsEnv) => env.ORIGIN || DEFAULT_ORIGIN
+/** The host a bot's webhook belongs on: the primary for every plan, except a trial —
+ *  a trial runs on the second host (TRIAL_ORIGIN) so its traffic never lands on the
+ *  primary. Shared by provision and the one-time webhook sync so they agree. */
+const hostOf = (env: BotsEnv, cfg: Cfg) => (isTrial(cfg) && env.TRIAL_ORIGIN) || originOf(env)
 const MAX_ITEMS = 50
 // The free plan is a mid-range store for one month: enough to run a real shop and decide.
 const FREE_MAX_ITEMS = 30
 const FREE_MAX_FAQS = 30
 const FREE_DAYS = 30
+// The trial is the full paid store for a short window: every capability, so the decision
+// to buy is made on the real product, not on its capped shadow.
+const TRIAL_DAYS = 7
+/** One conversational step of the panel lives this long: the owner's next plain
+ *  message answers it, or it quietly expires instead of eating a stray message. */
+const PENDING_TTL = 10 * 60_000
 const MAX_SECTIONS = 12
 const MAX_PAGES = 8
 /** How many files the storage index holds per bot. Telegram file_ids never expire for the
  *  bot that received them, so this is a real archive, not a cache. */
 const MAX_FILES = 200
+/** The update kinds every bot's webhook must be registered for. channel_post feeds
+ *  the storage channel — a bot registered before it joined this list never hears
+ *  channel posts at all, which read exactly as "بوستات لا تعمل": the post arrives
+ *  in Telegram and nothing happens, because Telegram never delivers it. */
+const HOOK_UPDATES = ['message', 'callback_query', 'pre_checkout_query', 'channel_post']
+/** Bump when HOOK_UPDATES (or any other webhook setting) changes: every live bot
+ *  whose record still carries the old revision re-registers itself, once. */
+const HOOK_REVISION = 2
 /** What the platform's /freebot checks before provisioning: an older Worker ignores "plan"
  *  and would host a free bot with no limits at all. */
-const PLANS = ['free', 'paid'] as const
+const PLANS = ['free', 'trial', 'paid'] as const
 
 /**
  * The platform's own bot, which gets the extra menu rows (the app downloads and
@@ -163,8 +191,11 @@ export function __expireOwnerCache() {
 const MAX_FAQS = 50
 const MAX_USERS = 5000
 const isFree = (cfg: Cfg) => cfg.plan === 'free'
-/** A free bot whose month is over: closed to customers, every byte of the shop kept. */
-const lapsed = (cfg: Cfg) => isFree(cfg) && !!cfg.expires && Date.now() > Date.parse(cfg.expires)
+/** A trial runs the full paid store for a fixed window, then lapses like a free month:
+ *  closed to customers, every byte of the shop kept for the upgrade decision. */
+const isTrial = (cfg: Cfg) => cfg.plan === 'trial'
+/** A free month or a trial window that is over: closed to customers, every byte kept. */
+const lapsed = (cfg: Cfg) => (isFree(cfg) || isTrial(cfg)) && !!cfg.expires && Date.now() > Date.parse(cfg.expires)
 const LAPSED_TEXT = '⏸ هذا المتجر متوقف مؤقتاً — عُد لاحقاً.'
 const day = (iso?: string) => (iso ? iso.slice(0, 10) : '')
 const itemCap = (cfg: Cfg) => (isFree(cfg) ? FREE_MAX_ITEMS : MAX_ITEMS)
@@ -204,7 +235,7 @@ export function productCard(i: Item) {
 }
 
 /** The file-send method for each kind of media an owner can attach as auto-delivery. */
-const FILE_METHOD = { document: 'sendDocument', photo: 'sendPhoto', video: 'sendVideo', audio: 'sendAudio', voice: 'sendVoice' } as const
+const FILE_METHOD = { document: 'sendDocument', photo: 'sendPhoto', video: 'sendVideo', animation: 'sendAnimation', audio: 'sendAudio', voice: 'sendVoice' } as const
 
 /** Hand the buyer what they paid for, the moment the Stars land. Returns true if anything was
  *  delivered, so the caller can fall back to "the owner will contact you" when an item has no
@@ -236,6 +267,7 @@ async function deliverItem(token: string, chat: number, item: Item) {
 function fileOf(m: Record<string, any>): { title: string; type: StoredFile['type']; file_id: string } | null {
   const cap = String(m?.caption ?? '').trim().slice(0, 60)
   if (m?.document?.file_id) return { title: cap || String(m.document.file_name ?? 'ملف').slice(0, 60), type: 'document', file_id: String(m.document.file_id) }
+  if (m?.animation?.file_id) return { title: cap || 'صورة متحركة', type: 'animation', file_id: String(m.animation.file_id) }
   if (m?.video?.file_id) return { title: cap || 'فيديو', type: 'video', file_id: String(m.video.file_id) }
   if (m?.audio?.file_id) return { title: cap || 'صوت', type: 'audio', file_id: String(m.audio.file_id) }
   if (m?.voice?.file_id) return { title: cap || 'رسالة صوتية', type: 'voice', file_id: String(m.voice.file_id) }
@@ -445,6 +477,49 @@ async function adminBotProvision(env: BotsEnv, shopToken: string, chat: number, 
     { reply_markup: { inline_keyboard: [[{ text: '🚀 افتح متجرك الآن', url: `https://t.me/${made.cfg.username}` }], [{ text: '🔙 لوحة التحكم', callback_data: 't:adm_refresh' }]] } })
 }
 
+const TRIAL_INTRO =
+  '🧪 <b>تجربة مجانية كاملة — كل المميزات، 7 أيام</b>\n' +
+  '━━━━━━━━━━━━━━━━━━━━━\n\n' +
+  'جرّب الباقة <b>المدفوعة كاملة</b> بلا أي قيود وبدون أي دفع:\n\n' +
+  '▫️ حتى <b>50 منتجاً</b> و <b>50 سؤالاً شائعاً</b>\n' +
+  '▫️ الإجابات الذكية بالذكاء الاصطناعي لعملائك\n' +
+  '▫️ الأقسام والصفحات والتسليم التلقائي وقناة التخزين\n' +
+  '▫️ لوحة التحكم الكاملة بدون توقيع «مجاني»\n\n' +
+  '━━━━━━━━━━━━━━━━━━━━━\n' +
+  '🚀 <b>خطوات التفعيل في دقيقة:</b>\n' +
+  '1️⃣ افتح @BotFather وأرسل <code>/newbot</code>\n' +
+  '2️⃣ انسخ التوكن (API Token)\n' +
+  `3️⃣ أرسله هنا بهذا الشكل: <code>/trial التوكن</code>\n\n` +
+  '⏳ بعد 7 أيام يتوقف المتجر للعملاء وتبقى كل بياناتك — رقِّها للباقة المدفوعة من المتجر، أو أكمل على الخطة المجانية (30 يوماً).'
+
+/** A customer asked for the full experience on trial: every paid capability for TRIAL_DAYS,
+ *  self-served from the platform bot's /trial — same self-serve cap as the free month. */
+async function trialBotProvision(env: BotsEnv, shopToken: string, chat: number, uid: number, plainToken: string) {
+  if (!env.BOTS_KEY) return void (await send(shopToken, chat, '⚠️ التجربة غير مهيأة حالياً — جرّب لاحقاً أو راسل المالك.'))
+  const idxRaw = await env.DOWNLOADS.get(`tbowner:${uid}`)
+  const owned = idxRaw ? (JSON.parse(idxRaw) as number[]) : []
+  if (owned.length >= SELF_SERVE_BOTS)
+    return void (await send(shopToken, chat,
+      `⚖️ وصلت حد ${SELF_SERVE_BOTS} بوت مستضاف لكل حساب.\nللتجربة أو الاستضافة اطلب الباقة الأساسية من المتجر:`,
+      { reply_markup: { inline_keyboard: [[{ text: '🛍 باقات المتاجر', url: `${originOf(env)}/store/` }], ...FREEBOT_ROWS.slice(1)] } }))
+  // A bot already on the paid plan gains nothing from a trial; a free bot may upgrade into
+  // one to feel the full store before deciding — the trial never downgrades anyone.
+  const existing = await load(env, plainToken.split(':')[0])
+  if (existing?.plan === 'paid')
+    return void (await send(shopToken, chat, '💎 هذا البوت على <b>الباقة المدفوعة</b> بالفعل — التجربة لا تضيف شيئاً.'))
+  const made = await provision(env, plainToken, uid, 'trial')
+  if (!made.ok) return void (await send(shopToken, chat, made.userText, { reply_markup: { inline_keyboard: FREEBOT_ROWS } }))
+  await send(shopToken, chat,
+    `🧪 <b>تجربتك الكاملة جاهزة وتعمل الآن!</b>\n\n` +
+      `🤖 البوت: @${esc(made.cfg.username)}\n` +
+      `⏳ التجربة: ${TRIAL_DAYS} أيام بكل المميزات — تنتهي ${day(made.cfg.expires)}\n\n` +
+      `<b>ابدأ من هنا:</b>\n` +
+      `• أرسل <code>/admin</code> في بوتك للوحة التحكم الكاملة\n` +
+      `• أضف منتجاً: <code>/add اسم_المنتج | السعر_بالنجوم | وصف</code>\n` +
+      `• ربط قناة التخزين: اجعل البوت مشرفاً في قناتك الخاصة وانشر ملفاً فيها`,
+    { reply_markup: { inline_keyboard: [[{ text: '🚀 افتح متجرك', url: `https://t.me/${made.cfg.username}` }], ...FREEBOT_ROWS.slice(1)] } })
+}
+
 const menu = { inline_keyboard: [[{ text: '🛍 المنتجات', callback_data: 't:items' }, { text: '❓ الأسئلة', callback_data: 't:faqs' }], [{ text: '💬 راسل المالك', callback_data: 't:contact' }]] }
 
 type KbButton = { text: string; callback_data?: string; url?: string }
@@ -455,6 +530,7 @@ function menuFor(env: BotsEnv, cfg: Cfg, uid?: number) {
   if (cfg.id === platformBotId(env)) {
     rows.push(
       [{ text: '🛍 المتجر والمنتجات', callback_data: 't:items' }, { text: '🎁 أنشئ متجرك مجاناً', callback_data: 't:freebot' }],
+      [{ text: '🧪 تجربة كاملة 7 أيام (كل المميزات)', callback_data: 't:trial' }],
       [{ text: '📱 تطبيقات أندرويد', callback_data: 't:android' }, { text: '💻 تطبيقات ويندوز', callback_data: 't:windows' }],
       [{ text: '🌐 تطبيقات موقعي', callback_data: 't:myapps' }, { text: '💖 تبرع', callback_data: 't:donate' }],
     )
@@ -501,11 +577,12 @@ const HELP_TEXT =
 const PLATFORM_HELP =
   '\n• /apps — 📱 تطبيقاتنا (أندرويد وويندوز)\n' +
   '• /freebot — 🎁 إنشاء متجر مجاني باسمك\n' +
+  '• /trial — 🧪 تجربة كاملة بكل المميزات (7 أيام)\n' +
   '• /donate — 💖 دعم ومساندة المنصة'
 /** ZeidexSoft's own apps and donation (with its bank accounts) belong to the platform bot.
  *  Every hosted shop answered them too — a customer's store showing our accounts. */
-const PLATFORM_COMMANDS = new Set(['apps', 'myapps', 'android', 'windows', 'donate', 'freebot', 'bots'])
-const PLATFORM_CALLBACK = /^t:(android|windows|myapps|donate|don_|don:|freebot)/
+const PLATFORM_COMMANDS = new Set(['apps', 'myapps', 'android', 'windows', 'donate', 'freebot', 'trial', 'bots'])
+const PLATFORM_CALLBACK = /^t:(android|windows|myapps|donate|don_|don:|freebot|trial)/
 
 /** Fold Arabic and Latin text into one comparable form: lowercase, no harakat or tatweel,
  *  Arabic-Indic and Persian digits as Latin, one alef/ya/ha spelling, no punctuation.
@@ -620,16 +697,47 @@ function nextId(list: { id: number }[]): number {
   return (list.length ? Math.max(...list.map((x) => x.id)) : 0) + 1
 }
 
+/** Re-register a bot's webhook at its recorded revision's settings. Telegram keeps each
+ *  registration's allowed_updates until the next setWebhook, so a bot provisioned before
+ *  channel_post joined the list never hears channel posts — deploying the code alone
+ *  changes nothing for it. Called once per stale record (on its first update after the
+ *  bump); pending updates are kept, unlike a fresh provision's clean slate. */
+async function syncHook(env: BotsEnv, cfg: Cfg, token: string) {
+  const hook = await tg(token, 'setWebhook', {
+    url: `${hostOf(env, cfg)}/tg/${cfg.id}`, secret_token: cfg.secret, drop_pending_updates: false,
+    // Same as provision: each update rewrites the whole KV record, so one at a time.
+    max_connections: 1,
+    allowed_updates: HOOK_UPDATES,
+  })
+  // A failure leaves the record unstamped, so the next update tries again.
+  if (!hook.ok) return
+  cfg.hook = HOOK_REVISION
+  await save(env, cfg)
+}
+
 /** Index a post in the storage channel. The first post ever seen captures the channel id, so
- *  the owner never types an id; a second channel where the bot is also admin is simply ignored
- *  — storages never mix. Receiving the post at all is the authorization: Telegram delivers
+ *  the owner never types an id; a second channel where the bot is also admin is reported, not
+ *  silently dropped — a silent drop was exactly "بوستات لا تعمل": posts kept arriving and
+ *  nothing happened. Receiving the post at all is the authorization: Telegram delivers
  *  channel posts to admin bots only. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function onChannelPost(env: BotsEnv, cfg: Cfg, token: string, post: Record<string, any>) {
   const chat = post.chat
   if (!chat || chat.type !== 'channel') return
+  if (cfg.filesChannel && cfg.filesChannel.id !== chat.id) {
+    await send(token, cfg.owner,
+      `⚠️ وصل منشور من قناة أخرى — «${esc(String(chat.title ?? chat.id))}» — وهي ليست قناة التخزين «${esc(cfg.filesChannel.title ?? String(cfg.filesChannel.id))}»، فتَجاهلته.\n\n` +
+      `لربط التخزين على القناة الجديدة: أرسل <code>/channel reset</code> ثم انشر أي ملف فيها.`,).catch(() => undefined)
+    return
+  }
   if (!cfg.filesChannel) cfg.filesChannel = { id: chat.id, title: String(chat.title ?? '').slice(0, 60) || undefined }
-  if (cfg.filesChannel.id !== chat.id) return
+  // A post that carries something but no indexable file (a sticker, a poll, a location):
+  // say so once instead of dropping it silently — the owner just watched it do nothing.
+  if (!fileOf(post) && !post.text) {
+    await send(token, cfg.owner,
+      `⚠️ منشور في قناة التخزين بلا ملف قابل للأرشفة.\nالأنواع المدعومة: مستند، صورة، فيديو، صورة متحركة (GIF)، صوت، رسالة صوتية.`).catch(() => undefined)
+    return
+  }
   await storeFile(env, cfg, token, cfg.owner, post)
 }
 
@@ -660,6 +768,10 @@ async function storeFile(env: BotsEnv, cfg: Cfg, token: string, chat: number, m:
 async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, any>) {
   const isOwner = (uid?: number) => uid === cfg.owner
   const isPlatform = cfg.id === platformBotId(env)
+  // A bot provisioned before channel_post joined allowed_updates never hears channel
+  // posts: Telegram keeps each registration's list until the next setWebhook, so the
+  // first update a stale record receives re-registers its webhook once and stamps it.
+  if (cfg.hook !== HOOK_REVISION) await syncHook(env, cfg, token)
 
   // The storage channel: a private, closed channel the owner runs with this bot as an admin.
   // Every file posted there is indexed for /send; the channel itself stays private — the bot
@@ -691,6 +803,12 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     if (cfg.paused && !isOwner(q.from.id)) return void (await send(token, chat, '🛠 البوت في صيانة قصيرة.'))
     const data = String(q.data ?? '')
     if (!isPlatform && PLATFORM_CALLBACK.test(data)) return
+    // The interactive panel is the owner's alone: its callbacks say who tapped
+    // them, and anyone else pressing a stale button gets silence, not powers.
+    if (data.startsWith('h:')) {
+      if (!isOwner(q.from.id)) return
+      return void (await onPanel(env, cfg, token, chat, data))
+    }
     if (data === 't:android') {
       const text =
         '📱 <b>تطبيقات الأندرويد الرسمية — ZeidexSoft</b>\n' +
@@ -744,6 +862,8 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
       )
     } else if (data === 't:freebot') {
       await send(token, chat, FREEBOT_INTRO, { reply_markup: { inline_keyboard: FREEBOT_ROWS } })
+    } else if (data === 't:trial') {
+      await send(token, chat, TRIAL_INTRO, { reply_markup: { inline_keyboard: FREEBOT_ROWS } })
     } else if (data === 't:donate') {
       const rows = [
         [{ text: '⭐️ التبرع بنجوم تيليجرام (Stars)', callback_data: 't:don_stars' }],
@@ -1129,6 +1249,14 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
   if (isPlatform && cmd === 'freebot') {
     return void (await send(token, chat, FREEBOT_INTRO, { reply_markup: { inline_keyboard: FREEBOT_ROWS } }))
   }
+  if (isPlatform && cmd === 'trial') {
+    // /trial bare shows the way in; /trial <token> provisions the full paid experience on
+    // the spot — the token rides the command, so the pasted-token path stays free-only.
+    const candidate = arg.split(/\s+/)[0]
+    if (!candidate || !TOKEN_RE.test(candidate))
+      return void (await send(token, chat, TRIAL_INTRO, { reply_markup: { inline_keyboard: FREEBOT_ROWS } }))
+    return void (await trialBotProvision(env, token, chat, uid, candidate))
+  }
   if (cmd === 'catalog') {
     const rows = cfg.items.map((i) => btnRow({ text: `⭐️ ${i.stars} — ${i.title}`, callback_data: `t:buy:${i.id}` }))
     if (isOwner(uid)) {
@@ -1218,6 +1346,17 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     return void (await freeBotProvision(env, token, chat, uid, text.trim()))
   }
 
+  // A panel step in flight: the owner's next plain message answers it. The step
+  // expires (PENDING_TTL), so a message days later is a message, not an answer;
+  // a slash command still falls through to the commands below (and /cancel closes it).
+  if (isOwner(uid) && cfg.pending) {
+    if (Date.now() - cfg.pending.at > PENDING_TTL) {
+      delete cfg.pending
+      await save(env, cfg)
+    } else if (!text.startsWith('/')) {
+      return void (await answerPending(env, cfg, token, chat, text))
+    }
+  }
   if (isOwner(uid) && text.startsWith('/')) return void (await owner(env, cfg, token, chat, text, m))
 
   const isContactReply = m.reply_to_message?.from?.id === cfg.id && m.reply_to_message?.text === CONTACT_PROMPT
@@ -1400,6 +1539,7 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     let attached: NonNullable<Item['deliver']>['file'] | undefined
     if (src) {
       if (src.document) attached = { id: src.document.file_id, type: 'document' }
+      else if (src.animation) attached = { id: src.animation.file_id, type: 'animation' }
       else if (src.video) attached = { id: src.video.file_id, type: 'video' }
       else if (src.audio) attached = { id: src.audio.file_id, type: 'audio' }
       else if (src.voice) attached = { id: src.voice.file_id, type: 'voice' }
@@ -1488,6 +1628,26 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
         ? `✅ أُرسل «${esc(f.title)}» إلى <code>${target}</code>.`
         : `❌ تعذّر الإرسال إلى <code>${target}</code> — ${esc(String(out.description ?? 'تأكد أن الشخص بدأ محادثة مع البوت أولاً.'))}`)
     }
+  } else if (cmd === 'channel') {
+    // The storage channel's binding: shown, and unbindable. It used to be captured on the
+    // first channel post and then locked forever — a wrong first channel meant every later
+    // post in the right one was silently ignored, with no way out but a hand-edited record.
+    if (arg === 'reset') {
+      const had = cfg.filesChannel
+      cfg.filesChannel = undefined
+      delete cfg.filesChannel
+      await save(env, cfg)
+      return void (await say(had
+        ? `✅ فُكّ ربط قناة التخزين «${esc(had.title ?? String(had.id))}».\nانشر أي ملف في القناة الجديدة — سيُربط التخزين عليها فوراً.`
+        : 'لا يوجد ربط بعد — انشر أي ملف في القناة بعد جعل البوت مشرفاً فيها.'))
+    }
+    const ch = cfg.filesChannel
+      ? `📡 مربوطة الآن: «${esc(cfg.filesChannel.title ?? String(cfg.filesChannel.id))}» (<code>${cfg.filesChannel.id}</code>) — ${cfg.files!.length}/${MAX_FILES} ملفاً`
+      : '📡 لا قناة تخزين مربوطة بعد.'
+    await say(
+      `📁 <b>قناة التخزين</b>\n${ch}\n\n` +
+      `<b>الربط:</b> أنشئ قناة خاصة (مغلقة)، اجعل البوت مشرفاً فيها، ثم انشر أي ملف فيها — يُربط ويُخزّن ويُرقّم فوراً.\n` +
+      `<b>إعادة الربط على قناة أخرى:</b> <code>/channel reset</code> ثم انشر ملفاً في القناة الجديدة.`)
   } else if (cmd === 'del' || cmd === 'delfaq') {
     const list = cmd === 'del' ? cfg.items : cfg.faqs
     const n = Number(arg)
@@ -1527,6 +1687,7 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     return void (await adminBotProvision(env, token, chat, cfg.owner, candidate))
   } else if (cmd === 'admin') {
     const adminRows = [
+      [{ text: '🎛 اللوحة التفاعلية', callback_data: 'h:main' }],
       [{ text: '🎁 أخذ أي شيء من المتجر مجاناً (للأدمن)', callback_data: 't:adm_take_any' }],
       [{ text: '📦 قائمة المنتجات', callback_data: 't:adm_items' }, { text: '❓ الأسئلة الشائعة', callback_data: 't:adm_faqs' }],
       [{ text: '📁 الملفات المخزنة', callback_data: 't:adm_files' }],
@@ -1544,6 +1705,7 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
         `الخطة: <b>${isFree(cfg) ? `🎁 مجانية حتى ${day(cfg.expires)}${lapsed(cfg) ? ' (انتهت)' : ''}` : '💎 مدفوعة'}</b>\n` +
         `الأقسام: <b>${cfg.sections!.length}</b> · الصفحات: <b>${cfg.pages!.length}</b>\n\n` +
       `<i>أوامر الإدارة المباشرة:</i>\n` +
+      `• لوحة تفاعلية بالأزرار: <code>/panel</code>\n` +
       `• أخذ بوت بدون دفع: <code>/createbot التوكن</code>\n` +
       `• إضافة منتج: <code>/add اسم | سعر_النجوم | وصف</code>\n` +
       `• تسليم تلقائي فوري بعد الدفع: <code>/deliver رقم_المنتج الكود</code> (أو ردّ على ملف بـ <code>/deliver رقم_المنتج</code>)\n` +
@@ -1558,6 +1720,19 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
       (cfg.id === platformBotId(env) ? `\n• إصدار تراخيص Pro: <code>/licnew 2 365 1</code>` : ''),
       { reply_markup: { inline_keyboard: adminRows } }
     )
+  } else if (cmd === 'panel') {
+    // The tap-through control panel: the same powers as the commands above, but
+    // every list is a view with buttons and every edit is one answered step.
+    const root = panelRoot(cfg)
+    await send(token, chat, root.text, { reply_markup: { inline_keyboard: root.rows } })
+  } else if (cmd === 'cancel') {
+    if (cfg.pending) {
+      delete cfg.pending
+      await save(env, cfg)
+      await say('✅ أُغلقت الخطوة المفتوحة.')
+    } else {
+      await say('لا خطوة مفتوحة.')
+    }
   } else if (cmd === 'licnew') {
     // Pro licence minting. The key is shown ONCE and only its hash is stored, so this reply is the
     // only moment the plaintext exists anywhere — losing it means reissuing, not recovering.
@@ -1596,6 +1771,320 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     const r = await send(token, Number(target), `💬 رد المالك:\n${esc(words.join(' ').slice(0, 2000))}`)
     await say(r.ok ? '✅ أُرسل.' : 'تعذّر الإرسال.')
   }
+}
+
+// ── the interactive control panel (/panel, h: buttons) ──────────────────
+// The same powers as the /admin commands, but tappable: every list is a view
+// with buttons, and every edit that needs text is one conversational step —
+// the panel records what it is waiting for in cfg.pending, and the owner's
+// next plain message answers it (answerPending). A step expires (PENDING_TTL)
+// and /cancel closes it, so a stray message is never mistaken for an answer.
+
+type Panel = { text: string; rows: KbButton[][] }
+
+/** The root view: the shop at a glance, and a door into each list. */
+function panelRoot(cfg: Cfg): Panel {
+  const plan = isFree(cfg)
+    ? `🎁 مجانية — ${lapsed(cfg) ? 'انتهت' : `حتى ${day(cfg.expires)}`}`
+    : isTrial(cfg)
+      ? `🧪 تجربة — ${lapsed(cfg) ? 'انتهت' : `حتى ${day(cfg.expires)}`}`
+      : '💎 مدفوعة (دائمة)'
+  const rows: KbButton[][] = [
+    [{ text: `📦 المنتجات (${cfg.items.length}/${itemCap(cfg)})`, callback_data: 'h:items' }, { text: `🗂 الأقسام (${cfg.sections!.length})`, callback_data: 'h:secs' }],
+    [{ text: `❓ الأسئلة (${cfg.faqs.length})`, callback_data: 'h:faqs' }, { text: `📄 الصفحات (${cfg.pages!.length})`, callback_data: 'h:pages' }],
+    [{ text: `📁 الملفات (${cfg.files!.length}/${MAX_FILES})`, callback_data: 'h:files' }, { text: '⚙️ الإعدادات', callback_data: 'h:set' }],
+    [{ text: cfg.paused ? '▶️ استئناف البوت' : '⏸ إيقاف للصيانة', callback_data: 'h:pause' }, { text: '🔄 تحديث', callback_data: 'h:main' }],
+  ]
+  const text =
+    `🎛 <b>لوحة التحكم التفاعلية</b>\n━━━━━━━━━━━━━━━━━━━━━\n` +
+    `📦 المنتجات: <b>${cfg.items.length}</b> / ${itemCap(cfg)}\n` +
+    `🗂 الأقسام: <b>${cfg.sections!.length}</b> · 📄 الصفحات: <b>${cfg.pages!.length}</b>\n` +
+    `❓ الأسئلة: <b>${cfg.faqs.length}</b> / ${faqCap(cfg)}\n` +
+    `📁 الملفات: <b>${cfg.files!.length}</b> / ${MAX_FILES}\n` +
+    `👥 العملاء: <b>${cfg.users.length}</b> · 🧾 الطلبات: <b>${cfg.orders}</b> · ⭐️ <b>${cfg.stars}</b>\n` +
+    `الخطة: <b>${plan}</b>\n` +
+    `الحالة: <b>${cfg.paused ? '⏸ متوقف للصيانة' : '▶️ يعمل'}</b>\n\n` +
+    `<i>كل تعديل نصي يفتح خطوة واحدة: أرسل النص، أو /cancel للإلغاء.</i>`
+  return { text, rows }
+}
+
+function panelItems(cfg: Cfg): Panel {
+  const rows: KbButton[][] = cfg.items.map((i) => [
+    { text: `⭐️ ${i.stars} — ${i.title.slice(0, 24)}`, callback_data: `h:it:${i.id}` },
+    { text: '🗑', callback_data: `h:itdel:${i.id}` },
+  ])
+  rows.push([{ text: '➕ منتج جديد', callback_data: 'h:additem' }], [{ text: '🔙 اللوحة', callback_data: 'h:main' }])
+  const list = cfg.items.map((i, n) => `${n + 1}. ${esc(i.title)} — ⭐️ ${i.stars}${i.deliver ? ' ⚡️' : ''}`).join('\n') || 'لا منتجات بعد.'
+  return { text: `📦 <b>المنتجات</b>\n${list}\n\n⚡️ = تسليم تلقائي مضبوط`, rows }
+}
+
+function panelItem(cfg: Cfg, id: number): Panel | null {
+  const it = cfg.items.find((x) => x.id === id)
+  if (!it) return null
+  const sec = it.section ? cfg.sections!.find((s) => s.id === it.section)?.name : undefined
+  return {
+    text: productCard(it) + (sec ? `\n🗂 القسم: ${esc(sec)}` : '') + (it.deliver ? '\n⚡️ تسليم تلقائي: مضبوط' : '\n⚡️ تسليم تلقائي: غير مضبوط'),
+    rows: [
+      [{ text: '⚡️ تسليم تلقائي', callback_data: `h:itdlv:${it.id}` }],
+      [{ text: '🗑 حذف المنتج', callback_data: `h:itdel:${it.id}` }],
+      [{ text: '🔙 المنتجات', callback_data: 'h:items' }, { text: '🎛 اللوحة', callback_data: 'h:main' }],
+    ],
+  }
+}
+
+function panelSecs(cfg: Cfg): Panel {
+  const rows: KbButton[][] = cfg.sections!.map((s) => [{ text: `🗑 ${s.name.slice(0, 24)}`, callback_data: `h:secdel:${s.id}` }])
+  rows.push([{ text: '➕ قسم جديد', callback_data: 'h:addsec' }], [{ text: '🔙 اللوحة', callback_data: 'h:main' }])
+  const list = cfg.sections!.map((s, n) => `${n + 1}. ${esc(s.name)} — ${cfg.items.filter((i) => i.section === s.id).length} منتجاً`).join('\n') || 'لا أقسام بعد.'
+  return { text: `🗂 <b>الأقسام</b>\n${list}\n\nحذف قسم يُبقي منتجاته بلا قسم.`, rows }
+}
+
+function panelFaqs(cfg: Cfg): Panel {
+  const rows: KbButton[][] = cfg.faqs.map((f, n) => [{ text: `🗑 ${f.q.slice(0, 24)}`, callback_data: `h:faqdel:${n + 1}` }])
+  rows.push([{ text: '➕ سؤال جديد', callback_data: 'h:addfaq' }], [{ text: '🔙 اللوحة', callback_data: 'h:main' }])
+  return { text: `❓ <b>الأسئلة الشائعة</b>\n${cfg.faqs.map((f, n) => `${n + 1}. ${esc(f.q)}`).join('\n') || 'لا أسئلة بعد.'}`, rows }
+}
+
+function panelPages(cfg: Cfg): Panel {
+  const rows: KbButton[][] = cfg.pages.map((p, n) => [{ text: `📄 ${p.title.slice(0, 24)}`, callback_data: `h:page:${n + 1}` }])
+  rows.push([{ text: '➕ صفحة جديدة', callback_data: 'h:addpage' }], [{ text: '🔙 اللوحة', callback_data: 'h:main' }])
+  return { text: `📄 <b>الصفحات</b>\n${cfg.pages.map((p, n) => `${n + 1}. ${esc(p.title)}`).join('\n') || 'لا صفحات بعد.'}`, rows }
+}
+
+function panelPage(cfg: Cfg, n: number): Panel | null {
+  const p = cfg.pages![n - 1]
+  if (!p) return null
+  return {
+    text: `📄 <b>${esc(p.title)}</b>\n\n${esc(p.body)}`,
+    rows: [[{ text: '🗑 حذف الصفحة', callback_data: `h:pagedel:${n}` }], [{ text: '🔙 الصفحات', callback_data: 'h:pages' }, { text: '🎛 اللوحة', callback_data: 'h:main' }]],
+  }
+}
+
+function panelFiles(cfg: Cfg): Panel {
+  const rows: KbButton[][] = cfg.files!.map((f, n) => [{ text: `🗑 ${f.title.slice(0, 24)}`, callback_data: `h:filedel:${n + 1}` }])
+  rows.push([{ text: '📡 قناة التخزين', callback_data: 'h:channel' }], [{ text: '🔙 اللوحة', callback_data: 'h:main' }])
+  return {
+    text:
+      `📁 <b>ملفات التخزين</b> (${cfg.files!.length}/${MAX_FILES})\n` +
+      (cfg.files!.map((f, n) => `${n + 1}. ${esc(f.title)}`).join('\n') || 'لا ملفات بعد.') +
+      '\n\nالتخزين: انشر أي ملف في قناتك الخاصة (البوت مشرف) أو أرسله هنا مباشرة.',
+    rows,
+  }
+}
+
+function panelSet(cfg: Cfg): Panel {
+  const site = cfg.site ? `${esc(cfg.site.url)} — ${cfg.site.verified ? '✅ مفعّل' : '⏳ بانتظار التحقق'}` : 'لا ربط بعد'
+  return {
+    text:
+      `⚙️ <b>الإعدادات</b>\n━━━━━━━━━━━━━━━━━━━━━\n` +
+      `الترحيب: ${esc(cfg.welcome.slice(0, 80))}${cfg.welcome.length > 80 ? '…' : ''}\n` +
+      `الموقع: ${site}\n` +
+      `الحالة: ${cfg.paused ? '⏸ متوقف للصيانة' : '▶️ يعمل'}`,
+    rows: [
+      [{ text: '💬 تعديل الترحيب', callback_data: 'h:welcome' }],
+      [{ text: '🌐 ربط الموقع', callback_data: 'h:site' }],
+      [{ text: cfg.paused ? '▶️ استئناف البوت' : '⏸ إيقاف للصيانة', callback_data: 'h:pause' }],
+      [{ text: '🔙 اللوحة', callback_data: 'h:main' }],
+    ],
+  }
+}
+
+/** The panel's callback router: h:main is the root, every h:<list> a view,
+ *  every h:add* opens one answered step, and the rest act on a numbered target. */
+async function onPanel(env: BotsEnv, cfg: Cfg, token: string, chat: number, data: string) {
+  const view = async (p: Panel | null) => {
+    if (!p) return void (await send(token, chat, 'لم أجد ما طلبته — ربما حُذف للتو.'))
+    return void (await send(token, chat, p.text, { reply_markup: { inline_keyboard: p.rows } }))
+  }
+  // A text edit is one step: record it, then the owner's next message answers it.
+  const ask = async (op: string, prompt: string, target?: number) => {
+    cfg.pending = { op, ...(target !== undefined ? { target } : {}), at: Date.now() }
+    await save(env, cfg)
+    await send(token, chat, prompt + '\n\n<i>أرسل النص الآن · /cancel للإلغاء</i>', {
+      reply_markup: { inline_keyboard: [[{ text: '🗑 إلغاء', callback_data: 'h:cancel' }]] },
+    })
+  }
+  if (data === 'h:main') return view(panelRoot(cfg))
+  if (data === 'h:items') return view(panelItems(cfg))
+  if (data === 'h:additem')
+    return void (await ask('item', '📦 أرسل المنتج بالشكل:\n<code>الاسم | السعر بالنجوم | الوصف | القسم (اختياري)</code>\nمثال: <code>كورس | 150 | شرح كامل</code>'))
+  if (data.startsWith('h:it:')) return view(panelItem(cfg, Number(data.slice(5))))
+  if (data.startsWith('h:itdel:')) {
+    cfg.items = cfg.items.filter((i) => i.id !== Number(data.slice(8)))
+    await save(env, cfg)
+    return view(panelItems(cfg))
+  }
+  if (data.startsWith('h:itdlv:')) {
+    const it = cfg.items.find((i) => i.id === Number(data.slice(8)))
+    if (!it) return view(null)
+    return void (await ask('deliver', `⚡️ أرسل ما يُسلَّم تلقائياً لكل مشترٍ لـ «${esc(it.title)}»:\nنص/كود/رابط — أو <code>-</code> لإلغاء التسليم التلقائي.`, it.id))
+  }
+  if (data === 'h:secs') return view(panelSecs(cfg))
+  if (data === 'h:addsec') return void (await ask('sec', '🗂 أرسل اسم القسم (حتى 30 حرفاً).'))
+  if (data.startsWith('h:secdel:')) {
+    const id = Number(data.slice(9))
+    if (!cfg.sections!.some((s) => s.id === id)) return view(null)
+    cfg.sections = cfg.sections!.filter((s) => s.id !== id)
+    for (const it of cfg.items) if (it.section === id) delete it.section
+    await save(env, cfg)
+    return view(panelSecs(cfg))
+  }
+  if (data === 'h:faqs') return view(panelFaqs(cfg))
+  if (data === 'h:addfaq') return void (await ask('faq', '❓ أرسل السؤال والجواب بالشكل:\n<code>السؤال | الجواب</code>'))
+  if (data.startsWith('h:faqdel:')) {
+    const n = Number(data.slice(9))
+    if (!Number.isInteger(n) || n < 1 || n > cfg.faqs.length) return view(null)
+    cfg.faqs.splice(n - 1, 1)
+    await save(env, cfg)
+    return view(panelFaqs(cfg))
+  }
+  return onPanelRest(env, cfg, token, chat, data, view, ask)
+}
+
+/** The panel's remaining routes, split only to keep onPanel readable. */
+async function onPanelRest(env: BotsEnv, cfg: Cfg, token: string, chat: number, data: string, view: (p: Panel | null) => Promise<void>, ask: (op: string, prompt: string, target?: number) => Promise<void>) {
+  if (data === 'h:pages') return view(panelPages(cfg))
+  if (data === 'h:addpage') return void (await ask('page', '📄 أرسل الصفحة بالشكل:\n<code>العنوان | النص</code>'))
+  if (data.startsWith('h:pagedel:')) {
+    const n = Number(data.slice(10))
+    if (!Number.isInteger(n) || n < 1 || n > cfg.pages!.length) return view(null)
+    cfg.pages!.splice(n - 1, 1)
+    await save(env, cfg)
+    return view(panelPages(cfg))
+  }
+  if (data.startsWith('h:page:')) return view(panelPage(cfg, Number(data.slice(7))))
+  if (data === 'h:files') return view(panelFiles(cfg))
+  if (data.startsWith('h:filedel:')) {
+    const n = Number(data.slice(10))
+    if (!Number.isInteger(n) || n < 1 || n > cfg.files!.length) return view(null)
+    cfg.files!.splice(n - 1, 1)
+    await save(env, cfg)
+    return view(panelFiles(cfg))
+  }
+  if (data === 'h:channel') {
+    const ch = cfg.filesChannel
+      ? `📡 مربوطة: «${esc(cfg.filesChannel.title ?? String(cfg.filesChannel.id))}»`
+      : '📡 لا قناة مربوطة بعد — اجعل البوت مشرفاً في قناتك الخاصة (مغلقة) وانشر أي ملف فيها.'
+    return void (await send(token, chat, `📁 <b>قناة التخزين</b>\n${ch}`, {
+      reply_markup: { inline_keyboard: [[{ text: '🔓 فك الربط', callback_data: 'h:chreset' }], [{ text: '🔙 الملفات', callback_data: 'h:files' }]] },
+    }))
+  }
+  if (data === 'h:chreset') {
+    delete cfg.filesChannel
+    await save(env, cfg)
+    return void (await send(token, chat, '✅ فُكّ الربط — انشر أي ملف في القناة الجديدة ليُربط عليها فوراً.', {
+      reply_markup: { inline_keyboard: [[{ text: '🔙 اللوحة', callback_data: 'h:main' }]] },
+    }))
+  }
+  if (data === 'h:set') return view(panelSet(cfg))
+  if (data === 'h:welcome') return void (await ask('welcome', '💬 أرسل رسالة الترحيب الجديدة (حتى 500 حرف).'))
+  if (data === 'h:site')
+    return void (await ask('site', '🌐 أرسل رابط موقعك (https) — ثم يأتيك رمز التحقق.\nأو <code>off</code> لإلغاء الربط · <code>verify</code> بعد وضع الرمز على موقعك.'))
+  if (data === 'h:pause') {
+    cfg.paused = !cfg.paused
+    await save(env, cfg)
+    return view(panelRoot(cfg))
+  }
+  if (data === 'h:cancel') {
+    delete cfg.pending
+    await save(env, cfg)
+    return void (await send(token, chat, '✅ أُلغيت الخطوة.', { reply_markup: { inline_keyboard: [[{ text: '🎛 اللوحة', callback_data: 'h:main' }]] } }))
+  }
+}
+
+/** The owner's next plain message answers the panel's open step. A malformed
+ *  answer keeps the step open and repeats the format, so nothing is lost to a typo. */
+async function answerPending(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: string) {
+  const p = cfg.pending!
+  const back = [[{ text: '🎛 اللوحة', callback_data: 'h:main' }]] as KbButton[][]
+  // Success closes the step; the button takes the owner straight back to the panel.
+  const done = async (t: string) => {
+    delete cfg.pending
+    await save(env, cfg)
+    await send(token, chat, t, { reply_markup: { inline_keyboard: back } })
+  }
+  const parts = text.split('|').map((s) => s.trim())
+  if (p.op === 'item') {
+    const stars = Number(parts[1])
+    if (!parts[0] || !Number.isInteger(stars) || stars < 1 || stars > 10000)
+      return void (await send(token, chat, 'صيغة غير مفهومة — أعد الإرسال بالشكل: <code>الاسم | السعر بالنجوم | الوصف</code> (أو /cancel).'))
+    if (cfg.items.length >= itemCap(cfg)) return void (await done(`الحد ${itemCap(cfg)} منتجاً.`))
+    let section: number | undefined
+    if (parts[3]) {
+      const name = parts[3].slice(0, 30)
+      let sec = cfg.sections!.find((x) => x.name === name)
+      if (!sec) {
+        if (cfg.sections!.length >= MAX_SECTIONS) return void (await done(`الحد ${MAX_SECTIONS} قسماً.`))
+        sec = { id: nextId(cfg.sections!), name }
+        cfg.sections!.push(sec)
+      }
+      section = sec.id
+    }
+    cfg.items.push({ id: nextId(cfg.items), title: parts[0].slice(0, 32), stars, desc: (parts[2] || parts[0]).slice(0, 255), ...(section ? { section } : {}) })
+    return void (await done(`✅ أُضيف «${esc(parts[0].slice(0, 32))}» (${stars} ⭐️).`))
+  }
+  return answerPendingRest(env, cfg, token, chat, text, p, done, parts)
+}
+
+/** The panel's remaining answer kinds, split only to keep answerPending readable. */
+async function answerPendingRest(
+  env: BotsEnv,
+  cfg: Cfg,
+  token: string,
+  chat: number,
+  text: string,
+  p: NonNullable<Cfg['pending']>,
+  done: (t: string) => Promise<void>,
+  parts: string[],
+) {
+  if (p.op === 'faq') {
+    if (!parts[0] || !parts[1])
+      return void (await send(token, chat, 'صيغة غير مفهومة — أعد الإرسال بالشكل: <code>السؤال | الجواب</code> (أو /cancel).'))
+    if (cfg.faqs.length >= faqCap(cfg)) return void (await done(`الحد ${faqCap(cfg)} سؤالاً.`))
+    cfg.faqs.push({ q: parts[0].slice(0, 60), a: parts[1].slice(0, 1000) })
+    return void (await done('✅ أُضيف السؤال.'))
+  }
+  if (p.op === 'page') {
+    if (!parts[0] || !parts[1])
+      return void (await send(token, chat, 'صيغة غير مفهومة — أعد الإرسال بالشكل: <code>العنوان | النص</code> (أو /cancel).'))
+    if (cfg.pages!.length >= MAX_PAGES) return void (await done(`الحد ${MAX_PAGES} صفحات.`))
+    cfg.pages!.push({ title: parts[0].slice(0, 24), body: parts[1].slice(0, 3000) })
+    return void (await done(`✅ أُضيفت صفحة «${esc(parts[0].slice(0, 24))}».`))
+  }
+  if (p.op === 'sec') {
+    const name = text.trim().slice(0, 30)
+    if (!name) return void (await send(token, chat, 'أرسل اسماً غير فارغ (أو /cancel).'))
+    if (cfg.sections!.length >= MAX_SECTIONS) return void (await done(`الحد ${MAX_SECTIONS} قسماً.`))
+    if (cfg.sections!.some((s) => s.name === name)) return void (await done('القسم موجود.'))
+    cfg.sections!.push({ id: nextId(cfg.sections!), name })
+    return void (await done(`✅ أُضيف قسم «${esc(name)}».`))
+  }
+  if (p.op === 'welcome') {
+    const t = text.trim().slice(0, 500)
+    if (!t) return void (await send(token, chat, 'أرسل نصاً غير فارغ (أو /cancel).'))
+    cfg.welcome = t
+    return void (await done('✅ حُدّث الترحيب.'))
+  }
+  if (p.op === 'site') {
+    // The site flow keeps its own conversation (the code, then /site verify).
+    delete cfg.pending
+    await save(env, cfg)
+    return void (await siteCommand(env, cfg, (t) => send(token, chat, t), text.trim()))
+  }
+  if (p.op === 'deliver' && p.target) {
+    const it = cfg.items.find((i) => i.id === p.target)
+    if (!it) return void (await done('المنتج لم يعد موجوداً.'))
+    const secret = text.trim()
+    if (secret === '-') {
+      delete it.deliver
+      return void (await done(`🗑 أُلغي التسليم التلقائي لـ «${esc(it.title)}».`))
+    }
+    if (!secret) return void (await send(token, chat, 'أرسل المحتوى (نص/كود/رابط)، أو <code>-</code> للإلغاء (أو /cancel).'))
+    it.deliver = { ...(it.deliver ?? {}), text: secret.slice(0, 1000) }
+    return void (await done(`✅ سيُسلَّم تلقائياً لكل مشترٍ لـ «${esc(it.title)}».`))
+  }
+  // An op the panel no longer knows (an older record): close it rather than loop.
+  return void (await done('✅ أُغلقت الخطوة.'))
 }
 
 // ── the owner's own website (/site) ─────────────────────────────────
@@ -1792,7 +2281,7 @@ async function provision(
   env: BotsEnv,
   plainToken: string,
   ownerId: number,
-  plan: 'free' | 'paid' | undefined,
+  plan: 'free' | 'trial' | 'paid' | undefined,
 ): Promise<{ ok: true; cfg: Cfg } | { ok: false; error: string; userText: string; status: number }> {
   if (!TOKEN_RE.test(plainToken))
     return { ok: false, error: 'bad request', status: 400, userText: 'صيغة التوكن غير صحيحة. انسخه كاملاً من @BotFather (مثال: <code>123456:AAE…</code>).' }
@@ -1809,22 +2298,28 @@ async function provision(
     id: me.result.id, username: me.result.username, owner: ownerId, token: await seal(env, plainToken), secret,
     // An explicit plan wins; a re-provision without one keeps what the bot had.
     plan: plan ?? prev?.plan ?? 'paid',
+    // Fresh provisions register the current webhook settings themselves.
+    hook: HOOK_REVISION,
   }
-  // The free month starts once per bot. Re-provisioning keeps the original end, so neither a
-  // new token nor a repeated /freebot round trip can stretch it.
+  // The free month and the trial window each start once per bot. Re-provisioning keeps the
+  // original end, so neither a new token nor a repeated round trip can stretch either.
+  const fixedEnd = (days: number) => new Date(Date.now() + days * 864e5).toISOString()
   cfg.expires = isFree(cfg)
-    ? prev?.plan === 'free' && prev.expires
-      ? prev.expires
-      : new Date(Date.now() + FREE_DAYS * 864e5).toISOString()
-    : undefined
+    ? prev?.plan === 'free' && prev.expires ? prev.expires : fixedEnd(FREE_DAYS)
+    : isTrial(cfg)
+      ? prev?.plan === 'trial' && prev.expires ? prev.expires : fixedEnd(TRIAL_DAYS)
+      : undefined
   await save(env, cfg)
+  // Trials run on the second host: when TRIAL_ORIGIN names it (the G53208084
+  // workers.dev deployment), the trial bot's webhook is registered there, so a
+  // trial's traffic never lands on the primary host.
   const hook = await tg(plainToken, 'setWebhook', {
-    url: `${originOf(env)}/tg/${cfg.id}`, secret_token: secret, drop_pending_updates: true,
+    url: `${hostOf(env, cfg)}/tg/${cfg.id}`, secret_token: secret, drop_pending_updates: true,
     // One update at a time per bot: each update rewrites the whole KV record, so parallel
     // deliveries would overwrite each other (a product added during a /start vanishes).
     max_connections: 1,
     // channel_post feeds the storage channel (files the owner posts there are indexed for /send).
-    allowed_updates: ['message', 'callback_query', 'pre_checkout_query', 'channel_post'],
+    allowed_updates: HOOK_UPDATES,
   })
   if (!hook.ok)
     return { ok: false, error: String(hook.description ?? 'webhook failed'), status: 502, userText: `تعذّر تسجيل الويبهوك: ${esc(String(hook.description ?? ''))}\nأعد المحاولة بعد قليل.` }
@@ -1857,7 +2352,7 @@ export async function botsAdmin(request: Request, env: BotsEnv, url: URL): Promi
     const body = (await request.json().catch(() => ({}))) as { token?: string; owner_id?: number; welcome?: string; plan?: string }
     const token = String(body.token ?? '')
     if (!TOKEN_RE.test(token) || !Number.isInteger(body.owner_id)) return new Response('bad request', { status: 400 })
-    const plan = body.plan === 'free' || body.plan === 'paid' ? body.plan : undefined
+    const plan = body.plan === 'free' || body.plan === 'trial' || body.plan === 'paid' ? body.plan : undefined
     const made = await provision(env, token, body.owner_id!, plan)
     if (!made.ok) return new Response(made.error, { status: made.status })
     if (body.welcome) {
