@@ -22,7 +22,11 @@ if [ -z "$BOT_TOKEN" ]; then echo "ERROR: BOT_TOKEN not found in .dev.vars"; exi
 printf '%s' "$BOT_TOKEN" | npx wrangler secret put BOT_TOKEN
 
 echo "3/5 — Pushing bot configuration to the primary KV (DOWNLOADS binding)…"
-npx wrangler kv key put --binding=DOWNLOADS "tb:8968001501" --path=payload.json
+# --remote is load-bearing: wrangler 4 defaults `kv key put` to the local simulator,
+# so the payload would land in .wrangler/state and never reach production — and the
+# local workerd even OOMs (tcmalloc) under this sandbox's address-space limits,
+# killing the put with EPIPE. --remote writes straight to the real namespace.
+npx wrangler kv key put --remote --binding=DOWNLOADS "tb:8968001501" --path=payload.json
 
 echo "4/5 — Deploying worker to the primary host…"
 npm run deploy:cf
