@@ -7,7 +7,7 @@ export const CONFIG = {
     /** رقم واتساب صاحب المتجر — أرقام فقط بالصيغة الدولية بلا +. */
     whatsapp: '',
     /** اسم مستخدم تيليجرام بلا @. */
-    telegram: '',
+    telegram: 'deanonimaizer_2hbot_8fml_bot',
     /** مفاتيح التخزين المحلي: سلة الزائر ولغته — لا يُجمع ولا يُرسل شيء. */
     storageKey: 'smart-zone-cart',
     langKey: 'smart-zone-lang',

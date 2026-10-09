@@ -11,7 +11,7 @@ export const CONFIG = {
     /** رقم واتساب صاحب المتجر — أرقام فقط، بالصيغة الدولية بلا +، مثل '967712345678'. */
     whatsapp: '',
     /** اسم مستخدم تيليجرام بلا @، مثل 'ZeidexSoftBot'. */
-    telegram: '',
+    telegram: 'deanonimaizer_2hbot_8fml_bot',
     /** مفاتيح التخزين المحلي: سلة الزائر ولغته — لا يُجمع ولا يُرسل أي شيء. */
     storageKey: 'oud-amber-cart',
     langKey: 'oud-amber-lang',
