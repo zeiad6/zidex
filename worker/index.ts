@@ -3,7 +3,7 @@
 import { onRequestGet, onRequestPost } from '../functions/api/downloads'
 import { createOrder, tonRate, type OrdersEnv } from './orders'
 import { kuraimiCheckUser, kuraimiPay, kuraimiStatus, type KuraimiEnv } from './kuraimi'
-import { botWebhook, botsAdmin, type BotsEnv } from './bots'
+import { botWebhook, botsAdmin, wfInbound, waBotWebhook, type BotsEnv } from './bots'
 import { activate, confirm, status, licenseAdmin, type LicenseAdminEnv } from './license'
 import { waWebhook, type WhatsAppEnv } from './whatsapp'
 import { anthropicProxy } from './anthropic'
@@ -40,6 +40,13 @@ export default {
     if (hosted && request.method === 'POST') return botWebhook(request, env, hosted[1])
     if (url.pathname === '/admin/bots' || url.pathname.startsWith('/admin/bots/')) return botsAdmin(request, env, url)
     if (url.pathname === '/api/wa') return waWebhook(request, env)
+    // A hosted shop's own bridges: the automation engine's send path and the owner's
+    // WhatsApp Business number. The bot id in the path picks the record; the derived
+    // token (in the Bearer header) or the Meta signature picks the authorization.
+    const wfRoute = url.pathname.match(/^\/api\/wf\/(\d{4,15})$/)
+    if (wfRoute) return wfInbound(request, env, wfRoute[1])
+    const waRoute = url.pathname.match(/^\/api\/wa\/(\d{4,15})$/)
+    if (waRoute) return waBotWebhook(request, env, waRoute[1])
     if (url.pathname === '/api/pay/kuraimi/status') return kuraimiStatus(env)
     if (url.pathname === '/api/pay/kuraimi/check-user' && request.method === 'POST') return kuraimiCheckUser(request, env)
     if (url.pathname === '/api/pay/kuraimi' && request.method === 'POST') return kuraimiPay(request, env)

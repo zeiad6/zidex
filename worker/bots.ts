@@ -108,6 +108,17 @@ type Cfg = {
    *  before a revision lacks the field, so its webhook re-registers itself once —
    *  Telegram keeps each registration's allowed_updates until the next setWebhook. */
   hook?: number
+  /** The owner's automation bridge (the No-Code Engine product): an https URL that
+   *  receives a signed JSON event on every new customer, customer message and paid
+   *  order — an n8n / Activepieces / Make webhook node. The inbound side is
+   *  /api/wf/<id> with the same derived token, so a workflow can also speak through
+   *  the bot. */
+  workflow?: string
+  /** The owner's WhatsApp Business number (Meta Cloud API) — the dual link. A WhatsApp
+   *  customer asking about the shop is answered from this bot's own catalog; anything
+   *  else lands in the owner's Telegram chat for /ware. token (the permanent access
+   *  token) and secret (the app secret) are sealed like the bot token itself. */
+  wa?: { phoneId: string; token: string; secret: string; lastFrom?: string }
 }
 
 const DEFAULT_ORIGIN = 'https://zeidexsoft.com'
@@ -298,6 +309,21 @@ export async function webhookSecret(env: BotsEnv, botId: string | number) {
   const mac = new Uint8Array(await crypto.subtle.sign('HMAC', k, new TextEncoder().encode(`tg:${botId}`)))
   return b64(mac).replace(/[^A-Za-z0-9]/g, '').slice(0, 48)
 }
+/** The automation token for /api/wf/<id>: the same derivation as the webhook secret, so
+ *  an inbound workflow call is checkable before any KV read, and re-issuing BOTS_KEY is
+ *  the single revoker. The same value signs outbound events in x-zeidex-signature. */
+export async function workflowToken(env: BotsEnv, botId: string | number) {
+  const k = await crypto.subtle.importKey('raw', unb64(env.BOTS_KEY!), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+  const mac = new Uint8Array(await crypto.subtle.sign('HMAC', k, new TextEncoder().encode(`wf:${botId}`)))
+  return b64(mac).replace(/[^A-Za-z0-9]/g, '').slice(0, 48)
+}
+/** The hub.verify_token the owner pastes into the Meta app config for /api/wa/<id>.
+ *  Derived, not stored: nothing in the record can be leaked to reveal it. */
+export async function waVerifyToken(env: BotsEnv, botId: string | number) {
+  const k = await crypto.subtle.importKey('raw', unb64(env.BOTS_KEY!), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+  const mac = new Uint8Array(await crypto.subtle.sign('HMAC', k, new TextEncoder().encode(`wa:${botId}`)))
+  return b64(mac).replace(/[^A-Za-z0-9]/g, '').slice(0, 48)
+}
 
 export function safeEqual(a: string, b: string) {
   const x = new TextEncoder().encode(a)
@@ -359,6 +385,70 @@ const save = (env: BotsEnv, cfg: Cfg) => {
   configCache.set(String(cfg.id), { cfg, at: Date.now() })
   return env.DOWNLOADS.put(`tb:${cfg.id}`, JSON.stringify(cfg))
 }
+
+// ── the automation bridge and the WhatsApp dual link ─────────────────
+// The three "coming soon" products, made real: a signed event stream out to the
+// owner's automation platform, a token-gated send path in, and the owner's own
+// WhatsApp Business number routed through this bot. All of it never fails a
+// customer-facing path: an unreachable webhook or a dead Meta API is swallowed.
+
+/** One signed event to the owner's automation URL. The signature is the same derived
+ *  token /api/wf accepts, so the receiving workflow can verify the sender. A slow or
+ *  unreachable automation never breaks the shop: 4s cap, every error swallowed. */
+async function wfEvent(env: BotsEnv, cfg: Cfg, type: string, extra: Record<string, unknown>) {
+  if (!cfg.workflow || !/^https:\/\//i.test(cfg.workflow)) return
+  try {
+    const body = JSON.stringify({ type, bot: { id: cfg.id, username: cfg.username }, at: new Date().toISOString(), ...extra })
+    await fetch(cfg.workflow, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-zeidex-signature': await workflowToken(env, cfg.id) },
+      body,
+      signal: AbortSignal.timeout(4000),
+    })
+  } catch {
+    // the shop answers customers even when the automation is down
+  }
+}
+
+async function hmacHex(secret: string, body: string) {
+  const k = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+  const mac = new Uint8Array(await crypto.subtle.sign('HMAC', k, new TextEncoder().encode(body)))
+  return Array.from(mac, (x) => x.toString(16).padStart(2, '0')).join('')
+}
+
+const WA_GRAPH_VERSION = 'v23.0'
+
+/** Send one text through the owner's WhatsApp Business number (Meta Cloud API). */
+async function waSend(env: BotsEnv, cfg: Cfg, to: string, body: string): Promise<{ ok: boolean; status?: number }> {
+  if (!cfg.wa) return { ok: false }
+  try {
+    const res = await fetch(`https://graph.facebook.com/${WA_GRAPH_VERSION}/${cfg.wa.phoneId}/messages`, {
+      method: 'POST',
+      headers: { authorization: `Bearer ${await open(env, cfg.wa.token)}`, 'content-type': 'application/json' },
+      body: JSON.stringify({ messaging_product: 'whatsapp', to, type: 'text', text: { body: body.slice(0, 4096), preview_url: true } }),
+    })
+    return { ok: res.ok, status: res.status }
+  } catch {
+    return { ok: false }
+  }
+}
+
+/** Load another of the owner's bots by id, or an Arabic error text for the owner. The
+ *  CRM's remote commands all start here: the bot must exist AND belong to them. */
+async function ownedBot(env: BotsEnv, cfg: Cfg, arg: string): Promise<Cfg | string> {
+  const id = arg.split(/\s+/)[0] ?? ''
+  if (!/^\d+$/.test(id)) return 'الاستخدام: <code>/الأمر رقم_البوت</code> (الأرقام من <code>/mybots</code>).'
+  if (Number(id) === cfg.id) return 'هذا هو البوت نفسه — أرسل الأمر بدون رقم.'
+  const other = await load(env, id)
+  if (!other || other.owner !== cfg.owner) return 'لا يوجد بوت بهذا الرقم ضمن بوتاتك. راجع <code>/mybots</code>.'
+  return other
+}
+
+/** The three specialized products are paid capabilities, exactly like the smart answers:
+ *  free shops say so and point at the store, and the full trial keeps every power —
+ *  a trial is decided on the real product, not on its capped shadow. */
+const PREMIUM_GATE =
+  '💎 هذه الميزة ضمن الباقات المدفوعة — والتجربة المجانية الكاملة تفتحها كلها.\nرَقِّ باقتك من المتجر: /store أو من بوت المنصة.'
 
 /**
  * Owner ids, cached per isolate so the rate limiter can run *before* the KV
@@ -1204,6 +1294,8 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
       await send(token, cfg.owner,
         `🛒 طلب مدفوع: ⭐️ ${p.total_amount} من ${esc(m.from?.first_name)} (<code>${uid}</code>)${label}\n` +
         (delivered ? '⚡️ تم التسليم التلقائي للمشتري.' : '📬 يلزم التسليم اليدوي — لا يوجد تسليم تلقائي لهذا المنتج.'))
+      // The automation bridge hears about the paid order too, with what was bought.
+      await wfEvent(env, cfg, 'order', { user: { id: uid, name: m.from?.first_name }, item: item?.title, stars: p.total_amount })
     }
     cfg.stars += m.successful_payment.total_amount
     await save(env, cfg).catch(() => undefined)
@@ -1222,6 +1314,8 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     if (!isOwner(uid) && uid && !cfg.users.includes(uid) && cfg.users.length < MAX_USERS) {
       cfg.users.push(uid)
       await save(env, cfg)
+      // The automation bridge hears about every new customer the moment they land.
+      await wfEvent(env, cfg, 'customer_new', { user: { id: uid, name: m.from?.first_name } })
     }
     if (cfg.paused && !isOwner(uid)) return void (await send(token, chat, '🛠 البوت في صيانة قصيرة — عُد بعد قليل.'))
     const ended = lapsed(cfg)
@@ -1370,6 +1464,8 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
   // Non-owners only, and never a /command — an owner command or an unknown slash command
   // stays silent as before rather than being answered with "nothing found".
   if (uid && !isOwner(uid) && text && !text.startsWith('/')) {
+    // The automation bridge hears every customer message — the CRM's live feed.
+    await wfEvent(env, cfg, 'message', { user: { id: uid, name: m.from?.first_name }, text })
     const hit = searchKeys(cfg, text)
     const found = !!hit && (hit.items.length > 0 || hit.faqs.length > 0)
     if (!found && !isFree(cfg) && (await smartAnswer(env, token, chat, cfg, text))) return
@@ -1669,6 +1765,16 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     await save(env, cfg)
     await say('✅ حُدّثت رسالة الترحيب.')
   } else if (cmd === 'pause' || cmd === 'resume') {
+    // With a bot id, this pauses/resumes ANOTHER of the owner's bots — the CRM's remote
+    // switch, usable from any of their bots' chats. Without one, this bot itself.
+    if (/^\d+$/.test(arg)) {
+      if (isFree(cfg)) return void (await say(PREMIUM_GATE))
+      const target = await ownedBot(env, cfg, arg)
+      if (typeof target === 'string') return void (await say(target))
+      target.paused = cmd === 'pause'
+      await save(env, target)
+      return void (await say(`✅ @${esc(target.username)} ${target.paused ? 'متوقف الآن للعملاء.' : 'عاد للعمل.'}`))
+    }
     cfg.paused = cmd === 'pause'
     await save(env, cfg)
     await say(cfg.paused ? '⏸ البوت متوقف للعملاء.' : '▶️ عاد البوت للعمل.')
@@ -1716,6 +1822,9 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
       `• إرسال ملف لشخص: <code>/send رقم_الشخص رقم_الملف</code> (أو ردّ على أي ملف بـ <code>/send رقم_الشخص</code>)\n` +
       `• قسم جديد: <code>/section add التطبيقات</code> · منتج في قسم: <code>/add اسم | 100 | وصف | القسم</code>\n` +
       `• صفحة: <code>/page add من نحن | النص</code>\n` +
+      `• كل بوتاتك وإدارتها عن بُعد (CRM): <code>/mybots</code> — <code>/pause رقم_البوت</code> · <code>/resume رقم_البوت</code> · <code>/rehook رقم_البوت</code> · <code>/backup رقم_البوت</code>\n` +
+      `• محرك الأتمتة والربط بـ n8n: <code>/wf https://رابط_الويبهوك</code>\n` +
+      `• واتساب للأعمال (الربط المزدوج): <code>/wa رقم_الهاتف توكن سر</code> — الرد: <code>/ware نصك</code> · الإرسال: <code>/wasend رقم نصك</code>\n` +
       `• ربط موقعك: <code>/site https://موقعك.com</code>` +
       (cfg.id === platformBotId(env) ? `\n• إصدار تراخيص Pro: <code>/licnew 2 365 1</code>` : ''),
       { reply_markup: { inline_keyboard: adminRows } }
@@ -1770,6 +1879,149 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     if (!/^\d+$/.test(target) || !words.length) return void (await say('الاستخدام: <code>/reply رقم_العميل نص</code>'))
     const r = await send(token, Number(target), `💬 رد المالك:\n${esc(words.join(' ').slice(0, 2000))}`)
     await say(r.ok ? '✅ أُرسل.' : 'تعذّر الإرسال.')
+  } else if (cmd === 'mybots') {
+    // The unified CRM: every bot this owner runs on the platform, from any of their
+    // bots' chats — one place to see and manage them all. The per-owner index is what
+    // the self-service cap already uses, so the list is exact, not a KV scan.
+    if (isFree(cfg)) return void (await say(PREMIUM_GATE))
+    const idxRaw = await env.DOWNLOADS.get(`tbowner:${cfg.owner}`)
+    const ids = idxRaw ? (JSON.parse(idxRaw) as number[]) : []
+    if (!ids.length) return void (await say('لا بوتات مستضافة بعد على هذا الحساب.'))
+    const rows: string[] = []
+    for (const id of ids.slice(0, 25)) {
+      const other = id === cfg.id ? cfg : await load(env, String(id))
+      if (!other || other.owner !== cfg.owner) continue
+      const plan = isFree(other) ? (lapsed(other) ? '🎁 منتهية' : '🎁 مجانية') : isTrial(other) ? '🧪 تجربة' : '💎 مدفوعة'
+      rows.push(
+        `─ <b>@${esc(other.username)}</b> <code>${other.id}</code>\n` +
+        `${plan}${other.paused ? ' · ⏸ متوقف' : ' · ▶️ يعمل'} · 📦 ${other.items.length} منتج · 👥 ${other.users.length} عميل · 🧾 ${other.orders} طلب · ⭐️ ${other.stars}`,
+      )
+    }
+    await say(
+      `📊 <b>كل بوتاتك (${ids.length})</b>\n${rows.join('\n')}\n\n` +
+      `<i>الإدارة عن بُعد: <code>/pause رقم_البوت</code> · <code>/resume رقم_البوت</code> · <code>/rehook رقم_البوت</code> · <code>/backup رقم_البوت</code></i>`,
+    )
+  } else if (cmd === 'backup') {
+    // The CRM's export: the target bot's whole record, minus every secret.
+    if (isFree(cfg)) return void (await say(PREMIUM_GATE))
+    const target = await ownedBot(env, cfg, arg)
+    if (typeof target === 'string') return void (await say(target))
+    const copy: Record<string, unknown> = { ...target }
+    delete copy.token
+    if (copy.wa) copy.wa = { phoneId: target.wa!.phoneId }
+    await say(`💾 <b>نسخة احتياطية @${esc(target.username)}</b>\n<code>${esc(JSON.stringify(copy, null, 1).slice(0, 3500))}</code>`)
+  } else if (cmd === 'rehook') {
+    // Re-register a bot's webhook from afar — the same settings syncHook would use.
+    if (isFree(cfg)) return void (await say(PREMIUM_GATE))
+    const target = await ownedBot(env, cfg, arg)
+    if (typeof target === 'string') return void (await say(target))
+    const tk = await open(env, target.token)
+    const hook = await tg(tk, 'setWebhook', {
+      url: `${hostOf(env, target)}/tg/${target.id}`, secret_token: target.secret, drop_pending_updates: false,
+      max_connections: 1, allowed_updates: HOOK_UPDATES,
+    })
+    if (!hook.ok) return void (await say(`تعذّر: ${esc(String(hook.description ?? ''))}`))
+    target.hook = HOOK_REVISION
+    await save(env, target)
+    await say(`✅ أعيد ربط ويبهوك @${esc(target.username)}.`)
+  } else if (cmd === 'wf') {
+    // The No-Code Engine: this bot's events streamed, signed, to the owner's automation
+    // platform — and a token-gated way for that platform to speak back through the bot.
+    if (isFree(cfg)) return void (await say(PREMIUM_GATE))
+    if (arg === 'off') {
+      delete cfg.workflow
+      await save(env, cfg)
+      return void (await say('🔌 فُصل محرك الأتمتة.'))
+    }
+    if (arg === 'test') {
+      if (!cfg.workflow) return void (await say('لم يُربط بعد: <code>/wf https://رابط_الويبهوك</code>'))
+      await wfEvent(env, cfg, 'test', { user: { id: cfg.owner }, text: 'اختبار الاتصال' })
+      return void (await say('📡 أُرسل حدث <code>test</code> إلى الرابط المربوط. إن لم يصل، تحقق من استقبال منصة الأتمتة (n8n/Activepieces) للحدث <code>test</code>.'))
+    }
+    if (arg) {
+      const u = arg.split(/\s+/)[0]
+      if (!/^https:\/\//i.test(u)) return void (await say('الاستخدام: <code>/wf https://رابط_الويبهوك</code> — رابط عقدة ويبهوك في n8n أو Activepieces أو Make.'))
+      cfg.workflow = u
+      await save(env, cfg)
+      const tok = await workflowToken(env, cfg.id)
+      return void (await say(
+        `🔗 <b>رُبط محرك الأتمتة</b>\n\n` +
+        `ستصلك الأحداث موقّعة بترويسة <code>x-zeidex-signature</code>:\n` +
+        `• <code>customer_new</code> — عميل جديد\n• <code>message</code> — رسالة عميل\n• <code>order</code> — طلب مدفوع\n\n` +
+        `الإرسال عبر بوتك من منصة الأتمتة:\n` +
+        `<code>POST ${originOf(env)}/api/wf/${cfg.id}</code>\n` +
+        `ترويسة: <code>Authorization: Bearer ${esc(tok)}</code>\n` +
+        `النص: <code>{"text": "…"}</code> (واختيارياً <code>"chat_id": رقم</code>)\n\n` +
+        `تجربة: <code>/wf test</code> · فصل: <code>/wf off</code>`,
+      ))
+    }
+    if (cfg.workflow) {
+      const tok = await workflowToken(env, cfg.id)
+      return void (await say(
+        `🔗 محرك الأتمتة مربوط بـ <code>${esc(cfg.workflow)}</code>\n\n` +
+        `رمز الإرسال الوارد: <code>${esc(tok)}</code> · الإرسال: <code>POST ${originOf(env)}/api/wf/${cfg.id}</code> بنفس ترويسة Bearer.\n` +
+        `تجربة: <code>/wf test</code> · تغيير الرابط: أعد <code>/wf الرابط_الجديد</code> · فصل: <code>/wf off</code>`,
+      ))
+    }
+    await say('محرك الأتمتة والربط الذكي: صل بوتك بمنصات الأتمتة العالمية.\n\nالاستخدام: <code>/wf https://رابط_الويبهوك</code> (n8n / Activepieces / Make)\nستصلك الأحداث: عميل جديد · رسالة عميل · طلب مدفوع — ويمكن لمنصتك الإرسال عبر بوتك بنفس الرمز.')
+  } else if (cmd === 'wa') {
+    // WhatsApp Business, linked to this bot: the dual link. A shop question is answered
+    // from the bot's own catalog automatically; everything else lands in the owner's
+    // Telegram chat for /ware. token and app secret are sealed like the bot token.
+    if (isFree(cfg)) return void (await say(PREMIUM_GATE))
+    if (arg === 'off') {
+      delete cfg.wa
+      await save(env, cfg)
+      return void (await say('🔌 فُصل واتساب.'))
+    }
+    const a = arg.split(/\s+/).filter(Boolean)
+    if (a.length >= 3) {
+      const [phoneId, waToken, appSecret] = a
+      // Validate the pair against the Graph API before storing anything.
+      let valid = false
+      try {
+        const res = await fetch(`https://graph.facebook.com/${WA_GRAPH_VERSION}/${phoneId}?access_token=${encodeURIComponent(waToken)}`)
+        valid = res.ok
+      } catch {
+        valid = false
+      }
+      if (!valid) return void (await say('⚠️ رفضت Meta هذا الزوج (رقم الهاتف / التوكن الدائمي) — تحقق منهما من لوحة Meta for Developers ثم أعد الأمر.'))
+      cfg.wa = { phoneId, token: await seal(env, waToken), secret: await seal(env, appSecret) }
+      await save(env, cfg)
+      const verify = await waVerifyToken(env, cfg.id)
+      return void (await say(
+        `📱 <b>رُبط واتساب للأعمال بمتجرك</b>\n\n` +
+        `في تطبيقك على Meta for Developers ← WhatsApp ← Configuration:\n` +
+        `• رابط الويبهوك: <code>${originOf(env)}/api/wa/${cfg.id}</code>\n` +
+        `• Verify token: <code>${esc(verify)}</code>\n\n` +
+        `رسائل واتساب ستصلك هنا — والرد عليها: <code>/ware نصك</code>\n` +
+        `إرسال لأي رقم: <code>/wasend رقم نصك</code> · الفصل: <code>/wa off</code>`,
+      ))
+    }
+    if (cfg.wa) {
+      return void (await say(
+        `📱 واتساب مربوط برقم الهاتف <code>${esc(cfg.wa.phoneId)}</code>.\n` +
+        `الرد على آخر رسالة: <code>/ware نصك</code> · الإرسال لأي رقم: <code>/wasend رقم نصك</code> · الفصل: <code>/wa off</code>`,
+      ))
+    }
+    await say(
+      'ربط رقم أعمال واتساب (Meta Cloud API) بمتجرك — قناة مزدوجة: العملاء على واتساب، وأنت ترد من هنا.\n\n' +
+      'الاستخدام: <code>/wa رقم_الهاتف_الدائمي توكن_دائمي سر_التطبيق</code>\n' +
+      'كلها من لوحة Meta for Developers ← WhatsApp ← API Setup.\n\n' +
+      'رسائل واتساب ستصلك في هذا البوت، والرد بـ <code>/ware</code>.',
+    )
+  } else if (cmd === 'ware') {
+    // Reply to the last WhatsApp customer — the other half of the dual link.
+    if (!cfg.wa || !cfg.wa.lastFrom) return void (await say('لا رسالة واتساب بانتظار الرد — أول واتساب يصلك يحدد وجهة <code>/ware</code>.'))
+    if (!arg) return void (await say('الاستخدام: <code>/ware نص_الرد</code>'))
+    const r = await waSend(env, cfg, cfg.wa.lastFrom, arg)
+    await say(r.ok ? '✅ أُرسل عبر واتساب.' : `تعذّر الإرسال (${r.status ?? 'شبكة'}) — تحقق من الربط بـ <code>/wa</code>.`)
+  } else if (cmd === 'wasend') {
+    if (!cfg.wa) return void (await say('اربط واتساب أولاً: <code>/wa رقم_الهاتف_الدائمي توكن_دائمي سر_التطبيق</code>'))
+    const [num, ...words] = arg.split(/\s+/)
+    if (!/^\d{8,}$/.test(num ?? '') || !words.length) return void (await say('الاستخدام: <code>/wasend رقم_الواتساب نص</code>'))
+    const r = await waSend(env, cfg, num, words.join(' '))
+    await say(r.ok ? '✅ أُرسل.' : `تعذّر الإرسال (${r.status ?? 'شبكة'}).`)
   }
 }
 
@@ -2340,6 +2592,81 @@ async function provision(
   await env.DOWNLOADS.put(`tbowner:${ownerId}`, JSON.stringify(idx)).catch(() => undefined)
   await send(plainToken, ownerId, `🚀 <b>بوتك @${esc(cfg.username)} يعمل الآن على سحابة ZeidexSoft</b>\nافتحه وأرسل /admin للوحة التحكم.`)
   return { ok: true, cfg }
+}
+
+/** POST /api/wf/<id> — an automation (n8n, Activepieces, Make) speaking through the bot.
+ *  The same derived token that signs outbound events authorizes the call, so nothing is
+ *  shared with Telegram itself. Body: { chat_id?, text, keyboard? } — without a
+ *  chat_id the message goes to the owner's own chat. */
+export async function wfInbound(request: Request, env: BotsEnv, id: string): Promise<Response> {
+  if (request.method !== 'POST') return new Response('method not allowed', { status: 405 })
+  // The token check comes before any KV read: junk calls to /api/wf/* cost nothing.
+  const expect = `Bearer ${await workflowToken(env, id)}`
+  if (!safeEqual(request.headers.get('authorization') ?? '', expect)) return new Response('forbidden', { status: 403 })
+  const cfg = await load(env, id)
+  if (!cfg) return new Response('unknown bot', { status: 404 })
+  let body: { chat_id?: number; text?: string; keyboard?: string[][] }
+  try {
+    body = (await request.json()) as typeof body
+  } catch {
+    return new Response('bad json', { status: 400 })
+  }
+  const text = String(body.text ?? '').slice(0, 4000)
+  if (!text) return new Response('text required', { status: 400 })
+  // The keyboard is data, not markup: plain strings only, and every button just opens
+  // the bot's own main menu — an automation cannot inject arbitrary callback handlers.
+  const keyboard = body.keyboard?.length
+    ? { inline_keyboard: body.keyboard.slice(0, 10).map((row) => row.slice(0, 8).map((t) => ({ text: String(t).slice(0, 60), callback_data: 't:main' }))) }
+    : undefined
+  const r = await send(await open(env, cfg.token), body.chat_id ?? cfg.owner, esc(text), keyboard)
+  return new Response(JSON.stringify({ ok: r.ok }), { status: r.ok ? 200 : 502, headers: { 'content-type': 'application/json' } })
+}
+
+/** /api/wa/<id> — the owner's own WhatsApp Business number, linked by /wa. Meta verifies
+ *  once with the derived hub token, then POSTs every message signed with the app secret.
+ *  A shop question is answered from the bot's own catalog automatically; everything else
+ *  lands in the owner's Telegram chat for /ware. Always 200 on a verified POST: a
+ *  non-2xx makes Meta retry the same batch forever. */
+export async function waBotWebhook(request: Request, env: BotsEnv, id: string): Promise<Response> {
+  const url = new URL(request.url)
+  if (request.method === 'GET') {
+    const ok = url.searchParams.get('hub.mode') === 'subscribe' && safeEqual(url.searchParams.get('hub.verify_token') ?? '', await waVerifyToken(env, id))
+    return ok ? new Response(url.searchParams.get('hub.challenge') ?? '') : new Response('forbidden', { status: 403 })
+  }
+  if (request.method !== 'POST') return new Response('method not allowed', { status: 405 })
+  const cfg = await load(env, id)
+  if (!cfg?.wa) return new Response('not linked', { status: 404 })
+  const raw = await request.text()
+  if (!safeEqual(request.headers.get('x-hub-signature-256') ?? '', `sha256=${await hmacHex(await open(env, cfg.wa.secret), raw)}`)) {
+    return new Response('bad signature', { status: 401 })
+  }
+  // Signed by Meta from here on.
+  try {
+    type WaMsg = { from?: string; type?: string; text?: { body?: string } }
+    const update = JSON.parse(raw) as { entry?: { changes?: { value?: { messages?: WaMsg[] } }[] }[] }
+    for (const entry of update.entry ?? []) for (const change of entry.changes ?? []) for (const msg of change.value?.messages ?? []) {
+      const from = String(msg.from ?? '')
+      if (!from) continue
+      const body = String(msg.text?.body ?? '').trim()
+      // Remember who is waiting, so /ware knows where the next reply goes.
+      cfg.wa.lastFrom = from
+      await save(env, cfg)
+      const q = norm(body)
+      if (body && (q.includes('منتج') || q.includes('متجر') || q.includes('شراء') || q.includes('سعر') || q.includes('اسعار') || q.includes('بضاع'))) {
+        const lines = cfg.items.slice(0, 8).map((i) => `• ${i.title} — ⭐️ ${i.stars}`)
+        await waSend(env, cfg, from,
+          (lines.length ? `🛍 *منتجاتنا*\n${lines.join('\n')}\n\n` : '🛍 *مرحباً بك*\n') +
+          `الشراء والدعم من بوت تيليجرام:\nhttps://t.me/${cfg.username}`)
+      } else {
+        await send(await open(env, cfg.token), cfg.owner,
+          `📱 <b>واتساب من <code>${esc(from)}</code>:</b>\n${esc(body.slice(0, 2000)) || '(رسالة غير نصية)'}` +
+          (body ? `\n\nللرد: <code>/ware ردك هنا</code>` : ''))
+      }
+    }
+  } catch {
+    // A malformed batch is dropped, not retried forever.
+  }
+  return new Response('ok')
 }
 
 export async function botsAdmin(request: Request, env: BotsEnv, url: URL): Promise<Response> {

@@ -1290,4 +1290,174 @@ assert.equal(store.get('tb:123456789'), undefined)
   }
 }
 
+// ── The three "coming soon" products, made real: the CRM, the automation engine, WhatsApp ──
+{
+  b.configCache.clear()
+  b.ownerCache.clear()
+  const OWNER = 77
+  const ID = 555000777
+  const ID2 = 555000444
+  const OTHER = 555000555
+  const TOK = `${ID}:` + 'H'.repeat(35)
+  const TOK2 = `${ID2}:` + 'J'.repeat(35)
+  const events = [] // automation events the owner's platform received
+  const graph = [] // WhatsApp Graph API calls
+  const sent = [] // Telegram calls
+  const saved = globalThis.fetch
+  globalThis.fetch = async (url, init) => {
+    const u = String(url)
+    if (u === 'https://n8n.example/hook') {
+      events.push({ sig: init?.headers?.['x-zeidex-signature'], body: JSON.parse(init.body) })
+      return Response.json({ ok: true })
+    }
+    if (u.startsWith('https://graph.facebook.com/')) {
+      graph.push({ path: u, auth: init?.headers?.authorization, body: init?.body ? JSON.parse(init.body) : null })
+      return Response.json(init?.method === 'POST' ? { messages: [{ id: 'wamid.1' }] } : { display_phone_number: '+967 77 000 000', quality_rating: 'GREEN' })
+    }
+    if (u.startsWith('https://api.telegram.org/')) {
+      const method = u.split('/').pop()
+      const body = init?.body ? JSON.parse(init.body) : {}
+      sent.push({ method, body })
+      if (method === 'getMe') {
+        const tok = u.slice('https://api.telegram.org/bot'.length, u.lastIndexOf('/'))
+        const id = Number(tok.split(':')[0])
+        return Response.json({ ok: true, result: { id, username: `bot_${id}`, first_name: 'B' } })
+      }
+      return Response.json({ ok: true, result: {} })
+    }
+    return Response.json({ ok: true, result: {} })
+  }
+  try {
+    // Two bots for one owner — the CRM's raw material; a third for someone else.
+    await admin('POST', '/admin/bots', { token: TOK, owner_id: OWNER })
+    await admin('POST', '/admin/bots', { token: TOK2, owner_id: OWNER })
+    await admin('POST', '/admin/bots', { token: `${OTHER}:` + 'K'.repeat(35), owner_id: 88 })
+    const secret = JSON.parse(store.get(`tb:${ID}`)).secret
+    const say = (from, text) =>
+      b.botWebhook(
+        new Request(`https://zeidexsoft.com/tg/${ID}`, {
+          method: 'POST',
+          headers: { 'x-telegram-bot-api-secret-token': secret },
+          body: JSON.stringify({ message: { chat: { id: from, type: 'private' }, from: { id: from, first_name: 'N' }, text } }),
+        }),
+        env,
+        String(ID),
+      )
+    const ownerSays = (text) => say(OWNER, text)
+    const lastOwnerText = () => [...sent].reverse().find((c) => c.method === 'sendMessage' && c.body.chat_id === OWNER)?.body.text ?? ''
+
+    await ownerSays('/add Perfume | 100 | nice smell')
+
+    // CRM: /mybots from any of the owner's bots lists them all.
+    await ownerSays('/mybots')
+    assert.ok(lastOwnerText().includes(`bot_${ID}`) && lastOwnerText().includes(`bot_${ID2}`), '/mybots lists every bot of the owner')
+    assert.ok(!lastOwnerText().includes(`bot_${OTHER}`), "and nobody else's")
+
+    // CRM: remote pause/resume of the OTHER bot from this bot's chat.
+    await ownerSays(`/pause ${ID2}`)
+    assert.equal(JSON.parse(store.get(`tb:${ID2}`)).paused, true, 'the CRM pauses another bot remotely')
+    await ownerSays(`/resume ${ID2}`)
+    assert.equal(JSON.parse(store.get(`tb:${ID2}`)).paused, false, 'and resumes it')
+
+    // CRM: another owner's bot is untouchable.
+    await ownerSays(`/pause ${OTHER}`)
+    assert.ok(lastOwnerText().includes('لا يوجد بوت بهذا الرقم'), "one owner cannot touch another's bot")
+    assert.equal(JSON.parse(store.get(`tb:${OTHER}`)).paused, false)
+
+    // CRM: the backup exports the record without any secret.
+    await ownerSays(`/backup ${ID2}`)
+    assert.ok(lastOwnerText().includes(`bot_${ID2}`) && !lastOwnerText().includes(TOK2), 'backup exports the record without the token')
+
+    // CRM: the rehook re-registers the other bot's webhook at the current revision.
+    await ownerSays(`/rehook ${ID2}`)
+    const rh = sent.find((c) => c.method === 'setWebhook' && c.body.url === `https://zeidexsoft.com/tg/${ID2}`)
+    assert.ok(rh, 'rehook re-registers the target bot webhook')
+    assert.ok(lastOwnerText().includes('أعيد ربط'), 'rehook confirms to the owner')
+
+    // The automation engine: linking, then the live events.
+    await ownerSays('/wf https://n8n.example/hook')
+    assert.ok(lastOwnerText().includes(`/api/wf/${ID}`), 'the /wf setup answer shows the inbound endpoint')
+    const tok = await b.workflowToken(env, ID)
+    await say(900, 'course')
+    assert.equal(events.at(-1)?.body.type, 'message', 'a customer message fires a message event')
+    assert.equal(events.at(-1)?.body.text, 'course')
+    assert.equal(events.at(-1)?.body.bot.id, ID)
+    assert.equal(events.at(-1)?.sig, tok, 'events are signed with the derived token')
+    await say(901, '/start')
+    assert.equal(events.at(-1)?.body.type, 'customer_new', 'a first /start fires customer_new')
+
+    // The engine's inbound path: wrong token refused, right token speaks through the bot.
+    assert.equal((await b.wfInbound(new Request(`https://zeidexsoft.com/api/wf/${ID}`, { method: 'POST', headers: { authorization: 'Bearer nope' }, body: JSON.stringify({ text: 'hi' }) }), env, String(ID))).status, 403)
+    assert.equal((await b.wfInbound(new Request(`https://zeidexsoft.com/api/wf/${ID}`, { method: 'POST', headers: { authorization: `Bearer ${tok}` }, body: JSON.stringify({ text: '<b>bold</b>' }) }), env, String(ID))).status, 200)
+    assert.ok(sent.some((c) => c.method === 'sendMessage' && c.body.chat_id === OWNER && c.body.text.includes('&lt;b&gt;bold&lt;/b&gt;')), 'a workflow speaks to the owner, with its HTML escaped')
+
+    // Off stops the stream.
+    await ownerSays('/wf off')
+    events.length = 0
+    await say(900, 'course')
+    assert.equal(events.length, 0, '/wf off stops the stream')
+
+    // WhatsApp: linking seals both secrets.
+    const waToken = 'EAAG-wa-permanent-token'
+    const appSecret = 'wa-app-secret-1234567890'
+    await ownerSays(`/wa 1098765432 ${waToken} ${appSecret}`)
+    assert.ok(lastOwnerText().includes('Verify token'), 'the /wa setup answer shows the Meta config')
+    assert.ok(!store.get(`tb:${ID}`).includes(waToken), 'the WhatsApp token is stored sealed')
+    assert.ok(!store.get(`tb:${ID}`).includes(appSecret), 'the app secret is stored sealed')
+
+    // Meta verifies the webhook with the derived hub token; a wrong one is refused.
+    const hub = await b.waVerifyToken(env, ID)
+    assert.equal(await (await b.waBotWebhook(new Request(`https://zeidexsoft.com/api/wa/${ID}?hub.mode=subscribe&hub.verify_token=${hub}&hub.challenge=abc123`), env, String(ID))).text(), 'abc123', 'hub verification echoes the challenge')
+    assert.equal((await b.waBotWebhook(new Request(`https://zeidexsoft.com/api/wa/${ID}?hub.mode=subscribe&hub.verify_token=wrong&hub.challenge=x`), env, String(ID))).status, 403)
+
+    // A signed WhatsApp message: a shop question is auto-answered from the catalog, the rest lands in the owner's chat.
+    const enc = new TextEncoder()
+    const key = await crypto.subtle.importKey('raw', enc.encode(appSecret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+    const waMsg = async (from, text) => {
+      const payload = JSON.stringify({ entry: [{ changes: [{ value: { messages: [{ from, type: 'text', text: { body: text } }] } }] }] })
+      const sig = 'sha256=' + Array.from(new Uint8Array(await crypto.subtle.sign('HMAC', key, enc.encode(payload))), (x) => x.toString(16).padStart(2, '0')).join('')
+      return b.waBotWebhook(new Request(`https://zeidexsoft.com/api/wa/${ID}`, { method: 'POST', headers: { 'x-hub-signature-256': sig }, body: payload }), env, String(ID))
+    }
+    assert.equal((await waMsg('967771234567', 'ما هي الأسعار عندكم؟')).status, 200)
+    assert.ok(graph.some((g) => g.body?.to === '967771234567' && /Perfume/.test(g.body.text?.body ?? '')), 'a shop question is auto-answered from the catalog over WhatsApp')
+    await waMsg('967772345678', 'أحتاج مساعدة في الطلب')
+    assert.ok(sent.some((c) => c.method === 'sendMessage' && c.body.chat_id === OWNER && c.body.text.includes('أحتاج مساعدة') && c.body.text.includes('/ware')), 'the rest lands in the owner chat with the /ware hint')
+    assert.equal(JSON.parse(store.get(`tb:${ID}`)).wa.lastFrom, '967772345678', 'lastFrom remembers who is waiting')
+
+    // /ware replies through the Graph API; a forged signature is refused; /wa off unlinks.
+    await ownerSays('/ware أهلاً بك!')
+    assert.ok(graph.some((g) => g.body?.to === '967772345678' && (g.body.text?.body ?? '').includes('أهلاً')), '/ware replies over WhatsApp')
+    assert.equal((await b.waBotWebhook(new Request(`https://zeidexsoft.com/api/wa/${ID}`, { method: 'POST', headers: { 'x-hub-signature-256': 'sha256=deadbeef' }, body: '{}' }), env, String(ID))).status, 401)
+    await ownerSays('/wa off')
+    assert.equal(JSON.parse(store.get(`tb:${ID}`)).wa, undefined, '/wa off unlinks the number')
+
+    // All three are paid capabilities: a free-plan shop is refused with the gate text,
+    // the same policy as the smart answers — and the full trial keeps every power.
+    const FREE_ID = 555000666
+    await admin('POST', '/admin/bots', { token: `${FREE_ID}:` + 'L'.repeat(35), owner_id: OWNER, plan: 'free' })
+    const freeSecret = JSON.parse(store.get(`tb:${FREE_ID}`)).secret
+    const freeSay = (text) =>
+      b.botWebhook(
+        new Request(`https://zeidexsoft.com/tg/${FREE_ID}`, {
+          method: 'POST',
+          headers: { 'x-telegram-bot-api-secret-token': freeSecret },
+          body: JSON.stringify({ message: { chat: { id: OWNER, type: 'private' }, from: { id: OWNER, first_name: 'N' }, text } }),
+        }),
+        env,
+        String(FREE_ID),
+      )
+    for (const c of ['/mybots', '/wf https://n8n.example/hook', `/pause ${ID2}`, '/wa 1098765432 t s']) {
+      await freeSay(c)
+      assert.ok(lastOwnerText().includes('💎'), `a free shop is refused on ${c.split(' ')[0]}`)
+    }
+    assert.equal(JSON.parse(store.get(`tb:${FREE_ID}`)).workflow, undefined, 'a free shop cannot link the automation engine')
+    assert.equal(JSON.parse(store.get(`tb:${FREE_ID}`)).wa, undefined, 'a free shop cannot link WhatsApp')
+    await admin('POST', '/admin/bots', { token: `${FREE_ID}:` + 'L'.repeat(35), owner_id: OWNER, plan: 'trial' })
+    await freeSay('/wf https://n8n.example/hook')
+    assert.equal(JSON.parse(store.get(`tb:${FREE_ID}`)).workflow, 'https://n8n.example/hook', 'the full trial keeps every power')
+  } finally {
+    globalThis.fetch = saved
+  }
+}
+
 console.log('hosted bots: all checks passed')

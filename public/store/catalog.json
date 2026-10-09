@@ -164,7 +164,7 @@
       "category": "bots",
       "monthly": true,
       "featured": false,
-      "usd": 9.0,
+      "usd": 9,
       "image": "/store/img/products/store-bot-hosting.webp",
       "demo": "",
       "features": [
@@ -640,9 +640,19 @@
         "Ultra-fast cloud storage and hardened security",
         "Unlimited admin team access with roles"
       ],
-      "soon": true,
       "stars_full": 9500,
-      "usd_full": 129
+      "usd_full": 129,
+      "invoice": "https://t.me/$4h9wTeeCSEZFAQAA8lruANgjCKM",
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك فوراً إيصال بمعرّف العملية",
+        "يتواصل معك المشرف ويُفعّل منصة CRM على بوتاتك المستضافة",
+        "أرسل /mybots في أي بوت من بوتاتك — إحصاءات وإدارة مركزية عن بُعد"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt with the transaction id at once",
+        "An admin contacts you and activates the CRM across your hosted bots",
+        "Send /mybots in any of your bots — unified stats and remote management"
+      ]
     },
     {
       "sku": "workflow-engine",
@@ -671,9 +681,19 @@
         "Real-time payload processing and alerts",
         "Full support for cloud and self-hosted nodes"
       ],
-      "soon": true,
       "stars_full": 8500,
-      "usd_full": 115
+      "usd_full": 115,
+      "invoice": "https://t.me/$jtZ-j-eCSEZGAQAAwbfC7e3N_js",
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك فوراً إيصال بمعرّف العملية",
+        "يتواصل معك المشرف ويُفعّل محرك الأتمتة على بوتك",
+        "أرسل /wf ورابط الويبهوك في بوتك — وتبدأ الأحداث بالوصول إلى n8n فوراً"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt with the transaction id at once",
+        "An admin contacts you and activates the automation engine on your bot",
+        "Send /wf with your webhook URL in your bot — events start reaching n8n immediately"
+      ]
     },
     {
       "sku": "whatsapp-bot-pro",
@@ -702,9 +722,19 @@
         "Automated ticket assignment to team members",
         "Detailed conversion and retention metrics"
       ],
-      "soon": true,
       "stars_full": 11000,
-      "usd_full": 149
+      "usd_full": 149,
+      "invoice": "https://t.me/$5OEiFueCSEZHAQAASUo3JhMrzdo",
+      "after": [
+        "تدفع بنجوم تيليجرام — ويصلك فوراً إيصال بمعرّف العملية",
+        "جهّز رقم أعمال واتساب: Meta for Developers ← WhatsApp ← API Setup",
+        "أرسل /wa رقم_الهاتف الدائمي التوكن السر في بوتك — وتبدأ رسائل واتساب بالوصول إليك فوراً"
+      ],
+      "after_en": [
+        "You pay in Telegram Stars and get a receipt with the transaction id at once",
+        "Prepare a WhatsApp Business number: Meta for Developers ← WhatsApp ← API Setup",
+        "Send /wa <phone_id> <token> <secret> in your bot — WhatsApp messages reach you immediately"
+      ]
     },
     {
       "sku": "post-50",
@@ -761,7 +791,7 @@
       "category": "channel",
       "monthly": false,
       "featured": false,
-      "usd": 3.0,
+      "usd": 3,
       "image": "/store/img/products/pin-month.webp",
       "demo": "",
       "features": [],
@@ -806,7 +836,7 @@
       "category": "channel",
       "monthly": false,
       "featured": false,
-      "usd": 6.0,
+      "usd": 6,
       "image": "/store/img/products/archive-5k.webp",
       "demo": "",
       "features": [],
