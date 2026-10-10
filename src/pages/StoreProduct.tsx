@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowRight, Bot, CalendarClock, Star, WalletCards } from 'lucide-react'
+import { ArrowRight, AppWindow, Bot, CalendarClock, LayoutDashboard, Star, WalletCards } from 'lucide-react'
 import { useI18n } from '@/lib/i18n'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { site } from '@/lib/site'
@@ -152,6 +152,20 @@ export default function StoreProduct() {
             >
               <Bot className="size-4" aria-hidden="true" />
               {t('جرّب البوت قبل الشراء', 'Try the bot before buying')}
+            </a>
+            <a
+              href={`/bot-suite/#/bot/${product.sku}`}
+              className="text-accent mt-2 inline-flex items-center gap-1.5 text-[14px] font-bold hover:underline hover:underline-offset-4"
+            >
+              <AppWindow className="size-4" aria-hidden="true" />
+              {t('الواجهة الرسومية للبوت', "The bot's graphical interface")}
+            </a>
+            <a
+              href="/bot-suite/#/panel"
+              className="text-accent mt-2 inline-flex items-center gap-1.5 text-[14px] font-bold hover:underline hover:underline-offset-4"
+            >
+              <LayoutDashboard className="size-4" aria-hidden="true" />
+              {t('لوحة التحكم الموحّدة', 'The unified control panel')}
             </a>
           </div>
         </Reveal>

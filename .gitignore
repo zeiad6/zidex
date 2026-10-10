@@ -64,3 +64,7 @@ __pycache__/
 
 # قوالب المتاجر — لكل قالب مستودعه الخاص (تُنشر مخرجاته إلى public/templates/)
 store-sites/
+
+# واجهات البوتات — مستودع فرعي مستقل (تُنشر مخرجاته إلى public/bot-suite/)
+bot-suite/
+!public/bot-suite/

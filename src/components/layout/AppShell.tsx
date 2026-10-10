@@ -17,6 +17,7 @@ import {
   Search,
   ShoppingBag,
   Star,
+  AppWindow,
   LayoutGrid,
   LayoutTemplate,
   X,
@@ -40,7 +41,7 @@ import { categoryStyle } from '@/components/blog/categoryStyle'
  * phones, and a ⌘K / "/" search over posts and programs.
  * ------------------------------------------------------------------ */
 
-type NavItem = { to: string; icon: LucideIcon; label: string; labelEn: string; badge?: 'posts' | 'new' }
+type NavItem = { to: string; icon: LucideIcon; label: string; labelEn: string; badge?: 'posts' | 'new'; /** bundle outside the SPA — real navigation */ external?: boolean }
 
 const primaryNav: NavItem[] = [
   { to: '/', icon: House, label: 'الرئيسية', labelEn: 'Home' },
@@ -48,6 +49,7 @@ const primaryNav: NavItem[] = [
   { to: '/shop', icon: ShoppingBag, label: 'المتجر', labelEn: 'Store', badge: 'new' },
   { to: '/programs', icon: Package, label: 'البرامج', labelEn: 'Programs' },
   { to: '/templates', icon: LayoutTemplate, label: 'قوالب المتاجر', labelEn: 'Store templates', badge: 'new' },
+  { to: '/bot-suite/', icon: AppWindow, label: 'واجهات البوتات', labelEn: 'Bot interfaces', badge: 'new', external: true },
   { to: '/dashboard', icon: LayoutGrid, label: 'لوحة التحكم', labelEn: 'Dashboard' },
   { to: '/links', icon: Compass, label: 'الروابط', labelEn: 'Links' },
   { to: '/about', icon: Info, label: 'عن المنصة', labelEn: 'About' },
@@ -109,7 +111,23 @@ function Sidebar({ onSearch }: { onSearch: () => void }) {
 
       <nav className="flex flex-1 flex-col gap-1 p-4" aria-label={t('التنقل الرئيسي', 'Main navigation')}>
         <p className={label}>{t('القائمة الرئيسية', 'MAIN MENU')}</p>
-        {primaryNav.map(({ to, icon: Icon, label: ar, labelEn, badge }) => (
+        {primaryNav.map(({ to, icon: Icon, label: ar, labelEn, badge, external }) => {
+          // A static bundle outside the SPA (bot-suite) is a real navigation, not a
+          // client route — otherwise React Router would try to route /bot-suite itself.
+          if (external) {
+            return (
+              <a key={to} href={to} className="text-muted hover:bg-accent-soft hover:text-accent group relative isolate flex items-center gap-3 rounded-[14px] px-3.5 py-3 text-[14px] font-semibold transition-colors duration-200">
+                <Icon className="size-[1.15rem] shrink-0 transition-transform duration-300 group-hover:scale-110" aria-hidden="true" />
+                <span className="flex-1">{t(ar, labelEn)}</span>
+                {badge === 'new' ? (
+                  <span className="rounded-full bg-orange-100 px-2 py-0.5 text-[10px] font-black text-orange-600 dark:bg-orange-400/15 dark:text-orange-300">
+                    {t('جديد', 'New')}
+                  </span>
+                ) : null}
+              </a>
+            )
+          }
+          return (
           <NavLink
             key={to}
             to={to}
@@ -159,7 +177,8 @@ function Sidebar({ onSearch }: { onSearch: () => void }) {
               )
             }}
           </NavLink>
-        ))}
+          )
+        })}
 
         <p className={cn(label, 'pt-4')}>{t('الأقسام', 'SECTIONS')}</p>
         {categories.map((c) => {
