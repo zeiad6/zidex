@@ -793,7 +793,9 @@
       "needs_en": [
         "An Android 8.0+ device",
         "Telegram Stars balance (top up in Telegram or on Fragment)"
-      ]
+      ],
+      "invoice": "https://t.me/$Wi_H6CM5WEa0AgAAwcE02Spwj9U",
+      "invoice_item": 20
     },
     {
       "sku": "post-50",

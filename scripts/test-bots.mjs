@@ -776,6 +776,40 @@ assert.equal(store.get('tb:123456789'), undefined)
     assert.ok(!sent.some((c) => c.method === 'sendPhoto'), 'no file is sent when delivery is cleared')
     assert.ok(texts().some((t) => t.includes('سيتواصل معك المالك')), 'the buyer is told the owner will follow up')
 
+    // ── التسليم برابط قناة: t.me/c/<id>/<msg> يُنسخ لكل مشترٍ ──────────
+    // تطبيق بـ524MB لا يُرفع عبر البوت (حدّ 50MB): المصدر يبقى القناة ويتنسّخ.
+    sent.length = 0
+    await say(OWNER, '/deliver 1 https://t.me/c/4308164857/7')
+    assert.deepEqual(rec().items[0].deliver?.copyFrom, { chat: -1004308164857, message: 7 }, 'the channel link is stored as the delivery source')
+    const probe = sent.find((c) => c.method === 'copyMessage')
+    assert.ok(probe, 'the owner gets a probe copy to confirm the file is right')
+    assert.deepEqual(probe.body, { chat_id: OWNER, from_chat_id: -1004308164857, message_id: 7 })
+
+    // رابط بصيغة أخرى (ناقص/خاطئ) لا يُقبل كمصدر
+    sent.length = 0
+    await say(OWNER, '/deliver 1 https://t.me/c/notanumber/3')
+    assert.equal(rec().items[0].deliver?.copyFrom.message, 7, 'a malformed link never overwrites the source')
+
+    // The buyer pays: the file arrives COPIED from the channel, no upload involved.
+    const channelled = rec().items[0]
+    sent.length = 0
+    await post({
+      message: {
+        chat: { id: 63, type: 'private' },
+        from: { id: 63, first_name: 'ChannelBuyer' },
+        message_id: 902,
+        successful_payment: { total_amount: channelled.stars, currency: 'XTR', invoice_payload: `t${ID}:${channelled.id}` },
+      },
+    })
+    const copied = sent.find((c) => c.method === 'copyMessage')
+    assert.ok(copied, 'the buyer receives the file copied from the channel')
+    assert.equal(copied.body.chat_id, 63, 'the copy lands in the buyer’s chat')
+    assert.equal(copied.body.from_chat_id, -1004308164857)
+    assert.equal(copied.body.message_id, 7)
+    assert.ok(texts().some((t) => t.includes('تم الاستلام تلقائياً')), 'the buyer is told delivery was automatic')
+    const ownerNote2 = texts().find((t) => t.includes('طلب مدفوع'))
+    assert.ok(ownerNote2, 'the owner is still notified of the paid order')
+
     // A donation still thanks the buyer and never touches product delivery.
     sent.length = 0
     await post({

@@ -63,6 +63,10 @@ type Item = {
   deliver?: {
     text?: string
     file?: { id: string; type: 'document' | 'photo' | 'video' | 'animation' | 'audio' | 'voice' }
+    /** Deliver by COPYING an existing message: the app's real home is a private
+     *  channel, not a 50MB-capped bot upload. copyMessage moves the file to the
+     *  buyer with the bot as sender, so a 524MB APK is deliverable. */
+    copyFrom?: { chat: number; message: number }
   }
 }
 
@@ -360,6 +364,18 @@ async function deliverItem(token: string, chat: number, item: Item) {
   const d = item.deliver
   if (!d) return false
   try {
+    if (d.copyFrom) {
+      // The channel is the source of truth: the buyer gets the same bytes the
+      // channel holds, and an updated upload there flows to every future buyer.
+      const r = await tg(token, 'copyMessage', {
+        chat_id: chat,
+        from_chat_id: d.copyFrom.chat,
+        message_id: d.copyFrom.message,
+      })
+      if (!r.ok) console.error(`[deliver] copyMessage failed for item ${item.id}: ${r.description}`)
+      await send(token, chat, `🎁 <b>${esc(item.title)}</b>\n\n✅ تم الاستلام تلقائياً بعد الدفع. شكراً لك!`).catch(() => undefined)
+      return r.ok
+    }
     if (d.file) {
       await tg(token, FILE_METHOD[d.file.type] ?? 'sendDocument', {
         chat_id: chat,
@@ -1952,6 +1968,7 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
         `الاستخدام:\n` +
         `• نص/كود/رابط: <code>/deliver رقم_المنتج المحتوى</code>\n` +
         `• ملف: ردّ على الملف بـ <code>/deliver رقم_المنتج</code>\n` +
+        `• من رسالة في قناة: <code>/deliver رقم_المنتج https://t.me/c/…/7</code>\n` +
         `• إلغاء: <code>/deliver رقم_المنتج -</code>\n\n` +
         `أرقام المنتجات: <code>/items</code>`))
     }
@@ -1967,6 +1984,23 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
       else if (src.photo?.length) attached = { id: src.photo.at(-1).file_id, type: 'photo' }
     }
     const secret = secretParts.join(' ').trim()
+    // رابط رسالة قناة: t.me/c/<internal id>/<message id> — المصدر يُنسخ لكل مشترٍ،
+    // فلا حدّ حجم (APK بـ524MB يتسلّم كاملاً) ولا رفع عبر البوت.
+    const link = secret.match(/^https?:\/\/t\.me\/c\/(\d+)\/(\d+)/i)
+    if (link) {
+      const source = { chat: Number(`-100${link[1]}`), message: Number(link[2]) }
+      const probe = await tg(await open(env, cfg.token), 'copyMessage', {
+        chat_id: cfg.owner,
+        from_chat_id: source.chat,
+        message_id: source.message,
+      })
+      if (!probe.ok) {
+        return void (await say(`⚠️ تعذّر قراءة الرسالة من القناة (${probe.description || 'خطأ'}).\n\nتأكد أن البوت مُضاف إلى القناة، وأن الرابط يشير إلى رسالة تحمل الملف (وليس رسالة خدمة).`))
+      }
+      it.deliver = { ...(it.deliver ?? {}), copyFrom: source }
+      await save(env, cfg)
+      return void (await say(`✅ سيُرسل «${esc(it.title)}» تلقائياً بكل مشترٍ — منسوخاً من القناة.\n\nأرسلت لك نسخة تجريبية الآن لتتأكد أنها الملف الصحيح.`))
+    }
     if (attached) {
       it.deliver = { ...(it.deliver ?? {}), file: attached }
       await save(env, cfg)
