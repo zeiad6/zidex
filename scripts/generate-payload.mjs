@@ -14,6 +14,16 @@ const sealedToken = await sealToken(BOTS_KEY, BOT_TOKEN)
 
 const catalog = JSON.parse(readFileSync('public/store/catalog.json', 'utf8'))
 
+// The private storage channel (owner's channel, this bot added as admin). Its bot-API id is
+// `-100` + the number in a t.me/c/<number>/<msg> link. Recorded as filesChannel so the bot
+// trusts it; copyMessage auth is Telegram-side (the bot must stay an admin there).
+const STORAGE_CHANNEL = { id: -1003712432124, title: 'ZeidexSoft' }
+// Auto-delivery: a product whose SKU is here ships the instant the buyer pays, by copying a
+// channel message to them (copyMessage — the file's real home, past the 50MB bot-upload cap).
+const DELIVER_BY_SKU = {
+  'aifake-pro': { copyFrom: { chat: STORAGE_CHANNEL.id, message: 25 } },
+}
+
 // The storefront sells the WHOLE catalog, not just the three store-bot plans. Each catalog
 // category becomes a browsable section so the menu can deep-link into it, and every product
 // carries its feature list, USD price, demo and post-purchase steps into the bot.
@@ -53,6 +63,8 @@ const items = products.map((p, idx) => {
     ...(typeof p.usd === 'number' && p.usd > 0 ? { usd: p.usd } : {}),
     ...(typeof p.demo === 'string' && p.demo ? { demo: p.demo } : {}),
     ...(Array.isArray(p.after) && p.after.length ? { after: p.after } : {}),
+    // Instant auto-delivery for products bound above (e.g. the AiFake Pro APK).
+    ...(typeof p.sku === 'string' && DELIVER_BY_SKU[p.sku] ? { deliver: DELIVER_BY_SKU[p.sku] } : {}),
   }
 })
 
@@ -88,7 +100,16 @@ const cfg = {
   stars: 0,
   created: new Date().toISOString(),
   plan: 'paid',
+  filesChannel: STORAGE_CHANNEL,
 }
+
+// Money-path guard: every SKU bound for auto-delivery must carry its deliver block, and the
+// storage channel must be recorded — a silent drop here means a paying buyer gets nothing.
+for (const sku of Object.keys(DELIVER_BY_SKU)) {
+  const it = cfg.items.find((i) => i.sku === sku)
+  if (!it?.deliver?.copyFrom) throw new Error(`payload: ${sku} lost its auto-delivery binding`)
+}
+if (!cfg.filesChannel?.id) throw new Error('payload: storage channel not recorded')
 
 writeFileSync('payload.json', JSON.stringify(cfg))
 console.log('payload.json written — webhook secret derived with tg: prefix (48 chars), matching worker/bots.ts.')
