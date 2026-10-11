@@ -22,6 +22,9 @@ const CATEGORY_SECTIONS = {
   types: { id: 2, name: '🧩 بوتات متخصصة وأنظمة أتمتة' },
   channel: { id: 3, name: '📣 خدمات القنوات والتسويق' },
   sites: { id: 4, name: '🌐 قوالب المتاجر الجاهزة' },
+  // قسم التطبيقات: AiFake Pro يُباع كتطبيق أندرويد (ملف APK) لا كترخيص.
+  // بدونه كان المنتج يسقط في section=undefined فلا يظهر في أي قائمة بالبوت.
+  apps: { id: 5, name: '📱 تطبيقات جاهزة' },
 }
 // Stable order: sections follow this list; items follow the catalog order within each.
 const products = [...catalog.products].sort((a, b) => {

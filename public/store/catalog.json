@@ -757,8 +757,7 @@
       "stars": 2250,
       "category": "apps",
       "monthly": false,
-      "featured": false,
-      "soon": true,
+      "featured": true,
       "usd": 30,
       "image": "/img/aifake-1.webp",
       "features": [

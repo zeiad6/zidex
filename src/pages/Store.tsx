@@ -40,6 +40,7 @@ export default function Store() {
 
   const bots = catalog?.products.filter((p) => p.category === 'bots') ?? []
   const types = catalog?.products.filter((p) => p.category === 'types') ?? []
+  const apps = catalog?.products.filter((p) => p.category === 'apps') ?? []
   const services = catalog?.products.filter((p) => p.category === 'channel') ?? []
   const pro = bots.find((p) => p.featured) ?? bots[0]
 
@@ -133,6 +134,31 @@ export default function Store() {
             </div>
           )}
         </StoreSection>
+
+        {catalog && apps.length ? (
+          <StoreSection
+            id="shop-apps"
+            title={t('تطبيقات جاهزة', 'Ready-made apps')}
+            subtitle={t(
+              'تطبيقات تُشترى مرة واحدة وتُسلَّم كملف — لا بوت ولا اشتراك. ادفع بنجوم تيليجرام أو بالدولار، ويصلك الملف في نفس المحادثة.',
+              'Apps bought once and delivered as a file — no bot, no subscription. Pay in Telegram Stars or in USD, and the file arrives in the same chat.',
+            )}
+            action={
+              <SweepLink href={MINI_APP_PATH} className="text-accent flex items-center gap-1.5 text-[13px] font-bold">
+                <ShoppingBag className="size-4" aria-hidden="true" />
+                {t('نسخة تطبيق تيليجرام المصغّر', 'Telegram Mini App version')}
+              </SweepLink>
+            }
+          >
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {apps.map((p, i) => (
+                <Reveal key={p.sku} delay={Math.min(i * 0.05, 0.2)} className="h-full">
+                  <PackageCard product={p} catalog={catalog} />
+                </Reveal>
+              ))}
+            </div>
+          </StoreSection>
+        ) : null}
 
         {catalog && types.length ? (
           <StoreSection

@@ -10,7 +10,7 @@
 //   • other same-origin GETs (the shop catalogue, images): network-first with the
 //     last copy as fallback — fresh whenever online, never invented when not.
 // Bump CACHE_VERSION to retire every stored copy at once.
-const CACHE_VERSION = 'v1'
+const CACHE_VERSION = 'v2'
 const CACHE = `zeidex-${CACHE_VERSION}`
 // Extensionless on purpose: Cloudflare's assets "pretty URLs" 307 /offline.html
 // to /offline, and the offline fallback must be a redirect-free, cacheable hit.
