@@ -427,7 +427,7 @@ function useKuraimi() {
   return rate
 }
 
-type KuraimiResult = { refno: string; status: 'charging' | 'paid' | 'failed' | 'unknown'; yer: number; code?: string | null; message?: string | null }
+type KuraimiResult = { refno: string; status: 'charging' | 'paid' | 'failed' | 'unknown'; yer: number; code?: string | null; claim?: string | null; message?: string | null }
 
 function KuraimiPanel({ product, rate }: { product: StoreProduct; rate: number }) {
   const { t } = useI18n()
@@ -489,9 +489,11 @@ function KuraimiPanel({ product, rate }: { product: StoreProduct; rate: number }
     return (
       <Notice icon={<CircleCheck className="size-5 text-emerald-600 dark:text-emerald-300" aria-hidden="true" />}>
         {t(`تم الدفع (${result.refno}).`, `Paid (${result.refno}).`)}{' '}
-        {result.code
-          ? <><br />{t('مفتاح الترخيص / كود التفعيل:', 'Your license key / activation code:')} <code dir="ltr" className="font-mono font-bold select-all bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">{result.code}</code></>
-          : t('سيتواصل معك المشرف لتسليم طلبك.', 'An admin will contact you to deliver your order.')}
+        {result.claim
+          ? <><br />{t('استلم حزمة التطبيق (APK) عبر البوت:', 'Get your app package (APK) through the bot:')}{' '}<a href={result.claim} target="_blank" rel="noopener noreferrer" className="font-bold underline underline-offset-2 text-emerald-700 dark:text-emerald-300">{t('📱 استلام التطبيق الآن', '📱 Receive the app now')}</a></>
+          : result.code
+            ? <><br />{t('مفتاح الترخيص / كود التفعيل:', 'Your license key / activation code:')} <code dir="ltr" className="font-mono font-bold select-all bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">{result.code}</code></>
+            : t('سيتواصل معك المشرف لتسليم طلبك.', 'An admin will contact you to deliver your order.')}
       </Notice>
     )
   }

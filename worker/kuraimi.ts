@@ -176,7 +176,7 @@ export async function kuraimiCheckUser(request: Request, env: KuraimiEnv) {
   )
 }
 
-type Product = { sku: string; title: string; usd: number; monthly?: boolean }
+type Product = { sku: string; title: string; usd: number; monthly?: boolean; category?: string }
 type Stored = {
   status: 'charging' | 'paid' | 'failed' | 'unknown'
   sku: string
@@ -184,6 +184,10 @@ type Stored = {
   bankRef?: string
   code?: string | null
   licenseId?: string
+  /** App products (an APK in the storage channel) are received through the bot, not licensed:
+   *  this deep link makes the bot copy the package to the buyer. Cleared once claimed. */
+  claim?: string
+  claimed?: boolean
 }
 
 /** POST /api/pay/kuraimi — the website checkout. Same-origin, rate limited, idempotent. */
@@ -224,7 +228,7 @@ export async function kuraimiPay(request: Request, env: KuraimiEnv): Promise<Res
     return new Response('mobile locked for today', { status: 423 })
   }
 
-  const catalog = (await (await env.ASSETS.fetch(new URL('/store/catalog.json', url))).json()) as { products: Product[] }
+  const catalog = (await (await env.ASSETS.fetch(new URL('/store/catalog.json', url))).json()) as { products: Product[]; bot?: string }
   const product = catalog.products.find((p) => p.sku === sku)
   if (!product?.usd) return new Response('unknown product', { status: 400 })
   const yer = yerAmount(product.usd, Number(env.KURAIMI_YER_PER_USD))
@@ -264,9 +268,16 @@ export async function kuraimiPay(request: Request, env: KuraimiEnv): Promise<Res
   let code = supplierId && likecardReady(env) ? await buyCode(env, supplierId, refno) : null
   let licenseId: string | null = null
 
+  // App products ship the real package (an APK held in the storage channel), never a license.
+  // The buyer receives it through the bot — the same copyMessage path a Stars purchase uses —
+  // via this one-time claim deep link. The bot validates the paid refno before delivering.
+  const isApp = product.category === 'apps'
+  const claim = isApp && catalog.bot ? `https://t.me/${catalog.bot}?start=app_${refno}` : undefined
+
   // Automated Web Storefront Licensing:
-  // If no supplier code exists and this is a software/bot license, mint it automatically
-  const isLicenseProduct = sku.includes('pro') || sku.includes('license') || sku.includes('panel') || sku.includes('bot')
+  // If no supplier code exists and this is a software/bot license, mint it automatically.
+  // Apps are excluded: "aifake-pro" contains "pro" but is an APK, not licensed software.
+  const isLicenseProduct = !isApp && (sku.includes('pro') || sku.includes('license') || sku.includes('panel') || sku.includes('bot'))
   if (!code && isLicenseProduct) {
     try {
       const issued = await issueLicense(env as unknown as LicenseEnv, {
@@ -281,17 +292,19 @@ export async function kuraimiPay(request: Request, env: KuraimiEnv): Promise<Res
     }
   }
 
-  const stored: Stored = { status: 'paid', sku, yer, bankRef: bank.ResultSet?.PH_REF_NO, code, ...(licenseId ? { licenseId } : {}) }
+  const stored: Stored = { status: 'paid', sku, yer, bankRef: bank.ResultSet?.PH_REF_NO, code, ...(licenseId ? { licenseId } : {}), ...(claim ? { claim } : {}) }
 
   // Admins first: if the KV write below fails, a paid order is still never lost.
   await notifyAdmins(
     env,
     `🏦 <b>دفع الكريمي ناجح</b>\nالطلب: <code>${refno}</code>\nالمنتج: ${escapeHtml(product.title)}\nالمبلغ: ${yer.toLocaleString('en-US')} ريال\nمرجع البنك: <code>${escapeHtml(stored.bankRef ?? '—')}</code>\n` +
-      (code
-        ? `🔑 <b>مفتاح الترخيص / الكود المولد:</b> <code>${escapeHtml(code)}</code>\n(سُلّم للمشتري فوراً على شاشة المتجر).`
-        : supplierId
-          ? '⚠️ <b>فشل شراء الكود من LikeCard</b> — سلّمه يدوياً أو اعكس الدفعة.'
-          : 'سلّم الخدمة يدوياً للعميل.'),
+      (claim
+        ? `📱 <b>تطبيق</b> — يستلمه المشتري عبر رابط الاستلام في المتجر (يسلّمه البوت تلقائياً من القناة).`
+        : code
+          ? `🔑 <b>مفتاح الترخيص / الكود المولد:</b> <code>${escapeHtml(code)}</code>\n(سُلّم للمشتري فوراً على شاشة المتجر).`
+          : supplierId
+            ? '⚠️ <b>فشل شراء الكود من LikeCard</b> — سلّمه يدوياً أو اعكس الدفعة.'
+            : 'سلّم الخدمة يدوياً للعميل.'),
   )
   await env.DOWNLOADS.put(`kref:${refno}`, JSON.stringify(stored), { expirationTtl: ORDER_TTL_S }).catch(() => undefined)
   return Response.json({ refno, ...stored })

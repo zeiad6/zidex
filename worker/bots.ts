@@ -1539,7 +1539,30 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     // to land on the bare welcome, losing the tap's whole context. They now land on the
     // product's own checkout view, exactly like the 🛍 المنتجات button does.
     const startArg = text.slice(6).trim()
-    if (startArg.startsWith('buy_')) {
+    if (startArg.startsWith('app_')) {
+      // A paid web (Kuraimi) app order redeems its package here: validate the refno against the
+      // stored order, then copy the APK from the storage channel — the same delivery a Stars
+      // purchase gets. The refno is the buyer's paid receipt; a license is never involved.
+      const refno = startArg.slice(4)
+      const raw = /^ZX[A-Z0-9]{14}$/.test(refno) ? await env.DOWNLOADS.get(`kref:${refno}`) : null
+      const order = raw ? (JSON.parse(raw) as { status?: string; sku?: string; claimed?: boolean }) : null
+      if (!order || order.status !== 'paid') {
+        return void (await send(token, chat, '⚠️ لم نجد طلباً مدفوعاً بهذا الرابط. إن كنت دفعت للتو فانتظر تأكيد البنك ثم أعد فتح الرابط.'))
+      }
+      const item = order.sku ? cfg.items.find((i) => i.sku === order.sku) : undefined
+      if (!item?.deliver) {
+        return void (await send(token, chat, '📬 طلبك مدفوع — سيسلّمك المالك التطبيق قريباً.'))
+      }
+      const delivered = await deliverItem(token, chat, item)
+      if (delivered && !order.claimed) {
+        await env.DOWNLOADS.put(`kref:${refno}`, JSON.stringify({ ...order, claimed: true }), { expirationTtl: 90 * 24 * 3600 }).catch(() => undefined)
+      }
+      if (!isOwner(uid) && uid && !cfg.users.includes(uid) && cfg.users.length < MAX_USERS) {
+        cfg.users.push(uid)
+        await save(env, cfg).catch(() => undefined)
+      }
+      return
+    } else if (startArg.startsWith('buy_')) {
       const item = itemBySku(cfg, startArg.slice(4))
       if (item) return void (await sendBuyCard(token, chat, cfg, item, originOf(env)))
     } else if (startArg.startsWith('demo_')) {

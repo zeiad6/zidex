@@ -17,7 +17,13 @@ const kv = () => {
   const m = new Map()
   return { get: async (key) => m.get(key) ?? null, put: async (key, v) => void m.set(key, v), m }
 }
-const catalog = { products: [{ sku: 'pubg-660', title: 'PUBG 660 UC', usd: 10 }] }
+const catalog = {
+  bot: 'thebot',
+  products: [
+    { sku: 'pubg-660', title: 'PUBG 660 UC', usd: 10 },
+    { sku: 'aifake-pro', title: 'AiFake Pro', usd: 30, category: 'apps' },
+  ],
+}
 const ORIGIN = 'https://zeidexsoft.com'
 const env = (over = {}) => ({
   DOWNLOADS: kv(),
@@ -38,7 +44,8 @@ globalThis.fetch = async (url, init) => {
   calls.push(String(url))
   if (String(url).includes('SendPayment')) {
     const sent = JSON.parse(init.body)
-    assert.equal(sent.AMOUNT, 5300); assert.equal(sent.CRCY, 'YER'); assert.equal(sent.PINPASS, btoa('1234'))
+    assert.ok(sent.AMOUNT === 5300 || sent.AMOUNT === 15900, `unexpected AMOUNT ${sent.AMOUNT}`)
+    assert.equal(sent.CRCY, 'YER'); assert.equal(sent.PINPASS, btoa('1234'))
     return new Response(JSON.stringify(globalThis.bankReply ?? { Code: 1, ResultSet: { PH_REF_NO: 'PH1' } }))
   }
   if (String(url).includes('create_order')) {
@@ -98,4 +105,13 @@ globalThis.fetch = realFetch
 // 5. Bad input never reaches the bank.
 assert.equal((await pay(env(), { ...order, pin: '12' })).status, 400)
 assert.equal(k.yerAmount(10.01, 530), 5306)
+
+// 6. An app product (aifake-pro) is delivered as a package, never licensed: the response
+//    carries a bot claim deep link and no license code, even though the sku contains "pro".
+globalThis.bankReply = { Code: 1, ResultSet: { PH_REF_NO: 'PH2' } }
+const app = await (await pay(env(), { sku: 'aifake-pro', mobile: '771234567', pin: '1234', idempotency_key: 'h'.repeat(32) })).json()
+assert.equal(app.status, 'paid', 'the app order is paid')
+assert.ok(!app.code, 'an app must not mint a license code')
+assert.ok(!app.licenseId, 'an app must not create a license')
+assert.equal(app.claim, `https://t.me/thebot?start=app_${app.refno}`, 'an app returns a bot claim deep link')
 console.log('kuraimi: all checks passed')

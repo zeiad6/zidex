@@ -1970,4 +1970,47 @@ assert.equal(store.get('tb:123456789'), undefined)
   assert.equal(JSON.parse(store.get(`tb:${VID}`)).users.length, 2, 'unique customers stay distinct from visits')
 }
 
+// Channel auto-delivery (the AiFake Pro APK path): a paid order for an item bound with
+// deliver.copyFrom copies that channel message to the buyer — the real file — and must never
+// fall back to the "the owner will contact you" post.
+{
+  const made = await (await admin('POST', '/admin/bots', { token: '444444444:' + 'D'.repeat(35), owner_id: 13 })).json()
+  const AID = made.bot_id
+  const asecret = JSON.parse(store.get(`tb:${AID}`)).secret
+  const seed = JSON.parse(store.get(`tb:${AID}`))
+  const CHAN = -1003712432124, MSG = 25
+  seed.items = [{ id: 20, title: 'AiFake Pro', stars: 2250, desc: 'APK', section: 5, usd: 30, deliver: { copyFrom: { chat: CHAN, message: MSG } } }]
+  store.set(`tb:${AID}`, JSON.stringify(seed))
+  b.configCache.clear()
+  calls.length = 0
+  await b.botWebhook(new Request(`https://zeidexsoft.com/tg/${AID}`, { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': asecret }, body: JSON.stringify({ message: { chat: { id: 70, type: 'private' }, from: { id: 70, first_name: 'B' }, message_id: 9, successful_payment: { total_amount: 2250, currency: 'XTR', invoice_payload: `t${AID}:20` } } }) }), env, String(AID))
+  const copy = calls.find((c) => c.method === 'copyMessage')
+  assert.ok(copy, 'a paid AiFake order copies the channel message (the APK), not a text post')
+  assert.equal(copy.body.from_chat_id, CHAN, 'the APK is copied from the storage channel')
+  assert.equal(copy.body.message_id, MSG, 'the APK is copied from the bound message')
+  assert.ok(copy.body.chat_id === 70, 'the APK goes to the buyer')
+  assert.ok(!calls.some((c) => c.method === 'sendMessage' && /سيتواصل معك المالك/.test(c.body.text || '')),
+    'auto-delivery must not fall back to the manual-contact post')
+
+  // Web (Kuraimi) app claim: /start app_<refno> for a paid app order copies the APK from the
+  // channel, exactly like the Stars path — and an unpaid/unknown refno delivers nothing.
+  const REF = 'ZX' + 'A1B2C3D4E5F6A7'
+  await env.DOWNLOADS.put(`kref:${REF}`, JSON.stringify({ status: 'paid', sku: 'aifake-pro' }))
+  // The item needs its sku so the claim can map the paid order to it.
+  const withSku = JSON.parse(store.get(`tb:${AID}`))
+  withSku.items[0].sku = 'aifake-pro'
+  store.set(`tb:${AID}`, JSON.stringify(withSku))
+  b.configCache.clear()
+  calls.length = 0
+  const claimStart = (ref, uid = 71) =>
+    b.botWebhook(new Request(`https://zeidexsoft.com/tg/${AID}`, { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': asecret }, body: JSON.stringify({ message: { chat: { id: uid, type: 'private' }, from: { id: uid, first_name: 'W' }, text: `/start app_${ref}` } }) }), env, String(AID))
+  await claimStart(REF)
+  const claimCopy = calls.find((c) => c.method === 'copyMessage')
+  assert.ok(claimCopy && claimCopy.body.message_id === MSG, 'a paid app claim copies the channel APK to the buyer')
+  assert.equal(JSON.parse(await env.DOWNLOADS.get(`kref:${REF}`)).claimed, true, 'a delivered claim is marked claimed')
+  calls.length = 0
+  await claimStart('ZX' + '000000000000NO')
+  assert.ok(!calls.some((c) => c.method === 'copyMessage'), 'an unknown refno delivers nothing')
+}
+
 console.log('hosted bots: all checks passed')
