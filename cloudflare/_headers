@@ -46,3 +46,17 @@
   ! Content-Security-Policy
   ! X-Frame-Options
   Content-Security-Policy: default-src 'self'; script-src 'self' https://telegram.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'self' https://web.telegram.org; base-uri 'self'; object-src 'none'; form-action 'none'
+
+# The control-panel Mini App (/panel/): same deal as the storefront — it opens inside
+# Telegram, loads the official SDK, and answers same-origin /api/dash/<id> calls.
+/panel/*
+  ! Content-Security-Policy
+  ! X-Frame-Options
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://telegram.org; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'self' https://web.telegram.org https://*.telegram.org https://t.me; base-uri 'none'; object-src 'none'; form-action 'none'
+
+# The bot interfaces Mini App (/bot-suite/): identical — Telegram frames it and it
+# loads the SDK; without this block the default CSP above would block both.
+/bot-suite/*
+  ! Content-Security-Policy
+  ! X-Frame-Options
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://telegram.org; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'self' https://web.telegram.org https://*.telegram.org https://t.me; base-uri 'none'; object-src 'none'; form-action 'none'

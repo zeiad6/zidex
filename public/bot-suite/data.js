@@ -35,11 +35,10 @@ export const BOTS = [
                 from: 'bot',
                 text: { ar: 'اختر قسماً:', en: 'Pick a section:' },
                 replies: [
-                    { label: { ar: '🤖 بوتات', en: '🤖 Bots' }, to: 1 },
+                    { label: { ar: '🤖 بوتات', en: '🤖 Bots' }, to: 2 },
                     { label: { ar: '🧩 أنظمة', en: '🧩 Systems' }, to: 2 },
                 ],
             },
-            { from: 'user', text: { ar: '🤖 بوتات', en: '🤖 Bots' } },
             {
                 from: 'bot',
                 text: { ar: 'بوت المتجر الذكي — 1750 نجمة ⭐', en: 'Smart Store Bot — 1750 Stars ⭐' },
@@ -90,11 +89,10 @@ export const BOTS = [
                 from: 'bot',
                 text: { ar: 'اختر الاشتراك الشهري:', en: 'Pick the monthly plan:' },
                 replies: [
-                    { label: { ar: '⭐ 750 شهرياً', en: '⭐ 750 monthly' }, to: 1 },
-                    { label: { ar: 'رجوع', en: 'Back' }, to: 0 },
+                    { label: { ar: '⭐ 750 شهرياً', en: '⭐ 750 monthly' }, to: 3 },
+                    { label: { ar: 'رجوع', en: 'Back' }, to: 1 },
                 ],
             },
-            { from: 'user', text: { ar: '⭐ 750 شهرياً', en: '⭐ 750 monthly' } },
             {
                 from: 'bot',
                 text: { ar: 'تم الاشتراك — يتجدد تلقائياً ويمكنك الإلغاء من إعدادات تيليجرام.', en: 'Subscribed — renews automatically; cancel any time from Telegram settings.' },
@@ -139,11 +137,11 @@ export const BOTS = [
                 from: 'bot',
                 text: { ar: 'آخر نسخة احتياطية 02:14 — استعادة بضغطة.', en: 'Last backup 02:14 — restore with one tap.' },
                 replies: [
-                    { label: { ar: 'تجديد 30 يوماً', en: 'Renew 30 days' }, to: 1 },
-                    { label: { ar: 'اطلب نسخة الآن', en: 'Backup now' }, to: 0 },
+                    { label: { ar: 'تجديد 30 يوماً', en: 'Renew 30 days' }, to: 3 },
+                    { label: { ar: 'اطلب نسخة الآن', en: 'Backup now' }, to: 2 },
                 ],
             },
-            { from: 'user', text: { ar: 'تجديد 30 يوماً', en: 'Renew 30 days' } },
+            { from: 'bot', text: { ar: 'جاري أخذ نسخة احتياطية… ✅ حُفظت 02:41.', en: 'Taking a backup… ✅ saved at 02:41.' } },
             { from: 'bot', text: { ar: 'تم التجديد ⭐ 750 — إيصال الدفع في المحادثة.', en: 'Renewed ⭐ 750 — the receipt is in this chat.' } },
         ],
     },
@@ -186,11 +184,15 @@ export const BOTS = [
                 from: 'bot',
                 text: { ar: 'اختر إجابتك:', en: 'Pick your answer:' },
                 replies: [
-                    { label: { ar: '11', en: '11' }, to: 1 },
-                    { label: { ar: '12', en: '12' }, to: 2 },
+                    { label: { ar: '11', en: '11' }, to: 2 },
+                    { label: { ar: '12', en: '12' }, to: 3 },
                 ],
             },
-            { from: 'user', text: { ar: '12', en: '12' } },
+            {
+                from: 'bot',
+                text: { ar: 'إجابة خاطئة ❌ أُخرجت من المجموعة.', en: 'Wrong answer ❌ you were removed from the group.' },
+                replies: [{ label: { ar: '🔄 أعد المحاولة', en: '🔄 Try again' }, to: 1 }],
+            },
             { from: 'bot', text: { ar: 'تم التحقق ✅ أهلاً بك في المجموعة.', en: 'Verified ✅ welcome to the group.' } },
         ],
     },
@@ -228,15 +230,13 @@ export const BOTS = [
                 text: { ar: 'كيف أساعدك؟ اختر سؤالاً:', en: 'How can I help? Pick a question:' },
                 replies: [
                     { label: { ar: 'كيف أدفع؟', en: 'How do I pay?' }, to: 1 },
-                    { label: { ar: 'أريد موظفاً', en: 'I want a human' }, to: 3 },
+                    { label: { ar: 'أريد موظفاً', en: 'I want a human' }, to: 2 },
                 ],
             },
-            { from: 'user', text: { ar: 'كيف أدفع؟', en: 'How do I pay?' } },
             {
                 from: 'bot',
                 text: { ar: 'الدفع بنجوم تيليجرام ⭐ بلا بطاقة، أو TON وUSDT وكريمي من الموقع.', en: 'Pay with Telegram Stars ⭐ without a card, or TON, USDT and Kuraimi on the site.' },
             },
-            { from: 'user', text: { ar: 'أريد موظفاً', en: 'I want a human' } },
             {
                 from: 'bot',
                 text: { ar: 'حوّلتك للموظف — تذكرتك:', en: 'Handed you to staff — your ticket:' },
@@ -281,20 +281,23 @@ export const BOTS = [
                     { label: { ar: 'زيارة', en: 'Visit' }, to: 1 },
                 ],
             },
-            { from: 'user', text: { ar: 'استشارة', en: 'Consultation' } },
             {
                 from: 'bot',
                 text: { ar: 'اختر الوقت:', en: 'Pick a time:' },
                 replies: [
                     { label: { ar: 'غداً 10:00', en: 'Tomorrow 10:00' }, to: 2 },
-                    { label: { ar: 'غداً 15:30', en: 'Tomorrow 15:30' }, to: 2 },
+                    { label: { ar: 'غداً 15:30', en: 'Tomorrow 15:30' }, to: 3 },
                 ],
             },
-            { from: 'user', text: { ar: 'غداً 10:00', en: 'Tomorrow 10:00' } },
             {
                 from: 'bot',
                 text: { ar: 'تم الحجز ✅ وسيصلك تذكير قبل الموعد.', en: 'Booked ✅ a reminder will reach you before the slot.' },
                 chip: { ar: 'موعد: غداً 10:00', en: 'Slot: tomorrow 10:00' },
+            },
+            {
+                from: 'bot',
+                text: { ar: 'تم الحجز ✅ وسيصلك تذكير قبل الموعد.', en: 'Booked ✅ a reminder will reach you before the slot.' },
+                chip: { ar: 'موعد: غداً 15:30', en: 'Slot: tomorrow 15:30' },
             },
         ],
     },
@@ -337,7 +340,24 @@ export const BOTS = [
                 text: { ar: 'تم الاشتراك ✅ هذا رابطك الخاص:', en: 'Subscribed ✅ here is your private link:' },
                 chip: { ar: 't.me/+AbC…', en: 't.me/+AbC…' },
             },
-            { from: 'bot', text: { ar: 'ينتهي اشتراكك بعد 30 يوماً، وسيصلك تنبيه قبل 3 أيام.', en: 'Your access ends in 30 days; you will be warned 3 days ahead.' } },
+            {
+                from: 'bot',
+                text: { ar: 'ينتهي اشتراكك بعد 30 يوماً. ماذا تريد أن تفعل؟', en: 'Your access ends in 30 days. What would you like to do?' },
+                replies: [
+                    { label: { ar: '🔄 جدّد الآن', en: '🔄 Renew now' }, to: 3 },
+                    { label: { ar: '📅 ماذا يحدث عند الانتهاء', en: '📅 What happens at expiry' }, to: 4 },
+                ],
+            },
+            {
+                from: 'bot',
+                text: { ar: 'جدّدنا اشتراكك حتى 2026-11-10 ✅ والرابط نفسه بلا تغيير:', en: 'Renewed until 2026-11-10 ✅ the same link, unchanged:' },
+                chip: { ar: 'فاتورة تجديد ⭐ 750', en: 'Renewal invoice ⭐ 750' },
+            },
+            {
+                from: 'bot',
+                text: { ar: 'عند الانتهاء يخرجك البوت تلقائياً من القناة، ويصلك تنبيه قبل 3 أيام. ويمكنك العودة بأي وقت:', en: 'At expiry the bot removes you automatically, warns you 3 days ahead, and you can come back any time:' },
+                chip: { ar: 'إخراج تلقائي مضمّم', en: 'Auto-removal built in' },
+            },
         ],
     },
     {
@@ -378,9 +398,11 @@ export const BOTS = [
                     { label: { ar: 'الرياض', en: 'Riyadh' }, to: 2 },
                 ],
             },
-            { from: 'user', text: { ar: 'جدة', en: 'Jeddah' } },
-            { from: 'bot', text: { ar: 'إجابة خاطئة ❌ الصحيحة: الرياض.', en: 'Wrong ❌ the answer is Riyadh.' } },
-            { from: 'user', text: { ar: 'الرياض', en: 'Riyadh' } },
+            {
+                from: 'bot',
+                text: { ar: 'إجابة خاطئة ❌ — حاول مرة أخرى.', en: 'Wrong answer ❌ — try again.' },
+                replies: [{ label: { ar: '🔄 أعد المحاولة', en: '🔄 Try again' }, to: 0 }],
+            },
             {
                 from: 'bot',
                 text: { ar: 'صحيح ✅ +100 نقطة:', en: 'Correct ✅ +100 points:' },
@@ -423,7 +445,29 @@ export const BOTS = [
                 chip: { ar: 'المصدر: الأسعار.pdf', en: 'Source: prices.pdf' },
             },
             { from: 'user', text: { ar: 'وهل يوجد خصم جماعي؟', en: 'Is there a bulk discount?' } },
-            { from: 'bot', text: { ar: 'لا أجد هذا في معلوماتك — أحوّلك لموظف يجيبك.', en: 'I cannot find that in your data — handing you to staff.' } },
+            {
+                from: 'bot',
+                text: { ar: 'لا أجد هذا في معلوماتك. أُحوّلك لفريق الدعم الآن:', en: 'I cannot find that in your data. Handing you to support now:' },
+                chip: { ar: 'محادثة موظف 👤', en: 'Staff chat 👤' },
+            },
+            {
+                from: 'bot',
+                text: { ar: 'اسألني عن أي شيء في قاعدة معرفتك:', en: 'Ask me anything from your knowledge base:' },
+                replies: [
+                    { label: { ar: '🚚 ما مدة الشحن؟', en: '🚚 Shipping times?' }, to: 5 },
+                    { label: { ar: '↩️ سياسة الاسترجاع', en: '↩️ Return policy' }, to: 6 },
+                ],
+            },
+            {
+                from: 'bot',
+                text: { ar: 'الشحن 2–4 أيام داخل الرياض، و5–7 لبقية المدن — من دليل المنتج.', en: 'Shipping is 2–4 days within Riyadh and 5–7 to other cities — from the product guide.' },
+                chip: { ar: 'المصدر: دليل المنتج.docx', en: 'Source: product-guide.docx' },
+            },
+            {
+                from: 'bot',
+                text: { ar: 'الاسترجاع متاح 14 يوماً بشرط سلامة التغليف — من سياسة الاسترجاع.', en: 'Returns are open for 14 days while packaging is intact — from the return policy.' },
+                chip: { ar: 'المصدر: سياسة الاسترجاع.txt', en: 'Source: return-policy.txt' },
+            },
         ],
     },
     {
@@ -457,10 +501,23 @@ export const BOTS = [
         chat: [
             {
                 from: 'bot',
-                text: { ar: 'لوحة CRM: 12 بوتاً، 8412 عميلاً.', en: 'CRM console: 12 bots, 8412 contacts.' },
+                text: { ar: 'لوحة CRM: 12 بوتاً، 8412 عميلاً — كل بوتاتك تختار من هنا.', en: 'CRM console: 12 bots, 8412 contacts — every bot answers from here.' },
                 chip: { ar: 'عرض موحّد للعميل @sara', en: 'Unified view of @sara' },
+                replies: [
+                    { label: { ar: '👤 ملف العميل', en: '👤 Contact card' }, to: 1 },
+                    { label: { ar: '⏸️ أوقف بوتاً', en: '⏸️ Pause a bot' }, to: 2 },
+                ],
             },
-            { from: 'bot', text: { ar: 'كل محادثاتها في كل بوتاتك في بطاقة واحدة.', en: 'Every conversation across your bots in one card.' } },
+            {
+                from: 'bot',
+                text: { ar: 'ملف @sara: 5 طلبات، 3 محادثات، من بوتين:', en: '@sara: 5 orders, 3 chats, across two bots:' },
+                chip: { ar: 'متجر + دعم', en: 'Store + support' },
+            },
+            {
+                from: 'bot',
+                text: { ar: 'أوقفت بوت المجموعات مؤقتاً — شغّله من اللوحة بضغطة.', en: 'Group bot paused — resume it from the console in one tap.' },
+                chip: { ar: 'إيقاف مؤقت ✅', en: 'Paused ✅' },
+            },
         ],
     },
     {
@@ -495,8 +552,21 @@ export const BOTS = [
                 from: 'bot',
                 text: { ar: 'حدث: عميل جديد @sara — نُفّذ التدفق:', en: 'Event: new customer @sara — flow ran:' },
                 chip: { ar: 'Sheets ✅ Slack ✅ بريد ✅', en: 'Sheets ✅ Slack ✅ Email ✅' },
+                replies: [
+                    { label: { ar: '▶️ شغّل التدفق', en: '▶️ Run the flow' }, to: 1 },
+                    { label: { ar: '➕ أضف تدفقاً', en: '➕ Add a flow' }, to: 2 },
+                ],
             },
-            { from: 'bot', text: { ar: 'يمكنك إضافة التدفق من اللوحة بلا كود.', en: 'Add flows from the console without code.' } },
+            {
+                from: 'bot',
+                text: { ar: 'نُفّذ في 0.4 ثانية — بلا كود:', en: 'Ran in 0.4 seconds — no code:' },
+                chip: { ar: 'Sheets ✅ Slack ✅ بريد ✅', en: 'Sheets ✅ Slack ✅ Email ✅' },
+            },
+            {
+                from: 'bot',
+                text: { ar: 'تدفق جديد: طلب جديد → أضف صفاً في Sheets.', en: 'New flow: new order → append a row to Sheets.' },
+                chip: { ar: 'مُفعّل ✅', en: 'Active ✅' },
+            },
         ],
     },
     {
@@ -537,14 +607,18 @@ export const BOTS = [
                 from: 'bot',
                 text: { ar: 'اختر:', en: 'Pick:' },
                 replies: [
-                    { label: { ar: 'الأسعار', en: 'Prices' }, to: 1 },
+                    { label: { ar: 'الأسعار', en: 'Prices' }, to: 2 },
                     { label: { ar: 'تتبع طلبي', en: 'Track my order' }, to: 3 },
                 ],
             },
-            { from: 'user', text: { ar: 'الأسعار', en: 'Prices' } },
             {
                 from: 'bot',
                 text: { ar: 'علبة الضيافة 349 ر.س، سكّري 1كجم 189 ر.س — والطلب متاح أيضاً عبر تيليجرام.', en: 'Hospitality box SAR 349, Sukkari 1kg SAR 189 — ordering also works on Telegram.' },
+            },
+            {
+                from: 'bot',
+                text: { ar: 'طلبك في الطريق 🚚 — يوصل غداً قبل 6 مساءً:', en: 'Your order is on the way 🚚 — arriving tomorrow before 6 pm:' },
+                chip: { ar: 'تتبع: DUR-2931', en: 'Tracking: DUR-2931' },
             },
         ],
     },

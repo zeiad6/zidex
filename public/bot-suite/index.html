@@ -2,14 +2,17 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>واجهات البوتات — جرّب كل بوت قبل أن تشتري</title>
-    <meta name="description" content="واجهات رسومية تفاعلية لكل بوت معروض للبيع: محاكاة المحادثة، لوحة تحكم البوت، ولوحة تحكم موحّدة." />
-    <meta name="theme-color" content="#070b14" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'self'" />
+    <meta name="description" content="واجهات Mini App لكل بوت معروض للبيع: محاكاة المحادثة التفاعلية، لوحة تحكم البوت، ولوحة تحكم موحّدة — عربي وإنجليزي، ثيم نهاري وليلي." />
+    <meta name="theme-color" content="#f1f4fb" />
+    <!-- إطار تيليجرام فقط: Mini App يُفتح داخل iframe العميل، وغير ذلك لا يُضمن إطلاقاً. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self' https://telegram.org; img-src 'self' data:; font-src 'self'; connect-src 'self' https://telegram.org; form-action 'none'; base-uri 'none'; frame-ancestors 'self' https://web.telegram.org https://*.telegram.org https://t.me" />
     <meta name="referrer" content="no-referrer" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23070b14'/%3E%3Crect x='7' y='7' width='8' height='8' rx='2.5' fill='%2322d3ee'/%3E%3Crect x='17' y='7' width='8' height='8' rx='2.5' fill='%23818cf8'/%3E%3Crect x='7' y='17' width='8' height='8' rx='2.5' fill='%23f472b6'/%3E%3Crect x='17' y='17' width='8' height='8' rx='2.5' fill='%2334d399'/%3E%3C/svg%3E" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b1020'/%3E%3Crect x='7' y='7' width='8' height='8' rx='2.5' fill='%2322d3ee'/%3E%3Crect x='17' y='7' width='8' height='8' rx='2.5' fill='%23818cf8'/%3E%3Crect x='7' y='17' width='8' height='8' rx='2.5' fill='%23f472b6'/%3E%3Crect x='17' y='17' width='8' height='8' rx='2.5' fill='%2334d399'/%3E%3C/svg%3E" />
     <link rel="stylesheet" href="styles.css" />
+    <!-- SDK تيليجرام: سكربت كلاسيكي قبل الحزمة. إن فشل تحميله تعمل الواجهة في وضع المتصفح. -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script type="module" src="app.js" defer></script>
   </head>
   <body>
@@ -19,15 +22,13 @@
       <div class="container head-in">
         <a class="brand" href="#/">
           <span class="brand-mark" aria-hidden="true"></span>
-          <span data-i18n="brand">واجهات البوتات</span>
+          <span>واجهات البوتات<small>mini app</small></span>
         </a>
-        <nav class="nav">
-          <a href="#/" id="nav-gallery" data-nav="gallery" data-i18n="navGallery">كل الواجهات</a>
-          <a href="#/panel" id="nav-panel" data-nav="panel" data-i18n="navPanel">لوحة التحكم</a>
-        </nav>
+        <span class="head-chip" id="run-state"><i aria-hidden="true"></i><span data-i18n="inBrowser">تعمل في متصفحك</span></span>
         <div class="head-actions">
           <a class="btn ghosty sm" id="site-link" href="https://zeidexsoft.com/shop" target="_blank" rel="noopener" data-i18n="siteLink">زيارة المتجر</a>
-          <button class="btn ghosty" id="lang" type="button" data-i18n="langBtn">English</button>
+          <button class="btn icon" id="theme" type="button" aria-label="" title=""></button>
+          <button class="btn ghosty sm" id="lang" type="button" data-i18n="langBtn">English</button>
         </div>
       </div>
     </header>
@@ -38,21 +39,22 @@
         <div class="container hero">
           <span class="kicker" data-i18n="kicker">واجهات رسومية حقيقية</span>
           <h1 data-i18n="heroTitle">واجهة كل بوت…<br />كما يراها عميلك</h1>
-          <p class="hero-lead" data-i18n="heroLead">محاكاة تفاعلية لكل بوت معروض للبيع.</p>
+          <p class="hero-lead" data-i18n="heroLead"></p>
           <div class="hero-cta">
             <a class="btn primary" href="#/panel" data-i18n="heroCta">افتح لوحة التحكم</a>
+            <a class="btn ghosty" id="hero-store" href="https://zeidexsoft.com/shop" target="_blank" rel="noopener" data-i18n="siteLink">زيارة المتجر</a>
           </div>
           <div class="stats">
-            <div class="stat"><b data-count="12">0</b><span data-i18n="stat1">بوتاً جاهزاً</span></div>
-            <div class="stat"><b data-count="3">0</b><span data-i18n="stat2">سطحاً رسومياً</span></div>
-            <div class="stat"><b data-count="2">0</b><span data-i18n="stat3">لغةً مدعومة</span></div>
+            <div class="stat reveal"><b data-count="12">0</b><span data-i18n="stat1">بوتاً جاهزاً</span></div>
+            <div class="stat reveal"><b data-count="2">0</b><span data-i18n="stat2">ثيمين</span></div>
+            <div class="stat reveal"><b data-count="2">0</b><span data-i18n="stat3">لغةً مدعومة</span></div>
           </div>
         </div>
         <div class="container section">
           <div class="section-head">
             <div>
               <h2 id="gallery-title">واجهات البوتات</h2>
-              <p id="gallery-sub">بطاقة لكل بوت.</p>
+              <p id="gallery-sub"></p>
             </div>
           </div>
           <div class="grid" id="grid"></div>
@@ -62,11 +64,14 @@
       <!-- واجهة بوت واحد -->
       <section id="bot-view" hidden>
         <div class="container bot-head">
+          <div class="bot-avatar" id="bot-avatar" aria-hidden="true"></div>
           <div>
             <h1 id="view-title"></h1>
             <p class="view-sub" id="view-sub"></p>
           </div>
-          <a class="btn ghosty sm" href="#/" data-i18n="navGallery">كل الواجهات</a>
+          <div class="head-actions">
+            <a class="btn primary" id="bot-buy" href="#" target="_blank" rel="noopener"></a>
+          </div>
         </div>
         <div class="container bot-grid">
           <div class="col-chat">
@@ -87,6 +92,20 @@
         <div class="container section" id="panel-root"></div>
       </section>
     </main>
+
+    <!-- شريط التبويب السفلي — نمط Mini Apps -->
+    <nav class="tabbar" aria-label="التبويبات">
+      <div class="tabbar-in">
+        <button class="tab" id="tab-home" type="button" data-nav="gallery">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
+          <span data-i18n="tabHome">الرئيسية</span>
+        </button>
+        <button class="tab" id="tab-panel" type="button" data-nav="panel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
+          <span data-i18n="tabPanel">اللوحة</span>
+        </button>
+      </div>
+    </nav>
 
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 

@@ -130,7 +130,64 @@ type Cfg = {
   waGuests?: { phoneId: string; uid: number; token: string; secret: string; exp?: string; lastFrom?: string }[]
   /** Telegram ids that paid for the WhatsApp product: their guest link never expires. */
   waPaid?: number[]
+  /** Customers banned from the control panel (TMA): their messages are ignored by the bot
+   *  and they never receive a broadcast. A ban here is the panel's, never Telegram's. */
+  banned?: number[]
 }
+
+/** One customer message parked in the bot's inbox for the control panel to answer. */
+type InboxMsg = {
+  id: number
+  from: number
+  /** Display name at the time it arrived (Telegram's first_name). */
+  name?: string
+  text: string
+  at: number
+  /** The owner already answered this one from the panel (or from the chat with /reply). */
+  replied?: boolean
+}
+
+/** The panel's live feed, in its own KV key (not the bot record): customers' names and
+ *  the newest messages. Kept apart on purpose — message traffic is the only thing that
+ *  writes here, so the shop record's write profile (orders, /start, /add) is untouched,
+ *  and a read of the feed never costs a read of the shop. */
+type Feed = { contacts: Record<string, string>; inbox: InboxMsg[] }
+
+const feedKey = (id: number | string) => `feed:${id}`
+/** How many customer messages the inbox keeps. Old ones fall off the top; the panel
+ *  never shows more than a screen of conversations anyway. */
+const INBOX_MAX = 40
+/** Minimum gap between two feed writes for the same bot: 1 write/second per key is the
+ *  KV ceiling and the retired free tier's daily budget is finite, so the feed is
+ *  throttled. Only its copy of a message is dropped — the customer's answer still
+ *  goes out immediately, because searching never depends on the feed. */
+const INBOX_FLUSH_MS = 15_000
+const feedFlushAt = new Map<number, number>()
+
+const emptyFeed = (): Feed => ({ contacts: {}, inbox: [] })
+
+async function loadFeed(env: BotsEnv, id: number): Promise<Feed> {
+  const raw = await env.DOWNLOADS.get(feedKey(id))
+  if (!raw) return emptyFeed()
+  try {
+    const f = JSON.parse(raw) as Partial<Feed>
+    return { contacts: f.contacts ?? {}, inbox: f.inbox ?? [] }
+  } catch {
+    return emptyFeed()
+  }
+}
+
+async function saveFeed(env: BotsEnv, id: number, feed: Feed): Promise<void> {
+  await env.DOWNLOADS.put(feedKey(id), JSON.stringify(feed))
+}
+/** One broadcast run's ceiling — the panel pages through the list in batches, so the
+ *  cap is a safety rail against a mis-typed audience, not a throughput limit. */
+const BROADCAST_MAX = 2000
+/** Recipients sent per panel tick: small enough that one request never nears the
+ *  Worker's CPU limit, big enough that the progress bar moves visibly. */
+const BROADCAST_BATCH = 20
+/** Broadcast jobs live a day in KV — long enough to finish, short enough to not leak. */
+const BROADCAST_TTL = 86400
 
 const DEFAULT_ORIGIN = 'https://zeidexsoft.com'
 const originOf = (env: BotsEnv) => env.ORIGIN || DEFAULT_ORIGIN
@@ -393,6 +450,50 @@ export async function dashOk(env: BotsEnv, botId: string | number, code: string)
   if (!/^\d{1,12}$/.test(exp) || !mac) return false
   if (Number(exp) * 1000 < Date.now()) return false
   return safeEqual(mac, await dashMac(env, botId, Number(exp)))
+}
+
+const hex = (u: Uint8Array) => [...u].map((b) => b.toString(16).padStart(2, '0')).join('')
+
+/** Validates a Mini App's initData against THIS bot's own token and returns the user
+ *  it belongs to — or null. The check is Telegram's own recipe, so it is unforgeable
+ *  without the bot token (which only the Worker can read, sealed):
+ *
+ *    secret_key = HMAC_SHA256(key="WebAppData", msg=bot_token)
+ *    hash       = HMAC_SHA256(key=secret_key,   msg=data_check_string)
+ *
+ *  where data_check_string is every received field except `hash`, sorted, joined by
+ *  newlines. auth_date older than a day is refused: a leaked initData must not be a
+ *  permanent key. */
+export async function tmaUser(env: BotsEnv, cfg: Cfg, initData: string): Promise<{ id: number; name?: string } | null> {
+  if (!initData || initData.length > 4096) return null
+  const params = new URLSearchParams(initData)
+  const hash = params.get('hash') ?? ''
+  params.delete('hash')
+  if (!hash) return null
+  const check = [...params.entries()]
+    .map(([k, v]) => `${k}=${v}`)
+    .sort()
+    .join('\n')
+  const macOf = async (key: Uint8Array | string, msg: string) => {
+    const k = await crypto.subtle.importKey('raw', typeof key === 'string' ? new TextEncoder().encode(key) : key, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+    return new Uint8Array(await crypto.subtle.sign('HMAC', k, new TextEncoder().encode(msg)))
+  }
+  const token = await open(env, cfg.token)
+  const secret = await macOf('WebAppData', token)
+  const mine = hex(await macOf(secret, check))
+  if (!safeEqual(mine, hash.toLowerCase())) return null
+  const at = Number(params.get('auth_date') ?? 0)
+  if (!at || Date.now() - at * 1000 > 864e5) return null
+  let user: Record<string, unknown> = {}
+  try {
+    user = JSON.parse(params.get('user') ?? '{}') as Record<string, unknown>
+  } catch {
+    return null
+  }
+  const id = Number(user['id'] ?? 0)
+  if (!Number.isInteger(id) || id <= 0) return null
+  const name = typeof user['first_name'] === 'string' ? user['first_name'].slice(0, 40) : undefined
+  return { id, ...(name ? { name } : {}) }
 }
 
 export function safeEqual(a: string, b: string) {
@@ -665,7 +766,7 @@ async function trialBotProvision(env: BotsEnv, shopToken: string, chat: number, 
 
 const menu = { inline_keyboard: [[{ text: '🛍 المنتجات', callback_data: 't:items' }, { text: '❓ الأسئلة', callback_data: 't:faqs' }], [{ text: '💬 راسل المالك', callback_data: 't:contact' }]] }
 
-type KbButton = { text: string; callback_data?: string; url?: string }
+type KbButton = { text: string; callback_data?: string; url?: string; web_app?: { url: string } }
 /** The /start and "main menu" keyboard: one builder, so the two can never disagree. */
 function menuFor(env: BotsEnv, cfg: Cfg, uid?: number) {
   const rows: KbButton[][] = []
@@ -824,6 +925,9 @@ export async function botWebhook(request: Request, env: BotsEnv, id: string): Pr
   const record = cfg ?? (await load(env, id))
   if (!record) return new Response('ok')
   rememberOwner(record.id, record.owner)
+  // A customer the panel banned is invisible: no answer, no search, no smart reply.
+  // The owner is never bannable through this path — this is the panel's ban, not Telegram's.
+  if (from && !isOwner && (record.banned ?? []).includes(from.id)) return new Response('ok')
   try {
     await handle(env, record, await open(env, record.token), update)
   } catch {
@@ -1664,12 +1768,29 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     return
   }
 
-  // A customer's plain words ARE a query: the same matcher as /search, and never a KV write.
+  // A customer's plain words ARE a query: the same matcher as /search, and never a KV
+  // write — the search path reads, it never saves (see test-bots.mjs: search, catalog and
+  // help must cost zero writes). The support feed below is the one exception, and it is
+  // gated (paid only), throttled, and kept in its own key precisely so this stays true.
   // Non-owners only, and never a /command — an owner command or an unknown slash command
   // stays silent as before rather than being answered with "nothing found".
   if (uid && !isOwner(uid) && text && !text.startsWith('/')) {
     // The automation bridge hears every customer message — the CRM's live feed.
     await wfEvent(env, cfg, 'message', { user: { id: uid, name: m.from?.first_name }, text })
+    // The support feed is a paid record's luxury: a retired free shop spends no KV
+    // writes on a live chat it cannot open. Paid shops get the throttled feed — its
+    // own key, so nothing here ever writes the shop record.
+    if (!isFree(cfg)) {
+      const last = feedFlushAt.get(cfg.id) ?? 0
+      if (Date.now() - last > INBOX_FLUSH_MS) {
+        feedFlushAt.set(cfg.id, Date.now())
+        const feed = await loadFeed(env, cfg.id)
+        const name = typeof m.from?.first_name === 'string' ? m.from.first_name.slice(0, 40) : undefined
+        if (name && feed.contacts[String(uid)] !== name) feed.contacts = { ...feed.contacts, [String(uid)]: name }
+        feed.inbox = [...feed.inbox, { id: (feed.inbox.at(-1)?.id ?? 0) + 1, from: uid, ...(name ? { name } : {}), text: text.slice(0, 500), at: Date.now() }].slice(-INBOX_MAX)
+        await saveFeed(env, cfg.id, feed)
+      }
+    }
     const hit = searchKeys(cfg, text)
     const found = !!hit && (hit.items.length > 0 || hit.faqs.length > 0)
     if (!found && !isFree(cfg) && (await smartAnswer(env, token, chat, cfg, text))) return
@@ -1996,7 +2117,7 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     }
     return void (await adminBotProvision(env, token, chat, cfg.owner, candidate))
   } else if (cmd === 'admin') {
-    const adminRows = [
+    const adminRows: KbButton[][] = [
       [{ text: '🎛 اللوحة التفاعلية', callback_data: 'h:main' }],
       [{ text: '🎁 أخذ أي شيء من المتجر مجاناً (للأدمن)', callback_data: 't:adm_take_any' }],
       [{ text: '📦 قائمة المنتجات', callback_data: 't:adm_items' }, { text: '❓ الأسئلة الشائعة', callback_data: 't:adm_faqs' }],
@@ -2008,6 +2129,9 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
     // /admin alone is enough to find it — /web also mints a fresh one on demand.
     if (env.BOTS_KEY)
       adminRows.splice(1, 0, [{ text: `🌐 لوحة تحكم الويب (${DASH_TTL_DAYS} أيام)`, url: `${originOf(env)}/dash/#id=${cfg.id}&k=${await dashCode(env, cfg.id)}` }])
+    // The Mini App lives inside Telegram: same powers, no browser, no link to paste.
+    if (env.BOTS_KEY)
+      adminRows.splice(2, 0, [{ text: '🎛 اللوحة المصغّرة (داخل تيليجرام)', web_app: { url: `${originOf(env)}/panel/#id=${cfg.id}` } }])
     await send(token, chat,
       `<b>📊 لوحة تحكم المتجر (ZeidexSoft Admin)</b>\n\n` +
       `👥 العملاء النشطون: <b>${cfg.users.length}</b>\n` +
@@ -2100,6 +2224,28 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
       `<code>${originOf(env)}/dash/#id=${cfg.id}&amp;k=${code}</code>\n\n` +
       '<i>الرابط شخصي — لا تشاركه مع أحد. جديدها في أي وقت بإرسال /web من جديد.</i>',
       { reply_markup: { inline_keyboard: [[{ text: '🎛 افتح اللوحة الآن', url: `${originOf(env)}/dash/#id=${cfg.id}&k=${code}` }]] } }
+    )
+  } else if (cmd === 'tma' || cmd === 'miniapp') {
+    // اللوحة المصغّرة (Mini App): تعمل من داخل تيليجرام نفسها — لا متصفح خارجي.
+    // تُثبَّت كزر قائمة في محادثة المالك وحده (العملاء لا يرون الزر)، ويُفتح
+    // الزر مباشرة على اللوحة. المصادقة بتوقيع initData لا برابط يُنسخ.
+    if (!env.BOTS_KEY) return void (await say('⚠️ اللوحة المصغّرة غير مهيأة حالياً.'))
+    const url = `${originOf(env)}/panel/#id=${cfg.id}`
+    const r = await tg(await open(env, cfg.token), 'setChatMenuButton', {
+      chat_id: chat,
+      menu_button: { type: 'web_app', text: 'لوحة التحكم', web_app: { url } },
+    })
+    await send(token, chat,
+      '🎛 <b>لوحة التحكم المصغّرة (Mini App)</b>\n' +
+      '━━━━━━━━━━━━━━━━━━━━━\n\n' +
+      'تدير بوتك كاملاً من داخل تيليجرام — بلا متصفح خارجي:\n\n' +
+      '▫️ إحصاءات: العملاء، الطلبات، النجوم، الرسائل\n' +
+      '▫️ العملاء: بحث، حظر، ورفع الحظر\n' +
+      '▫️ الدعم الفني: رسائل العملاء والرد عليهم كأنك البوت\n' +
+      '▫️ إرسال جماعي لكل العملاء بشريط تقدّم\n' +
+      '▫️ الإعدادات: الترحيب، الإيقاف للصيانة، وزر القائمة\n\n' +
+      (r.ok ? '✅ ثبّتنا اللوحة كزر قائمة لهذه المحادثة — ستجدها أسفل الشاشة.' : '⚠️ تعذّر تثبيت زر القائمة — استخدم الزر بالأسفل للفتح المباشر.'),
+      { reply_markup: { inline_keyboard: [[{ text: '🎛 افتح اللوحة المصغّرة', web_app: { url } }]] } }
     )
   } else if (cmd === 'site') {
     await siteCommand(env, cfg, say, arg)
@@ -2933,17 +3079,35 @@ export async function botsDash(request: Request, env: BotsEnv, url: URL): Promis
   const parts = url.pathname.split('/').filter(Boolean) // ['api','dash',<id>,…action]
   const id = parts[2]
   if (!id || !/^\d{4,15}$/.test(id)) return new Response('bad id', { status: 400 })
+  const act = parts.slice(3) // 'session' | 'state' | 'items' | 'users' | 'inbox' | …
+  const NO_STORE: Record<string, string> = { 'cache-control': 'no-store' }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const body = () => request.json().catch(() => ({})) as Promise<Record<string, any>>
+
+  // ── جلسة الـMini App: توقيع تيليجرام نفسه مقابل رمز الدخول ──────────────
+  // أول نداء قبل أي مصادقة: العميل يرسل initData كما استلمها من تيليجرام، ونحن
+  // نتحقق منها بتوقيع توكن البوت نفسه. النجاح يمنح نفس رمز /web (7 أيام) — فتصير
+  // كل النقاط التالية على المسار المعتاد، ومصادقة واحدة فقط في النظام.
+  if (request.method === 'POST' && act[0] === 'session') {
+    const cfg = await load(env, id)
+    if (!cfg) return new Response('not found', { status: 404 })
+    const b = await body()
+    const user = await tmaUser(env, cfg, String(b.initData ?? ''))
+    if (!user || user.id !== cfg.owner) return new Response('forbidden', { status: 403, headers: NO_STORE })
+    return Response.json(
+      { ok: true, code: await dashCode(env, cfg.id), user, bot: { id: cfg.id, username: cfg.username } },
+      { headers: NO_STORE },
+    )
+  }
+
   const auth = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '')
   if (!auth) return new Response('forbidden', { status: 403 })
   if (!(await dashOk(env, id, auth))) return new Response('forbidden', { status: 403 })
   const cfg = await load(env, id)
   if (!cfg) return new Response('not found', { status: 404 })
+  const feed = await loadFeed(env, cfg.id)
 
-  const act = parts.slice(3) // 'state' | 'items' | 'items/<iid>' | 'deliver' | 'faqs' | …
-  const NO_STORE: Record<string, string> = { 'cache-control': 'no-store' }
   const bad = (msg: string) => new Response(msg, { status: 400, headers: NO_STORE })
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const body = () => request.json().catch(() => ({})) as Promise<Record<string, any>>
 
   // Read side: one call paints the whole dashboard; secrets (token, secret) never included.
   if (request.method === 'GET' && act[0] === 'state') {
@@ -2959,6 +3123,10 @@ export async function botsDash(request: Request, env: BotsEnv, url: URL): Promis
         sections: cfg.sections ?? [],
         faqs: cfg.faqs,
         files: (cfg.files ?? []).map((f) => ({ id: f.id, title: f.title, type: f.type })),
+        /** الـMini App يقرأ في نداء واحد: العملاء، المحظورون، وصندوق المحادثات.
+         *  الأسماء والصندوق من سجل feed المستقل — لا يمسّان سجل المتجر. */
+        users: cfg.users.map((u) => ({ id: u, name: feed.contacts[String(u)], banned: (cfg.banned ?? []).includes(u) })),
+        inbox: feed.inbox,
       },
       { headers: NO_STORE },
     )
@@ -3108,6 +3276,94 @@ export async function botsDash(request: Request, env: BotsEnv, url: URL): Promis
     cfg.paused = b.paused == null ? !cfg.paused : !!b.paused
     await save(env, cfg)
     return Response.json({ ok: true, paused: cfg.paused }, { headers: NO_STORE })
+  }
+
+  // ── العملاء: حظر ورفع الحظر ────────────────────────────────────────────
+  // الحظر قرار اللوحة: البوت يتجاهل رسائل المحظور ولا يرسل لهم أي بث. لا يمسّ
+  // حالتهم في تيليجرام — رفع الحظر يعيد كل شيء كما كان.
+  if (request.method === 'POST' && act[0] === 'users' && act[1] === 'ban') {
+    const b = await body()
+    const who = Number(b.user)
+    if (!Number.isInteger(who) || who <= 0) return bad('bad user')
+    const banned = new Set(cfg.banned ?? [])
+    if (b.banned === false) banned.delete(who)
+    else banned.add(who)
+    cfg.banned = [...banned].slice(-BROADCAST_MAX)
+    await save(env, cfg)
+    return Response.json({ ok: true, banned: (cfg.banned ?? []).includes(who) }, { headers: NO_STORE })
+  }
+
+  // ── الدعم الفني: ردّ على عميل كأنك البوت ──────────────────────────────
+  // نفس إرسال البوت بالضبط (توكنه، محادثته)، فيصل الرد للعميل من البوت نفسه.
+  // تُعلَّم كل رسائل ذلك العميل في الصندوق كمُجاب عنها.
+  if (request.method === 'POST' && act[0] === 'inbox' && act[1] === 'reply') {
+    const b = await body()
+    const to = Number(b.to)
+    const text = String(b.text ?? '').trim().slice(0, 2000)
+    if (!Number.isInteger(to) || to <= 0 || !text) return bad('bad reply')
+    const r = await tg(await open(env, cfg.token), 'sendMessage', { chat_id: to, text })
+    if (!r.ok) return new Response(r.description || 'send failed', { status: 502, headers: NO_STORE })
+    feed.inbox = feed.inbox.map((m) => (m.from === to ? { ...m, replied: true } : m))
+    await saveFeed(env, cfg.id, feed)
+    return Response.json({ ok: true }, { headers: NO_STORE })
+  }
+
+  // ── الإرسال الجماعي: تُنشأ المهمة ثم تتقدّم على دفعات ──────────────────
+  // كل دفعة في نداء مستقل: الشريط يتقدّم فعلياً، وأي انقطاع يكمل من حيث توقفت
+  // (المهمة في KV لا في ذاولة الطلب). الفشل لا يوقف الدفعة — يُحصى ويكمل.
+  if (request.method === 'POST' && act[0] === 'broadcast' && !act[1]) {
+    const b = await body()
+    const text = String(b.text ?? '').trim()
+    if (text.length < 1 || text.length > 1000) return bad('bad text')
+    const banned = new Set(cfg.banned ?? [])
+    const audience = cfg.users.filter((u) => !banned.has(u)).slice(0, BROADCAST_MAX)
+    if (!audience.length) return new Response('no audience', { status: 409, headers: NO_STORE })
+    const job = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`
+    const key = `bj:${cfg.id}:${job}`
+    const state = { total: audience.length, done: 0, failed: 0, at: Date.now(), queue: audience }
+    await env.DOWNLOADS.put(key, JSON.stringify(state), { expirationTtl: BROADCAST_TTL })
+    return Response.json({ ok: true, job, total: audience.length, done: 0 }, { headers: NO_STORE })
+  }
+
+  // دفعة من الإرسال: ترسل حتى BROADCAST_BATCH رسالة وتُعيد الحالة. اللوحة تعيد
+  // النداء حتى done === total — الشريط يتقدّم بلا انتظار خفي.
+  if (request.method === 'POST' && act[0] === 'broadcast' && act[1] === 'tick') {
+    const b = await body()
+    const key = `bj:${cfg.id}:${String(b.job ?? '').replace(/[^a-z0-9]/gi, '')}`
+    const raw = await env.DOWNLOADS.get(key)
+    if (!raw) return new Response('no job', { status: 404, headers: NO_STORE })
+    const job = JSON.parse(raw) as { total: number; done: number; failed: number; queue: number[] }
+    const batch = job.queue.splice(0, Math.max(1, Math.min(Number(b.n) || BROADCAST_BATCH, 100)))
+    const token = await open(env, cfg.token)
+    for (const who of batch) {
+      job.done += 1
+      const r = await tg(token, 'sendMessage', { chat_id: who, text: String(b.text ?? '') })
+      if (!r.ok) job.failed += 1
+      await env.DOWNLOADS.put(key, JSON.stringify(job), { expirationTtl: BROADCAST_TTL })
+    }
+    return Response.json({ ok: true, done: job.done, total: job.total, failed: job.failed }, { headers: NO_STORE })
+  }
+
+  // حالة المهمة: اللوحة تقرأها عند إعادة الفتح (تحديث الصفحة لا يضيع الشريط).
+  if (request.method === 'GET' && act[0] === 'broadcast' && act[1]) {
+    const key = `bj:${cfg.id}:${String(act[1]).replace(/[^a-z0-9]/gi, '')}`
+    const raw = await env.DOWNLOADS.get(key)
+    if (!raw) return new Response('no job', { status: 404, headers: NO_STORE })
+    const job = JSON.parse(raw) as { total: number; done: number; failed: number }
+    return Response.json({ total: job.total, done: job.done, failed: job.failed }, { headers: NO_STORE })
+  }
+
+  // ── تثبيت اللوحة في قائمة البوت ───────────────────────────────────────
+  // زر القائمة (Menu Button) يوضع لمحادثة المالك وحده — العملاء لا يرون أثراً
+  // له. واللوحة تُفتح من الزر مباشرة كـMini App.
+  if (request.method === 'POST' && act[0] === 'menu') {
+    const url = `${originOf(env)}/panel/#id=${cfg.id}`
+    const r = await tg(await open(env, cfg.token), 'setChatMenuButton', {
+      chat_id: cfg.owner,
+      menu_button: { type: 'web_app', text: 'لوحة التحكم', web_app: { url } },
+    })
+    if (!r.ok) return new Response(r.description || 'menu failed', { status: 502, headers: NO_STORE })
+    return Response.json({ ok: true, url }, { headers: NO_STORE })
   }
 
   return new Response('method not allowed', { status: 405, headers: NO_STORE })

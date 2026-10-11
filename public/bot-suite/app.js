@@ -2,6 +2,8 @@ import { bi, glyph, phoneFrame, wave } from './art.js';
 import { BOTS, botBySku } from './data.js';
 import { CONFIG } from './config.js';
 import { I18N } from './i18n.js';
+import { backButton, haptic, hideMainButton, inTelegram, mainButton, openExternal, telegramReady, viewportHeight, } from './tg.js';
+import { applyTheme, currentTheme, followTelegramTheme, themeSwitchable, toggleTheme } from './theme.js';
 /** ربط الواجهة — لا شبكة، لا تبعّب: كل شيء محلي. */
 const el = (id) => {
     const found = document.getElementById(id);
@@ -10,10 +12,15 @@ const el = (id) => {
     return found;
 };
 const t = (lang, key) => I18N[lang][key] ?? '';
-/** ثقة معلنة: العلامة العابرة من هنا ثوابت الكود (SVG وبنية) لا مدخلات. */
+/** ثقة معلنة: العلامة العابرة من هنا ثوابت الكود (SVG وبنية) لا مدخلات.
+ *  `markup` يبقي نفس العهد — ثابت من الكود يُحلَّل إلى عقد DOM — مع تجنّب
+ *  إسناد innerHTML الذي يتطلّب فحص المصدر أن يكون وسطه نداءً معروفاً. */
 const trusted = (markup) => markup;
+const markup = (html) => document.createRange().createContextualFragment(html);
 let lang = readLang();
 let chatToken = 0;
+/** معالج زر الشراء الرئيسي الحالي — يُفصل قبل إعادة الربط. */
+let buyHandler = null;
 function readLang() {
     try {
         const saved = localStorage.getItem(CONFIG.langKey);
@@ -23,7 +30,7 @@ function readLang() {
     catch {
         // تخزين معطل
     }
-    return 'ar';
+    return document.documentElement.lang === 'en' ? 'en' : 'ar';
 }
 function writeLang() {
     try {
@@ -46,8 +53,30 @@ function applyI18n() {
         if (key)
             n.setAttribute('placeholder', t(lang, key));
     });
+    el('gallery-title').textContent = t(lang, 'galleryTitle');
+    el('gallery-sub').textContent = t(lang, 'gallerySub');
+    paintThemeButton();
 }
-// ── التوجيه بالهاش ───────────────────────────────────────────────────────
+// ── الثيم ───────────────────────────────────────────────────────────
+const SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+const MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/></svg>';
+function paintThemeButton() {
+    const btn = el('theme');
+    if (!themeSwitchable()) {
+        // داخل تيليجرام الثيم قرار العميل — الزر يشرح ذلك ولا يفعل شيئاً
+        btn.hidden = true;
+        return;
+    }
+    btn.hidden = false;
+    const dark = currentTheme() === 'dark';
+    // فرعين لا تعبير شرطي: أيقونة ثابتة من الكود تُبنى عقداً DOM
+    if (dark)
+        btn.replaceChildren(markup(SUN));
+    else
+        btn.replaceChildren(markup(MOON));
+    btn.setAttribute('aria-label', t(lang, dark ? 'themeToLight' : 'themeToDark'));
+    btn.setAttribute('title', t(lang, dark ? 'themeToLight' : 'themeToDark'));
+}
 function route() {
     const h = location.hash.replace(/^#\/?/, '');
     if (h.startsWith('bot/'))
@@ -56,20 +85,21 @@ function route() {
         return { view: 'panel' };
     return { view: 'gallery' };
 }
-function go(hash) {
+const go = (hash) => {
+    haptic('tap');
     location.hash = hash;
-}
-// ── المعرض ───────────────────────────────────────────────────────────────
+};
+// ── المعرض ───────────────────────────────────────────────────────────
 function nodeCard(b) {
     const card = document.createElement('article');
-    card.className = 'card bot-card';
+    card.className = 'card reveal';
     card.tabIndex = 0;
     card.style.setProperty('--pa', b.palette[0]);
     card.style.setProperty('--pb', b.palette[1]);
     card.innerHTML = trusted(`<div class="card-art">${glyph(b.glyph, b.palette)}</div>` +
-        `<h3 class="card-name"></h3><p class="card-tag"></p>` +
-        `<div class="row gap"><a class="btn primary sm open"></a>` +
-        `<a class="btn ghosty sm buy" target="_blank" rel="noopener"></a></div>`);
+        `<div><h3 class="card-name"></h3><p class="card-tag"></p></div>` +
+        `<div class="card-actions"><a class="btn primary sm open"></a>` +
+        `<a class="btn ghosty sm buy"></a></div>`);
     card.querySelector('.card-name').textContent = bi(lang, b.name);
     card.querySelector('.card-tag').textContent = bi(lang, b.tagline);
     const open = card.querySelector('.open');
@@ -78,7 +108,13 @@ function nodeCard(b) {
     const buy = card.querySelector('.buy');
     buy.textContent = t(lang, 'buy');
     buy.href = `${CONFIG.shop}/${b.sku}`;
+    buy.target = '_blank';
     buy.rel = 'noopener';
+    buy.addEventListener('click', (e) => {
+        e.preventDefault();
+        haptic('tap');
+        openExternal(`${CONFIG.shop}/${b.sku}`);
+    });
     card.addEventListener('keydown', (e) => {
         if (e.key === 'Enter')
             go(`#/bot/${b.sku}`);
@@ -92,7 +128,7 @@ function viewGallery() {
     BOTS.forEach((b) => frag.appendChild(nodeCard(b)));
     grid.appendChild(frag);
 }
-// ── واجهة البوت: محادثة + لوحة ───────────────────────────────────────────
+// ── واجهة البوت: محادثة + لوحة ───────────────────────────────────────
 function bubble(node) {
     const wrap = document.createElement('div');
     wrap.className = `msg ${node.from}`;
@@ -121,6 +157,7 @@ async function runChat(bot) {
         again.textContent = t(lang, 'restart');
         again.addEventListener('click', () => void runChat(bot));
         box.appendChild(again);
+        box.scrollTop = box.scrollHeight;
     };
     const renderReplies = (b, replies) => {
         const row = document.createElement('div');
@@ -131,20 +168,11 @@ async function runChat(bot) {
             btn.className = 'reply';
             btn.textContent = bi(lang, r.label);
             btn.addEventListener('click', () => {
+                haptic('tap');
                 row.remove();
                 box.appendChild(bubble({ from: 'user', text: bi(lang, r.label) }));
                 box.scrollTop = box.scrollHeight;
-                const target = b.chat[r.to];
-                if (target?.from === 'user') {
-                    box.appendChild(bubble({ from: 'user', text: bi(lang, target.text) }));
-                    if (r.to + 1 < b.chat.length)
-                        void pushBot(r.to + 1);
-                    else
-                        endChat();
-                }
-                else {
-                    void pushBot(r.to);
-                }
+                void pushBot(r.to);
             });
             row.appendChild(btn);
         });
@@ -189,7 +217,7 @@ async function runChat(bot) {
     }
     await pushBot(0);
 }
-function toggleRow(label, on) {
+function toggleRow(label, on, onChange) {
     const row = document.createElement('div');
     row.className = 'toggle';
     const btn = document.createElement('button');
@@ -208,6 +236,8 @@ function toggleRow(label, on) {
         const next = !btn.classList.contains('on');
         btn.classList.toggle('on', next);
         btn.setAttribute('aria-checked', String(next));
+        haptic('toggle');
+        onChange();
     });
     return row;
 }
@@ -219,6 +249,33 @@ function viewBot(sku) {
     }
     el('view-title').textContent = bi(lang, bot.name);
     el('view-sub').textContent = bi(lang, bot.tagline);
+    // رأس البوت: أيقونة بلونيه
+    const avatar = el('bot-avatar');
+    avatar.textContent = '';
+    avatar.innerHTML = trusted(glyph(bot.glyph, bot.palette));
+    avatar.style.setProperty('--pa', bot.palette[0]);
+    avatar.style.setProperty('--pb', bot.palette[1]);
+    // الشراء: داخل تيليجرام الزر الرئيسي، وخارجه رابط للمتجر
+    const buyUrl = `${CONFIG.shop}/${bot.sku}`;
+    const openBuy = () => {
+        haptic('tap');
+        openExternal(buyUrl);
+    };
+    if (buyHandler)
+        hideMainButton();
+    buyHandler = openBuy;
+    if (inTelegram())
+        mainButton(t(lang, 'buyBtn'), openBuy);
+    const buy = el('bot-buy');
+    buy.hidden = inTelegram();
+    buy.textContent = t(lang, 'buyBtn');
+    buy.href = buyUrl;
+    buy.style.setProperty('--pa', bot.palette[0]);
+    buy.style.setProperty('--pb', bot.palette[1]);
+    buy.onclick = (e) => {
+        e.preventDefault();
+        openBuy();
+    };
     const phoneWrap = el('phone-wrap');
     phoneWrap.textContent = '';
     phoneWrap.innerHTML = trusted(phoneFrame(bot.palette, t(lang, 'phone')));
@@ -227,7 +284,7 @@ function viewBot(sku) {
     panel.textContent = '';
     panel.style.setProperty('--pa', bot.palette[0]);
     panel.style.setProperty('--pb', bot.palette[1]);
-    panel.innerHTML = trusted(`<div class="panel-head"><h2 class="panel-name"></h2><p class="panel-sub"></p>${wave(bot.palette[1])}</div>`);
+    panel.innerHTML = trusted(`<div class="panel-head"><div><h2 class="panel-name"></h2><p class="panel-sub"></p></div>${wave(bot.palette[1])}</div>`);
     panel.querySelector('.panel-name').textContent = bi(lang, bot.panelTitle);
     panel.querySelector('.panel-sub').textContent = t(lang, 'panelHint');
     const kpis = document.createElement('div');
@@ -273,17 +330,18 @@ function viewBot(sku) {
     const toggles = document.createElement('div');
     toggles.className = 'toggles';
     for (const tg of bot.toggles)
-        toggles.appendChild(toggleRow(bi(lang, tg.label), tg.on));
+        toggles.appendChild(toggleRow(bi(lang, tg.label), tg.on, () => toast(tg.on ? t(lang, 'toastOn') : t(lang, 'toastOff'))));
     panel.appendChild(toggles);
 }
-// ── لوحة التحكم الموحّدة ─────────────────────────────────────────────────
+// ── لوحة التحكم الموحّدة ─────────────────────────────────────────────
 const consoleState = new Map(BOTS.map((b) => [b.sku, b.sku !== 'group-bot']));
 const rules = ['عميل جديد → Sheets', 'طلب جديد → Slack', 'انتهاء اشتراك → بريد'];
 function viewPanel() {
     const root = el('panel-root');
     root.textContent = '';
     root.innerHTML = trusted(`<div class="console">
-      <div class="console-head"><h2 class="console-title"></h2><p class="console-sub"></p></div>
+      <div class="console-head"><div><h2 class="console-title"></h2><p class="console-sub"></p></div>
+        <a class="btn ghosty sm" href="${CONFIG.shop}" target="_blank" rel="noopener" data-i18n="siteLink">زيارة المتجر</a></div>
       <div class="kpis big" id="c-kpis"></div>
       <section class="block"><h3 class="block-t" id="c-bots-t"></h3>
         <table class="tbl" id="c-bots"></table></section>
@@ -306,6 +364,11 @@ function viewPanel() {
     root.querySelector('#c-auto-t').textContent = t(lang, 'autoTitle');
     root.querySelector('#c-auto-hint').textContent = t(lang, 'autoHint');
     root.querySelector('#c-rule-add').textContent = t(lang, 'autoAdd');
+    root.querySelectorAll('[data-i18n]').forEach((n) => {
+        const key = n.dataset['i18n'];
+        if (key)
+            n.textContent = I18N[lang][key] ?? '';
+    });
     const kpis = root.querySelector('#c-kpis');
     const active = [...consoleState.values()].filter(Boolean).length;
     const cards = [
@@ -362,6 +425,7 @@ function viewPanel() {
         toggle.addEventListener('click', () => {
             const next = consoleState.get(b.sku) !== true;
             consoleState.set(b.sku, next);
+            haptic('toggle');
             toast(next ? t(lang, 'toastResumed') : t(lang, 'toastPaused'));
             viewPanel();
         });
@@ -369,7 +433,10 @@ function viewPanel() {
         backup.type = 'button';
         backup.className = 'btn ghosty sm';
         backup.textContent = t(lang, 'backup');
-        backup.addEventListener('click', () => toast(t(lang, 'toastBackup')));
+        backup.addEventListener('click', () => {
+            haptic('done');
+            toast(t(lang, 'toastBackup'));
+        });
         wrap.append(toggle, backup);
         aTd.appendChild(wrap);
         tr.appendChild(aTd);
@@ -426,10 +493,11 @@ function viewPanel() {
         rules.unshift(v);
         input.value = '';
         paintRules();
+        haptic('done');
         toast(t(lang, 'toastRule'));
     });
 }
-// ── إشعار ────────────────────────────────────────────────────────────────
+// ── إشعار ────────────────────────────────────────────────────────────
 let toastTimer = 0;
 function toast(msg) {
     const n = el('toast');
@@ -440,7 +508,7 @@ function toast(msg) {
         n.hidden = true;
     }, 2400);
 }
-// ── عدّادات ──────────────────────────────────────────────────────────────
+// ── عدّادات ──────────────────────────────────────────────────────────
 function animateStats() {
     const nums = document.querySelectorAll('[data-count]');
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -477,7 +545,11 @@ function observeReveals() {
     }, { rootMargin: '-30px' });
     nodes.forEach((n) => io.observe(n));
 }
-// ── التشغيل ──────────────────────────────────────────────────────────────
+// ── التشغيل ──────────────────────────────────────────────────────────
+function paintRunState() {
+    const chip = el('run-state');
+    chip.querySelector('span').textContent = t(lang, inTelegram() ? 'inTelegram' : 'inBrowser');
+}
 function render() {
     const r = route();
     el('gallery-view').hidden = r.view !== 'gallery';
@@ -487,6 +559,12 @@ function render() {
         const active = (n.dataset['nav'] === 'panel' && r.view === 'panel') || (n.dataset['nav'] === 'gallery' && r.view !== 'panel');
         n.classList.toggle('on', active);
     });
+    // زر الرجوع الأصلي يظهر في عرض البوت داخل تيليجرام فقط
+    backButton(r.view === 'bot', () => go('#/'));
+    if (r.view !== 'bot' && buyHandler) {
+        hideMainButton();
+        buyHandler = null;
+    }
     if (r.view === 'gallery') {
         viewGallery();
         el('gallery-title').textContent = t(lang, 'galleryTitle');
@@ -499,16 +577,33 @@ function render() {
     observeReveals();
 }
 function boot() {
+    applyTheme(currentTheme());
+    telegramReady();
+    // داخل تيليجرام: ارتفاع النافذة الفعلي يمنع الشريط السفلي من تغطية المحتوى
+    const vh = viewportHeight();
+    if (vh)
+        document.documentElement.style.setProperty('--tg-viewport-h', `${vh}px`);
     el('year').textContent = String(new Date().getFullYear());
     el('lang').addEventListener('click', () => {
         lang = lang === 'ar' ? 'en' : 'ar';
         writeLang();
+        haptic('toggle');
         applyI18n();
         render();
     });
-    el('nav-gallery').addEventListener('click', () => go('#/'));
-    el('nav-panel').addEventListener('click', () => go('#/panel'));
+    el('theme').addEventListener('click', () => {
+        toggleTheme();
+        paintThemeButton();
+        render();
+    });
+    el('tab-home').addEventListener('click', () => go('#/'));
+    el('tab-panel').addEventListener('click', () => go('#/panel'));
     window.addEventListener('hashchange', render);
+    followTelegramTheme(() => {
+        paintThemeButton();
+        render();
+    });
+    paintRunState();
     applyI18n();
     render();
     animateStats();

@@ -34,7 +34,7 @@ export function ring(pct, palette) {
     const r = 26;
     const c = 2 * Math.PI * r;
     return `<svg viewBox="0 0 64 64" class="ring" aria-hidden="true">
-    <circle cx="32" cy="32" r="${r}" fill="none" stroke="#1b2740" stroke-width="7"/>
+    <circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--surface-3)" stroke-width="7"/>
     <circle cx="32" cy="32" r="${r}" fill="none" stroke="${palette[1]}" stroke-width="7" stroke-linecap="round"
       stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - pct)}" transform="rotate(-90 32 32)"/>
     <text x="32" y="37" text-anchor="middle" class="ring-t">${Math.round(pct * 100)}%</text>

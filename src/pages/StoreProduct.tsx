@@ -4,6 +4,7 @@ import { ArrowRight, AppWindow, Bot, CalendarClock, LayoutDashboard, Star, Walle
 import { useI18n } from '@/lib/i18n'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { site } from '@/lib/site'
+import { hasBotInterface } from '@/data/botInterfaces'
 import { STORE_SHOT, botLink, productImage, useCatalog, useProductCopy } from '@/lib/store'
 import { TiltCard } from '@/components/ui/Interactive'
 import { Reveal } from '@/components/ui/Reveal'
@@ -59,7 +60,7 @@ export default function StoreProduct() {
     return <div className="container-app py-10"><div className="bg-sunken h-[32rem] animate-pulse rounded-panel" /></div>
   }
 
-  const isBot = product.category === 'bots'
+  const isBot = product.category === 'bots' || product.category === 'types'
 
   return (
     <div className="container-app py-8 sm:py-10">
@@ -144,29 +145,35 @@ export default function StoreProduct() {
 
             <h2 className="text-app mt-8 mb-3 text-lg font-black">{t('طرق الدفع', 'Ways to pay')}</h2>
             <PaymentMethods product={product} catalog={catalog} />
-            <a
-              href={botLink(catalog)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent mt-4 inline-flex items-center gap-1.5 text-[14px] font-bold hover:underline hover:underline-offset-4"
-            >
-              <Bot className="size-4" aria-hidden="true" />
-              {t('جرّب البوت قبل الشراء', 'Try the bot before buying')}
-            </a>
-            <a
-              href={`/bot-suite/#/bot/${product.sku}`}
-              className="text-accent mt-2 inline-flex items-center gap-1.5 text-[14px] font-bold hover:underline hover:underline-offset-4"
-            >
-              <AppWindow className="size-4" aria-hidden="true" />
-              {t('الواجهة الرسومية للبوت', "The bot's graphical interface")}
-            </a>
-            <a
-              href="/bot-suite/#/panel"
-              className="text-accent mt-2 inline-flex items-center gap-1.5 text-[14px] font-bold hover:underline hover:underline-offset-4"
-            >
-              <LayoutDashboard className="size-4" aria-hidden="true" />
-              {t('لوحة التحكم الموحّدة', 'The unified control panel')}
-            </a>
+            {isBot && (
+              <a
+                href={botLink(catalog)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent mt-4 inline-flex items-center gap-1.5 text-[14px] font-bold hover:underline hover:underline-offset-4"
+              >
+                <Bot className="size-4" aria-hidden="true" />
+                {t('جرّب البوت قبل الشراء', 'Try the bot before buying')}
+              </a>
+            )}
+            {hasBotInterface(product.sku) && (
+              <a
+                href={`/bot-suite/#/bot/${product.sku}`}
+                className="text-accent mt-2 inline-flex items-center gap-1.5 text-[14px] font-bold hover:underline hover:underline-offset-4"
+              >
+                <AppWindow className="size-4" aria-hidden="true" />
+                {t('الواجهة الرسومية للبوت', "The bot's graphical interface")}
+              </a>
+            )}
+            {(isBot || product.sku === 'panel-pro') && (
+              <a
+                href="/bot-suite/#/panel"
+                className="text-accent mt-2 inline-flex items-center gap-1.5 text-[14px] font-bold hover:underline hover:underline-offset-4"
+              >
+                <LayoutDashboard className="size-4" aria-hidden="true" />
+                {t('لوحة التحكم الموحّدة', 'The unified control panel')}
+              </a>
+            )}
           </div>
         </Reveal>
       </div>

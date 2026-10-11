@@ -178,7 +178,13 @@ assert.ok((await faqRow('١٢٣')).includes('t:faq:0'), 'and match the other way
 // Latin case folding inside Arabic text.
 assert.ok((await faqRow('alypay')).includes('t:faq:0'), 'Latin text must fold to lower case')
 
-assert.deepEqual(searchWrites, [], 'search, catalog and help must never write to KV')
+// The shop record is untouchable from here: search, catalog and help must never write it.
+// (The panel's support feed is the one exception in the codebase — it is paid-only,
+// throttled, and lives in its own feed:<id> key, so it can never bend this rule.)
+assert.deepEqual(searchWrites.filter((k) => k.startsWith('tb:')), [], 'search, catalog and help must never write the shop record')
+// A plain customer message on a paid record may write the throttled feed — and nothing else.
+const feedWrites = searchWrites.filter((k) => !k.startsWith('tb:'))
+for (const k of feedWrites) assert.ok(k.startsWith('feed:'), `unexpected write outside the feed: ${k}`)
 env.DOWNLOADS.put = basePut
 
 // Regression: none of that opened a hole in the owner commands.
