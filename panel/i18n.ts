@@ -5,6 +5,8 @@ export const I18N: Record<Lang, Record<string, string>> = {
   ar: {
     appName: 'لوحة تحكم البوت',
     loading: 'جاري تحميل اللوحة…',
+    demoBanner: '🎛 وضع المعاينة — هذه لوحة تحكم بوتك بعد الشراء، ببيانات تجريبية.',
+    demoLocked: '🔒 معاينة فقط — التغييرات معطّلة حتى الشراء.',
     authTitle: 'سجّل الدخول للوحة',
     authLead: 'افتح هذه اللوحة من داخل بوتك عبر زر القائمة، أو الصق رمز الوصول الذي أرسله لك الأمر /web.',
     authId: 'معرّف البوت',
@@ -17,6 +19,7 @@ export const I18N: Record<Lang, Record<string, string>> = {
     tabBroadcast: 'الإرسال',
     tabChat: 'الدعم',
     tabSettings: 'الإعدادات',
+    kpiVisits: 'زيارات المتجر',
     kpiUsers: 'العملاء',
     kpiOrders: 'الطلبات',
     kpiStars: 'النجوم',
@@ -83,6 +86,8 @@ export const I18N: Record<Lang, Record<string, string>> = {
   en: {
     appName: 'Bot control panel',
     loading: 'Loading the panel…',
+    demoBanner: '🎛 Preview mode — this is your bot’s control panel after purchase, with sample data.',
+    demoLocked: '🔒 Preview only — changes are disabled until you buy.',
     authTitle: 'Sign in to the panel',
     authLead: 'Open this panel from inside your bot through the menu button, or paste the access code /web sent you.',
     authId: 'Bot id',
@@ -95,6 +100,7 @@ export const I18N: Record<Lang, Record<string, string>> = {
     tabBroadcast: 'Broadcast',
     tabChat: 'Support',
     tabSettings: 'Settings',
+    kpiVisits: 'Store visits',
     kpiUsers: 'Customers',
     kpiOrders: 'Orders',
     kpiStars: 'Stars',

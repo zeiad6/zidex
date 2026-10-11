@@ -21,7 +21,7 @@ const ok = (name, cond, extra = '') => {
 }
 
 const state = {
-  bot: { id: ID, username: 'shop_bot', paused: false, plan: 'paid', expires: null, lapsed: false, orders: 12, stars: 3400, users: 3, welcome: 'أهلاً بك', site: null, created: '2026-01-01', caps: { items: 50, faqs: 50 } },
+  bot: { id: ID, username: 'shop_bot', paused: false, plan: 'paid', expires: null, lapsed: false, orders: 12, stars: 3400, users: 3, visits: 140, welcome: 'أهلاً بك', site: null, created: '2026-01-01', caps: { items: 50, faqs: 50 } },
   items: [{ id: 1, title: 'دورة', stars: 150, desc: 'دورة فيديو' }],
   sections: [],
   faqs: [],

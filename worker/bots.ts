@@ -92,6 +92,8 @@ type Cfg = {
   users: number[]
   orders: number
   stars: number
+  /** Total store opens by non-owners (repeats included). Unique customers = users.length. */
+  visits?: number
   created: string
   /** Legacy records only — the free month is retired. "trial": the one self-serve plan.
    *  Absent on records made before plans existed, which are paid. */
@@ -308,16 +310,28 @@ function itemBySku(cfg: Cfg, sku: string): Item | undefined {
   )
 }
 
+/** Pre-purchase Mini App previews for the bot products (sections 1 = متاجر، 2 = أنظمة): the
+ *  control panel opened read-only in demo mode, and the customer storefront — so a buyer tries
+ *  both interfaces before paying. channel / site / app products have no such panel, so none. */
+const previewRows = (item: Item, origin: string): KbButton[][] =>
+  item.section === 1 || item.section === 2
+    ? [
+        [{ text: '🎛 جرّب لوحة التحكم (معاينة)', web_app: { url: `${origin}/panel/#id=demo` } }],
+        [{ text: '🖥 جرّب واجهة المتجر', web_app: { url: `${origin}/store/` } }],
+      ]
+    : []
+
 /** The product's own checkout view: its card first when there is one to show, straight to
  *  the invoice when there is not. One builder shared by the 🛍 buttons, the /search results
  *  and the web store's buy_<sku> deep link, so every path sells the exact same thing. */
-async function sendBuyCard(token: string, chat: number, cfg: Cfg, item: Item) {
+async function sendBuyCard(token: string, chat: number, cfg: Cfg, item: Item, origin: string) {
   if (hasCard(item)) {
     await send(token, chat, productCard(item), {
       reply_markup: {
         inline_keyboard: [
           [{ text: `⭐️ شراء الآن (${item.stars} نجمة)`, callback_data: `t:pay:${item.id}` }],
           ...(item.demo && /^https?:\/\//.test(item.demo) ? [[{ text: '🔗 معاينة', url: item.demo }]] : []),
+          ...previewRows(item, origin),
           ...(WA_ITEM(item) ? [[{ text: '📱 ربط واتساب — تجربة 7 أيام', callback_data: 't:wa_trial' }]] : []),
           [{ text: '🔙 المنتجات', callback_data: 't:items' }],
         ],
@@ -1378,7 +1392,7 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
         // straight into payment. Simple owner-added items keep the one-tap invoice.
         // The card-then-invoice flow itself lives in sendBuyCard, shared with the web
         // store's buy_<sku> deep link, so the two paths can never sell differently.
-        await sendBuyCard(token, chat, cfg, item)
+        await sendBuyCard(token, chat, cfg, item, originOf(env))
       }
     } else if (data.startsWith('t:pay:') && q.message.chat.type === 'private') {
       // The "buy now" button on a product card: same invoice as one-tap buy, reached deliberately.
@@ -1503,11 +1517,16 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
   if (isOwner(uid) && fileOf(m)) return void (await storeFile(env, cfg, token, chat, m))
 
   if (text.startsWith('/start')) {
-    if (!isOwner(uid) && uid && !cfg.users.includes(uid) && cfg.users.length < MAX_USERS) {
-      cfg.users.push(uid)
+    // Store visits: every time a non-owner opens the store counts, repeats included — the panel
+    // shows it beside the unique-customer count. ponytail: one KV write per visit; sample or
+    // batch (e.g. count in a Durable Object) only if the free-tier write quota ever bites.
+    if (!isOwner(uid) && uid) {
+      cfg.visits = (cfg.visits ?? 0) + 1
+      const isNew = !cfg.users.includes(uid) && cfg.users.length < MAX_USERS
+      if (isNew) cfg.users.push(uid)
       await save(env, cfg)
       // The automation bridge hears about every new customer the moment they land.
-      await wfEvent(env, cfg, 'customer_new', { user: { id: uid, name: m.from?.first_name } })
+      if (isNew) await wfEvent(env, cfg, 'customer_new', { user: { id: uid, name: m.from?.first_name } })
     }
     if (cfg.paused && !isOwner(uid)) return void (await send(token, chat, '🛠 البوت في صيانة قصيرة — عُد بعد قليل.'))
     const ended = lapsed(cfg)
@@ -1522,7 +1541,7 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
     const startArg = text.slice(6).trim()
     if (startArg.startsWith('buy_')) {
       const item = itemBySku(cfg, startArg.slice(4))
-      if (item) return void (await sendBuyCard(token, chat, cfg, item))
+      if (item) return void (await sendBuyCard(token, chat, cfg, item, originOf(env)))
     } else if (startArg.startsWith('demo_')) {
       const item = cfg.items.find((i) => i.demo === startArg.slice(5)) || itemBySku(cfg, startArg.slice(5))
       if (item) {
@@ -1536,6 +1555,7 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
             ]
           : [
               [{ text: `⭐️ شراء الآن (${item.stars} نجمة)`, callback_data: `t:pay:${item.id}` }],
+              ...previewRows(item, originOf(env)),
               [{ text: '🧪 جرّب متجرك 7 أيام', callback_data: 't:trial' }],
               [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }],
             ]
@@ -3161,7 +3181,7 @@ export async function botsDash(request: Request, env: BotsEnv, url: URL): Promis
         bot: {
           id: cfg.id, username: cfg.username, paused: !!cfg.paused, plan: cfg.plan ?? 'paid',
           expires: cfg.expires ?? null, lapsed: lapsed(cfg), orders: cfg.orders, stars: cfg.stars,
-          users: cfg.users.length, welcome: cfg.welcome, site: cfg.site ?? null,
+          users: cfg.users.length, visits: cfg.visits ?? 0, welcome: cfg.welcome, site: cfg.site ?? null,
           created: cfg.created, caps: { items: itemCap(cfg), faqs: faqCap(cfg) },
         },
         items: cfg.items,

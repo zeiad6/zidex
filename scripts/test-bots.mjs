@@ -1922,4 +1922,52 @@ assert.equal(store.get('tb:123456789'), undefined)
   }
 }
 
+// Pre-purchase Mini App previews: a bot-type product (section 1/2) card carries the control-panel
+// demo and storefront web_app buttons; a channel/site/app product (other sections) carries none.
+{
+  const made = await (await admin('POST', '/admin/bots', { token: '222222222:' + 'B'.repeat(35), owner_id: 9 })).json()
+  const PID = made.bot_id
+  const psecret = JSON.parse(store.get(`tb:${PID}`)).secret
+  const pdeliver = (update) =>
+    b.botWebhook(new Request(`https://zeidexsoft.com/tg/${PID}`, { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': psecret }, body: JSON.stringify(update) }), env, String(PID))
+  const seed = JSON.parse(store.get(`tb:${PID}`))
+  seed.items = [
+    { id: 1, title: 'بوت متجر', stars: 300, desc: 'متجر كامل', section: 1, usd: 9, demo: 'store' },
+    { id: 2, title: 'حزمة منشورات', stars: 50, desc: 'قناة', section: 3, usd: 3 },
+  ]
+  seed.sections = [{ id: 1, name: 'متاجر' }, { id: 3, name: 'قنوات' }]
+  store.set(`tb:${PID}`, JSON.stringify(seed))
+  b.configCache.clear()
+  const buyKb = async (itemId) => {
+    calls.length = 0
+    await pdeliver({ callback_query: { id: 'bq', from: { id: 60 }, data: `t:buy:${itemId}`, message: { chat: { id: 60, type: 'private' } } } })
+    const card = calls.filter((c) => c.method === 'sendMessage').at(-1)
+    return (card?.body.reply_markup?.inline_keyboard ?? []).flat()
+  }
+  const botKb = await buyKb(1)
+  const webApps = botKb.filter((x) => x.web_app).map((x) => x.web_app.url)
+  assert.ok(webApps.some((u) => u.endsWith('/panel/#id=demo')), 'a bot product card offers the control-panel demo')
+  assert.ok(webApps.some((u) => u.endsWith('/store/')), 'a bot product card offers the storefront preview')
+  const chanKb = await buyKb(2)
+  assert.ok(chanKb.filter((x) => x.web_app).length === 0, 'a channel product card has no app preview')
+}
+
+// Store visits: a non-owner /start counts every time (repeats included); the owner's own
+// /start never counts. Unique customers stay in users[].
+{
+  const made = await (await admin('POST', '/admin/bots', { token: '333333333:' + 'C'.repeat(35), owner_id: 11 })).json()
+  const VID = made.bot_id
+  const vsecret = JSON.parse(store.get(`tb:${VID}`)).secret
+  const vstart = (id) =>
+    b.botWebhook(new Request(`https://zeidexsoft.com/tg/${VID}`, { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': vsecret }, body: JSON.stringify({ message: { chat: { id, type: 'private' }, from: { id, first_name: 'V' }, text: '/start' } }) }), env, String(VID))
+  const visits = () => JSON.parse(store.get(`tb:${VID}`)).visits ?? 0
+  await vstart(11) // owner — must not count
+  assert.equal(visits(), 0, 'owner /start is not a visit')
+  await vstart(501)
+  await vstart(502)
+  await vstart(501) // repeat — counts again
+  assert.equal(visits(), 3, 'every non-owner /start is a visit, repeats included')
+  assert.equal(JSON.parse(store.get(`tb:${VID}`)).users.length, 2, 'unique customers stay distinct from visits')
+}
+
 console.log('hosted bots: all checks passed')

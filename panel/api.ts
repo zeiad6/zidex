@@ -13,6 +13,7 @@ export interface BotState {
     orders: number
     stars: number
     users: number
+    visits: number
     welcome: string
     site: { url: string; verified: boolean } | null
     created: string
@@ -42,6 +43,52 @@ export interface Session {
 }
 
 const SESSION_KEY = 'tma-session'
+
+/** Sample state for the pre-purchase preview (panel/#id=demo). Entirely client-side — no API
+ *  call, no auth, no real bot — so a prospective buyer explores the control app without touching
+ *  anyone's data. Writes are blocked in demo mode (see App.act). */
+const now = Date.now()
+export const DEMO_STATE: BotState = {
+  bot: {
+    id: 0,
+    username: 'your_store_bot',
+    paused: false,
+    plan: 'paid',
+    expires: null,
+    lapsed: false,
+    orders: 42,
+    stars: 1680,
+    users: 3,
+    visits: 128,
+    welcome: 'أهلاً بك في متجري 👋 تصفّح المنتجات واطلب بضغطة.',
+    site: null,
+    created: new Date(now - 1000 * 60 * 60 * 24 * 21).toISOString(),
+    caps: { items: 50, faqs: 20 },
+  },
+  items: [
+    { id: 1, title: 'اشتراك شهري Pro', stars: 350, desc: 'كل المزايا لمدة شهر.' },
+    { id: 2, title: 'حزمة 100 تصميم', stars: 500, desc: 'قوالب جاهزة للتحميل الفوري.' },
+    { id: 3, title: 'استشارة خاصة', stars: 800, desc: 'جلسة 30 دقيقة واحد لواحد.' },
+  ],
+  sections: [
+    { id: 1, name: 'اشتراكات' },
+    { id: 2, name: 'منتجات رقمية' },
+  ],
+  faqs: [
+    { q: 'كيف أستلم المنتج؟', a: 'فوراً بعد الدفع داخل المحادثة.' },
+    { q: 'ما طرق الدفع؟', a: 'نجوم تيليجرام مباشرة.' },
+  ],
+  files: [{ id: 1, title: 'دليل الاستخدام.pdf', type: 'document' }],
+  users: [
+    { id: 101, name: 'أحمد', banned: false },
+    { id: 102, name: 'سارة', banned: false },
+    { id: 103, name: 'Omar', banned: true },
+  ],
+  inbox: [
+    { id: 1, from: 101, name: 'أحمد', text: 'هل الاشتراك يشمل التحديثات؟', at: now - 1000 * 60 * 18, replied: false },
+    { id: 2, from: 102, name: 'سارة', text: 'شكراً، وصلني المنتج ✅', at: now - 1000 * 60 * 90, replied: true },
+  ],
+}
 
 export const api = {
   id: '',

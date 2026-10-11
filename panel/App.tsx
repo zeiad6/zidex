@@ -1,6 +1,6 @@
 /** قشرة اللوحة: مصادقة initData، ثيم تيليجرام، تنقّل، وجلب الحالة. */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { api, forgetSession, storedSession, type BotState } from './api'
+import { api, forgetSession, storedSession, DEMO_STATE, type BotState } from './api'
 import { ago, t, type Lang } from './i18n'
 import {
   inTelegram,
@@ -45,6 +45,7 @@ export function App() {
   const [phase, setPhase] = useState<Phase>('booting')
   const [tab, setTab] = useState<Tab>('home')
   const [state, setState] = useState<BotState | null>(null)
+  const [demo, setDemo] = useState(false)
   const [busy, setBusy] = useState(false)
   const [toast, setToast] = useState('')
   const [focusUser, setFocusUser] = useState<number | null>(null)
@@ -97,6 +98,15 @@ export function App() {
       setPhase('signin')
       return
     }
+    // Pre-purchase preview: panel/#id=demo renders sample data entirely client-side — no
+    // session, no API, no writes — so the store's buy card can show the control app to buyers.
+    if (id === 'demo') {
+      api.id = 'demo'
+      setDemo(true)
+      setState(DEMO_STATE)
+      setPhase('ready')
+      return
+    }
     api.id = id
     const signed = initData()
     const pasted = (route.get('k') ?? '').trim()
@@ -122,13 +132,13 @@ export function App() {
 
   /* ── الحالة: نداء واحد يرسم كل شيء، ويتحدث كل 12 ثانية ────────────── */
   const load = useCallback(async () => {
-    if (phase !== 'ready') return
+    if (phase !== 'ready' || demo) return
     try {
       setState(await api.state())
     } catch (e) {
       if ((e as Error).message === 'auth') setPhase('signin')
     }
-  }, [phase])
+  }, [phase, demo])
 
   useEffect(() => {
     void load()
@@ -139,6 +149,11 @@ export function App() {
   /* ── إجراءات ─────────────────────────────────────────────────────── */
   const act = useCallback(
     async (fn: () => Promise<unknown>, done?: () => void) => {
+      if (demo) {
+        say(t(lang, 'demoLocked'))
+        haptic('warn')
+        return
+      }
       setBusy(true)
       try {
         await fn()
@@ -150,7 +165,7 @@ export function App() {
         setBusy(false)
       }
     },
-    [load, say, lang],
+    [load, say, lang, demo],
   )
 
   if (phase === 'booting') {
@@ -229,6 +244,11 @@ export function App() {
       </aside>
 
       <main>
+        {demo ? (
+          <div className="pill pill-warn" style={{ margin: '12px 16px 0', display: 'block', textAlign: 'center', padding: '8px 12px' }}>
+            {t(lang, 'demoBanner')}
+          </div>
+        ) : null}
         <header className="hero">
           <div className="hero-in">
             <span className="hero-avatar" aria-hidden="true">

@@ -1,7 +1,7 @@
 /** العرض الرئيسي: ترويسة البوت + مؤشرات + إجراءات سريعة + أحدث الرسائل. */
 import type { BotState } from '../api'
 import { ago, t, type Lang } from '../i18n'
-import { IconBag, IconChat, IconPause, IconPin, IconPlay, IconStar, IconUsers } from '../icons'
+import { IconBag, IconChat, IconEye, IconPause, IconPin, IconPlay, IconStar, IconUsers } from '../icons'
 import { Card, Kpi, Pill, Row } from '../ui'
 
 interface Props {
@@ -22,6 +22,7 @@ export function Dashboard({ lang, state, busy, onTogglePause, onInstallMenu, onO
   return (
     <>
       <div className="kpis">
+        <Kpi tile="#7c3aed" icon={<IconEye />} value={bot.visits.toLocaleString('en-US')} label={t(lang, 'kpiVisits')} />
         <Kpi tile="#4f46e5" icon={<IconUsers />} value={String(users.length)} label={t(lang, 'kpiUsers')} />
         <Kpi tile="#0891b2" icon={<IconBag />} value={String(bot.orders)} label={t(lang, 'kpiOrders')} />
         <Kpi tile="#d97706" icon={<IconStar />} value={bot.stars.toLocaleString('en-US')} label={t(lang, 'kpiStars')} />

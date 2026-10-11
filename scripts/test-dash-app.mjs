@@ -20,7 +20,7 @@ const runtime = readFileSync(join(pub, 'dash.js'), 'utf8')
 const ID = 8968001501
 const KEY = '1750000000.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef'
 const state = {
-  bot: { id: ID, username: 'shop_bot', paused: false, plan: 'paid', expires: null, lapsed: false, orders: 12, stars: 3400, users: 27, welcome: 'أهلاً بك في متجري', site: null, created: '2026-01-01', caps: { items: 50, faqs: 50 } },
+  bot: { id: ID, username: 'shop_bot', paused: false, plan: 'paid', expires: null, lapsed: false, orders: 12, stars: 3400, users: 27, visits: 310, welcome: 'أهلاً بك في متجري', site: null, created: '2026-01-01', caps: { items: 50, faqs: 50 } },
   items: [{ id: 1, title: 'دورة تصميم كاملة', stars: 150, desc: 'دورة فيديو', sku: 'design-course', features: ['ميزة أولى'], after: ['خطوة أولى'] }],
   sections: [{ id: 1, name: '🤖 بوتات ومتاجر' }],
   faqs: [{ q: 'كيف أدفع؟', a: 'بنجوم تيليجرام' }],
