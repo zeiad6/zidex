@@ -302,6 +302,23 @@ function animateStats() {
     });
     document.querySelectorAll('#stats b[data-count]').forEach((n) => io.observe(n));
 }
+// ── ظهور تدريجي عند التمرير — يضيف .in لكل عنصر data-reveal عند وصوله للنظر ──
+function revealOnScroll() {
+    const nodes = document.querySelectorAll('[data-reveal]');
+    if (!('IntersectionObserver' in window)) {
+        nodes.forEach((n) => n.classList.add('in'));
+        return;
+    }
+    const io = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+            if (!entry.isIntersecting)
+                continue;
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+        }
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.1 });
+    nodes.forEach((n) => io.observe(n));
+}
 // ── الإقلاع ────────────────────────────────────────────────────────────────
 function boot() {
     el('hero-art').innerHTML = trusted(heroArt());
@@ -347,5 +364,6 @@ function boot() {
     renderGrid();
     syncCart();
     animateStats();
+    revealOnScroll();
 }
 boot();

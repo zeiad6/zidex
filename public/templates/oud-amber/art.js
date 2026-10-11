@@ -52,6 +52,12 @@ export function heroArt() {
         `<stop offset="1" stop-color="#d9ab52" stop-opacity="0"/>` +
         `</radialGradient></defs>` +
         `<circle cx="150" cy="160" r="150" fill="url(#hglow)"/>` +
+        // خيوط بخور ترتفع من عنق القارورة — تضيف حياة وفخامة بلا صورة خارجية
+        `<g fill="none" stroke="#e8c37e" stroke-width="2" stroke-linecap="round" opacity=".5">` +
+        `<path class="wisp w1" d="M150 40q-10 -14 2 -26t-2 -22"/>` +
+        `<path class="wisp w2" d="M164 44q10 -12 0 -24t4 -20"/>` +
+        `<path class="wisp w3" d="M138 46q-8 -10 2 -20t-2 -18"/>` +
+        `</g>` +
         `<g class="hero-float">` +
         `<rect x="142" y="26" width="16" height="26" rx="4" fill="#8a6420"/>` +
         `<rect x="132" y="12" width="36" height="16" rx="6" fill="#d9ab52"/>` +
