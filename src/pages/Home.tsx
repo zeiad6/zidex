@@ -414,14 +414,15 @@ function HeroFact({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
-        'rounded-3xl border p-4',
-        'border-white/15 bg-white/10 backdrop-blur-xl',
+        'relative overflow-hidden rounded-3xl border p-4',
+        'border-white/12 bg-gradient-to-b from-white/[0.13] to-white/[0.035] ring-1 ring-inset ring-white/[0.06] backdrop-blur-xl',
         !reduce && 'motion-safe:animate-[floaty_6s_ease-in-out_infinite]',
       )}
       style={delay ? { animationDelay: `${delay}s` } : undefined}
     >
-      <p className="text-[11px] font-bold text-white/60">{label}</p>
-      <p className="mt-1 text-2xl font-black text-white">{value}</p>
+      <span aria-hidden="true" className="from-ghost-400/80 to-veil-400/50 absolute inset-x-4 top-0 h-px bg-gradient-to-r" />
+      <p className="text-[11px] font-bold tracking-wide text-white/60">{label}</p>
+      <p className="mt-1.5 text-[1.7rem] leading-none font-black text-white">{value}</p>
       {sub ? <p className="mt-1 text-[11px] leading-relaxed text-white/50">{sub}</p> : null}
       {bars?.length ? (
         <div className="mt-3 flex h-9 items-end gap-0.5" aria-hidden="true">
@@ -450,10 +451,22 @@ function Hero() {
     <section
       aria-labelledby="hero-title"
       className="grid-bg relative overflow-hidden rounded-panel p-6 sm:p-9"
-      style={{ background: 'linear-gradient(135deg, #0f1023 0%, #1e1b4b 55%, #31247a 100%)' }}
+      style={{
+        background:
+          'radial-gradient(130% 100% at 86% -12%, #322579 0%, rgba(50,37,121,0) 55%), radial-gradient(95% 85% at -2% 108%, #0c3b36 0%, rgba(12,59,54,0) 52%), linear-gradient(135deg, #0c0d1e 0%, #15133a 58%, #1a1753 100%)',
+      }}
     >
-      <span aria-hidden="true" className="absolute -top-24 left-1/4 size-96 rounded-full opacity-45 blur-[100px]" style={{ background: '#6d5cff' }} />
-      <span aria-hidden="true" className="absolute -right-16 -bottom-24 size-72 rounded-full opacity-35 blur-[90px]" style={{ background: '#00c9a7' }} />
+      {/* توقيع الواجهة: مسحة أورورا مخروطية واحدة بدل الكرتين الضبابيتين المكرّرتين، + خيط ضوئي علوي */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-1/3 start-1/4 size-[44rem] opacity-25 blur-[96px] motion-safe:animate-[floaty_11s_ease-in-out_infinite]"
+        style={{ background: 'conic-gradient(from 210deg at 50% 50%, #6d5cff, #00c9a7, #8d7cff, #6d5cff)' }}
+      />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px"
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(141,124,255,.7) 30%, rgba(0,201,167,.5) 70%, transparent)' }}
+      />
 
       <div className="relative grid items-center gap-8 lg:grid-cols-[1.15fr_1fr]">
         <div>
