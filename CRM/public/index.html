@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRM الموحد — إدارة بوتات تليجرام</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+</head>
+<body>
+
+  <!-- شاشة الدخول -->
+  <div id="login-screen" class="login-screen hidden">
+    <form id="login-form" class="login-card">
+      <div class="login-logo">📊</div>
+      <h1>CRM الموحد</h1>
+      <p class="login-sub">منصة إدارة وأتمتة بوتات تليجرام</p>
+      <label>اسم المستخدم
+        <input type="text" id="login-username" autocomplete="username" required>
+      </label>
+      <label>كلمة المرور
+        <input type="password" id="login-password" autocomplete="current-password" required>
+      </label>
+      <p id="login-error" class="login-error"></p>
+      <button type="submit" class="btn btn-primary btn-block">دخول</button>
+    </form>
+  </div>
+
+  <!-- التطبيق -->
+  <div id="app" class="app hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-icon">📊</span>
+        <div>
+          <strong>CRM الموحد</strong>
+          <small id="sidebar-user">—</small>
+        </div>
+      </div>
+      <nav class="nav">
+        <button class="nav-item active" data-view="dashboard">📈 لوحة المعلومات</button>
+        <button class="nav-item" data-view="customers">👥 العملاء <span id="nav-unread" class="badge hidden">0</span></button>
+        <button class="nav-item" data-view="pipeline">💰 خط المبيعات</button>
+        <button class="nav-item" data-view="automation">⚡ الأتمتة</button>
+        <button class="nav-item" data-view="team" id="nav-team">🔐 الفريق</button>
+      </nav>
+      <div class="sidebar-footer">
+        <div id="bot-status" class="bot-status">—</div>
+        <button id="logout-btn" class="btn btn-ghost btn-block">خروج</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <h2 id="view-title">لوحة المعلومات</h2>
+        <div class="topbar-actions">
+          <input type="search" id="global-search" placeholder="بحث عن عميل..." class="search-input">
+          <span id="bridge-state" class="bridge-state" title="حالة ربط المنصّة">—</span>
+          <span id="live-dot" class="live-dot" title="اتصال مباشر">●</span>
+        </div>
+      </header>
+
+      <section id="view-dashboard" class="view">
+        <div class="stat-cards" id="stat-cards"></div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>الرسائل (آخر 14 يوم)</h3>
+            <canvas id="chart-messages" height="220"></canvas>
+          </div>
+          <div class="card">
+            <h3>عملاء جدد (آخر 14 يوم)</h3>
+            <canvas id="chart-users" height="220"></canvas>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>خط المبيعات</h3>
+            <div id="funnel" class="funnel"></div>
+          </div>
+          <div class="card">
+            <h3>أكثر العملاء تفاعلاً</h3>
+            <ul id="top-users" class="top-users"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-customers" class="view hidden">
+        <div class="customers-layout">
+          <div class="card list-card">
+            <div class="list-header">
+              <button id="export-btn" class="btn btn-ghost btn-sm" type="button" title="تصدير العملاء CSV">⬇︎ تصدير</button>
+              <select id="filter-status" class="select-input">
+                <option value="">كل الحالات</option>
+                <option value="new">جديد</option>
+                <option value="interested">مهتم</option>
+                <option value="contacted">تم التواصل</option>
+                <option value="customer">عميل</option>
+                <option value="lost">مفقود</option>
+              </select>
+            </div>
+            <div id="users-list" class="users-list"></div>
+          </div>
+          <div class="card detail-card" id="user-detail">
+            <p class="empty">اختر عميلاً لعرض المحادثة</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-pipeline" class="view hidden">
+        <div class="board" id="board"></div>
+      </section>
+
+      <section id="view-automation" class="view hidden">
+        <div class="grid-2">
+          <div class="card">
+            <h3>قواعد الرد الآلي</h3>
+            <p class="muted">عندما تحتوي رسالة العميل على الكلمة المفتاحية، يرد البوت تلقائياً.</p>
+            <form id="rule-form" class="rule-form">
+              <input type="text" id="rule-keyword" placeholder="الكلمة المفتاحية (مثال: السعر)" required>
+              <textarea id="rule-response" placeholder="نص الرد الآلي" rows="3" required></textarea>
+              <button type="submit" class="btn btn-primary">إضافة قاعدة</button>
+            </form>
+          </div>
+          <div class="card">
+            <h3>القواعد النشطة</h3>
+            <div id="rules-list" class="rules-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-team" class="view hidden">
+        <div class="grid-2">
+          <div class="card">
+            <h3>إضافة مسؤول</h3>
+            <form id="agent-form" class="rule-form">
+              <input type="text" id="agent-username" placeholder="اسم المستخدم" required>
+              <input type="password" id="agent-password" placeholder="كلمة المرور (6 أحرف على الأقل)" required>
+              <select id="agent-role" class="select-input">
+                <option value="agent">مسؤول مبيعات (agent)</option>
+                <option value="admin">مدير (admin)</option>
+              </select>
+              <button type="submit" class="btn btn-primary">إضافة</button>
+            </form>
+          </div>
+          <div class="card">
+            <h3>الفريق الحالي</h3>
+            <div id="agents-list" class="rules-list"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

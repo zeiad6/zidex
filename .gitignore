@@ -68,3 +68,8 @@ store-sites/
 # واجهات البوتات — مستودع فرعي مستقل (تُنشر مخرجاته إلى public/bot-suite/)
 bot-suite/
 !public/bot-suite/
+
+# قاعدة بيانات CRM المحلية (وليدة تشغيل محلي — لا تُرفع)
+CRM/crm.db
+CRM/crm.db-wal
+CRM/crm.db-shm
