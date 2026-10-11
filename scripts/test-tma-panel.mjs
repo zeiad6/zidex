@@ -194,6 +194,14 @@ await deliver({ message: { chat: { id: 5099, type: 'private' }, from: { id: 5099
 ok('الخطة المجانية لا تكتب سجل الدعم', JSON.stringify(JSON.parse(store.get(`feed:${ID}`) ?? 'null')) === JSON.stringify(feedFlush))
 store.set(`tb:${ID}`, JSON.stringify({ ...cfg(), plan: 'paid' }))
 
+// ── 5ج) الردّ من داخل البوت (/reply) يقفل خيط العميل في اللوحة ─────────
+calls.length = 0
+await deliver({ message: { chat: { id: OWNER, type: 'private' }, from: { id: OWNER, first_name: 'Ali' }, text: `/reply ${CUSTOMER} تم الحل من المحادثة` } })
+ok('/reply يرسل للعميل', calls.some((c) => c.method === 'sendMessage' && c.body.chat_id === CUSTOMER))
+ok('/reply يقفل خيط العميل في الصندوق', feed().inbox.filter((m) => m.from === CUSTOMER).every((m) => m.replied))
+const afterReply = await (await dash('GET', 'state', null, session.code)).json()
+ok('الحالة لا تعرض الخيط كمفتوح بعد /reply', !afterReply.inbox.some((m) => m.from === CUSTOMER && !m.replied))
+
 // ── 6) تثبيت لوحة القائمة: web_app على رابط اللوحة ────────────────────
 calls.length = 0
 const menu = await dash('POST', 'menu', {}, session.code)

@@ -2252,7 +2252,18 @@ async function owner(env: BotsEnv, cfg: Cfg, token: string, chat: number, text: 
   } else if (cmd === 'reply') {
     const [target, ...words] = arg.split(' ')
     if (!/^\d+$/.test(target) || !words.length) return void (await say('الاستخدام: <code>/reply رقم_العميل نص</code>'))
-    const r = await send(token, Number(target), `💬 رد المالك:\n${esc(words.join(' ').slice(0, 2000))}`)
+    const who = Number(target)
+    const r = await send(token, who, `💬 رد المالك:\n${esc(words.join(' ').slice(0, 2000))}`)
+    // The panel's inbox is the same conversation: a reply sent from here closes that
+    // customer's thread there too, or the owner reads a question already answered.
+    if (r.ok && !isFree(cfg)) {
+      const feed = await loadFeed(env, cfg.id)
+      const open = feed.inbox.some((m) => m.from === who && !m.replied)
+      if (open) {
+        feed.inbox = feed.inbox.map((m) => (m.from === who && !m.replied ? { ...m, replied: true } : m))
+        await saveFeed(env, cfg.id, feed)
+      }
+    }
     await say(r.ok ? '✅ أُرسل.' : 'تعذّر الإرسال.')
   } else if (cmd === 'mybots') {
     // The unified CRM: every bot this owner runs on the platform, from any of their

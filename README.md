@@ -76,6 +76,40 @@ src/
 └── pages/          Home, Links, Blog, BlogPost, About, NotFound
 ```
 
+## The bot platform (the bigger half)
+
+This repo also runs the ZeidexSoft bot store: a Cloudflare Worker hosts every
+customer's Telegram shop, sells 20 products in Stars, and ships two Mini Apps.
+Nothing here needs a server of its own — `worker/` + the assets in `dist/`.
+
+```
+worker/        the Worker: webhook, menu, /admin, licensing, /api/dash (one API)
+bot-suite/     the bot-interfaces Mini App (own repo, zero deps, tsc → build/)
+panel/         the control-panel Mini App (React + Tailwind, vite.panel.config.ts)
+store-sites/   the three store templates, each its own repo
+scripts/stage-*.mjs   copy each sub-build into public/ so `npm run build` stages it
+```
+
+| Route | What it is |
+|---|---|
+| `/` `/shop` | the storefront (bilingual, Telegram Mini App for buying) |
+| `/bot-suite/` | an interactive interface for every bot on sale, plus a unified panel |
+| `/panel/#id=<botId>` | the owner's control panel — **opens inside Telegram** |
+| `/templates/<slug>/` | each store template's live demo |
+| `/api/dash/<id>/…` | the one dashboard API: `/web` link token, Mini App `initData` |
+
+The panel authenticates with Telegram's own recipe (`secret = HMAC(WebAppData,
+bot_token)`) and exchanges the signature for the same 7-day code the `/web`
+link mints — one auth to reason about. Owner-side commands: `/admin`,
+`/panel`, `/tma` (installs the panel as the chat menu button), `/mybots`,
+`/wa`.
+
+```bash
+npm run build:panel   # dist/panel/ only
+npm run test:tma      # panel API checks (session, ban, inbox, broadcast, menu)
+node scripts/test-tma-app.mjs   # the built bundle, rendered in jsdom
+```
+
 ## Theming
 
 Colours are **semantic tokens**, not raw values, so both themes share one source of

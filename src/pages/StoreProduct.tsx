@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowRight, AppWindow, Bot, CalendarClock, LayoutDashboard, Star, WalletCards } from 'lucide-react'
+import { ArrowRight, AppWindow, Bot, CalendarClock, LayoutDashboard, LayoutTemplate, Star, WalletCards } from 'lucide-react'
 import { useI18n } from '@/lib/i18n'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { site } from '@/lib/site'
@@ -172,6 +172,19 @@ export default function StoreProduct() {
               >
                 <LayoutDashboard className="size-4" aria-hidden="true" />
                 {t('لوحة التحكم الموحّدة', 'The unified control panel')}
+              </a>
+            )}
+            {/* قالب المتجر: تجربته الحيّة على /templates/<slug> — نفس النسخة التي يستلمها المشتري،
+                بعد تخصيص نسخة العرض بحساب المنصة. الرابط من الـSKU نفسه فلا تكرار ولا انحراف. */}
+            {product.category === 'sites' && /^site-([a-z0-9-]+)$/.test(product.sku) && (
+              <a
+                href={`/templates/${product.sku.replace(/^site-/, '')}/`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent mt-2 inline-flex items-center gap-1.5 text-[14px] font-bold hover:underline hover:underline-offset-4"
+              >
+                <LayoutTemplate className="size-4" aria-hidden="true" />
+                {t('تجربة القالب مباشرة', 'Try the template live')}
               </a>
             )}
           </div>
