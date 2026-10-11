@@ -277,3 +277,28 @@ input:focus-visible, select:focus-visible { outline: none; border-color: var(--a
 
 .skip { position: absolute; inset-inline-start: -9999px; inset-block-start: 0; z-index: 100; background: var(--accent-2); color: #f7f2e9; padding: 0.6rem 1rem; border-end-start-radius: 10px; border-end-end-radius: 10px; font-weight: 700; }
 .skip:focus { inset-inline-start: 0; }
+
+/* ── elevation pass — عمق وحركة دافئة تحافظ على هوية دُرّة ───────────── */
+.product { position: relative; overflow: hidden; }
+.product::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(320px 120px at 50% -8%, rgb(196 86 47 / 0.12), transparent 70%);
+  opacity: 0; transition: opacity 0.3s ease;
+}
+.product:hover::before { opacity: 1; }
+.product .art-wrap { aspect-ratio: 4 / 3; display: grid; place-items: center; }
+.product .art-wrap .art { width: 78%; transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1); }
+.product:hover .art-wrap .art { transform: translateY(-3px) scale(1.05); }
+.product .art-wrap::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(60% 50% at 50% 115%, rgb(185 138 47 / 0.18), transparent 70%);
+}
+.btn.primary { position: relative; overflow: hidden; }
+.btn.primary::before {
+  content: ""; position: absolute; inset-block-start: 0; inset-inline-start: -60%;
+  width: 40%; height: 100%; transform: skewX(-18deg);
+  background: linear-gradient(100deg, transparent, rgb(255 255 255 / 0.55), transparent);
+}
+.btn.primary:hover::before { animation: dz-sheen 0.7s cubic-bezier(0.22, 0.61, 0.36, 1); }
+@keyframes dz-sheen { to { inset-inline-start: 130%; } }
+@media (prefers-reduced-motion: reduce) { .btn.primary::before { display: none; } }

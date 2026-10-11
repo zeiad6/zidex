@@ -100,6 +100,68 @@ export const programs: Program[] = [
     date: '2026-10-04',
   },
   {
+    slug: 'artcraft',
+    name: 'ArtCraft — محرّك الإبداع للفنانين',
+    nameEn: 'ArtCraft — Creative Engine',
+    tagline:
+      'بيئة إبداع مفتوحة المصدر للفنانين والمصممين وصنّاع الأفلام: لوحة دقيقة تجمع التصميم والرسم وأدوات الذكاء الاصطناعي في مكان واحد، بتحكم كامل في كل عنصر. تعمل محلياً على جهازك.',
+    taglineEn:
+      'An open-source creative environment for artists, designers and filmmakers: a precise canvas that unites design, drawing and AI tools in one place, with full control over every element. Runs locally on your machine.',
+    version: '0.41.0',
+    platform: 'Windows x64',
+    kind: 'windows',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.0/ArtCraft_0.41.0_x64-setup.exe',
+        host: 'GitHub',
+        file: 'ArtCraft_0.41.0_x64-setup.exe',
+        size: '39.9 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.0/ArtCraft_0.41.0_x64_en-US.msi',
+        host: 'GitHub',
+        file: 'ArtCraft_0.41.0_x64_en-US.msi',
+        size: '44.7 MB',
+        note: 'حزمة MSI',
+      },
+    ],
+    docs: 'https://github.com/storytold/artcraft',
+    glyph: 'spark',
+    date: '2026-09-26',
+  },
+  {
+    slug: 'photocraft',
+    name: 'PhotoCraft — محرّر الصور الاحترافي',
+    nameEn: 'PhotoCraft — Pro Image Editor',
+    tagline:
+      'محرّر صور مفتوح المصدر، إعادة بناء نظيفة لـ Adobe Photoshop: طبقات، أقنعة، مرشّحات، أدوات تحديد ذكية، دعم PSD، وتحرير غير متلف — بديل مجاني كامل بلا اشتراك. يعمل محلياً على جهازك.',
+    taglineEn:
+      'An open-source image editor, a clean-room reimplementation of Adobe Photoshop: layers, masks, filters, smart selection, PSD support and non-destructive editing — a full free alternative with no subscription. Runs locally on your machine.',
+    version: '0.7.0',
+    platform: 'Windows x64',
+    kind: 'windows',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/photocraft/releases/download/v0.7.0/photocraft-0.7.0-windows-x64.msi',
+        host: 'GitHub',
+        file: 'photocraft-0.7.0-windows-x64.msi',
+        size: '61.6 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/photocraft/releases/download/v0.7.0/photocraft-0.7.0-windows-x64-portable.zip',
+        host: 'GitHub',
+        file: 'photocraft-0.7.0-windows-x64-portable.zip',
+        size: '73.3 MB',
+        note: 'نسخة محمولة (بلا تثبيت)',
+      },
+    ],
+    docs: 'https://github.com/storytold/photocraft',
+    glyph: 'layers',
+    date: '2026-10-11',
+  },
+  {
     slug: 'edms-archive-android',
     name: 'أرشيف برو EDMS — أندرويد',
     nameEn: 'Archive Pro EDMS — Android',
