@@ -56,5 +56,8 @@
     "typescript-eslint": "^8.19.1",
     "vite": "^6.0.7",
     "wrangler": "^4.148.0"
+  },
+  "overrides": {
+    "sharp": "^0.35.5"
   }
 }

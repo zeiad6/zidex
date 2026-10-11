@@ -15,9 +15,13 @@ export async function anthropicProxy(request: Request, url: URL): Promise<Respon
     })
   }
 
-  // Subpath after /api/anthropic
+  // Subpath after /api/anthropic. Build the target by assigning pathname/search on a fixed
+  // base, never `new URL(subpath, base)`: a subpath like `//evil.com/x` is a protocol-relative
+  // reference that would otherwise swap the host to evil.com and forward the caller's key there.
   const subpath = url.pathname.slice('/api/anthropic'.length) || '/'
-  const targetUrl = new URL(subpath + url.search, 'https://api.anthropic.com')
+  const targetUrl = new URL('https://api.anthropic.com')
+  targetUrl.pathname = subpath
+  targetUrl.search = url.search
 
   // Zero-Trust: allow /api/hello (CLI health probe) or requests with authentication
   const hasAuth = request.headers.has('x-api-key') || request.headers.has('authorization')

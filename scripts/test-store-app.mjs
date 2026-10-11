@@ -475,18 +475,25 @@ console.log('\n11. sheet details — after you pay, what you need, coming soon')
   ok('how to get it running is listed', doc.querySelectorAll('#sheet-setup li').length === basic.setup.length && basic.setup.length > 0)
   ok('steps are the catalogue text, not markup', doc.querySelector('#sheet-after li').textContent === basic.after[0])
 
+  // 'soon' products were all shipped in a40903d (catalog now sells every product), so the
+  // catalog may carry none. store.js still renders the soon badge + ask-button, so these
+  // assertions run only when a soon product exists; otherwise the feature is simply dormant.
   const soon = catalog.products.find((p) => p.soon)
-  ok('unbuilt products are marked soon, with no invoice', !!soon && !soon.invoice)
-  ok('a soon card says so', doc.querySelector(`#grid .card[data-sku="${soon.sku}"] .badge.soon`) !== null)
-  open(soon.sku)
-  await tick()
-  // An empty section hides regardless of which product is first-soon: a soon
-  // product that does carry steps shows them, one without hides the box.
-  ok('a soon product hides the empty sections', doc.querySelector('#sheet-after-box').hidden === ((soon.after || []).length === 0))
-  const buy = doc.querySelector('#sheet-buy')
-  ok('its button asks instead of buying', buy.textContent.includes('اسأل'))
-  buy.click()
-  ok('and opens the bot chat, never a purchase', opened.length === 1 && !opened[0].includes('start=buy_'), opened[0])
+  if (soon) {
+    ok('unbuilt products are marked soon, with no invoice', !soon.invoice)
+    ok('a soon card says so', doc.querySelector(`#grid .card[data-sku="${soon.sku}"] .badge.soon`) !== null)
+    open(soon.sku)
+    await tick()
+    // An empty section hides regardless of which product is first-soon: a soon
+    // product that does carry steps shows them, one without hides the box.
+    ok('a soon product hides the empty sections', doc.querySelector('#sheet-after-box').hidden === ((soon.after || []).length === 0))
+    const buy = doc.querySelector('#sheet-buy')
+    ok('its button asks instead of buying', buy.textContent.includes('اسأل'))
+    buy.click()
+    ok('and opens the bot chat, never a purchase', opened.length === 1 && !opened[0].includes('start=buy_'), opened[0])
+  } else {
+    ok('no product is coming-soon — all shipped', true)
+  }
   ok('no runtime errors', errors.length === 0, errors.join(' | ') || 'clean')
   window.close()
 }

@@ -108,3 +108,23 @@ test('anthropicProxy forwards authenticated requests and strips client IP header
     globalThis.fetch = originalFetch
   }
 })
+
+test('anthropicProxy keeps upstream host even when subpath is protocol-relative (host-escape fix)', async () => {
+  let capturedUrl = null
+  const originalFetch = globalThis.fetch
+  globalThis.fetch = async (target) => {
+    capturedUrl = target
+    return new Response(null, { status: 200 })
+  }
+  try {
+    const req = new Request('https://zeidexsoft.com/api/anthropic//evil.com/v1/messages', {
+      method: 'POST',
+      headers: { 'x-api-key': 'sk-ant-secret' },
+    })
+    const url = new URL(req.url)
+    await anthropicProxy(req, url)
+    assert.equal(new URL(capturedUrl).host, 'api.anthropic.com')
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+})
