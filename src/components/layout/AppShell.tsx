@@ -17,7 +17,6 @@ import {
   Search,
   ShoppingBag,
   Star,
-  AppWindow,
   LayoutGrid,
   LayoutTemplate,
   X,
@@ -47,9 +46,11 @@ const primaryNav: NavItem[] = [
   { to: '/', icon: House, label: 'الرئيسية', labelEn: 'Home' },
   { to: '/blog', icon: BookOpen, label: 'المقالات', labelEn: 'Articles', badge: 'posts' },
   { to: '/shop', icon: ShoppingBag, label: 'المتجر', labelEn: 'Store', badge: 'new' },
+  { to: '/search', icon: Search, label: 'البحث', labelEn: 'Search', badge: 'new' },
   { to: '/programs', icon: Package, label: 'البرامج', labelEn: 'Programs' },
   { to: '/templates', icon: LayoutTemplate, label: 'قوالب المتاجر', labelEn: 'Store templates', badge: 'new' },
-  { to: '/bot-suite/', icon: AppWindow, label: 'واجهات البوتات', labelEn: 'Bot interfaces', badge: 'new', external: true },
+  // '/bot-suite/' (واجهات البوتات) hidden from nav per request; the bundle stays
+  // shipped and is still reached from each product page's live preview.
   { to: '/dashboard', icon: LayoutGrid, label: 'لوحة التحكم', labelEn: 'Dashboard' },
   { to: '/links', icon: Compass, label: 'الروابط', labelEn: 'Links' },
   { to: '/about', icon: Info, label: 'عن المنصة', labelEn: 'About' },
@@ -420,7 +421,7 @@ function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void })
   )
 }
 
-// Home, Store, Articles, Programs; the rest live behind the More drawer.
+// Home, Store, Articles, Search; the rest live behind the More drawer.
 const mobileNav = primaryNav.slice(0, 4)
 
 export function AppShell({ children }: { children: ReactNode }) {

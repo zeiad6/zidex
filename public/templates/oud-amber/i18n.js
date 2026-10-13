@@ -7,6 +7,8 @@ export const I18N = {
     ar: {
         skip: 'تخطَّ إلى المنتجات',
         brand: 'عود وعنبر',
+        tplBadge: 'قالب ZeidexSoft',
+        pageTitle: 'عود وعنبر — عطور وعود فاخرة',
         navProducts: 'المنتجات',
         navWhy: 'لماذا نحن',
         navHow: 'طريقة الطلب',
@@ -68,6 +70,8 @@ export const I18N = {
     en: {
         skip: 'Skip to products',
         brand: 'Oud & Amber',
+        tplBadge: 'ZeidexSoft template',
+        pageTitle: 'Oud & Amber — Luxury fragrance & oud',
         navProducts: 'Products',
         navWhy: 'Why us',
         navHow: 'How to order',

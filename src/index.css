@@ -1058,3 +1058,117 @@
 .prerender a {
   color: var(--accent);
 }
+
+/* ------------------------------------------------------------------ *
+ * Swiss International Typographic Style — Home (phase 1 redesign).
+ * A typographic index, not a dashboard: strict grid, hairline rules,
+ * one flat violet accent, square corners, no glass/shadow depth.
+ * Scoped to .home-swiss so pages not yet redesigned keep their look.
+ * ------------------------------------------------------------------ */
+.home-swiss {
+  --swiss-accent: #6d5cff;
+}
+.dark .home-swiss {
+  /* ghost-400 — lifts off the near-black ground where #6d5cff goes muddy */
+  --swiss-accent: #9187ff;
+}
+
+.home-swiss :is(h1, h2, h3, .swiss-display) {
+  font-family: 'Archivo Expanded', 'Archivo', 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  font-weight: 800;
+}
+/* Arabic joins on the baseline; negative tracking collides the descenders. */
+[dir='rtl'] .home-swiss :is(h1, h2, h3, .swiss-display) {
+  letter-spacing: 0;
+}
+
+.home-swiss .swiss-headline {
+  font-size: clamp(2.5rem, 6.5vw, 5rem);
+  line-height: 1.03;
+  font-weight: 900;
+}
+[dir='rtl'] .home-swiss .swiss-headline {
+  line-height: 1.16;
+}
+
+/* Small tracked label — the masthead nameplate, section tags, data labels. */
+.home-swiss .swiss-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+/* Arabic has no case and dislikes wide tracking; keep it legible. */
+[dir='rtl'] .home-swiss .swiss-label {
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-family: 'IBM Plex Sans Arabic', 'JetBrains Mono', ui-sans-serif, sans-serif;
+}
+
+/* Tabular figures for the data index. */
+.home-swiss .swiss-figure {
+  font-family: 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+/* Flat Swiss buttons — square, no gradient, no glow. */
+.home-swiss .btn-swiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 3.25rem;
+  padding-inline: 1.5rem;
+  border-radius: 0;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s var(--ease-out-expo),
+    color 0.2s,
+    border-color 0.2s,
+    transform 0.15s var(--ease-out-expo);
+}
+.home-swiss .btn-swiss:active {
+  transform: translateY(1px);
+}
+.home-swiss .btn-swiss-primary {
+  background: var(--swiss-accent);
+  color: #ffffff;
+}
+.dark .home-swiss .btn-swiss-primary {
+  color: #05060a;
+}
+.home-swiss .btn-swiss-primary:hover {
+  background: color-mix(in oklab, var(--swiss-accent) 85%, #000);
+}
+.dark .home-swiss .btn-swiss-primary:hover {
+  background: color-mix(in oklab, var(--swiss-accent) 85%, #fff);
+}
+.home-swiss .btn-swiss-line {
+  border: 1px solid var(--fg);
+  color: var(--fg);
+  background: transparent;
+}
+.home-swiss .btn-swiss-line:hover {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* A directory row in the data index: label + big figure, hairline below,
+   the whole row shifts toward the content on hover (transform, not layout). */
+.home-swiss .swiss-index-row {
+  transition: transform 0.25s var(--ease-out-expo);
+}
+.home-swiss .swiss-index-row:hover {
+  transform: translateX(0.5rem);
+}
+[dir='rtl'] .home-swiss .swiss-index-row:hover {
+  transform: translateX(-0.5rem);
+}

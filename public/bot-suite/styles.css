@@ -54,7 +54,10 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+/* احجز مكان شريط التمرير دائماً: تبديل ar/en يغيّر ارتفاع المحتوى، فيظهر الشريط
+   أو يختفي فيزيح المحتوى المتمركز أفقياً. الحجز الثابت يمنع هذه القفزة في RTL. */
+html { scroll-behavior: smooth; scrollbar-gutter: stable; overflow-x: hidden; }
+body { overflow-x: clip; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }

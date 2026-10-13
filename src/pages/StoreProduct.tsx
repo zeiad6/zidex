@@ -143,6 +143,36 @@ export default function StoreProduct() {
               </>
             ) : null}
 
+            {/* الواجهة الرسومية التفاعلية مدمجة في الصفحة نفسها — iframe من نفس الأصل،
+                يجرّبها المشتري هنا مباشرة بلا مغادرة الموقع (الرابط أدناه يفتحها بملء الشاشة). */}
+            {hasBotInterface(product.sku) && (
+              <div className="mt-8">
+                <h2 className="text-app mb-3 text-lg font-black">{t('جرّب الواجهة الآن', 'Try the interface now')}</h2>
+                <div className="border-app bg-sunken rounded-panel overflow-hidden border">
+                  <iframe
+                    src={`/bot-suite/#/bot/${product.sku}`}
+                    title={t('الواجهة الرسومية التفاعلية للبوت', "The bot's interactive graphical interface")}
+                    loading="lazy"
+                    className="h-[600px] w-full border-0"
+                  />
+                </div>
+              </div>
+            )}
+            {/* معاينة القالب الحيّة مدمجة في صفحة المنتج. */}
+            {product.category === 'sites' && /^site-([a-z0-9-]+)$/.test(product.sku) && (
+              <div className="mt-8">
+                <h2 className="text-app mb-3 text-lg font-black">{t('معاينة القالب الحيّة', 'Live template preview')}</h2>
+                <div className="border-app bg-sunken rounded-panel overflow-hidden border">
+                  <iframe
+                    src={`/templates/${product.sku.replace(/^site-/, '')}/`}
+                    title={t('معاينة القالب', 'Template preview')}
+                    loading="lazy"
+                    className="h-[600px] w-full border-0"
+                  />
+                </div>
+              </div>
+            )}
+
             <h2 className="text-app mt-8 mb-3 text-lg font-black">{t('طرق الدفع', 'Ways to pay')}</h2>
             <PaymentMethods product={product} catalog={catalog} />
             {isBot && (

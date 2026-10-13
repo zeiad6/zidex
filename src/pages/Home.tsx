@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react'
-import { ShineBorder } from '@/components/ui/Decor'
-import { Glyph, type GlyphName } from '@/components/ui/Glyphs'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowLeft, Check, Download, FileText, Gift, LayoutGrid, Package, ShoppingBag, UserPlus, type LucideIcon } from 'lucide-react'
+import { animate, motion, useInView, useReducedMotion } from 'framer-motion'
+import { ArrowLeft, Gift, ShoppingBag } from 'lucide-react'
 import { allPosts, categories, categoryLabel, postsFor, type Category } from '@/data/posts'
 import { primaryDownload as primaryOf, programs } from '@/data/programs'
 import { site, tiktok } from '@/lib/site'
@@ -17,91 +15,265 @@ import { OpeningOffer } from '@/components/store/organisms/OpeningOffer'
 import { useCatalog } from '@/lib/store'
 
 /* ------------------------------------------------------------------ *
- * Home dashboard, after the "Bloggo" Dribbble shot: serif greeting, a
- * stepped "spotlight" card, three quick actions, then the content grids.
+ * Home — Swiss International Typographic Style (phase 1 redesign).
+ *
+ * A typographic index of a software studio, not a dashboard. Hierarchy
+ * is carried by an Archivo grotesque at real scale, a strict column
+ * grid, and 1px hairline rules — never by cards, glass, or gradients.
+ * One flat violet accent. All figures are read from real data.
  * ------------------------------------------------------------------ */
 
-function Illustration({ glyph, image }: { glyph: GlyphName; image?: string }) {
+/** A rule that draws across in the reading direction, origin at the start edge. */
+function DrawRule({ delay = 0, className }: { delay?: number; className?: string }) {
   const reduce = useReducedMotion()
-  if (image) {
-    return (
-      <motion.div
-        key={image}
-        initial={reduce ? false : { opacity: 0, scale: 0.97 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        aria-hidden="true"
-        className="relative h-44 overflow-hidden rounded-2xl sm:h-48"
-      >
-        <img src={image} alt="" className="size-full object-cover" loading="lazy" />
-      </motion.div>
-    )
-  }
   return (
-    <div aria-hidden="true" className="bg-ghost-400 relative h-44 overflow-hidden rounded-2xl sm:h-48">
-      <div className="dark:bg-ink-800 absolute start-[12%] top-0 w-[58%] rounded-b-xl bg-white p-3 shadow-lg">
-        {[72, 56, 64].map((w) => (
-          <div key={w} className="flex items-center gap-2 py-1">
-            <span className="grid size-4 shrink-0 place-items-center rounded bg-emerald-500 text-white">
-              <Check className="size-3" strokeWidth={3} />
-            </span>
-            <span className="bg-ink-200 dark:bg-ink-600 h-1.5 rounded-full" style={{ width: `${w}%` }} />
-          </div>
-        ))}
+    <motion.div
+      aria-hidden="true"
+      className={cn('swiss-rule h-px w-full origin-[left] rtl:origin-[right]', className)}
+      style={{ background: 'var(--line-strong)' }}
+      initial={reduce ? false : { scaleX: 0 }}
+      whileInView={{ scaleX: 1 }}
+      viewport={{ once: true, margin: '-10%' }}
+      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
+    />
+  )
+}
+
+/** Shared section head: hairline, a tracked label, the display heading, and an
+ *  optional directory link — the Swiss rhythm that opens every block. */
+function SectionHead({
+  label,
+  title,
+  sub,
+  to,
+  linkText,
+}: {
+  label: string
+  title: string
+  sub?: string
+  to?: string
+  linkText?: string
+}) {
+  return (
+    <div className="mb-8">
+      <DrawRule />
+      <div className="mt-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+        <div className="min-w-0">
+          <span className="swiss-label text-subtle block">{label}</span>
+          <h2 className="swiss-display text-app mt-2 text-2xl leading-[1.05] sm:text-3xl">{title}</h2>
+          {sub ? <p className="text-muted mt-2 max-w-[48ch] text-sm leading-relaxed">{sub}</p> : null}
+        </div>
+        {to && linkText ? (
+          <Link
+            to={to}
+            className="swiss-label text-app group hover:text-accent inline-flex shrink-0 items-center gap-2 pb-1 transition-colors"
+          >
+            {linkText}
+            <ArrowLeft className="size-3.5 transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1" aria-hidden="true" />
+          </Link>
+        ) : null}
       </div>
-      <motion.div
-        key={glyph}
-        initial={reduce ? false : { opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-        className="ring-ghost-300/70 dark:bg-ink-800 absolute end-[9%] bottom-[11%] w-[64%] rounded-xl bg-white p-3 shadow-xl ring-4"
-      >
-        <div className="flex items-center justify-between gap-2">
-          <span className="h-2 w-2/5 rounded-full bg-amber-400" />
-          <Glyph name={glyph} size={22} className="text-tiktok-600" />
-        </div>
-        <div className="bg-ink-200 dark:bg-ink-600 mt-2.5 h-1.5 w-4/5 rounded-full" />
-        <div className="mt-2 flex gap-1.5">
-          {[1, 2, 3].map((i) => (
-            <span key={i} className="bg-ink-200 dark:bg-ink-600 h-1.5 w-1/4 rounded-full" />
-          ))}
-        </div>
-      </motion.div>
     </div>
   )
 }
 
-type Spot = {
-  step: string
-  title: string
-  body: string
-  glyph: GlyphName
-  cta: string
-  href: string
-  external?: boolean
+/* ------------------------------------------------------------------ *
+ * Masthead — the first viewport. A nameplate bar, one very large
+ * typographic statement of the offer, two flat actions, and a Swiss
+ * data index of the four real figures opposite the headline.
+ * ------------------------------------------------------------------ */
+
+type IndexEntry = { label: string; value: ReactNode; to: string; external?: boolean }
+
+/** A figure that ticks up from zero when it scrolls into view — the index's
+ *  one interactive flourish. Non-numeric values (a placeholder dash) render
+ *  as-is, and reduced-motion jumps straight to the final number. */
+function CountUp({ to }: { to: number }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-15%' })
+  const reduce = useReducedMotion()
+  const [val, setVal] = useState(0)
+
+  useEffect(() => {
+    if (!inView) return
+    if (reduce) {
+      setVal(to)
+      return
+    }
+    const controls = animate(0, to, {
+      duration: 1.1,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => setVal(Math.round(v)),
+    })
+    return () => controls.stop()
+  }, [inView, to, reduce])
+
+  return <span ref={ref}>{val.toLocaleString('en-US')}</span>
 }
 
-function Spotlight() {
+function DataIndex({ entries }: { entries: IndexEntry[] }) {
+  const reduce = useReducedMotion()
+  return (
+    <ul className="w-full">
+      {entries.map((e, i) => {
+        const inner = (
+          <>
+            <span className="swiss-label text-subtle">{e.label}</span>
+            <span className="swiss-figure text-app text-4xl leading-none sm:text-5xl" dir="auto">
+              {typeof e.value === 'number' ? <CountUp to={e.value} /> : e.value}
+            </span>
+          </>
+        )
+        const rowCls =
+          'swiss-index-row flex items-end justify-between gap-4 py-4 text-app hover:text-accent'
+        return (
+          <motion.li
+            key={i}
+            className="border-t border-app last:border-b"
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 + i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {e.external ? (
+              <a href={e.to} target="_blank" rel="noopener noreferrer nofollow" className={rowCls}>
+                {inner}
+              </a>
+            ) : (
+              <Link to={e.to} className={rowCls}>
+                {inner}
+              </Link>
+            )}
+          </motion.li>
+        )
+      })}
+    </ul>
+  )
+}
+
+function Masthead() {
+  const { t } = useI18n()
+  const reduce = useReducedMotion()
+  const { catalog } = useCatalog()
+  const botCount = catalog?.products.filter(
+    (p) => p.category === 'types' || (p.category === 'bots' && !p.monthly),
+  ).length
+  const trialLink = catalog ? `https://t.me/${catalog.bot}?start=trial` : '/shop'
+
+  const entries: IndexEntry[] = [
+    { label: t('أنواع بوتات جاهزة', 'Ready bot types'), value: botCount ?? '—', to: '/shop' },
+    { label: t('برامج منشورة', 'Published apps'), value: programs.length, to: '/programs' },
+    { label: t('مقالات تقنية', 'Technical articles'), value: allPosts.length, to: '/blog' },
+    {
+      label: t('متابع على تيك توك', 'TikTok followers'),
+      value: tiktok.stats.followers,
+      to: tiktok.profile,
+      external: true,
+    },
+  ]
+
+  const rise = (delay: number) =>
+    reduce
+      ? {}
+      : {
+          initial: { opacity: 0, y: 20 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] as const },
+        }
+
+  return (
+    <section aria-labelledby="hero-title" className="relative isolate">
+      {/* Nameplate bar. */}
+      <DrawRule />
+      <motion.div
+        className="flex items-center justify-between gap-4 py-3"
+        initial={reduce ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+      >
+        <span className="swiss-label text-app inline-flex items-center gap-2.5 font-semibold">
+          <span className="relative flex size-2">
+            <span
+              className="absolute inline-flex size-full animate-ping rounded-full opacity-70 motion-reduce:animate-none"
+              style={{ background: 'var(--swiss-accent)' }}
+            />
+            <span className="relative inline-flex size-2 rounded-full" style={{ background: 'var(--swiss-accent)' }} />
+          </span>
+          ZEIDEXSOFT
+        </span>
+        <span className="swiss-label text-subtle truncate">{t('الموقع الرسمي', 'official site')}</span>
+      </motion.div>
+      <DrawRule delay={0.08} />
+
+      {/* Headline + index. */}
+      <div className="grid gap-x-10 gap-y-12 pt-10 lg:grid-cols-12 lg:pt-14">
+        <div className="lg:col-span-7">
+          <motion.h1
+            id="hero-title"
+            className="swiss-headline swiss-display text-app"
+            initial={reduce ? false : { opacity: 0, y: 24, clipPath: 'inset(0 0 18% 0)' }}
+            animate={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)' }}
+            transition={{ duration: 0.8, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {t('نبني بوتات تيليجرام وبرمجيات ', 'We build Telegram bots & software ')}
+            <span style={{ color: 'var(--swiss-accent)' }}>{t('تُشغِّل عملك.', 'that run your business.')}</span>
+          </motion.h1>
+
+          <motion.p className="text-muted mt-7 max-w-[50ch] text-base leading-relaxed sm:text-lg" {...rise(0.3)}>
+            {t(
+              'متاجر رقمية، إدارة مجموعات، خدمة عملاء، حجوزات واشتراكات — بدفع بالنجوم أو الكريمي. جرّب بوتك الكامل بكل المميزات قبل أن تدفع.',
+              'Digital stores, group management, support, bookings and subscriptions — paid in Stars or via Kuraimi. Try your full bot, every feature, before you pay.',
+            )}
+          </motion.p>
+
+          <motion.div className="mt-9 flex flex-wrap gap-3" {...rise(0.4)}>
+            <Link to="/shop" className="btn-swiss btn-swiss-primary">
+              <ShoppingBag className="size-4" aria-hidden="true" />
+              {t('تصفح البوتات', 'Browse bots')}
+            </Link>
+            <a href={trialLink} target="_blank" rel="noopener noreferrer" className="btn-swiss btn-swiss-line">
+              <Gift className="size-4" aria-hidden="true" />
+              {t('بوت متجر مجاني لمدة شهر', 'A free store bot for a month')}
+            </a>
+          </motion.div>
+        </div>
+
+        <div className="lg:col-span-5 lg:ps-10 lg:border-s lg:border-app">
+          <span className="swiss-label text-subtle mb-1 block">{t('الفهرس', 'The index')}</span>
+          <DataIndex entries={entries} />
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ------------------------------------------------------------------ *
+ * Start here — a numbered directory of the four things a first visitor
+ * should do, re-formed from the old tabbed "spotlight". The step
+ * numbers carry the sequence; the detail sits in one typographic panel,
+ * not a glass card.
+ * ------------------------------------------------------------------ */
+
+type Step = { kicker: string; title: string; body: string; cta: string; href: string; external?: boolean }
+
+function StartHere() {
   const { lang, t } = useI18n()
   const latest = postsFor(lang)[0]
   const program = programs[0]
 
-  const spots: Spot[] = [
+  const steps: Step[] = [
     {
-      step: t('اقرأ أحدث مقال', 'Read the latest article'),
+      kicker: t('اقرأ أحدث مقال', 'Read the latest article'),
       title: latest.title,
       body: latest.excerpt,
-      glyph: latest.cover as GlyphName,
       cta: t('اقرأ المقال', 'Read article'),
       href: `/blog/${latest.slug}`,
     },
     ...(program
       ? [
           {
-            step: t('حمّل برنامجاً مجانياً', 'Download a free program'),
+            kicker: t('حمّل برنامجاً مجانياً', 'Download a free program'),
             title: t(program.name, program.nameEn),
             body: t(program.tagline, program.taglineEn),
-            glyph: program.glyph,
             cta: t(`تحميل · ${primaryOf(program).size}`, `Download · ${primaryOf(program).size}`),
             href: primaryOf(program).href,
             external: true,
@@ -109,24 +281,22 @@ function Spotlight() {
         ]
       : []),
     {
-      step: t('كل الروابط في مكان واحد', 'Every link in one place'),
+      kicker: t('كل الروابط في مكان واحد', 'Every link in one place'),
       title: t('صفحة الروابط', 'The links page'),
       body: t(
         'حساباتي، البث المباشر، المدونة، وطرق التواصل — في شبكة واحدة مع نسخ ومشاركة بنقرة.',
         'My accounts, live streams, the blog, and ways to reach me — one grid, with one-tap copy and share.',
       ),
-      glyph: 'compass',
       cta: t('افتح الروابط', 'Open links'),
       href: '/links',
     },
     {
-      step: t('تابعني على تيك توك', 'Follow me on TikTok'),
+      kicker: t('تابعني على تيك توك', 'Follow me on TikTok'),
       title: site.handle,
       body: t(
         'كل فيديو جديد ينزل هناك أولاً — والمقالات هنا هي نسخته المكتوبة.',
         'Every new video lands there first — the articles here are the written version.',
       ),
-      glyph: 'tiktok',
       cta: t('افتح تيك توك', 'Open TikTok'),
       href: tiktok.profile,
       external: true,
@@ -134,192 +304,91 @@ function Spotlight() {
   ]
 
   const [active, setActive] = useState(0)
-  const [seen, setSeen] = useState<Set<number>>(() => new Set([0]))
-  const spot = spots[active]!
-
-  const select = (i: number) => {
-    setActive(i)
-    setSeen((s) => new Set(s).add(i))
-  }
+  const step = steps[active]!
 
   return (
-    <ShineBorder className="rounded-2xl border border-app">
-      <section aria-label={t('ابدأ من هنا', 'Start here')}>
-      <div className="grid lg:grid-cols-[minmax(0,5fr)_minmax(0,8fr)]">
-        <div role="tablist" aria-orientation="vertical" className="flex flex-col gap-1 p-3 sm:p-4">
-          {spots.map((s, i) => {
+    <section aria-labelledby="start-here">
+      <SectionHead
+        label={t('ابدأ من هنا', 'Start here')}
+        title={t('أربع خطوات، بالترتيب', 'Four moves, in order')}
+      />
+      <div className="grid gap-x-10 gap-y-8 lg:grid-cols-12">
+        {/* The numbered list of steps. */}
+        <ul role="tablist" aria-orientation="vertical" className="lg:col-span-5">
+          {steps.map((s, i) => {
             const on = i === active
-            const done = seen.has(i) && !on
             return (
-              <button
-                key={s.step}
-                type="button"
-                role="tab"
-                id={`spot-tab-${i}`}
-                aria-selected={on}
-                aria-controls="spot-panel"
-                onClick={() => select(i)}
-                className={cn(
-                  'flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-start text-[15px] transition-colors',
-                  on ? 'bg-accent-soft text-app font-semibold' : 'text-muted hover:bg-sunken/70',
-                )}
-              >
-                <span
+              <li key={s.kicker} className="border-t border-app last:border-b">
+                <button
+                  type="button"
+                  role="tab"
+                  id={`step-tab-${i}`}
+                  aria-selected={on}
+                  aria-controls="step-panel"
+                  onClick={() => setActive(i)}
                   className={cn(
-                    'grid size-7 shrink-0 place-items-center rounded-full border text-sm font-medium',
-                    on ? 'border-accent text-accent' : done ? 'border-ghost-300 text-accent' : 'border-app text-subtle',
+                    'swiss-index-row flex w-full cursor-pointer items-baseline gap-4 py-4 text-start transition-colors',
+                    on ? 'text-app' : 'text-muted hover:text-app',
                   )}
                 >
-                  {done ? <Glyph name="check" size={14} strokeWidth={2.6} aria-hidden="true" /> : i + 1}
-                </span>
-                {s.step}
-              </button>
+                  <span
+                    className={cn(
+                      'swiss-figure w-8 shrink-0 text-xl tabular-nums',
+                      on ? 'text-accent' : 'text-subtle',
+                    )}
+                  >
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span className="text-[15px] leading-snug font-semibold">{s.kicker}</span>
+                </button>
+              </li>
             )
           })}
-        </div>
+        </ul>
 
+        {/* The detail panel. */}
         <div
-          id="spot-panel"
+          id="step-panel"
           role="tabpanel"
-          aria-labelledby={`spot-tab-${active}`}
-          className="bg-ink-50 grid items-center gap-6 border-t border-app p-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] sm:p-7 lg:border-t-0 lg:border-s dark:bg-white/[0.02]"
+          aria-labelledby={`step-tab-${active}`}
+          className="lg:col-span-7 lg:ps-10 lg:border-s lg:border-app"
         >
-          <Illustration glyph={spot.glyph} />
-          <div className="min-w-0">
-            <h2 className="text-app line-clamp-2 text-lg leading-snug font-semibold sm:text-xl">{spot.title}</h2>
-            <p className="text-muted mt-2 line-clamp-3 text-sm leading-relaxed">{spot.body}</p>
-            {spot.external ? (
-              <a href={spot.href} target="_blank" rel="noopener noreferrer nofollow" className="btn btn-primary mt-5 h-10 cursor-pointer px-5">
-                {spot.href.includes('mediafire') ? <Download className="size-4" aria-hidden="true" /> : null}
-                {spot.cta}
+          <motion.div
+            key={active}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span className="swiss-figure text-subtle block text-6xl leading-none sm:text-7xl">
+              {String(active + 1).padStart(2, '0')}
+            </span>
+            <h3 className="swiss-display text-app mt-5 text-xl leading-snug font-bold sm:text-2xl" dir="auto">
+              {step.title}
+            </h3>
+            <p className="text-muted mt-3 max-w-[56ch] text-sm leading-relaxed sm:text-base">{step.body}</p>
+            {step.external ? (
+              <a
+                href={step.href}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="text-app hover:text-accent group mt-6 inline-flex items-center gap-2 text-sm font-bold"
+              >
+                {step.cta}
+                <ArrowLeft className="size-4 transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1" aria-hidden="true" />
               </a>
             ) : (
-              <Link to={spot.href} className="btn btn-primary mt-5 h-10 cursor-pointer px-5">
-                {spot.cta}
+              <Link
+                to={step.href}
+                className="text-app hover:text-accent group mt-6 inline-flex items-center gap-2 text-sm font-bold"
+              >
+                {step.cta}
+                <ArrowLeft className="size-4 transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1" aria-hidden="true" />
               </Link>
             )}
-          </div>
+          </motion.div>
         </div>
       </div>
-      </section>
-    </ShineBorder>
-  )
-}
-
-/**
- * Zidex KPI row: icon tile + badge on top, label, big figure, and a footer
- * (mini bars or a segment meter). Every number is read off the site's own
- * data — the template's balances and campaign counts have no equivalent here.
- */
-function QuickActions() {
-  const { lang, t } = useI18n()
-  const perCategory = categories.map((c) => allPosts.filter((p) => p.category === c).length)
-  const maxCat = Math.max(...perCategory, 1)
-  const latest = postsFor(lang)[0]
-  const windows = programs.filter((p) => p.kind === 'windows').length
-  const android = programs.filter((p) => p.kind === 'android').length
-
-  const cards: {
-    to: string
-    icon: LucideIcon
-    tile: string
-    badge: string
-    badgeTone: string
-    label: string
-    value: number
-    unit: string
-    foot: React.ReactNode
-  }[] = [
-    {
-      to: '/blog',
-      icon: FileText,
-      tile: 'bg-orange-50 text-orange-500 dark:bg-orange-400/10',
-      badge: t('أحدثها', 'Latest'),
-      badgeTone: 'bg-orange-50 text-orange-600 dark:bg-orange-400/10 dark:text-orange-300',
-      label: t('مقالات منشورة', 'Published articles'),
-      value: allPosts.length,
-      unit: t('مقال', 'posts'),
-      foot: <span className="text-subtle block truncate text-[11px] font-bold">{latest?.title}</span>,
-    },
-    {
-      to: '/programs',
-      icon: Package,
-      tile: 'bg-ghost-50 text-ghost-500 dark:bg-ghost-400/10 dark:text-ghost-300',
-      badge: t('مجاني', 'Free'),
-      badgeTone: 'bg-ghost-50 text-ghost-600 dark:bg-ghost-400/10 dark:text-ghost-300',
-      label: t('برامج جاهزة للتحميل', 'Programs to download'),
-      value: programs.length,
-      unit: t('برنامج', 'apps'),
-      foot: (
-        <span className="text-subtle block text-[11px] font-bold">
-          {t(`ويندوز ${windows} · أندرويد ${android}`, `Windows ${windows} · Android ${android}`)}
-        </span>
-      ),
-    },
-    {
-      to: '/blog',
-      icon: LayoutGrid,
-      tile: 'bg-emerald-50 text-emerald-500 dark:bg-emerald-400/10',
-      badge: t(`${categories.length} أقسام`, `${categories.length} sections`),
-      badgeTone: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-400/10 dark:text-emerald-300',
-      label: t('توزيع المقالات', 'Articles by section'),
-      value: categories.length,
-      unit: t('قسم', 'sections'),
-      foot: (
-        <span className="flex h-6 items-end gap-[3px]" aria-hidden="true">
-          {perCategory.map((n, i) => (
-            <span
-              key={i}
-              className="from-ghost-500 to-veil-500 flex-1 rounded-sm bg-linear-to-t"
-              style={{ height: `${Math.max(12, (n / maxCat) * 100)}%` }}
-            />
-          ))}
-        </span>
-      ),
-    },
-    {
-      to: '/links',
-      icon: UserPlus,
-      tile: 'bg-sky-50 text-sky-500 dark:bg-sky-400/10',
-      badge: site.handle,
-      badgeTone: 'bg-sky-50 text-sky-600 dark:bg-sky-400/10 dark:text-sky-300',
-      label: t('متابع على تيك توك', 'TikTok followers'),
-      value: tiktok.stats.followers,
-      unit: t('متابع', 'followers'),
-      foot: (
-        <span className="flex gap-1.5" aria-hidden="true">
-          {[1, 0.7, 0.4, 0.15].map((o) => (
-            <span key={o} className="bg-ghost-500 h-2 flex-1 rounded-full" style={{ opacity: o }} />
-          ))}
-        </span>
-      ),
-    },
-  ]
-
-  return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      {cards.map(({ to, icon: Icon, tile, badge, badgeTone, label, value, unit, foot }, i) => (
-        <Link
-          key={i}
-          to={to}
-          className="border-app bg-elevated shadow-app hover:shadow-app-lg rounded-card flex flex-col border p-5 transition-shadow duration-300"
-        >
-          <span className="flex items-start justify-between gap-2">
-            <span className={cn('grid size-11 shrink-0 place-items-center rounded-2xl', tile)}>
-              <Icon className="size-5" aria-hidden="true" />
-            </span>
-            <span className={cn('truncate rounded-full px-2 py-1 text-[11px] font-black', badgeTone)} dir="auto">
-              {badge}
-            </span>
-          </span>
-          <span className="text-subtle mt-3 text-[12px] font-bold">{label}</span>
-          <span className="text-app mt-0.5 text-2xl font-black">
-            {value} <span className="text-subtle text-sm font-bold">{unit}</span>
-          </span>
-          <span className="mt-2">{foot}</span>
-        </Link>
-      ))}
-    </div>
+    </section>
   )
 }
 
@@ -332,207 +401,56 @@ function Articles() {
 
   return (
     <section aria-labelledby="home-articles">
-      <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-3">
-        <div>
-          <h2 id="home-articles" className="text-app text-[17px] font-black">
-            {t('المقالات', 'Articles')}
-          </h2>
-          <p className="text-subtle mt-0.5 text-[12px]">
-            {t('أدق التفاصيل، بلا حشو', 'The detail, without the filler')}
-          </p>
+      <div className="mb-8">
+        <DrawRule />
+        <div className="mt-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+          <div>
+            <span className="swiss-label text-subtle block">{t('المدونة', 'The blog')}</span>
+            <h2 id="home-articles" className="swiss-display text-app mt-2 text-2xl leading-[1.05] sm:text-3xl">
+              {t('المقالات', 'Articles')}
+            </h2>
+          </div>
+          <div className="flex items-center gap-5">
+            <label className="text-muted relative flex items-center text-sm">
+              <span className="sr-only">{t('تصفية حسب القسم', 'Filter by category')}</span>
+              <select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value as Category | 'all')}
+                className="hover:text-app swiss-label cursor-pointer appearance-none bg-transparent pe-5 outline-none"
+              >
+                <option value="all">{t('الأحدث', 'Latest')}</option>
+                {categories.map((c) => (
+                  <option key={c} value={c}>
+                    {categoryLabel(c, lang)}
+                  </option>
+                ))}
+              </select>
+              <svg viewBox="0 0 24 24" className="pointer-events-none absolute end-0 size-4" fill="none" aria-hidden="true">
+                <path d="m6 9 6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </label>
+            <Link
+              to="/blog"
+              className="swiss-label text-app group hover:text-accent inline-flex shrink-0 items-center gap-2 transition-colors"
+            >
+              {t('عرض الكل', 'View all')}
+              <ArrowLeft className="size-3.5 transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1" aria-hidden="true" />
+            </Link>
+          </div>
         </div>
-        <span className="bg-line h-5 w-px" aria-hidden="true" />
-        <label className="text-muted relative flex items-center text-sm">
-          <span className="sr-only">{t('تصفية حسب القسم', 'Filter by category')}</span>
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value as Category | 'all')}
-            className="hover:text-app cursor-pointer appearance-none bg-transparent pe-5 outline-none"
-          >
-            <option value="all">{t('الأحدث', 'Latest')}</option>
-            {categories.map((c) => (
-              <option key={c} value={c}>
-                {categoryLabel(c, lang)}
-              </option>
-            ))}
-          </select>
-          <svg viewBox="0 0 24 24" className="pointer-events-none absolute end-0 size-4" fill="none" aria-hidden="true">
-            <path d="m6 9 6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </label>
-        <Link to="/blog" className="text-accent group ms-auto flex items-center gap-1 text-sm font-medium">
-          {t('عرض الكل', 'View all')}
-          <ArrowLeft className="size-3.5 transition-transform rtl:group-hover:-translate-x-0.5 ltr:group-hover:translate-x-0.5" aria-hidden="true" />
-        </Link>
       </div>
 
       {list.length ? (
-        <div className="grid gap-x-6 gap-y-10 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 xl:grid-cols-3">
           {list.map((post, i) => (
             <PostCard key={post.slug} post={post} index={i} />
           ))}
         </div>
       ) : (
-        <p className="text-muted rounded-2xl border border-dashed border-app py-12 text-center text-sm">
+        <p className="text-muted border border-dashed border-app py-12 text-center text-sm">
           {t('لا مقالات في هذا القسم بعد.', 'No articles in this category yet.')}
         </p>
       )}
-    </section>
-  )
-}
-
-/* ------------------------------------------------------------------ *
- * Hero. A dark gradient panel with a fine grid over it, two blurred
- * colour blobs, and a column of floating fact cards.
- *
- * The fact cards carry real figures only. The reference this is drawn
- * from filled its equivalents with a bank balance, a boarding pass and
- * a testimonial; a personal hub has none of those, and inventing them
- * would be the one thing the rest of the site never does.
- * ------------------------------------------------------------------ */
-
-function HeroFact({
-  label,
-  value,
-  sub,
-  bars,
-  delay,
-}: {
-  label: string
-  value: React.ReactNode
-  sub?: string
-  /** Relative weights for the mini bar. Lengths, not invented trends. */
-  bars?: number[]
-  delay: number
-}) {
-  const reduce = useReducedMotion()
-  const max = bars?.length ? Math.max(...bars) : 1
-
-  return (
-    <motion.div
-      initial={reduce ? false : { opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }}
-      className={cn(
-        'relative overflow-hidden rounded-3xl border p-4',
-        'border-white/12 bg-gradient-to-b from-white/[0.13] to-white/[0.035] ring-1 ring-inset ring-white/[0.06] backdrop-blur-xl',
-        !reduce && 'motion-safe:animate-[floaty_6s_ease-in-out_infinite]',
-      )}
-      style={delay ? { animationDelay: `${delay}s` } : undefined}
-    >
-      <span aria-hidden="true" className="from-ghost-400/80 to-veil-400/50 absolute inset-x-4 top-0 h-px bg-gradient-to-r" />
-      <p className="text-[11px] font-bold tracking-wide text-white/60">{label}</p>
-      <p className="mt-1.5 text-[1.7rem] leading-none font-black text-white">{value}</p>
-      {sub ? <p className="mt-1 text-[11px] leading-relaxed text-white/50">{sub}</p> : null}
-      {bars?.length ? (
-        <div className="mt-3 flex h-9 items-end gap-0.5" aria-hidden="true">
-          {bars.map((b, i) => (
-            <motion.span
-              key={i}
-              initial={reduce ? false : { height: 0 }}
-              animate={{ height: `${Math.max(8, (b / max) * 100)}%` }}
-              transition={{ duration: 0.6, delay: delay + i * 0.04, ease: [0.16, 1, 0.3, 1] }}
-              className="flex-1 rounded-full bg-gradient-to-t from-ghost-400 to-veil-500"
-            />
-          ))}
-        </div>
-      ) : null}
-    </motion.div>
-  )
-}
-
-function Hero() {
-  const { t } = useI18n()
-  const { catalog } = useCatalog()
-  const botCount = catalog?.products.filter((p) => p.category === 'types' || (p.category === 'bots' && !p.monthly)).length
-  const trialLink = catalog ? `https://t.me/${catalog.bot}?start=trial` : '/shop'
-
-  return (
-    <section
-      aria-labelledby="hero-title"
-      className="grid-bg relative overflow-hidden rounded-panel p-6 sm:p-9"
-      style={{
-        background:
-          'radial-gradient(130% 100% at 86% -12%, #322579 0%, rgba(50,37,121,0) 55%), radial-gradient(95% 85% at -2% 108%, #0c3b36 0%, rgba(12,59,54,0) 52%), linear-gradient(135deg, #0c0d1e 0%, #15133a 58%, #1a1753 100%)',
-      }}
-    >
-      {/* توقيع الواجهة: مسحة أورورا مخروطية واحدة بدل الكرتين الضبابيتين المكرّرتين، + خيط ضوئي علوي */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-1/3 start-1/4 size-[44rem] opacity-25 blur-[96px] motion-safe:animate-[floaty_11s_ease-in-out_infinite]"
-        style={{ background: 'conic-gradient(from 210deg at 50% 50%, #6d5cff, #00c9a7, #8d7cff, #6d5cff)' }}
-      />
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(141,124,255,.7) 30%, rgba(0,201,167,.5) 70%, transparent)' }}
-      />
-
-      <div className="relative grid items-center gap-8 lg:grid-cols-[1.15fr_1fr]">
-        <div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[12px] font-bold text-white/85">
-            <span className="relative flex size-2">
-              <span className="bg-veil-400 absolute inline-flex size-full animate-ping rounded-full opacity-75 motion-reduce:animate-none" />
-              <span className="bg-veil-300 relative inline-flex size-2 rounded-full" />
-            </span>
-            {t('ZeidexSoft · الموقع الرسمي', 'ZeidexSoft · official site')}
-          </span>
-
-          <h1 id="hero-title" className="mt-5 text-3xl leading-[1.2] font-black text-balance text-white lg:text-[2.9rem]">
-            {t('نبني بوتات تيليجرام وبرمجيات تعمل لعملك', 'We build Telegram bots and software that work for your business')}
-          </h1>
-
-          <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-white/70">
-            {t(
-              'متاجر رقمية، إدارة مجموعات، خدمة عملاء، حجوزات واشتراكات — بدفع بالنجوم والكريمي. جرّب بوتك الكامل بكل المميزات 7 أيام مجاناً.',
-              'Digital stores, group management, support, bookings and subscriptions — paid in Stars or via Kuraimi. Try your full bot with every feature free for 7 days.',
-            )}
-          </p>
-
-          <div className="mt-7 flex flex-wrap gap-3">
-            <Link to="/shop" className="btn btn-primary h-12 rounded-2xl px-6 text-[14px] font-black">
-              <ShoppingBag className="size-4" aria-hidden="true" />
-              {t('تصفح البوتات', 'Browse bots')}
-            </Link>
-            <a
-              href={trialLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-ink flex h-12 items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-6 text-[14px] font-black text-white transition-colors hover:bg-white"
-            >
-              <Gift className="size-4" aria-hidden="true" />
-              {t('بوت متجر مجاني لمدة شهر', 'A free store bot for a month')}
-            </a>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3.5">
-          <HeroFact
-            label={t('أنواع بوتات جاهزة', 'Ready bot types')}
-            value={botCount ?? '…'}
-            sub={t('لكل منها تجربة مجانية داخل تيليجرام', 'each with a free demo in Telegram')}
-            delay={0.1}
-          />
-          <HeroFact
-            label={t('تجربة مجانية', 'Free trial')}
-            value={t('يومين', '2 days')}
-            sub={t('على توكن بوتك، مرة واحدة لكل شخص', 'on your own bot token, once per person')}
-            delay={0.2}
-          />
-          <HeroFact
-            label={t('برامج منشورة', 'Published apps')}
-            value={programs.length}
-            sub={t('ويندوز وأندرويد', 'Windows and Android')}
-            delay={0.3}
-          />
-          <HeroFact
-            label={t('مقالات تقنية', 'Technical articles')}
-            value={allPosts.length}
-            sub={t('شروحات عملية بالتفصيل', 'hands-on, in depth')}
-            delay={0.4}
-          />
-        </div>
-      </div>
     </section>
   )
 }
@@ -545,41 +463,35 @@ export default function Home() {
   }, [t])
 
   return (
-    <div className="container-app flex flex-col gap-6 py-6 lg:gap-8 lg:py-8">
+    <div className="home-swiss container-app flex flex-col gap-16 py-10 sm:gap-20 lg:gap-28 lg:py-14">
       <OpeningOffer />
-      <Hero />
+      <Masthead />
 
       <Reveal delay={0.06}>
-        <StoreTeaser />
+        <section aria-label={t('المتجر', 'The store')}>
+          <SectionHead
+            label={t('المتجر', 'The store')}
+            title={t('اختر بوتك، جاهز للتشغيل', 'Pick your bot, ready to run')}
+            to="/shop"
+            linkText={t('كل البوتات', 'All bots')}
+          />
+          <StoreTeaser />
+        </section>
       </Reveal>
 
-      <Reveal delay={0.08}>
-        <QuickActions />
-      </Reveal>
-
-      <Reveal delay={0.1}>
-        <Spotlight />
-      </Reveal>
-
+      <StartHere />
 
       <Articles />
 
       {programs.length ? (
         <section aria-labelledby="home-programs">
-          <div className="mb-6 flex items-center gap-4">
-            <div>
-              <h2 id="home-programs" className="text-app text-[17px] font-black">
-                {t('البرامج', 'Programs')}
-              </h2>
-              <p className="text-subtle mt-0.5 text-[12px]">
-                {t('كل برنامج موثّق بمقال مستقل', 'Every program documented in its own article')}
-              </p>
-            </div>
-            <Link to="/programs" className="text-accent group ms-auto flex items-center gap-1.5 text-[13px] font-bold">
-              {t('كل البرامج', 'All programs')}
-              <ArrowLeft className="size-3.5 transition-transform rtl:group-hover:-translate-x-0.5 ltr:group-hover:translate-x-0.5" aria-hidden="true" />
-            </Link>
-          </div>
+          <SectionHead
+            label={t('التحميلات', 'Downloads')}
+            title={t('البرامج', 'Programs')}
+            sub={t('كل برنامج موثّق بمقال مستقل.', 'Every program documented in its own article.')}
+            to="/programs"
+            linkText={t('كل البرامج', 'All programs')}
+          />
           <div className="grid gap-3">
             {programs.slice(0, 3).map((p) => (
               <ProgramCard key={p.slug} program={p} />

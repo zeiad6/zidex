@@ -1,3 +1,6 @@
+/* خط عربي/لاتيني موحّد بكل الأوزان: Cairo variable ذاتي الاستضافة (OFL). */
+@font-face{font-family:'Cairo';src:url('fonts/cairo-arabic-wght-normal.woff2') format('woff2');font-weight:200 1000;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-089F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF,U+0660-0669;}
+@font-face{font-family:'Cairo';src:url('fonts/cairo-latin-wght-normal.woff2') format('woff2');font-weight:200 1000;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+2000-206F,U+2074,U+20AC,U+2122,U+2212;}
 /* عود وعنبر — "أتيليه": هوية فاخرة محرَّرة. فحم دافئ، شمبانيا وذهب عتيق،
    مساحات واسعة، تدرّج طباعي، وتفاصيل دقيقة (حبيبات، خيوط ذهبية، لمعة عابرة).
    الخصائص المنطقية تقلب الصفحة مع اللغة rtl→ltr. لا خطوط خارجية — عائلات النظام فقط
@@ -16,6 +19,9 @@
   --gold: #d4a94e;
   --gold-soft: #ecc987;
   --gold-deep: #8a6420;
+  --sans: 'Cairo', 'Segoe UI', 'Noto Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+  --a1: #d4a94e;
+  --a2: #ecc987;
   --champagne: #f0d8a8;
   --radius: 16px;
   --radius-lg: 22px;
@@ -27,6 +33,8 @@
 }
 
 * { box-sizing: border-box }
+/* سمة hidden تُخفي دائماً — تمنع بقاء الدرج/النافذة ظاهرة إذا ضبط صنفها display. */
+[hidden] { display: none !important }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100% }
 body {
   margin: 0;
@@ -35,12 +43,12 @@ body {
     radial-gradient(900px 600px at -5% 10%, #241a0b 0%, rgba(36, 26, 11, 0) 55%),
     var(--bg);
   color: var(--ink);
-  font-family: 'Segoe UI', 'Noto Naskh Arabic', 'Geeza Pro', Tahoma, 'Helvetica Neue', sans-serif;
+  font-family: var(--sans);
   line-height: 1.75;
   min-height: 100vh;
   overflow-x: hidden;
 }
-html[lang='en'] body { font-family: 'Iowan Old Style', 'Palatino Linotype', 'Georgia', serif }
+html[lang='en'] body { font-family: var(--sans)}
 
 /* حبيبات فيلمية خفيفة فوق كل شيء — تكسر "النظافة الرقمية" المولّدة */
 body::after {
@@ -51,12 +59,12 @@ body::after {
 body > * { position: relative; z-index: 2 }
 
 h1, h2, h3, .brand-name {
-  font-family: 'Sakkal Majalla', 'Amiri', 'Noto Naskh Arabic', 'Palatino Linotype', 'Geeza Pro', serif;
+  font-family: var(--sans);
   font-weight: 700;
   line-height: 1.2;
 }
 html[lang='en'] h1, html[lang='en'] h2, html[lang='en'] h3, html[lang='en'] .brand-name {
-  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+  font-family: var(--sans);
   letter-spacing: -.01em;
 }
 
@@ -148,7 +156,7 @@ button { font: inherit; cursor: pointer }
 .hero-acts { display: flex; gap: .8rem; flex-wrap: wrap; margin: 1.8rem 0 }
 .hero-stats { display: flex; gap: clamp(1.2rem, 4vw, 2.6rem); list-style: none; padding: 1.4rem 0 0; margin: 1.2rem 0 0; border-top: 1px solid var(--line-soft) }
 .hero-stats li { display: grid; gap: .1rem }
-.hero-stats b { font-size: clamp(1.5rem, 3vw, 2rem); color: var(--champagne); font-family: 'Palatino Linotype', Georgia, serif; font-weight: 700 }
+.hero-stats b { font-size: clamp(1.5rem, 3vw, 2rem); color: var(--champagne); font-family: var(--sans); font-weight: 700 }
 .hero-stats span { color: var(--ink-faint); font-size: .76rem; letter-spacing: .04em }
 .hero-art { display: grid; place-items: center; position: relative }
 .hero-svg { width: min(380px, 78vw); height: auto; filter: drop-shadow(0 30px 70px rgba(212, 169, 78, .22)) }
@@ -234,7 +242,7 @@ button { font: inherit; cursor: pointer }
   border-radius: 99px; padding: .16rem .7rem;
 }
 .price { display: flex; gap: .5rem; align-items: baseline; margin-bottom: .9rem }
-.price b { color: var(--champagne); font-size: 1.22rem; font-family: 'Palatino Linotype', Georgia, serif }
+.price b { color: var(--champagne); font-size: 1.22rem; font-family: var(--sans)}
 .price s { color: var(--ink-faint); font-size: .85rem }
 
 .hint { color: var(--ink-dim); font-size: .9rem }
@@ -261,7 +269,7 @@ button { font: inherit; cursor: pointer }
 .steps b {
   flex: none; width: 46px; height: 46px; display: grid; place-items: center;
   border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--gold-soft), var(--gold-deep));
-  color: #231905; font-size: 1.15rem; font-family: 'Palatino Linotype', Georgia, serif; font-weight: 700;
+  color: #231905; font-size: 1.15rem; font-family: var(--sans); font-weight: 700;
   box-shadow: 0 6px 18px rgba(212, 169, 78, .22);
 }
 .steps span { align-self: center; color: var(--ink-dim) }
@@ -305,7 +313,7 @@ html[dir='rtl'] .drawer { --from: -100% }
 .ghost.del:hover { color: #d47f6b; background: none }
 .cart-foot { display: grid; gap: .65rem; margin-top: auto; padding-top: .3rem }
 .total { font-size: 1.05rem; border-top: 1px dashed var(--line); padding-top: .9rem }
-.total b { color: var(--champagne); font-family: 'Palatino Linotype', Georgia, serif; font-size: 1.3rem }
+.total b { color: var(--champagne); font-family: var(--sans); font-size: 1.3rem }
 
 /* ── النوافذ والإشعار ───────────────────────────────────────── */
 .modal {
@@ -342,3 +350,17 @@ html[dir='rtl'] .drawer { --from: -100% }
   [data-reveal] { opacity: 1; transform: none }
   html { scroll-behavior: auto }
 }
+
+/* ── تحسين الخطوط: stack عربي/لاتيني أوضح + تقنين أحرف ومقاسات متّسقة ── */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { text-rendering: optimizeLegibility; font-feature-settings: "kern", "liga", "calt"; }
+
+/* ── برواز مضيء متحرك + شارة بيانات القالب ── */
+.tpl-frame{position:fixed;inset:0;z-index:200;pointer-events:none;}
+.tpl-frame::before{content:"";position:absolute;inset:0;padding:2.5px;background:linear-gradient(130deg,var(--a1),var(--a2),var(--a1));background-size:220% 220%;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:tpl-glow 5s ease infinite;opacity:.95;}
+.tpl-frame::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 24px -6px var(--a1);animation:tpl-pulse 3.4s ease-in-out infinite;}
+@keyframes tpl-glow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes tpl-pulse{0%,100%{opacity:.16}50%{opacity:.42}}
+.tpl-badge{position:fixed;inset-block-end:calc(12px + env(safe-area-inset-bottom));inset-inline-start:50%;translate:-50% 0;z-index:201;display:inline-flex;align-items:center;gap:.45rem;padding:.4rem .95rem;border-radius:999px;background:var(--a1);color:#1a1206;font-size:.72rem;font-weight:800;box-shadow:0 12px 26px -12px rgb(0 0 0 / .6);pointer-events:none;white-space:nowrap;}
+.tpl-badge b{font-weight:900}.tpl-badge span{opacity:.8;font-weight:700}
+@media (prefers-reduced-motion:reduce){.tpl-frame::before,.tpl-frame::after{animation:none}}

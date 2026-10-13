@@ -18,8 +18,28 @@ function readInitialTheme(): Theme {
   return document.documentElement.classList.contains('dark') ? 'dark' : 'light'
 }
 
+/** Tracks the OS preference live, so a visitor who never touches the toggle
+ *  still follows their system theme when it changes. */
+function useSystemTheme() {
+  const [systemTheme, setSystemTheme] = useState<'light' | 'dark'>(() =>
+    typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light',
+  )
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const handler = (e: MediaQueryListEvent) => setSystemTheme(e.matches ? 'dark' : 'light')
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  return systemTheme
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(readInitialTheme)
+  const systemTheme = useSystemTheme()
 
   // Side effects only. Persistence lives in the setters below, so a visitor
   // who never touches the toggle is not recorded as having made a choice and
@@ -40,6 +60,19 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
     meta.content = theme === 'dark' ? '#0b0d1e' : '#f3f4fa'
   }, [theme])
+
+  // Auto-follow system theme when the user hasn't made an explicit choice
+  useEffect(() => {
+    let stored: string | null = null
+    try {
+      stored = localStorage.getItem(STORAGE_KEY)
+    } catch {
+      /* private mode */
+    }
+    if (!stored) {
+      setThemeState(systemTheme)
+    }
+  }, [systemTheme])
 
   const persist = (t: Theme) => {
     try {

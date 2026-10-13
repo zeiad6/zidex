@@ -56,8 +56,18 @@ export default function Templates() {
               <div className="grid gap-0 lg:grid-cols-[1fr_1.15fr]">
                 {/* لوحة الهوية + التجربة المباشرة */}
                 <div className="border-app relative border-b lg:border-b-0 lg:border-e">
-                  <div className="relative h-56 sm:h-72" style={{ background: tpl.swatch }}>
-                    <div className="absolute inset-x-0 bottom-0 p-5">
+                  {/* معاينة حيّة للمتجر الفعلي داخل الموقع — iframe من نفس الأصل /templates/<slug>/.
+                      مستجيبة (المتجر يعرض تخطيطه المحمول)، بلا تفاعل (pointer-events)، تحميل كسول. */}
+                  <div className="relative h-72 overflow-hidden sm:h-80" style={{ background: tpl.swatch }}>
+                    <iframe
+                      src={`/templates/${tpl.slug}/`}
+                      title={t(tpl.name.ar, tpl.name.en)}
+                      loading="lazy"
+                      tabIndex={-1}
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 h-full w-full border-0"
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent p-5">
                       <h2 className="text-2xl font-black text-white drop-shadow-sm">{t(tpl.name.ar, tpl.name.en)}</h2>
                       <p className="text-sm font-semibold text-white/85">{t(tpl.tagline.ar, tpl.tagline.en)}</p>
                     </div>

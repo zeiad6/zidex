@@ -1112,6 +1112,182 @@
         "We deploy on your domain and connect your Telegram store bot"
       ],
       "invoice_item": 19
+    },
+    {
+      "sku": "site-bot-bazaar",
+      "title": "قالب متجر بوت بازار — سوق بوتات ومنتجات رقمية",
+      "title_en": "Bot Bazaar store template — bots & digital goods marketplace",
+      "description": "سوق رقمي بهوية بنفسجية داكنة بأسلوب Bento: 8 منتجات بين بوتات تيليجرام والأدوات والقوالب والاشتراكات، برموز مرسومة بالكود، بحث وترتيب وسلة محفوظة. مصمَّم للبيع بتسليم فوري. عربي أولاً بإنجليزية كاملة وصفر تبعيات.",
+      "description_en": "A digital marketplace with a dark violet Bento identity: 8 products across Telegram bots, tools, templates and subscriptions, with code-drawn glyphs, search, sort and a saved cart. Built to sell with instant delivery. Arabic-first, full English, zero dependencies.",
+      "stars": 5200,
+      "category": "sites",
+      "monthly": false,
+      "featured": false,
+      "usd": 75,
+      "image": "/store/img/products/site-bot-bazaar.webp",
+      "demo": "",
+      "features": [
+        "8 منتجات رقمية: بوتات، أدوات، اشتراكات",
+        "تخطيط Bento ببلاطات معيارية",
+        "رموز منتجات مرسومة بالكود SVG",
+        "بحث وترتيب وسلة محفوظة",
+        "طلب فوري عبر تيليجرام أو واتساب",
+        "صفر تبعيات ورؤوس أمان صارمة"
+      ],
+      "features_en": [
+        "8 digital products: bots, tools, subscriptions",
+        "A Bento layout of modular tiles",
+        "Code-drawn SVG product glyphs",
+        "Search, sort and a saved cart",
+        "Instant ordering via Telegram or WhatsApp",
+        "Zero dependencies and strict security headers"
+      ],
+      "invoice": "",
+      "after": [
+        "تجرب المتجر حياً قبل الشراء: zeidexsoft.com/templates/bot-bazaar",
+        "نرسل لك الكود المصدري الكامل + مجلد build/ الجاهز للنشر",
+        "نغيّر المنتجات والأسعار والأقسام حسب تشكيلتك",
+        "ننشره على نطاقك ونربط بوت متجرك على تيليجرام"
+      ],
+      "after_en": [
+        "Try the store live before buying: zeidexsoft.com/templates/bot-bazaar",
+        "You receive the full source plus the build/ folder ready to deploy",
+        "We change products, prices and sections to your selection",
+        "We deploy on your domain and connect your Telegram store bot"
+      ],
+      "invoice_item": 20
+    },
+    {
+      "sku": "site-aman",
+      "title": "قالب متجر أمان — خطط تأمين رقمي",
+      "title_en": "Aman store template — digital insurance plans",
+      "description": "متجر تأمين بأسلوب Soft Care هادئ فاتح: بطاقات بيضاء عائمة، بطاقة ترحيب بتدرّج دافئ، وأزرار إسبريسو مستديرة — مستوحى من تصميم تطبيق تأمين على Dribbble. 8 خطط بين الصحي والمركبات والممتلكات برموز مرسومة بالكود. عربي أولاً بإنجليزية كاملة وصفر تبعيات.",
+      "description_en": "An insurance store in a calm light Soft Care style: white floating cards, a warm-gradient welcome card and rounded espresso buttons — inspired by an insurance app design on Dribbble. 8 plans across health, motor and property with code-drawn glyphs. Arabic-first, full English, zero dependencies.",
+      "stars": 4200,
+      "category": "sites",
+      "monthly": false,
+      "featured": false,
+      "usd": 59,
+      "image": "/store/img/products/site-aman.webp",
+      "demo": "",
+      "features": [
+        "8 خطط: صحي، مركبات، سفر، منزل، أجهزة",
+        "أسلوب هادئ فاتح ببطاقات بيضاء",
+        "بطاقة ترحيب بتدرّج دافئ",
+        "رموز تأمين مرسومة بالكود SVG",
+        "بحث وترتيب وقائمة خطط محفوظة",
+        "صفر تبعيات ورؤوس أمان صارمة"
+      ],
+      "features_en": [
+        "8 plans: health, motor, travel, home, devices",
+        "A calm light style with white cards",
+        "A warm-gradient welcome card",
+        "Code-drawn SVG insurance glyphs",
+        "Search, sort and a saved plans list",
+        "Zero dependencies and strict security headers"
+      ],
+      "invoice": "",
+      "after": [
+        "تجرب المتجر حياً قبل الشراء: zeidexsoft.com/templates/aman",
+        "نرسل لك الكود المصدري الكامل + مجلد build/ الجاهز للنشر",
+        "نغيّر الخطط والتغطيات والأسعار حسب منتجاتك",
+        "ننشره على نطاقك ونربط بوت متجرك على تيليجرام"
+      ],
+      "after_en": [
+        "Try the store live before buying: zeidexsoft.com/templates/aman",
+        "You receive the full source plus the build/ folder ready to deploy",
+        "We change plans, coverages and prices to your products",
+        "We deploy on your domain and connect your Telegram store bot"
+      ],
+      "invoice_item": 21
+    },
+    {
+      "sku": "site-mahfazah",
+      "title": "قالب متجر محفظة — خدمات مالية ومحفظة رقمية",
+      "title_en": "Mahfazah store template — digital wallet & finance",
+      "description": "متجر فينتك بأسلوب Aurora Wallet فاتح بلافندر بنفسجي: بطاقات بيضاء عائمة، بطاقة رصيد بتدرّج بنفسجي، وأزرار إنديغو — مستوحى من تصميم تطبيق محفظة إلكترونية على Dribbble. 8 خدمات بين البطاقات والباقات والتحويلات برموز مرسومة بالكود. عربي أولاً بإنجليزية كاملة وصفر تبعيات.",
+      "description_en": "A fintech store in a light violet Aurora Wallet style: white floating cards, a violet-gradient balance card and indigo buttons — inspired by an e-wallet app design on Dribbble. 8 services across cards, bundles and transfers with code-drawn glyphs. Arabic-first, full English, zero dependencies.",
+      "stars": 3600,
+      "category": "sites",
+      "monthly": false,
+      "featured": false,
+      "usd": 49,
+      "image": "/store/img/products/site-mahfazah.webp",
+      "demo": "",
+      "features": [
+        "8 خدمات: بطاقات، تحويلات، فواتير، ادخار",
+        "أسلوب فينتك فاتح ببطاقات بيضاء",
+        "بطاقة رصيد بتدرّج بنفسجي",
+        "رموز مالية مرسومة بالكود SVG",
+        "بحث وترتيب وسلة محفوظة",
+        "صفر تبعيات ورؤوس أمان صارمة"
+      ],
+      "features_en": [
+        "8 services: cards, transfers, bills, savings",
+        "A light fintech style with white cards",
+        "A violet-gradient balance card",
+        "Code-drawn SVG finance glyphs",
+        "Search, sort and a saved cart",
+        "Zero dependencies and strict security headers"
+      ],
+      "invoice": "",
+      "after": [
+        "تجرب المتجر حياً قبل الشراء: zeidexsoft.com/templates/mahfazah",
+        "نرسل لك الكود المصدري الكامل + مجلد build/ الجاهز للنشر",
+        "نغيّر الخدمات والباقات والأسعار حسب منتجاتك",
+        "ننشره على نطاقك ونربط بوت متجرك على تيليجرام"
+      ],
+      "after_en": [
+        "Try the store live before buying: zeidexsoft.com/templates/mahfazah",
+        "You receive the full source plus the build/ folder ready to deploy",
+        "We change services, bundles and prices to your products",
+        "We deploy on your domain and connect your Telegram store bot"
+      ],
+      "invoice_item": 22
+    },
+    {
+      "sku": "site-chrono",
+      "title": "قالب متجر كرونو — سوق ساعات فاخرة",
+      "title_en": "Chrono store template — luxury watch marketplace",
+      "description": "سوق ساعات فاخر بأسلوب Cobalt Luxe داكن navy بتوهّج أزرق كوبالت: بطاقات داكنة، أزرار أزرق متدرّج، وأسعار كبيرة — مستوحى من تصميم تطبيق سوق ساعات على Dribbble. 8 موديلات بين الكلاسيك والرياضي والفاخر بوجوه ساعات مرسومة بالكود. عربي أولاً بإنجليزية كاملة وصفر تبعيات.",
+      "description_en": "A luxury watch marketplace in a dark navy Cobalt Luxe style with electric-blue glow: dark cards, blue-gradient buttons and large prices — inspired by a watch marketplace app design on Dribbble. 8 models across classic, sport and luxury with code-drawn watch faces. Arabic-first, full English, zero dependencies.",
+      "stars": 8800,
+      "category": "sites",
+      "monthly": false,
+      "featured": false,
+      "usd": 129,
+      "image": "/store/img/products/site-chrono.webp",
+      "demo": "",
+      "features": [
+        "8 موديلات: أوتوماتيك، كرونوغراف، غوص، فاخر",
+        "أسلوب داكن navy بتوهّج أزرق كوبالت",
+        "وجوه ساعات مرسومة بالكود SVG",
+        "بحث وترتيب وسلة محفوظة",
+        "طلب فوري عبر تيليجرام أو واتساب",
+        "صفر تبعيات ورؤوس أمان صارمة"
+      ],
+      "features_en": [
+        "8 models: automatic, chronograph, diver, luxury",
+        "A dark navy style with electric-blue glow",
+        "Code-drawn SVG watch faces",
+        "Search, sort and a saved cart",
+        "Instant ordering via Telegram or WhatsApp",
+        "Zero dependencies and strict security headers"
+      ],
+      "invoice": "",
+      "after": [
+        "تجرب المتجر حياً قبل الشراء: zeidexsoft.com/templates/chrono",
+        "نرسل لك الكود المصدري الكامل + مجلد build/ الجاهز للنشر",
+        "نغيّر الموديلات والأسعار والأقسام حسب تشكيلتك",
+        "ننشره على نطاقك ونربط بوت متجرك على تيليجرام"
+      ],
+      "after_en": [
+        "Try the store live before buying: zeidexsoft.com/templates/chrono",
+        "You receive the full source plus the build/ folder ready to deploy",
+        "We change models, prices and sections to your collection",
+        "We deploy on your domain and connect your Telegram store bot"
+      ],
+      "invoice_item": 23
     }
   ],
   "offer": {

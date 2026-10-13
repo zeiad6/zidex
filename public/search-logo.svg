@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120">
+  <defs>
+    <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6D5CFF"/>
+      <stop offset="100%" style="stop-color:#00C9A7"/>
+    </linearGradient>
+    <linearGradient id="lg2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#9187FF"/>
+      <stop offset="50%" style="stop-color:#6D5CFF"/>
+      <stop offset="100%" style="stop-color:#55D9C0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Magnifier icon -->
+  <g transform="translate(8, 16)">
+    <circle cx="40" cy="40" r="32" fill="none" stroke="url(#lg2)" stroke-width="8"/>
+    <line x1="62" y1="62" x2="92" y2="92" stroke="url(#lg1)" stroke-width="10" stroke-linecap="round"/>
+    <!-- Search rays -->
+    <circle cx="40" cy="40" r="18" fill="none" stroke="url(#lg1)" stroke-width="3" opacity="0.4" stroke-dasharray="4 6"/>
+    <!-- Center dot -->
+    <circle cx="40" cy="40" r="6" fill="url(#lg1)"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="120" y="56" font-family="Plus Jakarta Sans, Arial, sans-serif" font-size="38" font-weight="800" fill="url(#lg1)" letter-spacing="-0.5">Zeidex<tspan fill="url(#lg2)">Search</tspan></text>
+
+  <!-- Tagline -->
+  <text x="122" y="86" font-family="IBM Plex Sans Arabic, Arial, sans-serif" font-size="16" font-weight="500" fill="#767A9E">بحث دلالي لقنوات تيليجرام</text>
+
+  <!-- Accent underline -->
+  <rect x="120" y="96" width="180" height="4" rx="2" fill="url(#lg1)" opacity="0.7"/>
+
+  <!-- Sparkle accents -->
+  <circle cx="350" cy="28" r="4" fill="#6D5CFF" opacity="0.6"/>
+  <circle cx="370" cy="50" r="3" fill="#00C9A7" opacity="0.7"/>
+  <circle cx="335" cy="42" r="2.5" fill="#9187FF" opacity="0.5"/>
+</svg>

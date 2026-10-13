@@ -11,7 +11,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'self'" />
     <meta name="description" content="عود وعنبر — متجر عطور وعود فاخر: دهن العود الكمبودي، المباخر، الهدايا. طلب فوري عبر واتساب أو تيليجرام." />
     <meta name="theme-color" content="#171106" />
-    <title>عود وعنبر — عطور وعود فاخرة</title>
+    <title data-i18n="pageTitle">عود وعنبر — عطور وعود فاخرة</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23171106'/%3E%3Cpath d='M16 6c-2 3-5 5-5 9a5 5 0 0010 0c0-4-3-6-5-9z' fill='%23d4a94e'/%3E%3C/svg%3E" />
     <link rel="stylesheet" href="styles.css" />
     <script type="module" src="app.js" defer></script>
@@ -108,8 +108,8 @@
           <p data-i18n="footTag">عطور تُشعل الذكريات — من قلب التراث إلى بيتك.</p>
         </div>
         <nav class="foot-acts" aria-label="تواصل">
-          <a id="wa-link" class="btn ghosty sm" href="#" hidden>واتساب</a>
-          <a id="tg-link" class="btn ghosty sm" href="#" hidden>تيليجرام</a>
+          <a id="wa-link" data-i18n="waLabel" class="btn ghosty sm" href="#" hidden>واتساب</a>
+          <a id="tg-link" data-i18n="tgLabel" class="btn ghosty sm" href="#" hidden>تيليجرام</a>
         </nav>
       </div>
       <p class="foot-credit">
@@ -145,5 +145,7 @@
 
     <!-- إشعار -->
     <div class="toast" id="toast" hidden></div>
+    <div class="tpl-frame" aria-hidden="true"></div>
+    <div class="tpl-badge" aria-hidden="true"><b data-i18n="brand">عود وعنبر</b><span data-i18n="tplBadge">قالب ZeidexSoft</span></div>
   </body>
 </html>
