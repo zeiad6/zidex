@@ -1,0 +1,148 @@
+/** كتالوج خطط التأمين — البيانات الوحيدة التي يديرها صاحب المتجر.
+ *  كل نص مرتين (ar/en) والسعر قسط سنوي بالريال السعودي يبدأ من. */
+export const PRODUCTS = [
+    {
+        id: 1,
+        kind: 'shield',
+        cat: 'personal',
+        price: 1200,
+        old: 1500,
+        badge: { ar: 'الأكثر طلباً', en: 'Most popular' },
+        name: { ar: 'تأمين صحي شامل', en: 'Comprehensive Health' },
+        desc: {
+            ar: 'تغطية طبية واسعة: استشارات، أدوية، تنويم، وطوارئ — بشبكة مستشفيات واسعة وبطاقة رقمية فورية.',
+            en: 'Wide medical cover: consultations, medicines, hospitalization and emergencies — a large hospital network and an instant digital card.',
+        },
+        specs: [
+            { ar: 'شبكة واسعة', en: 'Wide network' },
+            { ar: 'بطاقة رقمية', en: 'Digital card' },
+            { ar: 'طوارئ 24/7', en: '24/7 emergency' },
+        ],
+        meta: { ar: 'بلا فترة انتظار على الحالات الأساسية', en: 'No waiting period on core conditions' },
+    },
+    {
+        id: 2,
+        kind: 'heart',
+        cat: 'personal',
+        price: 650,
+        name: { ar: 'تأمين على الحياة', en: 'Life Protection' },
+        desc: {
+            ar: 'حماية مالية لعائلتك: مبلغ تعويض يُصرف بسرعة، مع تغطية العجز الكلي وخيارات ادخار اختيارية.',
+            en: 'Financial protection for your family: a fast-paid benefit, total-disability cover and optional savings add-ons.',
+        },
+        specs: [
+            { ar: 'صرف سريع', en: 'Fast payout' },
+            { ar: 'تغطية عجز', en: 'Disability cover' },
+            { ar: 'ادخار اختياري', en: 'Optional savings' },
+        ],
+        meta: { ar: 'أقساط ثابتة طوال المدة', en: 'Fixed premiums for the whole term' },
+    },
+    {
+        id: 3,
+        kind: 'plane',
+        cat: 'personal',
+        price: 180,
+        old: 240,
+        badge: { ar: 'عرض الموسم', en: 'Season offer' },
+        name: { ar: 'تأمين السفر', en: 'Travel Cover' },
+        desc: {
+            ar: 'تغطية الرحلات: علاج طارئ بالخارج، تعويض تأخّر أو فقد الأمتعة، وإلغاء الرحلة — تفعيل فوري قبل السفر.',
+            en: 'Trip cover: emergency care abroad, delayed or lost-baggage compensation and trip cancellation — instant activation before you fly.',
+        },
+        specs: [
+            { ar: 'علاج بالخارج', en: 'Care abroad' },
+            { ar: 'الأمتعة', en: 'Baggage' },
+            { ar: 'إلغاء الرحلة', en: 'Trip cancel' },
+        ],
+        meta: { ar: 'يغطّي شنغن ومعظم الوجهات', en: 'Covers Schengen and most destinations' },
+    },
+    {
+        id: 4,
+        kind: 'car',
+        cat: 'vehicle',
+        price: 980,
+        old: 1250,
+        badge: { ar: 'شامل', en: 'Comprehensive' },
+        name: { ar: 'تأمين مركبات شامل', en: 'Comprehensive Motor' },
+        desc: {
+            ar: 'تغطية مركبتك ضد الحوادث والسرقة والحريق، مع مساعدة على الطريق وسيارة بديلة — تقدير أضرار بالتطبيق.',
+            en: 'Covers your vehicle against accidents, theft and fire, with roadside assistance and a replacement car — in-app damage estimates.',
+        },
+        specs: [
+            { ar: 'مساعدة طريق', en: 'Roadside help' },
+            { ar: 'سيارة بديلة', en: 'Courtesy car' },
+            { ar: 'ورش معتمدة', en: 'Approved shops' },
+        ],
+        meta: { ar: 'خصم عدم المطالبة حتى 30%', en: 'No-claims discount up to 30%' },
+    },
+    {
+        id: 5,
+        kind: 'umbrella',
+        cat: 'vehicle',
+        price: 320,
+        name: { ar: 'تأمين ضد الغير', en: 'Third-party Motor' },
+        desc: {
+            ar: 'التغطية الإلزامية بأفضل سعر: أضرار الطرف الثالث ماديّة وجسدية، إصدار فوري ووثيقة معتمدة.',
+            en: 'The mandatory cover at the best price: third-party material and bodily damage, instant issuance and an approved policy.',
+        },
+        specs: [
+            { ar: 'إصدار فوري', en: 'Instant issue' },
+            { ar: 'معتمدة', en: 'Approved' },
+            { ar: 'أرخص قسط', en: 'Lowest premium' },
+        ],
+        meta: { ar: 'تجديد بضغطة قبل الانتهاء', en: 'One-tap renewal before expiry' },
+    },
+    {
+        id: 6,
+        kind: 'home',
+        cat: 'property',
+        price: 420,
+        name: { ar: 'تأمين المنزل', en: 'Home Insurance' },
+        desc: {
+            ar: 'حماية منزلك ومحتوياته من الحريق والسرقة وتسرّب المياه، مع تغطية المسؤولية تجاه الغير داخل المسكن.',
+            en: 'Protects your home and contents from fire, theft and water leaks, with liability cover for others inside the home.',
+        },
+        specs: [
+            { ar: 'المبنى والمحتويات', en: 'Building + contents' },
+            { ar: 'تسرّب المياه', en: 'Water damage' },
+            { ar: 'مسؤولية', en: 'Liability' },
+        ],
+        meta: { ar: 'تقييم سريع بالصور عبر التطبيق', en: 'Fast photo-based assessment in-app' },
+    },
+    {
+        id: 7,
+        kind: 'briefcase',
+        cat: 'property',
+        price: 1600,
+        badge: { ar: 'للأعمال', en: 'Business' },
+        name: { ar: 'تأمين الأعمال الصغيرة', en: 'Small-business Cover' },
+        desc: {
+            ar: 'باقة متكاملة للمنشآت الصغيرة: ممتلكات، مسؤولية عامة، وتعويض انقطاع الأعمال — بوثيقة واحدة مبسّطة.',
+            en: 'An all-in-one package for small firms: property, public liability and business-interruption cover — in one simplified policy.',
+        },
+        specs: [
+            { ar: 'ممتلكات', en: 'Property' },
+            { ar: 'مسؤولية عامة', en: 'Public liability' },
+            { ar: 'انقطاع الأعمال', en: 'Interruption' },
+        ],
+        meta: { ar: 'تُفصَّل حسب نشاطك ومساحتك', en: 'Tailored to your activity and size' },
+    },
+    {
+        id: 8,
+        kind: 'phone',
+        cat: 'property',
+        price: 150,
+        old: 200,
+        name: { ar: 'تأمين الأجهزة', en: 'Device Protection' },
+        desc: {
+            ar: 'حماية جوالك ولابتوبك من الكسر والسرقة وتلف السوائل، مع إصلاح بقطع أصلية أو استبدال سريع.',
+            en: 'Protects your phone and laptop from breakage, theft and liquid damage, with genuine-parts repair or a fast replacement.',
+        },
+        specs: [
+            { ar: 'كسر وسوائل', en: 'Breakage + liquid' },
+            { ar: 'سرقة', en: 'Theft' },
+            { ar: 'قطع أصلية', en: 'Genuine parts' },
+        ],
+        meta: { ar: 'إصلاح خلال 48 ساعة', en: 'Repair within 48 hours' },
+    },
+];

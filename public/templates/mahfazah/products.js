@@ -1,0 +1,146 @@
+/** كتالوج المنتجات والخدمات المالية — البيانات الوحيدة التي يديرها صاحب المتجر.
+ *  كل نص مرتين (ar/en) والسعر بالريال السعودي. */
+export const PRODUCTS = [
+    {
+        id: 1,
+        kind: 'wallet',
+        cat: 'services',
+        price: 49,
+        old: 79,
+        badge: { ar: 'الأكثر طلباً', en: 'Most popular' },
+        name: { ar: 'محفظة برو', en: 'Wallet Pro' },
+        desc: {
+            ar: 'ترقية المحفظة: حدود أعلى، تحويلات فورية بلا رسوم، واسترداد نقدي على المدفوعات — اشتراك شهري يُلغى أي وقت.',
+            en: 'Upgrade your wallet: higher limits, instant fee-free transfers and cashback on payments — a monthly plan you can cancel anytime.',
+        },
+        specs: [
+            { ar: 'بلا رسوم تحويل', en: 'No transfer fees' },
+            { ar: 'استرداد نقدي', en: 'Cashback' },
+            { ar: 'حدود أعلى', en: 'Higher limits' },
+        ],
+        meta: { ar: 'تفعيل فوري على حسابك', en: 'Instant activation on your account' },
+    },
+    {
+        id: 2,
+        kind: 'card',
+        cat: 'cards',
+        price: 25,
+        name: { ar: 'بطاقة مسبقة الدفع', en: 'Prepaid Card' },
+        desc: {
+            ar: 'بطاقة افتراضية تعمل أونلاين فوراً، وبطاقة بلاستيكية تصلك لاحقاً — تحكّم كامل بالحدود والإيقاف من التطبيق.',
+            en: 'A virtual card that works online instantly, plus a physical card later — full control of limits and freeze from the app.',
+        },
+        specs: [
+            { ar: 'افتراضية فورية', en: 'Instant virtual' },
+            { ar: 'تحكم بالحدود', en: 'Limit control' },
+            { ar: 'إيقاف فوري', en: 'Instant freeze' },
+        ],
+        meta: { ar: 'مقبولة عالمياً أينما تُقبل البطاقات', en: 'Accepted globally wherever cards are' },
+    },
+    {
+        id: 3,
+        kind: 'transfer',
+        cat: 'services',
+        price: 15,
+        badge: { ar: 'دولي', en: 'Global' },
+        name: { ar: 'تحويلات دولية', en: 'Global Transfers' },
+        desc: {
+            ar: 'أرسل أموالاً لأكثر من 80 دولة بسعر صرف واضح ورسوم ثابتة منخفضة — وصول خلال دقائق لأغلب الوجهات.',
+            en: 'Send money to 80+ countries at a clear exchange rate and a low flat fee — arriving within minutes to most destinations.',
+        },
+        specs: [
+            { ar: '80+ دولة', en: '80+ countries' },
+            { ar: 'سعر واضح', en: 'Clear rate' },
+            { ar: 'خلال دقائق', en: 'In minutes' },
+        ],
+        meta: { ar: 'تتبّع الحوالة لحظة بلحظة', en: 'Track the transfer in real time' },
+    },
+    {
+        id: 4,
+        kind: 'topup',
+        cat: 'bundles',
+        price: 100,
+        old: 110,
+        name: { ar: 'باقة شحن الرصيد', en: 'Top-up Bundle' },
+        desc: {
+            ar: 'اشحن رصيد جوالك والإنترنت لكل الشبكات بخصم فوري، مع جدولة شحن تلقائي شهري إن رغبت.',
+            en: 'Top up mobile and data for all networks with an instant discount, plus optional monthly auto top-up.',
+        },
+        specs: [
+            { ar: 'كل الشبكات', en: 'All networks' },
+            { ar: 'خصم فوري', en: 'Instant discount' },
+            { ar: 'شحن تلقائي', en: 'Auto top-up' },
+        ],
+        meta: { ar: 'يصل الرصيد خلال ثوانٍ', en: 'Credit arrives in seconds' },
+    },
+    {
+        id: 5,
+        kind: 'bills',
+        cat: 'services',
+        price: 10,
+        name: { ar: 'سداد الفواتير', en: 'Bill Payments' },
+        desc: {
+            ar: 'ادفع الكهرباء والماء والاتصالات والحكومية من مكان واحد، مع تذكير قبل الاستحقاق وإيصال رقمي محفوظ.',
+            en: 'Pay electricity, water, telecom and government bills in one place, with due-date reminders and a saved digital receipt.',
+        },
+        specs: [
+            { ar: 'كل الجهات', en: 'All billers' },
+            { ar: 'تذكيرات', en: 'Reminders' },
+            { ar: 'إيصال رقمي', en: 'Digital receipt' },
+        ],
+        meta: { ar: 'جدولة الدفع التلقائي متاحة', en: 'Auto-pay scheduling available' },
+    },
+    {
+        id: 6,
+        kind: 'savings',
+        cat: 'bundles',
+        price: 60,
+        badge: { ar: 'ادّخار', en: 'Savings' },
+        name: { ar: 'باقة الادخار الذكي', en: 'Smart Savings' },
+        desc: {
+            ar: 'أهداف ادخار تلقائية: تقتطع مبلغاً صغيراً مع كل عملية، وأظرف مخصّصة لكل هدف مع عائد تشجيعي.',
+            en: 'Automatic savings goals: round up every transaction into envelopes per goal, with a bonus reward rate.',
+        },
+        specs: [
+            { ar: 'ادخار تلقائي', en: 'Auto-save' },
+            { ar: 'أظرف أهداف', en: 'Goal envelopes' },
+            { ar: 'عائد تشجيعي', en: 'Bonus rate' },
+        ],
+        meta: { ar: 'تسحب مدخراتك في أي وقت', en: 'Withdraw your savings anytime' },
+    },
+    {
+        id: 7,
+        kind: 'crypto',
+        cat: 'services',
+        price: 39,
+        name: { ar: 'محفظة العملات الرقمية', en: 'Crypto Wallet' },
+        desc: {
+            ar: 'احفظ وأرسل العملات الرقمية الكبرى بأمان، مع تحويل سريع بين الرقمي والرصيد المحلي وتنبيهات أسعار.',
+            en: 'Hold and send major cryptocurrencies securely, with fast swaps between crypto and local balance, plus price alerts.',
+        },
+        specs: [
+            { ar: 'عملات كبرى', en: 'Major coins' },
+            { ar: 'تحويل سريع', en: 'Fast swaps' },
+            { ar: 'تنبيهات أسعار', en: 'Price alerts' },
+        ],
+        meta: { ar: 'مفاتيحك محمية بتشفير الجهاز', en: 'Your keys protected by device encryption' },
+    },
+    {
+        id: 8,
+        kind: 'gift',
+        cat: 'cards',
+        price: 50,
+        old: 60,
+        name: { ar: 'بطاقات الهدايا', en: 'Gift Cards' },
+        desc: {
+            ar: 'بطاقات هدايا رقمية للمتاجر والألعاب والبث، تُرسل فوراً برسالة أنيقة — فئات متعددة بخصومات دورية.',
+            en: 'Digital gift cards for stores, games and streaming, sent instantly with an elegant message — many values with regular discounts.',
+        },
+        specs: [
+            { ar: 'إرسال فوري', en: 'Instant send' },
+            { ar: 'فئات متعددة', en: 'Many values' },
+            { ar: 'خصومات', en: 'Discounts' },
+        ],
+        meta: { ar: 'لأشهر المتاجر والمنصّات', en: 'For top stores and platforms' },
+    },
+];

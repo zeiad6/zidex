@@ -1,0 +1,147 @@
+/** كتالوج الساعات الفاخرة — البيانات الوحيدة التي يديرها صاحب المتجر.
+ *  كل نص مرتين (ar/en) والسعر بالريال السعودي. */
+export const PRODUCTS = [
+    {
+        id: 1,
+        kind: 'automatic',
+        cat: 'classic',
+        price: 8900,
+        old: 10500,
+        badge: { ar: 'الأكثر طلباً', en: 'Best seller' },
+        name: { ar: 'أكواريسر أوتوماتيك', en: 'Aquaracer Automatic' },
+        desc: {
+            ar: 'ساعة أوتوماتيكية بحركة ميكانيكية سويسرية، مينا لؤلؤي، وسوار ستيل مصقول — مقاومة ماء 300م وزجاج ياقوتي.',
+            en: 'A Swiss automatic with a mechanical movement, mother-of-pearl dial and polished steel bracelet — 300m water resistance and sapphire glass.',
+        },
+        specs: [
+            { ar: 'حركة سويسرية', en: 'Swiss movement' },
+            { ar: 'زجاج ياقوتي', en: 'Sapphire glass' },
+            { ar: 'مقاومة 300م', en: '300m resistant' },
+        ],
+        meta: { ar: 'ضمان دولي 24 شهراً · علبة أصلية', en: 'International warranty 24 months · Original box' },
+    },
+    {
+        id: 2,
+        kind: 'dress',
+        cat: 'classic',
+        price: 4200,
+        name: { ar: 'كلاسيك سليم', en: 'Classic Slim' },
+        desc: {
+            ar: 'ساعة أنيقة نحيفة لمناسبات الأعمال، مينا فضي مع أرقام رومانية، وسوار جلد إيطالي مدبوغ نباتياً.',
+            en: 'A slim, elegant dress watch for business, a silver dial with Roman numerals and a vegetable-tanned Italian leather strap.',
+        },
+        specs: [
+            { ar: 'نحيفة 7مم', en: '7mm slim' },
+            { ar: 'جلد إيطالي', en: 'Italian leather' },
+            { ar: 'كوارتز دقيق', en: 'Precise quartz' },
+        ],
+        meta: { ar: 'تناسب المعصم النحيف والعريض', en: 'Fits slim and wide wrists' },
+    },
+    {
+        id: 3,
+        kind: 'chrono',
+        cat: 'sport',
+        price: 6500,
+        old: 7800,
+        badge: { ar: 'كرونوغراف', en: 'Chronograph' },
+        name: { ar: 'سبيد كرونوغراف', en: 'Speed Chronograph' },
+        desc: {
+            ar: 'كرونوغراف رياضي بثلاث عدّادات وقياس سرعة (تاكيمتر)، مينا أسود مطفي وسوار ستيل متين — للسرعة والدقة.',
+            en: 'A sport chronograph with three sub-dials and a tachymeter, a matte-black dial and a sturdy steel bracelet — for speed and precision.',
+        },
+        specs: [
+            { ar: 'ثلاث عدّادات', en: 'Three sub-dials' },
+            { ar: 'تاكيمتر', en: 'Tachymeter' },
+            { ar: 'مقاومة 100م', en: '100m resistant' },
+        ],
+        meta: { ar: 'إضاءة ليلية على المؤشرات', en: 'Luminous hands and markers' },
+    },
+    {
+        id: 4,
+        kind: 'diver',
+        cat: 'sport',
+        price: 5600,
+        name: { ar: 'ديب دايفر 500', en: 'Deep Diver 500' },
+        desc: {
+            ar: 'ساعة غوص احترافية بإطار دوّار أحادي الاتجاه، مقاومة 500م، وصمام هيليوم — جاهزة للأعماق والبحر.',
+            en: 'A pro diver with a unidirectional rotating bezel, 500m resistance and a helium valve — ready for the depths.',
+        },
+        specs: [
+            { ar: 'إطار دوّار', en: 'Rotating bezel' },
+            { ar: 'مقاومة 500م', en: '500m resistant' },
+            { ar: 'صمام هيليوم', en: 'Helium valve' },
+        ],
+        meta: { ar: 'سوار مطاطي وستيل في العلبة', en: 'Rubber and steel straps in the box' },
+    },
+    {
+        id: 5,
+        kind: 'sport',
+        cat: 'sport',
+        price: 3100,
+        name: { ar: 'فيلد سبورت', en: 'Field Sport' },
+        desc: {
+            ar: 'ساعة ميدانية خفيفة مقاومة للصدمات، مينا واضح سهل القراءة، وسوار نايلون متين — للمغامرة اليومية.',
+            en: 'A light, shock-resistant field watch with a clear, legible dial and a durable nylon strap — for everyday adventure.',
+        },
+        specs: [
+            { ar: 'مقاومة صدمات', en: 'Shock-resistant' },
+            { ar: 'خفيفة', en: 'Lightweight' },
+            { ar: 'سوار نايلون', en: 'Nylon strap' },
+        ],
+        meta: { ar: 'بطارية تدوم 5 سنوات', en: 'Battery lasts 5 years' },
+    },
+    {
+        id: 6,
+        kind: 'smart',
+        cat: 'sport',
+        price: 1800,
+        old: 2200,
+        badge: { ar: 'ذكية', en: 'Smart' },
+        name: { ar: 'كرونو سمارت', en: 'Chrono Smart' },
+        desc: {
+            ar: 'ساعة ذكية بمظهر كلاسيكي: شاشة AMOLED، تتبّع صحي ونوم، إشعارات، وبطارية أسبوع — بعلبة ستيل أنيقة.',
+            en: 'A smartwatch with a classic look: an AMOLED screen, health and sleep tracking, notifications and a week of battery — in an elegant steel case.',
+        },
+        specs: [
+            { ar: 'AMOLED', en: 'AMOLED' },
+            { ar: 'تتبّع صحي', en: 'Health tracking' },
+            { ar: 'بطارية أسبوع', en: 'Week battery' },
+        ],
+        meta: { ar: 'تعمل مع أندرويد وiOS', en: 'Works with Android and iOS' },
+    },
+    {
+        id: 7,
+        kind: 'gold',
+        cat: 'luxury',
+        price: 28000,
+        badge: { ar: 'إصدار محدود', en: 'Limited' },
+        name: { ar: 'رويال جولد', en: 'Royal Gold' },
+        desc: {
+            ar: 'ساعة فاخرة بطلاء ذهب 18 قيراطاً، مينا مزخرف بالـguilloché، وحركة أوتوماتيكية مزخرفة تُرى من الخلف الياقوتي.',
+            en: 'A luxury piece in 18k gold plating, a guilloché-engraved dial and a decorated automatic movement seen through the sapphire back.',
+        },
+        specs: [
+            { ar: 'ذهب 18 قيراط', en: '18k gold' },
+            { ar: 'نقش guilloché', en: 'Guilloché' },
+            { ar: 'خلفية ياقوتية', en: 'Sapphire back' },
+        ],
+        meta: { ar: 'رقم تسلسلي وشهادة أصالة', en: 'Serial number and authenticity card' },
+    },
+    {
+        id: 8,
+        kind: 'skeleton',
+        cat: 'luxury',
+        price: 45000,
+        name: { ar: 'سكيليتون توربيون', en: 'Skeleton Tourbillon' },
+        desc: {
+            ar: 'تحفة ميكانيكية مكشوفة الحركة بتوربيون يدوي التجميع، هيكل مفرّغ يُظهر كل ترس — قطعة اقتناء نادرة.',
+            en: 'A mechanical masterpiece with an exposed, hand-assembled tourbillon and a skeletonized frame showing every gear — a rare collector piece.',
+        },
+        specs: [
+            { ar: 'توربيون', en: 'Tourbillon' },
+            { ar: 'تجميع يدوي', en: 'Hand-assembled' },
+            { ar: 'هيكل مفرّغ', en: 'Skeletonized' },
+        ],
+        meta: { ar: 'عدد محدود · صندوق خشب فاخر', en: 'Limited count · Fine wood case' },
+    },
+];
