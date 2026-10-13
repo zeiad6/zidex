@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZeidexSearch - محرك بحث تيليجرام</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            min-height: 100vh;
+            color: #f8fafc;
+            padding: 16px;
+        }
+
+        .container {
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-top: 10px;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.6);
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+        }
+
+        .search-input::placeholder {
+            color: #64748b;
+        }
+
+        .type-filters {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .type-btn {
+            padding: 8px 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .type-btn:hover,
+        .type-btn.active {
+            background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
+            border-color: #38bdf8;
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(2, 132, 199, 0.3);
+        }
+
+        .category-filters {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .cat-chip {
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            color: #94a3b8;
+            font-size: 11px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .cat-chip:hover,
+        .cat-chip.active {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: #38bdf8;
+            color: #38bdf8;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #38bdf8;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .results {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .channel-card {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            padding: 14px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease;
+        }
+
+        .channel-card:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(56, 189, 248, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .channel-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .channel-emoji {
+            font-size: 26px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+        }
+
+        .channel-info {
+            flex: 1;
+        }
+
+        .channel-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-type {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .badge-bot { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
+        .badge-channel { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+        .badge-group { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
+
+        .active-dot {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            color: #22c55e;
+            font-weight: 500;
+        }
+
+        .channel-meta {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 3px;
+        }
+
+        .channel-desc {
+            font-size: 12px;
+            color: #cbd5e1;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        .channel-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .channel-stats {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .channel-link {
+            padding: 6px 14px;
+            background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .channel-link:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 16px;
+            color: #94a3b8;
+        }
+
+        .empty-state .emoji {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        ::-webkit-scrollbar {
+            height: 4px;
+            width: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 ZeidexSearch</h1>
+            <p>محرك بحث تيليجرام للقنوات 📢 والبوتات 🤖 والمجموعات 👥</p>
+        </div>
+
+        <div class="search-box">
+            <input type="text" class="search-input" id="searchInput" placeholder="ابحث بالاسم، المعرف، أو التخصص..." />
+        </div>
+
+        <div class="type-filters" id="typeFilters">
+            <div class="type-btn active" data-type="all">🌐 الكل</div>
+            <div class="type-btn" data-type="channel">📢 قنوات</div>
+            <div class="type-btn" data-type="bot">🤖 بوتات</div>
+            <div class="type-btn" data-type="group">👥 مجموعات</div>
+        </div>
+
+        <div class="category-filters" id="categoryFilters">
+            <div class="cat-chip active" data-cat="all">الكل</div>
+            <div class="cat-chip" data-cat="تقنية">تقنية</div>
+            <div class="cat-chip" data-cat="برمجة">برمجة</div>
+            <div class="cat-chip" data-cat="أدوات">أدوات</div>
+            <div class="cat-chip" data-cat="تحميل">تحميل</div>
+            <div class="cat-chip" data-cat="أخبار">أخبار</div>
+            <div class="cat-chip" data-cat="دين">دين</div>
+            <div class="cat-chip" data-cat="تعليم">تعليم</div>
+            <div class="cat-chip" data-cat="أعمال">أعمال</div>
+            <div class="cat-chip" data-cat="رياضة">رياضة</div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="totalItems">0</div>
+                <div class="stat-label">عنصر نشط</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="activeCount">100%</div>
+                <div class="stat-label">شغال ونشط</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="totalMembers">0</div>
+                <div class="stat-label">متابع وعضو</div>
+            </div>
+        </div>
+
+        <div id="resultsContainer">
+            <div class="results" id="resultsList"></div>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        const allEntities = [{"id": 1, "username": "BotFather", "title": "BotFather", "type": "bot", "category": "تقنية", "members": 2, "description": "بوت إدارة وإنشاء بوتات تيليجرام الرسمية", "verified": 1, "emoji": "🤖"}, {"id": 2, "username": "ControllerBot", "title": "Controller Bot", "type": "bot", "category": "خدمات", "members": 2, "description": "بوت إدارة وتنسيق منشورات قنوات تيليجرام", "verified": 1, "emoji": "🤖"}, {"id": 3, "username": "LivegramBot", "title": "Livegram Bot", "type": "bot", "category": "خدمات", "members": 2, "description": "بوت إنشاء بوتات تواصل واستقبال الرسائل", "verified": 1, "emoji": "🤖"}, {"id": 4, "username": "vote", "title": "VoteBot", "type": "bot", "category": "أدوات", "members": 2, "description": "بوت إنشاء استطلاعات الرأي والتصويت", "verified": 1, "emoji": "🤖"}, {"id": 5, "username": "like", "title": "LikeBot", "type": "bot", "category": "أدوات", "members": 2, "description": "بوت إضافة تفاعلات الإعجاب للمنشورات", "verified": 1, "emoji": "🤖"}, {"id": 6, "username": "QuizBot", "title": "Quiz Bot", "type": "bot", "category": "تعليم", "members": 2, "description": "بوت إنشاء الاختبارات والمسابقات التفاعلية", "verified": 1, "emoji": "🤖"}, {"id": 7, "username": "GmailBot", "title": "Gmail Bot", "type": "bot", "category": "خدمات", "members": 0, "description": "بوت ربط وتلقي رسائل بريد جيميل في تيليجرام", "verified": 1, "emoji": "🤖"}, {"id": 8, "username": "Stickers", "title": "Stickers", "type": "bot", "category": "أدوات", "members": 2, "description": "بوت صناعة وإدارة حزم ملصقات تيليجرام الرسمي", "verified": 1, "emoji": "🤖"}, {"id": 9, "username": "ShortUrlBot", "title": "SHORT URL", "type": "bot", "category": "أدوات", "members": 2, "description": "بوت اختصار الروابط الطويلة بسرعة", "verified": 1, "emoji": "🤖"}, {"id": 10, "username": "uploadbot", "title": "URL Uploader", "type": "bot", "category": "أدوات", "members": 2, "description": "بوت رفع الملفات والروابط وتحويلها لملفات تيليجرام", "verified": 1, "emoji": "🤖"}, {"id": 11, "username": "FileConverterBot", "title": "File Converter", "type": "bot", "category": "أدوات", "members": 2, "description": "بوت تحويل صيغ الملفات والصور والمستندات", "verified": 1, "emoji": "🤖"}, {"id": 12, "username": "dropmailbot", "title": "DropMail.me", "type": "bot", "category": "خدمات", "members": 0, "description": "بوت إنشاء بريد إلكتروني مؤقت لاستقبال الرسائل", "verified": 1, "emoji": "🤖"}, {"id": 13, "username": "translate_bot", "title": "Translate_Bot", "type": "bot", "category": "ترجمة", "members": 2, "description": "بوت الترجمة الفورية بين مختلف اللغات", "verified": 1, "emoji": "🤖"}, {"id": 14, "username": "AudioTubeBot", "title": "AudioTubeBot", "type": "bot", "category": "تحميل", "members": 0, "description": "بوت استخراج وتحميل الصوت من مقاطع يوتيوب", "verified": 1, "emoji": "🤖"}, {"id": 15, "username": "TikTokDownloadBot", "title": "tiktokdownloadbot", "type": "bot", "category": "تحميل", "members": 0, "description": "بوت تنزيل فيديوهات تيك توك بدون علامة مائية", "verified": 1, "emoji": "🤖"}, {"id": 16, "username": "FBdownBot", "title": "Ab", "type": "bot", "category": "تحميل", "members": 2, "description": "بوت تحميل مقاطع الفيديو من فيسبوك", "verified": 1, "emoji": "🤖"}, {"id": 17, "username": "vkmusic_bot", "title": "VK Music Bot", "type": "bot", "category": "صوتيات", "members": 2, "description": "بوت البحث عن الأغاني والمقاطع الصوتية وتحميلها", "verified": 1, "emoji": "🤖"}, {"id": 18, "username": "TextMagicBot", "title": "Text Magic ✏️", "type": "bot", "category": "أدوات", "members": 2, "description": "بوت زخرفة وتنسيق النصوص العربية والإنجليزية", "verified": 1, "emoji": "🤖"}, {"id": 19, "username": "TempMail_org_bot", "title": "Temp Mail ✉️ Official Bot", "type": "bot", "category": "خدمات", "members": 2, "description": "بوت بريد مؤقت لحماية الخصوصية", "verified": 1, "emoji": "🤖"}, {"id": 20, "username": "AllSaverBot", "title": "Downloader video YouTube Instagram", "type": "bot", "category": "تحميل", "members": 2, "description": "بوت تحميل الوسائط من مختلف المنصات الاجتماعية", "verified": 1, "emoji": "🤖"}, {"id": 21, "username": "ai_arab", "title": "AI for Arab", "type": "channel", "category": "ذكاء اصطناعي", "members": 11, "description": "ليستفيد العرب من الذكاء الصناعي", "verified": 0, "emoji": "📢"}, {"id": 22, "username": "ArabLinux", "title": "Arab Linux", "type": "channel", "category": "لينكس", "members": 3, "description": "كل مايخص لينكس", "verified": 0, "emoji": "📢"}, {"id": 23, "username": "Python_Ar", "title": "Op Israel2/ 31-12-2019", "type": "group", "category": "برمجة", "members": 190, "description": "قناة لغة بايثون ومكتباتها وشروحات برمجية", "verified": 0, "emoji": "👥"}, {"id": 24, "username": "WebDev_Ar", "title": "Web Dev", "type": "group", "category": "برمجة", "members": 88, "description": "مصادر وتطوير مواقع الويب وتصميم الواجهات", "verified": 0, "emoji": "👥"}, {"id": 25, "username": "Android_Ar", "title": "️عرب أندرويد - تطبيقات حصرية - العاب حصرية - العاب مهكرة", "type": "channel", "category": "تقنية", "members": 9577, "description": "كل مايخص الأندرويد\n\n● الالعاب حصرية و مدفوعة و مهكرة\n● تطبيقات حصرية", "verified": 0, "emoji": "📢"}, {"id": 26, "username": "ajmurgent", "title": "الجزيرة مباشر الآن", "type": "channel", "category": "أخبار", "members": 524, "description": "الجزيرة مباشر الآن - تغطية الأخبار العاجلة على مدار الساعة", "verified": 0, "emoji": "📢"}, {"id": 27, "username": "AlJazeera_Channel", "title": "قناة الجزيرة", "type": "channel", "category": "أخبار", "members": 27, "description": "قناة الجزيرة الإخبارية - التغطية الميدانية والتحليلات", "verified": 0, "emoji": "📢"}, {"id": 28, "username": "alarabiya", "title": "العربية", "type": "channel", "category": "أخبار", "members": 113626, "description": "العربية.. أن تعرف أكثر\nhttps://www.alarabiya.net/", "verified": 1, "emoji": "📢"}, {"id": 29, "username": "alhadath", "title": "الحدث", "type": "channel", "category": "أخبار", "members": 0, "description": "قناة تفاعلية تركز على الأحداث السياسية في المنطقة العربية", "verified": 0, "emoji": "📢"}, {"id": 30, "username": "bbcarabic", "title": "BBC News عربي", "type": "channel", "category": "أخبار", "members": 0, "description": "Official channel for BBC Arabic القناة الرسمية لبي بي سي العربية", "verified": 0, "emoji": "📢"}, {"id": 31, "username": "sp_arabic", "title": "Arab Support", "type": "channel", "category": "أخبار", "members": 1, "description": "هدفنا تقديم مساعدة للطلاب العرب في الجامعات الايرانيه لكل المجالات الدراسية\n\nالخاص @asdfghjbie", "verified": 0, "emoji": "📢"}, {"id": 32, "username": "Alquran", "title": "Al-Qur'an 📖 القرآن", "type": "channel", "category": "دين", "members": 1986, "description": "تلاوات خاشعة وتدبر آيات القرآن الكريم والتفاسير", "verified": 0, "emoji": "📢"}, {"id": 33, "username": "quran", "title": "قرآن Quran", "type": "channel", "category": "دين", "members": 30857, "description": "القرآن الكريم وتلاوات بأصوات أشهر القراء", "verified": 0, "emoji": "📢"}, {"id": 34, "username": "Hadith", "title": "حــــدیثـــ | 𝓗𝓪𝓭𝓲𝓽𝓱", "type": "channel", "category": "دين", "members": 1176, "description": "Read a Hadith aday, keep the satan away💞\n@Moghavidel for comments", "verified": 0, "emoji": "📢"}, {"id": 35, "username": "English_Ar", "title": "انگلیسی با مجید اردکانی", "type": "group", "category": "تعليم", "members": 334, "description": "09171211521", "verified": 0, "emoji": "👥"}, {"id": 36, "username": "English_Audio", "title": "Английский", "type": "channel", "category": "تعليم", "members": 102, "description": "90 аудиоуроков для желающих выучить английский язык", "verified": 0, "emoji": "📢"}, {"id": 37, "username": "ecommerce_ar", "title": "المتاجر الإلكترونية بالعربي (شوبيفاي - سلة - زد)", "type": "group", "category": "أعمال", "members": 0, "description": "قناة تضم التجار والمهتمين بالتجارة الالكترونية والتسويق على منصات شوبيفاي - سلة - زد", "verified": 0, "emoji": "👥"}, {"id": 38, "username": "trading_ar", "title": "Trading🇵🇸", "type": "channel", "category": "أعمال", "members": 2, "description": "Signal trading 💵", "verified": 0, "emoji": "📢"}, {"id": 39, "username": "Crypto_Ar", "title": "Crypto-Advisor", "type": "group", "category": "عملات رقمية", "members": 2, "description": "أخبار وتطورات العملات الرقمية وتقنية البلوك تشين", "verified": 0, "emoji": "👥"}, {"id": 40, "username": "ArabFootball", "title": "عشاق كرة القدم❤️‍🔥", "type": "channel", "category": "رياضة", "members": 2, "description": "عشاق كرة القدم بدول العرب🖤🔥\nاشترك بالقناة وشاركنا جوك💥\nحياكم الله وتحية لكل عربي🗿❤", "verified": 0, "emoji": "📢"}, {"id": 41, "username": "cybersec_ar", "title": "Cyber Security - أمن سيبراني", "type": "group", "category": "أمن سيبراني", "members": 982, "description": "🔒 الأمن السيبراني للجميع\nهذا الجروب مخصص لتوعية الأفراد وتعريفهم بعالم الأمن السيبراني، وكيفية حماية بياناتهم وأجهزتهم من الاختراقات والتهديدات الرقمية.\n📚 سنشارك معلومات، نصائح، وأدوات تساعدك على اكتساب مهارات الحماية الإلكترونية بطريقة بسيطة وواضحة.", "verified": 0, "emoji": "👥"}, {"id": 42, "username": "Linux_Arabic", "title": "Linux Arabs | لينكس", "type": "group", "category": "لينكس", "members": 5323, "description": "#⦃🇾🇪⦄\nاهلا بك في مجموعة لينكس  وتوزيعاته هدفنا تبادل المعلومات والفائده وايضاً الدعم لعشاق لينكس : \nرابط القناة الخاصه بالمجموعه :\nt.me/Linux_arabss\nقوانين  t.me/Linux_Arabic/19189\nقنواتي :\n@SHADOW_YEMEN ¦ @SHADOW_BOOKS ¦ @SHADOW_IOT ¦ @SHADOW_YE", "verified": 0, "emoji": "👥"}, {"id": 43, "username": "ArabicDevelopers", "title": "Tech Geeks シ︎", "type": "group", "category": "برمجة", "members": 154, "description": "قناة ذات محتوي هادف وليس للربح او للاعلانات (لكل مبتدأ في مجال الويب) .\n\nhttps://t.me/Learn_Web1", "verified": 0, "emoji": "👥"}, {"id": 44, "username": "Flutter_Arabic", "title": "Flutter dev in Arabia", "type": "channel", "category": "برمجة", "members": 65, "description": "Flutter dev in Arabia", "verified": 0, "emoji": "📢"}, {"id": 45, "username": "Designers_Ar", "title": "ملتقى ديزاينرز 🌈", "type": "group", "category": "تصميم", "members": 21, "description": "ملتقى لكل الشغوفين بالتصميم بكافة انواعه وأشكاله سواء كانوا محترفين ام هواة \nويهتم الملتقى بالدورات ذات العلاقة وتطوير مهارات اعضاءه", "verified": 0, "emoji": "👥"}, {"id": 46, "username": "voicybot", "title": "Voicy 🇺🇦", "type": "bot", "category": "أدوات", "members": 0, "description": "بوت تحويل الرسائل الصوتية إلى نصوص مكتوبة", "verified": 1, "emoji": "🤖"}, {"id": 47, "username": "qrcode_bot", "title": "QR code reader", "type": "bot", "category": "أدوات", "members": 0, "description": "بوت إنشاء وقراءة رموز الاستجابة السريعة QR Code", "verified": 1, "emoji": "🤖"}, {"id": 48, "username": "gif", "title": "GIF Search", "type": "bot", "category": "أدوات", "members": 0, "description": "بوت البحث عن صور متحركة GIF", "verified": 1, "emoji": "🤖"}, {"id": 49, "username": "wiki", "title": "Wikipedia Search", "type": "bot", "category": "تعليم", "members": 2, "description": "بوت البحث المباشر في موسوعة ويكيبيديا", "verified": 1, "emoji": "🤖"}, {"id": 50, "username": "calcubot", "title": "Console calculator", "type": "bot", "category": "أدوات", "members": 2, "description": "بوت الآلة الحاسبة وحل المعادلات الرياضية", "verified": 1, "emoji": "🤖"}, {"id": 51, "username": "instasave_bot", "title": "InstaSave: Instagram & TikTok Downloader", "type": "bot", "category": "تحميل", "members": 2, "description": "بوت تحميل الصور والفيديوهات من انستغرام", "verified": 1, "emoji": "🤖"}, {"id": 52, "username": "TwitterDownloaderBot", "title": "Twitter Video Downloader", "type": "bot", "category": "تحميل", "members": 2, "description": "بوت تحميل الفيديو والصور من منصة إكس وتويتر", "verified": 1, "emoji": "🤖"}, {"id": 53, "username": "Quran_Audio_bot", "title": "quran audio", "type": "bot", "category": "دين", "members": 2, "description": "بوت الاستماع وتحميل تلاوات القرآن الكريم بأصوات القراء", "verified": 1, "emoji": "🤖"}, {"id": 54, "username": "Duaa_bot", "title": "Me", "type": "bot", "category": "دين", "members": 2, "description": "بوت الأدعية المأثورة والأذكار اليومية", "verified": 1, "emoji": "🤖"}, {"id": 55, "username": "HadithBot", "title": "بات حدیث", "type": "bot", "category": "دين", "members": 0, "description": "بوت البحث في الأحاديث النبوية وتخريجها", "verified": 1, "emoji": "🤖"}, {"id": 56, "username": "Athan_Bot", "title": "Anniversary 3 bulan💘", "type": "bot", "category": "دين", "members": 2, "description": "بوت مواقيت الصلاة والأذان والتنبيهات", "verified": 1, "emoji": "🤖"}, {"id": 57, "username": "EnglishGrammarBot", "title": "Grammarbot", "type": "bot", "category": "تعليم", "members": 2, "description": "بوت اختبارات وشروحات قواعد اللغة الإنجليزية", "verified": 1, "emoji": "🤖"}, {"id": 58, "username": "DictionaryBot", "title": "DictionaryBot", "type": "bot", "category": "تعليم", "members": 2, "description": "بوت المعاجم والقواميس اللغوية والترجمة", "verified": 1, "emoji": "🤖"}, {"id": 59, "username": "WeatherBot", "title": "Weather bot", "type": "bot", "category": "خدمات", "members": 0, "description": "بوت معرفة حالة الطقس والتوقعات الجوية", "verified": 1, "emoji": "🤖"}, {"id": 60, "username": "TechVoice", "title": "تيك فويس", "type": "channel", "category": "تقنية", "members": 5702, "description": "اخبار تقنية | فيديوات | بجودة عالية\nالقناة الرسمية لقناة تيك فويس", "verified": 0, "emoji": "📢"}, {"id": 61, "username": "Saudi_Developers", "title": "Saudi Developers", "type": "channel", "category": "برمجة", "members": 8, "description": "قناة تخدم كل مطور سعودي ومطورة سعودية 👨‍💻🇸🇦👩‍💻 نستعرض فيها النصائح والأدوات وغيرها..", "verified": 0, "emoji": "📢"}, {"id": 62, "username": "Freelance_Ar", "title": "Фріланс| group", "type": "channel", "category": "أعمال", "members": 21, "description": "Буду також радий за донат\nВот мій номер карти(5375411424037716)", "verified": 0, "emoji": "📢"}, {"id": 63, "username": "blockchain_ar", "title": "Zzz", "type": "channel", "category": "تقنية", "members": 0, "description": "أخبار البلوكتشين والويب 3", "verified": 0, "emoji": "📢"}, {"id": 64, "username": "medical_ar", "title": "I will do it🙂‍↔️", "type": "channel", "category": "صحة", "members": 2, "description": "نصائح طبية موثوقة ومعلومات صحية", "verified": 0, "emoji": "📢"}, {"id": 65, "username": "mental_health_ar", "title": "Mental Health Test 💜", "type": "group", "category": "صحة", "members": 3, "description": "محتوى توعوي عن الصحة النفسية", "verified": 0, "emoji": "👥"}, {"id": 66, "username": "learn_english_ar", "title": "تعلم اللغة الإنجليزية", "type": "group", "category": "تعليم", "members": 4, "description": "دروس إنجليزية يومية للمتعلمين العرب", "verified": 0, "emoji": "👥"}, {"id": 67, "username": "book_club_ar", "title": "Book Club", "type": "group", "category": "تعليم", "members": 1, "description": "مجتمع لمنافشة ومراجعة وتوصية الكتب وتشجيع عن القراءة الجماعية والاستفادة من الثقافات المختلفة العربية، مع تبني فعاليات داخل المجتمع من حين والاخر.", "verified": 0, "emoji": "👥"}, {"id": 68, "username": "books_ar", "title": "كتب وروايات عربية وعالمية", "type": "channel", "category": "تعليم", "members": 13033, "description": "كتب، روايات، شعر، مجلات، قصائد..\nالقراءة للجميع هي شعارنا..\n👇\nنتمنى أن تلقاكم رسالتنا هذه بصحة وسلامة قرب أحبائكم، من يريد كتاب أو رواية أو مخطوطة أو شعر فليتفضل بالبحث عنها داخل القناة من خلال خيارات البحث.\nوإذا لم يجدها فاطلبها هنا:\n@books0club 😍😊", "verified": 0, "emoji": "📢"}, {"id": 69, "username": "science_ar", "title": "عَــطـ ـــاّء 💌", "type": "channel", "category": "تعليم", "members": 1, "description": "محتوى علمي مبسط", "verified": 0, "emoji": "📢"}, {"id": 70, "username": "quran_daily", "title": "روزی یک صفحه با قرآن", "type": "channel", "category": "دين", "members": 176, "description": "خواندن روزانه یک صفحه از قرآن کریم بصورت صوتی و تصویری با ترجمه و  تفسیر موضوعی آن صفحه", "verified": 0, "emoji": "📢"}, {"id": 71, "username": "world_news_ar", "title": "أخبار العالم بالعربية", "type": "channel", "category": "أخبار", "members": 2, "description": "أخبار عالمية مترجمة", "verified": 0, "emoji": "📢"}, {"id": 72, "username": "tech_news_ar", "title": "AI News", "type": "channel", "category": "أخبار", "members": 2, "description": "Daily Tech News 🚀", "verified": 0, "emoji": "📢"}, {"id": 73, "username": "anime_ar", "title": "عالم الأنمي - Anime World", "type": "channel", "category": "ترفيه", "members": 72245, "description": "أفضل قناة انمي 🚩\nعالمٌ آخر.. \nخارج حدود الخيال\nذلك هو عالم الأنمي \n\nننشر كل ما يخص الأنمي♥️\n\nجميع قنواتنا: https://t.me/anime_ar/44723", "verified": 1, "emoji": "📢"}, {"id": 74, "username": "photography_ar", "title": "Photographer", "type": "channel", "category": "تصميم", "members": 1, "description": "For the photographer sharing & discussion", "verified": 0, "emoji": "📢"}, {"id": 75, "username": "tv_ar", "title": "بوت قبول طلبات الانضمام", "type": "channel", "category": "ترفيه", "members": 91, "description": "أخبار البرامج والقنوات", "verified": 0, "emoji": "📢"}, {"id": 76, "username": "radio_ar", "title": "Радио АР", "type": "channel", "category": "ترفيه", "members": 10, "description": "О нелегком труде и великой судьбе проектировщиков", "verified": 0, "emoji": "📢"}, {"id": 77, "username": "cv_ar", "title": "ذكر الرحمن", "type": "channel", "category": "أعمال", "members": 0, "description": "أنشُرُ كل ما تطمئنّ إليه النفس، من شعرٍ وعلوم ،ومواعظ، وأناشيدَ هادئة، وأبحاثٍ مفيدة، رحِمَ اللهُ من ترك أثراً طيباً\n-\n\nرابط المصارحة(https://9j.sarhne.com)", "verified": 0, "emoji": "📢"}, {"id": 78, "username": "students_ar", "title": "قناة العلوم النحوية والأدبية 💼", "type": "channel", "category": "تعليم", "members": 1, "description": "مخصص لطلاب العربية", "verified": 0, "emoji": "📢"}, {"id": 79, "username": "real_estate_ksa", "title": "Недвижимость в КСА", "type": "channel", "category": "أعمال", "members": 2, "description": "Купить квартиру, дом, землю в КСА", "verified": 0, "emoji": "📢"}, {"id": 80, "username": "basketball_ar", "title": "Баскетбольные тренировки 🏀😤", "type": "channel", "category": "رياضة", "members": 11, "description": "🏀", "verified": 0, "emoji": "📢"}, {"id": 81, "username": "cybersecurity_ar", "title": "Cyber Security", "type": "group", "category": "تقنية", "members": 42, "description": "مجموعة خاصة بالبرمجة وأمن المعلومات ؛\n\n- Cyber Security °\n\nالقوانِين °\n\nممنوع طلَب اختراق الخ .. )\nممنوع السَب .\nممنوع العُنصريه .\n اذا كان عندك سؤال قم بالسؤال بطريقه مباشرة .\n\nبالتوفِيق أحبابي فـ الله 🤎 .", "verified": 0, "emoji": "👥"}, {"id": 82, "username": "quantum_ar", "title": ".", "type": "channel", "category": "تقنية", "members": 1, "description": "أخبار الحوسبة الكمومية", "verified": 0, "emoji": "📢"}, {"id": 83, "username": "rust_ar", "title": "Rust بالعربي", "type": "group", "category": "برمجة", "members": 425, "description": "مجتمع عربي للغة البرمجة Rust، نناقش مواضيع اللغة ومايتعلق بها", "verified": 0, "emoji": "👥"}, {"id": 84, "username": "api_ar", "title": "سرقه أعضاء 😂", "type": "group", "category": "برمجة", "members": 4, "description": "دروس تطوير REST API", "verified": 0, "emoji": "👥"}, {"id": 85, "username": "testing_ar", "title": "Testing One", "type": "channel", "category": "برمجة", "members": 2, "description": "دروس اختبار البرمجيات QA", "verified": 0, "emoji": "📢"}, {"id": 86, "username": "investment_ar", "title": "AR Investment", "type": "channel", "category": "أعمال", "members": 33, "description": "درود", "verified": 0, "emoji": "📢"}, {"id": 87, "username": "consulting_ar", "title": "Альбина Зинкевич | Архитектор Финансовых Вселенных", "type": "channel", "category": "أعمال", "members": 49, "description": "Специализируюсь на построении комплексной системы управления финансами для малого и среднего бизнеса: помогаю решать все вопросы клиентов с финансами, налогами и бухгалтерией.\nПишите @malbinari\nСайт: consulting-ar.ru", "verified": 0, "emoji": "📢"}, {"id": 88, "username": "math_ar", "title": "🇸🇦الموسوعة الحرة للرياضيات🇸🇦", "type": "group", "category": "تعليم", "members": 3107, "description": "قروب يهتم في كل ما يخص الرخصة المهنية للمعلمين والمعلمات اسئلة وتجميعات وملازم وشروحات ودروس واستراتيجيات وافكار  وحل نماذج،\nباشراف :  محمد المحفوظ @math_q \nالقناة :  @math_rv", "verified": 0, "emoji": "👥"}, {"id": 89, "username": "korean_ar", "title": "Корейский с нуля❤️", "type": "channel", "category": "تعليم", "members": 1, "description": "Корейский вместе со мной с 0, сюда буду отправлять, то чем я пользуюсь.", "verified": 0, "emoji": "📢"}, {"id": 90, "username": "urluploadxbot", "title": "URL Uploader X⚡️", "type": "bot", "category": "أدوات", "members": 2, "description": "بوت رفع روابط مباشر إلى تيليجرام", "verified": 1, "emoji": "🤖"}, {"id": 91, "username": "TranscriberBot", "title": "TB", "type": "bot", "category": "أدوات", "members": 2, "description": "بوت تفريغ المقاطع الصوتية إلى كتابة", "verified": 1, "emoji": "🤖"}, {"id": 92, "username": "QR_Code_bot", "title": "QR Code Generator", "type": "bot", "category": "أدوات", "members": 2, "description": "بوت قراءة وإنشاء باركود و QR", "verified": 1, "emoji": "🤖"}, {"id": 93, "username": "apkdl_bot", "title": "APK Downloader", "type": "bot", "category": "تقنية", "members": 2, "description": "بوت تنزيل تطبيقات الأندرويد", "verified": 1, "emoji": "🤖"}, {"id": 94, "username": "imdb", "title": "IMDb", "type": "bot", "category": "ترفيه", "members": 2, "description": "بوت البحث عن الأفلام والمسلسلات وتقييماتها", "verified": 1, "emoji": "🤖"}, {"id": 95, "username": "coub", "title": "Coub", "type": "bot", "category": "ترفيه", "members": 2, "description": "بوت مقاطع الفيديو القصيرة والمتحركة", "verified": 1, "emoji": "🤖"}, {"id": 96, "username": "bing", "title": "Bing Image Search", "type": "bot", "category": "أدوات", "members": 2, "description": "بوت محرك بحث بينج", "verified": 1, "emoji": "🤖"}, {"id": 97, "username": "pic", "title": "Yandex Image Search", "type": "bot", "category": "أدوات", "members": 2, "description": "بوت البحث عن الصور عالية الدقة", "verified": 1, "emoji": "🤖"}, {"id": 98, "username": "vid", "title": "Video Search for YouTube", "type": "bot", "category": "ترفيه", "members": 2, "description": "بوت البحث عن مقاطع الفيديو في يوتيوب", "verified": 1, "emoji": "🤖"}];
+
+        let currentType = 'all';
+        let currentCategory = 'all';
+
+        const searchInput = document.getElementById('searchInput');
+        const resultsList = document.getElementById('resultsList');
+        const typeFilters = document.getElementById('typeFilters');
+        const categoryFilters = document.getElementById('categoryFilters');
+        const totalItemsEl = document.getElementById('totalItems');
+        const totalMembersEl = document.getElementById('totalMembers');
+
+        function normalizeArabic(text) {
+            if (!text) return '';
+            return text
+                .replace(/[أإآٱ]/g, 'ا')
+                .replace(/ة/g, 'ه')
+                .replace(/[ًٌٍَُِّْٰ]/g, '')
+                .replace(/[ىي]/g, 'ي')
+                .replace(/[ؤ]/g, 'و')
+                .replace(/[ئ]/g, 'ي')
+                .toLowerCase()
+                .trim();
+        }
+
+        function formatNumber(num) {
+            if (!num) return '0';
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+
+        function renderResults() {
+            const query = normalizeArabic(searchInput.value);
+
+            const filtered = allEntities.filter(it => {
+                const matchesType = currentType === 'all' || it.type === currentType;
+                const matchesCat = currentCategory === 'all' || it.category === currentCategory;
+
+                let matchesQuery = true;
+                if (query) {
+                    const normTitle = normalizeArabic(it.title);
+                    const normDesc = normalizeArabic(it.description);
+                    const normUname = it.username.toLowerCase();
+                    const normCat = normalizeArabic(it.category);
+                    matchesQuery = normTitle.includes(query) ||
+                                   normDesc.includes(query) ||
+                                   normUname.includes(query) ||
+                                   normCat.includes(query);
+                }
+                return matchesType && matchesCat && matchesQuery;
+            });
+
+            // Sort by verified and members
+            filtered.sort((a, b) => b.members - a.members);
+
+            if (filtered.length === 0) {
+                resultsList.innerHTML = '<div class="empty-state"><div class="emoji">😔</div><h3>لا توجد نتائج مطابقة</h3><p>جرب كلمات أخرى أو غيّر خيارات الفلترة</p></div>';
+                return;
+            }
+
+            resultsList.innerHTML = filtered.map(it => {
+                let typeBadge = '';
+                let memberLabel = '';
+                if (it.type === 'bot') {
+                    typeBadge = '<span class="badge-type badge-bot">🤖 بوت</span>';
+                    memberLabel = '⚡ متاح للاستخدام الفوري';
+                } else if (it.type === 'group') {
+                    typeBadge = '<span class="badge-type badge-group">👥 مجموعة</span>';
+                    memberLabel = formatNumber(it.members) + ' عضو';
+                } else {
+                    typeBadge = '<span class="badge-type badge-channel">📢 قناة</span>';
+                    memberLabel = formatNumber(it.members) + ' مشترك';
+                }
+
+                const verifiedBadge = it.verified ? ' ✅' : '';
+                const desc = it.description ? it.description : 'حساب تيليجرام نشط ومفحوص';
+                const emoji = it.emoji || '📢';
+
+                return '<div class="channel-card">' +
+                    '<div class="channel-header">' +
+                        '<div class="channel-emoji">' + emoji + '</div>' +
+                        '<div class="channel-info">' +
+                            '<div class="channel-title">' + it.title + verifiedBadge + ' ' + typeBadge + '</div>' +
+                            '<div class="channel-meta"><span class="active-dot">● نشط وشغال</span> · ' + it.category + '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="channel-desc">' + desc + '</div>' +
+                    '<div class="channel-footer">' +
+                        '<div class="channel-stats">👥 ' + memberLabel + '</div>' +
+                        '<a href="https://t.me/' + it.username + '" target="_blank" class="channel-link">فتح @' + it.username + '</a>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        function updateStats() {
+            totalItemsEl.textContent = allEntities.length;
+            const sumMembers = allEntities.reduce((acc, curr) => acc + (curr.members || 0), 0);
+            totalMembersEl.textContent = formatNumber(sumMembers);
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', renderResults);
+
+        typeFilters.addEventListener('click', (e) => {
+            const btn = e.target.closest('.type-btn');
+            if (!btn) return;
+            document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentType = btn.dataset.type;
+            renderResults();
+        });
+
+        categoryFilters.addEventListener('click', (e) => {
+            const chip = e.target.closest('.cat-chip');
+            if (!chip) return;
+            document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            currentCategory = chip.dataset.cat;
+            renderResults();
+        });
+
+        // Initialize URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const qParam = urlParams.get('q');
+        const typeParam = urlParams.get('type');
+
+        if (qParam) {
+            searchInput.value = qParam;
+        }
+        if (typeParam && ['channel', 'bot', 'group'].includes(typeParam)) {
+            currentType = typeParam;
+            document.querySelectorAll('.type-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.type === typeParam);
+            });
+        }
+
+        updateStats();
+        renderResults();
+    </script>
+</body>
+</html>
