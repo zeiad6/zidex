@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import { ArrowLeft, ArrowUpLeft, Copy } from 'lucide-react'
 import { accentTokens, type HubLink } from '@/lib/site'
 import { cn, copyText, nativeShare } from '@/lib/utils'
-import { TiltCard } from '@/components/ui/Interactive'
 import { useI18n } from '@/lib/i18n'
 
 type Props = {
@@ -68,7 +67,7 @@ export function LinkCard({ link, onToast }: Props) {
   const main = (
     <span className="relative flex items-start gap-3.5">
       <span
-        className="grid size-11 shrink-0 place-items-center rounded-2xl border border-app text-xl"
+        className="border-app grid size-11 shrink-0 place-items-center rounded-xl border text-xl"
         style={{ backgroundColor: `rgb(${accent.rgb} / 0.1)` }}
       >
         <span aria-hidden="true">{link.emoji}</span>
@@ -91,35 +90,26 @@ export function LinkCard({ link, onToast }: Props) {
         </span>
       </span>
 
-      <span className="text-subtle mt-1 shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5 rtl:group-hover:-translate-x-0.5 ltr:group-hover:translate-x-0.5">
+      <span className="arrow-nudge text-subtle mt-1 shrink-0">
         {isInternal ? (
-          <ArrowLeft className="size-4" aria-hidden="true" />
+          <ArrowLeft className="size-4 ltr:rotate-180" aria-hidden="true" />
         ) : (
-          <ArrowUpLeft className="size-4" aria-hidden="true" />
+          <ArrowUpLeft className="size-4 ltr:scale-x-[-1]" aria-hidden="true" />
         )}
       </span>
     </span>
   )
 
   return (
-    <TiltCard max={link.featured ? 4 : 6} className="group h-full">
+    <div className="group h-full">
       <div
         className={cn(
-          'bg-elevated relative flex h-full min-w-0 flex-col overflow-hidden rounded-3xl border border-app p-4.5 shadow-app-md transition-[box-shadow,border-color,transform] duration-300',
-          'hover:border-strong hover:shadow-app-lg focus-within:border-accent',
+          'bg-elevated shadow-app relative flex h-full min-w-0 flex-col rounded-2xl border border-app p-5',
+          'card-lift hover-ring',
         )}
       >
-        {/* Accent wash, driven by the same token as the icon tile. */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-          style={{
-            background: `linear-gradient(135deg, rgb(${accent.rgb} / 0.14), transparent 62%)`,
-          }}
-        />
-
         {isInternal ? (
-          <Link to={link.href} className="relative block rounded-2xl focus-visible:outline-none">
+          <Link to={link.href} className="relative block focus-visible:outline-none">
             <span className="absolute inset-0" aria-hidden="true" />
             {main}
           </Link>
@@ -130,7 +120,7 @@ export function LinkCard({ link, onToast }: Props) {
             href={link.href}
             target="_blank"
             rel="noopener noreferrer nofollow"
-            className="relative block cursor-pointer rounded-2xl focus-visible:outline-none"
+            className="relative block cursor-pointer focus-visible:outline-none"
           >
             <span className="absolute inset-0" aria-hidden="true" />
             {main}
@@ -170,6 +160,6 @@ export function LinkCard({ link, onToast }: Props) {
           </span>
         </div>
       </div>
-    </TiltCard>
+    </div>
   )
 }

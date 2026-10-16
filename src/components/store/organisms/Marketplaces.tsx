@@ -2,6 +2,7 @@ import { ArrowUpRight, Gem, Gamepad2, Globe2, Receipt, ShieldCheck, Users } from
 import { useI18n } from '@/lib/i18n'
 import { MARKETPLACES, type Marketplace } from '@/lib/marketplaces'
 import { ArrowNudge, HoverCard, LiveDot } from '@/components/ui/Motion'
+import { Marquee } from '@/components/ui/Marquee'
 import { StoreSection } from '@/components/store/templates/StoreSection'
 import { Reveal } from '@/components/ui/Reveal'
 
@@ -49,6 +50,18 @@ export function Marketplaces() {
         ))}
       </div>
 
+      {/* The venues as a ticker, above the full cards: the same real names
+          and fees, in a single line, so a visitor sees the landscape before
+          reading any one card in detail. */}
+      <Marquee speed={34} className="mt-5 py-1" gap="2.75rem">
+        {MARKETPLACES.map((m) => (
+          <span key={m.id} className="text-subtle flex items-baseline gap-2 text-[12.5px] whitespace-nowrap">
+            <span className="text-app font-bold">{m.name}</span>
+            <span className="font-mono text-[11px]">{t(m.fee, m.feeEn)}</span>
+          </span>
+        ))}
+      </Marquee>
+
       <p className="text-subtle mt-4 flex items-start gap-2 text-[12px] leading-relaxed">
         <ShieldCheck className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
         {t(
@@ -66,7 +79,7 @@ function VenueCard({ market: m }: { market: Marketplace }) {
   const href = m.storefront || m.href
 
   return (
-    <HoverCard as="article" className="bg-elevated border-app shadow-app-md flex h-full flex-col border p-5">
+    <HoverCard as="article" className="bg-elevated border-app flex h-full flex-col rounded-card border p-5">
       <div className="flex items-start gap-3.5">
         <span className={cnTile(tile)} aria-hidden="true">
           <Icon className="size-5 text-white" />
@@ -127,6 +140,6 @@ function Row({ icon, label, children }: { icon: React.ReactNode; label: string; 
 }
 
 const cnTile = (tile: string) =>
-  `grid size-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br shadow-[0_10px_24px_-8px_rgb(0_0_0/0.45)] ${tile}`
+  `grid size-11 shrink-0 place-items-center rounded-xl border border-app ${tile}`
 
 const cnText = (text: string) => `shrink-0 font-mono text-[11px] font-bold ${text}`

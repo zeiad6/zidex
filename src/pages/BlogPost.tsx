@@ -261,7 +261,7 @@ export default function BlogPost() {
                   >
                     <span className="text-subtle flex items-center gap-1.5 text-[11px]">
                       {t('الأقدم', 'Older')}
-                      <ArrowLeft className="size-3" aria-hidden="true" />
+                      <ArrowLeft className="size-3 ltr:rotate-180" aria-hidden="true" />
                     </span>
                     <span className="text-app line-clamp-2 text-sm font-semibold transition-colors group-hover:text-accent">
                       {next.title}
@@ -282,7 +282,7 @@ export default function BlogPost() {
           <h2 className="text-2xl font-bold tracking-tight">{t('مقالات أخرى', 'More posts')}</h2>
           <Link to="/blog" className="text-accent flex items-center gap-1.5 text-sm font-medium">
             {t('عرض الكل', 'View all')}
-            <ArrowLeft className="size-3.5" aria-hidden="true" />
+            <ArrowLeft className="size-3.5 ltr:rotate-180" aria-hidden="true" />
           </Link>
         </div>
         <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

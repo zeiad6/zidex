@@ -3,7 +3,6 @@ import { Glyph } from '@/components/ui/Glyphs'
 import { motion, useReducedMotion } from 'framer-motion'
 import { site, tiktok } from '@/lib/site'
 import { nativeShare } from '@/lib/utils'
-import { Magnetic } from '@/components/ui/Interactive'
 import { CountUp } from '@/components/ui/Reveal'
 import { useTikTokProfile } from '@/hooks/useTikTokProfile'
 import { useI18n } from '@/lib/i18n'
@@ -51,13 +50,8 @@ export function TikTokProfileCard() {
      * the crop happens well away from the card's visible edge. Clipping at the
      * card's own radius instead turned the halo into a hard rounded rectangle.
      */
-    <div className="relative mx-auto -m-6 w-[calc(100%+3rem)] max-w-[calc(28rem+3rem)] overflow-hidden rounded-4xl p-6">
-      <div
-        aria-hidden="true"
-        className="tiktok-gradient animate-float-slow absolute -inset-6 rounded-[3.5rem] opacity-25 blur-3xl"
-      />
-
-      <div className="bg-elevated shadow-app-lg relative rounded-4xl border border-app p-5 sm:p-6">
+    <div className="relative mx-auto w-full max-w-md">
+      <div className="bg-elevated relative rounded-panel border border-app p-5 sm:p-6">
         <div className="relative flex flex-col items-center text-center">
           <div className="relative">
             <span
@@ -74,11 +68,11 @@ export function TikTokProfileCard() {
                 decoding="async"
                 referrerPolicy="no-referrer"
                 onError={() => setImgOk(false)}
-                className="tiktok-gradient relative size-[5.5rem] rounded-full object-cover p-[3px] shadow-lg"
+                className="relative size-[5.5rem] rounded-full border border-app object-cover"
               />
             ) : (
               <span
-                className="tiktok-gradient relative grid size-[5.5rem] place-items-center rounded-full text-3xl font-bold text-white shadow-lg"
+                className="bg-accent relative grid size-[5.5rem] place-items-center rounded-full text-3xl font-bold text-white"
                 role="img"
                 aria-label={t(`صورة حساب ${site.handle}`, `${site.handle} profile picture`)}
               >
@@ -116,7 +110,7 @@ export function TikTokProfileCard() {
                 initial={reduce ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + i * 0.07, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="bg-sunken flex flex-col items-center gap-0.5 rounded-2xl border border-app px-2 py-2.5"
+                className="bg-sunken flex flex-col items-center gap-0.5 rounded-xl border border-app px-2 py-2.5"
               >
                 <dt className="text-subtle flex items-center gap-1 text-[11px]">
                   <Glyph name={glyph} size={12} className={accent} aria-hidden="true" />
@@ -130,17 +124,15 @@ export function TikTokProfileCard() {
           </dl>
 
           <div className="mt-4 flex w-full gap-2">
-            <Magnetic strength={0.2} className="min-w-0 flex-1">
-              <a
-                href={tiktok.profile}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="btn tiktok-gradient h-11 w-full cursor-pointer text-white shadow-md"
-              >
-                <Glyph name="spark" size={16} aria-hidden="true" />
-                {t('تابع على تيك توك', 'Follow on TikTok')}
-              </a>
-            </Magnetic>
+            <a
+              href={tiktok.profile}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              className="btn btn-primary min-w-0 flex-1"
+            >
+              <Glyph name="spark" size={16} aria-hidden="true" />
+              {t('تابع على تيك توك', 'Follow on TikTok')}
+            </a>
             <button
               type="button"
               onClick={share}

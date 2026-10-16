@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import { Glyph } from '@/components/ui/Glyphs'
-import { SpotlightCard } from '@/components/ui/Interactive'
 import { primaryDownload, type Program } from '@/data/programs'
 import { useDownloadCount } from '@/lib/downloads'
 import { useI18n } from '@/lib/i18n'
@@ -20,11 +19,10 @@ export function ProgramCard({ program }: { program: Program }) {
   const reduce = useReducedMotion()
 
   return (
-    <SpotlightCard className="rounded-2xl shadow-app-md hover:shadow-app-lg">
-    <article className="group border-app bg-elevated flex flex-col gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center">
+    <article className="group border-app bg-elevated card-lift flex flex-col gap-3 rounded-card border p-5 hover:border-accent/40 hover:shadow-app-md sm:flex-row sm:items-center">
       <span className="relative shrink-0">
         <span
-          className="bg-sunken group-hover:bg-accent-soft grid size-11 place-items-center rounded-xl transition-colors duration-300"
+          className="border-app group-hover:border-accent/50 group-hover:bg-accent-soft grid size-11 place-items-center rounded-xl border transition-all duration-300 group-hover:scale-105"
           aria-hidden="true"
         >
           <Glyph name={program.glyph} size={20} className="text-accent" />
@@ -43,8 +41,8 @@ export function ProgramCard({ program }: { program: Program }) {
 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
-          <h3 className="text-app text-[15px] font-semibold">{t(program.name, program.nameEn)}</h3>
-          <span className="rounded-md bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300" dir="ltr">
+          <h3 className="text-app group-hover:text-accent text-[15px] font-semibold transition-colors">{t(program.name, program.nameEn)}</h3>
+          <span className="border-app rounded-md border bg-emerald-100 px-1.5 py-0.5 font-mono text-[10px] font-medium tabular-nums text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300" dir="ltr">
             v{program.version}
           </span>
         </div>
@@ -98,6 +96,5 @@ export function ProgramCard({ program }: { program: Program }) {
         ) : null}
       </div>
     </article>
-    </SpotlightCard>
   )
 }

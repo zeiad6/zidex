@@ -33,7 +33,7 @@ export function StoreFaq() {
   return (
     <div className="grid gap-2.5">
       {items.map(([q, a]) => (
-        <details key={q} className="group border-app bg-elevated shadow-app open:shadow-app-md rounded-2xl border transition-shadow">
+        <details key={q} className="group border-app bg-elevated open:shadow-app-md rounded-card border transition-shadow">
           <summary className="text-app flex cursor-pointer list-none items-center justify-between gap-3 p-4 font-bold [&::-webkit-details-marker]:hidden">
             {q}
             <ChevronDown className="text-subtle size-4 shrink-0 transition-transform duration-300 group-open:rotate-180" aria-hidden="true" />

@@ -49,7 +49,7 @@ export function BotCommands({ catalog }: { catalog: Catalog }) {
 
   return (
     <Reveal>
-      <HoverCard className="bg-elevated shadow-app-md border-app border p-5 sm:p-6">
+      <HoverCard className="bg-elevated border-app rounded-panel border p-5 sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h2 className="text-app text-xl font-black">{t('ابحث في البوت بدل التصفّح', 'Search the bot instead of scrolling it')}</h2>
@@ -73,7 +73,7 @@ export function BotCommands({ catalog }: { catalog: Catalog }) {
 
         <dl className="mt-5 grid gap-2.5 sm:grid-cols-2">
           {commands.map(({ cmd, Icon, label, note }) => (
-            <div key={cmd} className="group/cmd bg-sunken rounded-2xl p-3.5 transition-colors duration-300 hover:bg-(--bg-elevated) hover:shadow-app">
+            <div key={cmd} className="group/cmd bg-sunken rounded-card p-3.5 transition-colors duration-300 hover:bg-(--bg-elevated) hover:shadow-app">
               <dt className="flex items-center gap-2">
                 <Icon className="text-accent size-4 shrink-0" aria-hidden="true" />
                 <code className="text-app font-mono text-[13px] font-bold" dir="ltr">

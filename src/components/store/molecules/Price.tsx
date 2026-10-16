@@ -22,7 +22,7 @@ export function Price({ product, size = 'md', showUsd = false }: { product: Stor
         {product.monthly ? t('نجمة / شهرياً', 'Stars / month') : t('نجمة', 'Stars')}
       </span>
       {showUsd && product.usd ? (
-        <span className="text-subtle text-[13px]" dir="ltr">
+        <span className="text-subtle text-[13px] tabular-nums" dir="ltr">
           {t('أو', 'or')} ${product.usd}
           {product.monthly ? t(' / شهر', ' / mo') : ''}
         </span>

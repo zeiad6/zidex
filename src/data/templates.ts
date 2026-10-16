@@ -181,6 +181,29 @@ export const TEMPLATES: StoreTemplate[] = [
       { ar: 'صفر تبعيات ورؤوس أمان صارمة', en: 'Zero dependencies and strict security headers' },
     ],
   },
+  {
+    slug: 'turbo',
+    sku: 'site-turbo',
+    name: { ar: 'تيربو', en: 'Turbo' },
+    tagline: { ar: 'متجر إطارات وجنوط وإكسسوارات', en: 'Tires, wheels & accessories store' },
+    description: {
+      ar: 'قالب متجر سيارات بأسلوب داكن عصري ولمسة نيلية (indigo): hero بسيارة مرسومة بالكود، تصنيفات إطارات/جنوط/إكسسوارات، وبطاقات منتجات بمواصفات. مستوحى من AutoForge على Dribbble. 8 منتجات، عربي أولاً بإنجليزية كاملة.',
+      en: 'An automotive store template in a modern dark style with an indigo accent: a code-drawn car hero, tire/wheel/accessory categories, and spec-rich product cards. Inspired by AutoForge on Dribbble. 8 products, Arabic-first with full English.',
+    },
+    stars: 4600,
+    usd: 65,
+    demoPath: '/templates/turbo/',
+    repo: 'https://github.com/zeiad6/turbo-store',
+    swatch: 'linear-gradient(150deg,#1e1f30,#6366f1 55%,#0a0b16)',
+    features: [
+      { ar: '8 منتجات: إطارات، جنوط، فرامل، إضاءة، دواسات', en: '8 products: tires, wheels, brakes, lights, mats' },
+      { ar: 'هوية داكنة عصرية بلمسة نيلية (indigo)', en: 'A modern dark identity with an indigo accent' },
+      { ar: 'سيارة ورموز منتجات مرسومة بالكود SVG', en: 'Code-drawn SVG car and product marks' },
+      { ar: 'بحث وترتيب وتصنيفات وسلة محفوظة', en: 'Search, sort, categories and a saved cart' },
+      { ar: 'طلب فوري عبر تيليجرام أو واتساب', en: 'Instant ordering via Telegram or WhatsApp' },
+      { ar: 'صفر تبعيات ورؤوس أمان صارمة', en: 'Zero dependencies and strict security headers' },
+    ],
+  },
 ]
 
 export const templateBySlug = (slug: string | undefined): StoreTemplate | undefined =>

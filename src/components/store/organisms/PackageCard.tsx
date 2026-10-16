@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft, FlaskConical, Send } from 'lucide-react'
-import { BorderBeam } from '@/components/ui/Decor'
 import { useI18n } from '@/lib/i18n'
 import { buyLink, demoLink, useProductCopy, type Catalog, type StoreProduct } from '@/lib/store'
 import { cn } from '@/lib/utils'
@@ -16,11 +15,10 @@ export function PackageCard({ product, catalog }: { product: StoreProduct; catal
   return (
     <article
       className={cn(
-        'group/card bg-elevated relative flex h-full flex-col rounded-panel border p-5 transition-[box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:shadow-app-lg sm:p-6',
-        product.featured ? 'border-ghost-400/50 shadow-app-lg' : 'border-app shadow-app-md',
+        'group/card bg-elevated relative flex h-full flex-col rounded-card border p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-app-lg sm:p-6',
+        product.featured ? 'border-accent shadow-app-md hover:border-accent' : 'border-app hover:border-accent/40',
       )}
     >
-      {product.featured && <BorderBeam />}
       <div className="flex items-start gap-3.5">
         <ProductMark
           product={product}

@@ -61,7 +61,7 @@ function applyI18n() {
         const key = node.dataset['i18n'];
         if (!key)
             return;
-        node.textContent = t(lang, key);
+        const val = t(lang, key); if (val.includes("<")) node.innerHTML = val; else node.textContent = val;
     });
     document.querySelectorAll('[data-i18n-ph]').forEach((node) => {
         const key = node.dataset['i18nPh'];

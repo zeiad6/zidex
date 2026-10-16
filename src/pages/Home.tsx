@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { animate, motion, useInView, useReducedMotion } from 'framer-motion'
+import { animate, motion, useReducedMotion } from 'framer-motion'
 import { ArrowLeft, Gift, ShoppingBag } from 'lucide-react'
 import { allPosts, categories, categoryLabel, postsFor, type Category } from '@/data/posts'
 import { primaryDownload as primaryOf, programs } from '@/data/programs'
@@ -8,6 +8,8 @@ import { site, tiktok } from '@/lib/site'
 import { useI18n } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import { Reveal } from '@/components/ui/Reveal'
+import { SplitAccent } from '@/components/ui/SplitReveal'
+import { Marquee } from '@/components/ui/Marquee'
 import { PostCard } from '@/components/blog/PostCard'
 import { ProgramCard } from '@/components/programs/ProgramCard'
 import { StoreTeaser } from '@/components/store/organisms/StoreTeaser'
@@ -69,7 +71,7 @@ function SectionHead({
             className="swiss-label text-app group hover:text-accent inline-flex shrink-0 items-center gap-2 pb-1 transition-colors"
           >
             {linkText}
-            <ArrowLeft className="size-3.5 transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1" aria-hidden="true" />
+            <ArrowLeft className="size-3.5 transition-transform duration-200 ltr:rotate-180 ltr:group-hover:translate-x-1 rtl:group-hover:-translate-x-1" aria-hidden="true" />
           </Link>
         ) : null}
       </div>
@@ -89,13 +91,13 @@ type IndexEntry = { label: string; value: ReactNode; to: string; external?: bool
  *  one interactive flourish. Non-numeric values (a placeholder dash) render
  *  as-is, and reduced-motion jumps straight to the final number. */
 function CountUp({ to }: { to: number }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-15%' })
   const reduce = useReducedMotion()
-  const [val, setVal] = useState(0)
+  // Seed with the final value so the figure is always correct even if the
+  // animation never runs (reduced motion, JS slow, off-screen capture); the
+  // tick-up plays on mount rather than on scroll, so it is never stuck at 0.
+  const [val, setVal] = useState(to)
 
   useEffect(() => {
-    if (!inView) return
     if (reduce) {
       setVal(to)
       return
@@ -106,9 +108,9 @@ function CountUp({ to }: { to: number }) {
       onUpdate: (v) => setVal(Math.round(v)),
     })
     return () => controls.stop()
-  }, [inView, to, reduce])
+  }, [to, reduce])
 
-  return <span ref={ref}>{val.toLocaleString('en-US')}</span>
+  return <span>{val.toLocaleString('en-US')}</span>
 }
 
 function DataIndex({ entries }: { entries: IndexEntry[] }) {
@@ -186,11 +188,11 @@ function Masthead() {
       <DrawRule />
       <motion.div
         className="flex items-center justify-between gap-4 py-3"
-        initial={reduce ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial={reduce ? false : { opacity: 0, y: -4 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
       >
-        <span className="swiss-label text-app inline-flex items-center gap-2.5 font-semibold">
+        <span className="swiss-label text-app inline-flex items-center gap-2.5 rounded-full border border-app bg-elevated/80 px-3 py-1 shadow-xs backdrop-blur-md">
           <span className="relative flex size-2">
             <span
               className="absolute inline-flex size-full animate-ping rounded-full opacity-70 motion-reduce:animate-none"
@@ -198,25 +200,33 @@ function Masthead() {
             />
             <span className="relative inline-flex size-2 rounded-full" style={{ background: 'var(--swiss-accent)' }} />
           </span>
-          ZEIDEXSOFT
+          <span className="font-bold tracking-wider">ZEIDEXSOFT</span>
+          <span className="text-subtle text-[10px]">·</span>
+          <span className="text-subtle text-[10px] font-normal">{t('المنصة الرسمية', 'official platform')}</span>
         </span>
-        <span className="swiss-label text-subtle truncate">{t('الموقع الرسمي', 'official site')}</span>
+        <span className="swiss-label text-subtle text-[11px] font-mono tracking-wider">{t('إصدار 2026', 'V2026')}</span>
       </motion.div>
       <DrawRule delay={0.08} />
 
       {/* Headline + index. */}
-      <div className="grid gap-x-10 gap-y-12 pt-10 lg:grid-cols-12 lg:pt-14">
+      <div className="grid items-start gap-x-10 gap-y-10 pt-8 lg:grid-cols-12 lg:pt-10">
         <div className="lg:col-span-7">
-          <motion.h1
+          <motion.p className="swiss-label text-subtle flex items-center gap-2.5" {...rise(0.2)}>
+            <span
+              className="size-1.5 shrink-0 rounded-full"
+              style={{ background: 'var(--swiss-accent)' }}
+              aria-hidden="true"
+            />
+            {t('استوديو برمجة', 'Software studio')}
+          </motion.p>
+          <SplitAccent
+            as="h1"
             id="hero-title"
             className="swiss-headline swiss-display text-app"
-            initial={reduce ? false : { opacity: 0, y: 24, clipPath: 'inset(0 0 18% 0)' }}
-            animate={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)' }}
-            transition={{ duration: 0.8, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {t('نبني بوتات تيليجرام وبرمجيات ', 'We build Telegram bots & software ')}
-            <span style={{ color: 'var(--swiss-accent)' }}>{t('تُشغِّل عملك.', 'that run your business.')}</span>
-          </motion.h1>
+            lead={t('نبني بوتات تيليجرام وبرمجيات ', 'We build Telegram bots & software ')}
+            accent={t('تُشغِّل عملك.', 'that run your business.')}
+            accentClassName="swiss-accent-text"
+          />
 
           <motion.p className="text-muted mt-7 max-w-[50ch] text-base leading-relaxed sm:text-lg" {...rise(0.3)}>
             {t(
@@ -226,13 +236,13 @@ function Masthead() {
           </motion.p>
 
           <motion.div className="mt-9 flex flex-wrap gap-3" {...rise(0.4)}>
-            <Link to="/shop" className="btn-swiss btn-swiss-primary">
-              <ShoppingBag className="size-4" aria-hidden="true" />
-              {t('تصفح البوتات', 'Browse bots')}
+            <Link to="/shop" className="btn btn-primary group h-11 px-6">
+              <ShoppingBag className="size-4 transition-transform group-hover:scale-110" aria-hidden="true" />
+              <span>{t('تصفح البوتات', 'Browse bots')}</span>
             </Link>
-            <a href={trialLink} target="_blank" rel="noopener noreferrer" className="btn-swiss btn-swiss-line">
-              <Gift className="size-4" aria-hidden="true" />
-              {t('بوت متجر مجاني لمدة شهر', 'A free store bot for a month')}
+            <a href={trialLink} target="_blank" rel="noopener noreferrer" className="btn btn-ghost group h-11 px-6">
+              <Gift className="size-4 transition-transform group-hover:rotate-12" aria-hidden="true" />
+              <span>{t('بوت متجر مجاني لمدة شهر', 'A free store bot for a month')}</span>
             </a>
           </motion.div>
         </div>
@@ -327,13 +337,13 @@ function StartHere() {
                   aria-controls="step-panel"
                   onClick={() => setActive(i)}
                   className={cn(
-                    'swiss-index-row flex w-full cursor-pointer items-baseline gap-4 py-4 text-start transition-colors',
-                    on ? 'text-app' : 'text-muted hover:text-app',
+                    'swiss-index-row flex w-full cursor-pointer items-baseline gap-4 py-4 text-start transition-all duration-200',
+                    on ? 'text-app ps-2 border-s-2 border-accent' : 'text-muted hover:text-app hover:ps-1',
                   )}
                 >
                   <span
                     className={cn(
-                      'swiss-figure w-8 shrink-0 text-xl tabular-nums',
+                      'swiss-figure w-8 shrink-0 text-xl tabular-nums transition-colors',
                       on ? 'text-accent' : 'text-subtle',
                     )}
                   >
@@ -374,7 +384,7 @@ function StartHere() {
                 className="text-app hover:text-accent group mt-6 inline-flex items-center gap-2 text-sm font-bold"
               >
                 {step.cta}
-                <ArrowLeft className="size-4 transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1" aria-hidden="true" />
+                <ArrowLeft className="size-4 transition-transform duration-200 ltr:rotate-180 ltr:group-hover:translate-x-1 rtl:group-hover:-translate-x-1" aria-hidden="true" />
               </a>
             ) : (
               <Link
@@ -382,7 +392,7 @@ function StartHere() {
                 className="text-app hover:text-accent group mt-6 inline-flex items-center gap-2 text-sm font-bold"
               >
                 {step.cta}
-                <ArrowLeft className="size-4 transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1" aria-hidden="true" />
+                <ArrowLeft className="size-4 transition-transform duration-200 ltr:rotate-180 ltr:group-hover:translate-x-1 rtl:group-hover:-translate-x-1" aria-hidden="true" />
               </Link>
             )}
           </motion.div>
@@ -434,7 +444,7 @@ function Articles() {
               className="swiss-label text-app group hover:text-accent inline-flex shrink-0 items-center gap-2 transition-colors"
             >
               {t('عرض الكل', 'View all')}
-              <ArrowLeft className="size-3.5 transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1" aria-hidden="true" />
+              <ArrowLeft className="size-3.5 transition-transform duration-200 ltr:rotate-180 ltr:group-hover:translate-x-1 rtl:group-hover:-translate-x-1" aria-hidden="true" />
             </Link>
           </div>
         </div>
@@ -447,7 +457,7 @@ function Articles() {
           ))}
         </div>
       ) : (
-        <p className="text-muted border border-dashed border-app py-12 text-center text-sm">
+        <p className="text-muted border-app rounded-card border border-dashed py-12 text-center text-sm">
           {t('لا مقالات في هذا القسم بعد.', 'No articles in this category yet.')}
         </p>
       )}
@@ -463,9 +473,47 @@ export default function Home() {
   }, [t])
 
   return (
-    <div className="home-swiss container-app flex flex-col gap-16 py-10 sm:gap-20 lg:gap-28 lg:py-14">
+    <div className="swiss container-app flex flex-col gap-14 py-8 sm:gap-16 lg:gap-20 lg:py-10">
       <OpeningOffer />
       <Masthead />
+
+      {/* Marquee ticker of platform strengths inspired by Landing.love */}
+      <div className="py-2">
+        <DrawRule />
+        <Marquee speed={34} className="py-2.5" gap="1rem">
+          <span className="flex items-center gap-2 rounded-full border border-app bg-elevated/70 px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap shadow-xs backdrop-blur-md transition-colors hover:border-accent/40">
+            <span className="size-1.5 rounded-full bg-emerald-500 shadow-xs animate-pulse motion-reduce:animate-none" />
+            <span className="text-app font-bold">{t('تسليم فوري وتلقائي', 'Instant Delivery')}</span>
+            <span className="text-subtle">·</span>
+            <span className="text-muted">{t('بالنجوم والكريمي', 'Stars & Kuraimi')}</span>
+          </span>
+          <span className="flex items-center gap-2 rounded-full border border-app bg-elevated/70 px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap shadow-xs backdrop-blur-md transition-colors hover:border-accent/40">
+            <span className="size-1.5 rounded-full bg-violet-500 shadow-xs" />
+            <span className="text-app font-bold">{t('صفر تبعيات تشغيلية', 'Zero Dependencies')}</span>
+            <span className="text-subtle">·</span>
+            <span className="text-muted">{t('أداء خاطف واستضافة سحابية', 'Blazing speed & cloud hosting')}</span>
+          </span>
+          <span className="flex items-center gap-2 rounded-full border border-app bg-elevated/70 px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap shadow-xs backdrop-blur-md transition-colors hover:border-accent/40">
+            <span className="size-1.5 rounded-full bg-cyan-500 shadow-xs" />
+            <span className="text-app font-bold">{t('تجربة مجانية كاملة', 'Full 7-Day Free Trial')}</span>
+            <span className="text-subtle">·</span>
+            <span className="text-muted">{t('لكل باقات المتاجر', 'For all store packages')}</span>
+          </span>
+          <span className="flex items-center gap-2 rounded-full border border-app bg-elevated/70 px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap shadow-xs backdrop-blur-md transition-colors hover:border-accent/40">
+            <span className="size-1.5 rounded-full bg-rose-500 shadow-xs" />
+            <span className="text-app font-bold">{t('8 قوالب متاجر حية', '8 Live Store Templates')}</span>
+            <span className="text-subtle">·</span>
+            <span className="text-muted">{t('معاينة فورية قبل الشراء', 'Live preview before purchase')}</span>
+          </span>
+          <span className="flex items-center gap-2 rounded-full border border-app bg-elevated/70 px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap shadow-xs backdrop-blur-md transition-colors hover:border-accent/40">
+            <span className="size-1.5 rounded-full bg-amber-500 shadow-xs" />
+            <span className="text-app font-bold">{t('لوحة تحكم TMA متكاملة', 'TMA Dashboard')}</span>
+            <span className="text-subtle">·</span>
+            <span className="text-muted">{t('إدارة مركزية للبوتات والعملاء', 'Central management')}</span>
+          </span>
+        </Marquee>
+        <DrawRule delay={0.06} />
+      </div>
 
       <Reveal delay={0.06}>
         <section aria-label={t('المتجر', 'The store')}>
@@ -493,8 +541,10 @@ export default function Home() {
             linkText={t('كل البرامج', 'All programs')}
           />
           <div className="grid gap-3">
-            {programs.slice(0, 3).map((p) => (
-              <ProgramCard key={p.slug} program={p} />
+            {programs.slice(0, 3).map((p, i) => (
+              <Reveal key={p.slug} delay={i * 0.06}>
+                <ProgramCard program={p} />
+              </Reveal>
             ))}
           </div>
         </section>

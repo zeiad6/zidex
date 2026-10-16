@@ -24,18 +24,25 @@ export default function NotFound() {
       <AuroraBackdrop intensity="lg" className="opacity-70" />
 
       <div className="container-app relative">
-        <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
+        <div className="bg-elevated shadow-app-lg border-app mx-auto flex max-w-2xl flex-col items-center rounded-panel border p-8 text-center sm:p-10">
+          {/* Masthead row: the 404 framed between hairlines, like every other
+              page's kicker — the error page speaks the site's own language. */}
+          <div className="flex w-full items-center gap-3">
+            <span className="h-px flex-1" style={{ background: 'var(--line-strong)' }} aria-hidden="true" />
+            <span className="text-subtle font-mono text-[11px] tracking-widest" dir="ltr">
+              404 · {site.handle}
+            </span>
+            <span className="h-px flex-1" style={{ background: 'var(--line-strong)' }} aria-hidden="true" />
+          </div>
+
           <Reveal>
-            <p
-              aria-hidden="true"
-              className="gradient-text text-6xl leading-none font-extrabold tracking-tighter sm:text-8xl"
-            >
+            <p aria-hidden="true" className="gradient-text mt-6 text-6xl leading-none font-extrabold tracking-tighter sm:text-8xl">
               404
             </p>
           </Reveal>
 
           <Reveal delay={0.08}>
-            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            <h1 className="text-app text-2xl font-bold tracking-tight sm:text-3xl">
               {t('هذه الصفحة غير موجودة', 'This page does not exist')}
             </h1>
           </Reveal>
@@ -54,7 +61,7 @@ export default function NotFound() {
               <Reveal key={to} delay={0.18 + i * 0.06}>
                 <Link
                   to={to}
-                  className="bg-elevated shadow-app-md hover:shadow-app-lg hover:border-strong hover:text-accent group flex h-full min-w-0 flex-col items-center gap-1.5 rounded-2xl border border-app p-4 text-center transition-[box-shadow,border-color,transform,color] duration-300 hover:-translate-y-1 motion-reduce:hover:translate-y-0"
+                  className="bg-sunken shadow-app card-lift hover-ring hover:text-accent group flex h-full min-w-0 flex-col items-center gap-1.5 rounded-2xl border border-app p-4 text-center"
                 >
                   <span className="bg-accent-soft text-accent grid size-11 place-items-center rounded-2xl transition-transform duration-300 group-hover:scale-110">
                     <Icon className="size-5" aria-hidden="true" />
@@ -75,7 +82,7 @@ export default function NotFound() {
             >
               <Music2 className="size-4" aria-hidden="true" />
               {t('حساب تيك توك', 'TikTok account')}
-              <ArrowLeft className="size-4" aria-hidden="true" />
+              <ArrowLeft className="size-4 ltr:rotate-180" aria-hidden="true" />
             </a>
           </Reveal>
         </div>

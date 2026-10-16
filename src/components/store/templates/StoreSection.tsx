@@ -15,7 +15,7 @@ export function StoreSection({
   children: ReactNode
 }) {
   return (
-    <section aria-labelledby={id}>
+    <section aria-labelledby={id} className="border-t border-app pt-8">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 id={id} className="text-app text-2xl font-black text-balance">

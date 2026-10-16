@@ -14,7 +14,6 @@ import { useI18n } from '@/lib/i18n'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { site } from '@/lib/site'
 import { formatDate } from '@/lib/utils'
-import { AuroraBackdrop } from '@/components/ui/AuroraBackdrop'
 import { Reveal } from '@/components/ui/Reveal'
 import { Magnetic } from '@/components/ui/Interactive'
 import { TiltCard } from '@/components/ui/Interactive'
@@ -46,19 +45,18 @@ export default function Programs() {
   return (
     <>
       {/* Header */}
-      <section className="relative overflow-hidden pt-24 pb-8 sm:pt-28">
-        <AuroraBackdrop intensity="md" className="opacity-70" />
+      <section className="swiss relative pt-10 pb-8 sm:pt-12">
         <div className="container-app relative">
-          <Reveal>
-            <span className="chip bg-accent-soft text-accent mb-5 w-fit">
-              <Glyph name="package" size={13} aria-hidden="true" />
-              {t('مكتبة البرامج', 'Program library')}
-            </span>
-          </Reveal>
+          <div className="h-px w-full" style={{ background: 'var(--line-strong)' }} />
+          <div className="flex items-center justify-between gap-4 py-3">
+            <span className="swiss-label text-app font-semibold">{t('مكتبة البرامج', 'Program library')}</span>
+            <span className="swiss-label text-subtle">{t(`${programs.length} برنامج`, `${programs.length} programs`)}</span>
+          </div>
+          <div className="h-px w-full" style={{ background: 'var(--line-strong)' }} />
           <Reveal delay={0.06}>
-            <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
-              {t('برامج جاهزة', 'Ready-to-run')}{' '}
-              <span className="gradient-text">{t('للتحميل', 'to download')}</span>
+            <h1 className="swiss-headline swiss-display text-app mt-10">
+              {t('برامج جاهزة ', 'Ready-to-run ')}
+              <span style={{ color: 'var(--swiss-accent)' }}>{t('للتحميل.', 'to download.')}</span>
             </h1>
           </Reveal>
           <Reveal delay={0.12}>
@@ -97,7 +95,7 @@ export default function Programs() {
                     </p>
                   </div>
                 </div>
-                <span className="bg-sunken text-subtle rounded-full px-3 py-1 font-mono text-[11px]">
+                <span className="bg-sunken text-subtle rounded-full px-3 py-1 font-mono text-[11px] tabular-nums">
                   {items.length} {t('برنامج', items.length === 1 ? 'program' : 'programs')}
                 </span>
               </div>
@@ -151,7 +149,7 @@ function ProgramTile({
   return (
     <Reveal delay={Math.min(index * 0.06, 0.24)} className="h-full">
       <TiltCard max={4} className="group h-full">
-        <div className="border-app bg-elevated shadow-app-md hover:shadow-app-lg relative flex h-full min-w-0 flex-col rounded-panel border p-4 transition-[box-shadow] duration-300 hover:border-strong sm:p-5">
+        <div className="border-app bg-elevated shadow-app card-lift hover:border-accent/40 hover:shadow-app-lg relative flex h-full min-w-0 flex-col rounded-card border p-4 sm:p-5">
           <div className="relative flex items-start gap-3">
             <span className="relative shrink-0">
               <span
@@ -174,10 +172,10 @@ function ProgramTile({
 
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-app text-base leading-snug font-bold">
+                <h3 className="text-app group-hover:text-accent text-base leading-snug font-bold transition-colors">
                   {t(program.name, program.nameEn)}
                 </h3>
-                <span className="rounded-md bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300" dir="ltr">
+                <span className="border-app rounded-md border bg-emerald-100 px-1.5 py-0.5 font-mono text-[10px] font-medium tabular-nums text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300" dir="ltr">
                   v{program.version}
                 </span>
               </div>
@@ -215,7 +213,7 @@ function ProgramTile({
                 {t('تحميل', 'downloads')}
               </span>
             )}
-            <time dateTime={program.date} className="text-subtle ms-auto text-[10px]">
+            <time dateTime={program.date} className="text-subtle ms-auto text-[10px] tabular-nums">
               {formatDate(program.date, lang === 'en' ? 'en' : 'ar')}
             </time>
           </div>
@@ -251,7 +249,7 @@ function ProgramTile({
                 className="btn btn-ghost h-9 cursor-pointer px-3 text-[13px]"
               >
                 {t('التفاصيل', 'Details')}
-                <ArrowLeft className="size-3" aria-hidden="true" />
+                <ArrowLeft className="size-3 ltr:rotate-180" aria-hidden="true" />
               </Link>
             ) : program.docs ? (
               <a
@@ -261,7 +259,7 @@ function ProgramTile({
                 className="btn btn-ghost h-9 cursor-pointer px-3 text-[13px]"
               >
                 {t('التوثيق', 'Docs')}
-                <ArrowUpLeft className="size-3" aria-hidden="true" />
+                <ArrowUpLeft className="size-3 ltr:scale-x-[-1]" aria-hidden="true" />
               </a>
             ) : null}
           </div>

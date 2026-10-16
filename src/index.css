@@ -16,6 +16,8 @@
    Arabic. Tokens are semantic so light and dark share one source. */
 
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant ltr (&:where([dir="ltr"], [dir="ltr"] *));
+@custom-variant rtl (&:where([dir="rtl"], [dir="rtl"] *));
 
 @theme {
   /*
@@ -24,7 +26,9 @@
    * geometric family did all the work, including 45 uses of text-sm where a
    * humanist face with a taller x-height holds up far better.
    */
-  /* Jakarta has no Arabic glyphs, so Arabic runs fall through to Plex. */
+  /* Archivo (a grotesque) carries Latin; it has no Arabic glyphs, so Arabic
+     runs fall through to IBM Plex Sans Arabic — a grotesque peer that pairs
+     cleanly. One Swiss-grade type system across the whole site. */
   --font-sans: 'Plus Jakarta Sans', 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
   /* Headings share the text family but sit heavier and tighter — splitting
@@ -87,20 +91,15 @@
   --radius-card: 20px;
   --radius-panel: 24px;
 
-  --color-tiktok-400: #38e0d0;
-  --color-tiktok-500: #25f4ee;
-  --color-tiktok-600: #fe2c55;
-  --color-tiktok-700: #e2185b;
-
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @layer base {
   :root {
-    --bg: #f3f4fa;
+    --bg: #e9eafb;
     --bg-elevated: #ffffff;
-    --bg-sunken: #f4f5fa;
+    --bg-sunken: #f1f1fb;
     --fg: #0f1023;
     --fg-muted: #5b5e81;
     --fg-subtle: #767a9e;
@@ -208,7 +207,15 @@
     border-radius: 4px;
   }
 
-  /* Slim, theme-aware scrollbar. */
+  /* Slim, theme-aware scrollbar. `scrollbar-width/color` (Firefox and
+     Chrome 121+) keeps the thumb painted at all times — scrollbars never
+     blink out of existence mid-page. The document body itself no longer
+     scrolls (the page column owns scrolling), so no gutter is reserved
+     here; `.app-scroll` carries `scrollbar-gutter: stable` instead. */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -221,9 +228,102 @@
     border-radius: 99px;
     border: 3px solid var(--bg);
   }
-  ::-webkit-scrollbar-thumb:hover {
+  ::-webkit-scrollbar-thumb:hover,
+  ::-webkit-scrollbar-thumb:active {
     background: var(--fg-subtle);
   }
+  /* Inner scroll surfaces (dialogs, drawers) get a tighter thumb so they
+     read as one system, not an afterthought. */
+  dialog::-webkit-scrollbar {
+    width: 8px;
+  }
+
+/* ------------------------------------------------------------------------- *
+ * Scroll ownership.
+ *
+ * The page column (`.app-scroll`) is the scroll container; the body never
+ * scrolls. Its bar is styled as a detached pill (transparent track border +
+ * background-clip on the thumb) so it reads as floating inside the page,
+ * not bolted next to the fixed sidebar. The sidebar's own middle panes
+ * (`.app-scroll-fade`) hide the bar until hovered — a normal-height screen
+ * never needs it, so a stub of a scrollbar bolted beside the menu would
+ * only read as clutter.
+ * ------------------------------------------------------------------------- */
+.app-scroll {
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem; /* sticky header + clearance */
+  scrollbar-gutter: stable;
+}
+.app-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.app-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.app-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--fg-subtle) 42%, transparent);
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: 99px;
+}
+.app-scroll::-webkit-scrollbar-thumb:hover,
+.app-scroll::-webkit-scrollbar-thumb:active {
+  background: color-mix(in oklab, var(--accent) 55%, var(--fg-subtle));
+  background-clip: padding-box;
+}
+@supports (scrollbar-width: thin) {
+  .app-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--fg-subtle) 42%, transparent) transparent;
+  }
+}
+
+.app-scroll-fade {
+  scrollbar-gutter: stable;
+}
+.app-scroll-fade::-webkit-scrollbar {
+  width: 8px;
+}
+.app-scroll-fade::-webkit-scrollbar-track {
+  background: transparent;
+}
+.app-scroll-fade::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 99px;
+  transition: background-color 0.2s;
+}
+.app-scroll-fade:hover::-webkit-scrollbar-thumb,
+.app-scroll-fade:focus-within::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--fg-subtle) 55%, transparent);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+.app-scroll-fade {
+  scrollbar-width: none; /* hovered reveal stays webkit-only; Firefox gets a clean column */
+}
+.app-scroll-fade:hover,
+.app-scroll-fade:focus-within {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--fg-subtle) 55%, transparent) transparent;
+}
+
+/* Staggered entrance for the rail and menu items — one beat per row on
+   first paint, then gone forever (animation runs once per mount). */
+@keyframes rail-in {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rail-in {
+  animation: rail-in 0.45s var(--ease-out-expo) both;
+}
 
   /* Direction-bearing icons are drawn for RTL (arrow-left = "forward").
      In English they are mirrored here once instead of at every call site. */
@@ -246,9 +346,18 @@
     letter-spacing: 0.005em;
   }
 
+  /* Latin headings take the negative tracking the Arabic default leaves
+     off: display faces read tighter and more confident at 700/800. */
+  [dir='ltr'] :is(h1, h2, h3, h4) {
+    letter-spacing: -0.015em;
+  }
+
   h1 {
     font-weight: 800;
     letter-spacing: 0.015em;
+  }
+  [dir='ltr'] h1 {
+    letter-spacing: -0.02em;
   }
 
   /* Arabic ascenders and diacritics need more vertical room than Latin. */
@@ -256,6 +365,20 @@
     line-height: 1.28;
   }
 
+  /* Arabic body copy breathes wider than the Latin default: the joins and
+     the taller x-height of Plex Arabic read cramped at Tailwind's 1.5, and
+     components that need their own leading already set it. */
+  html[lang='ar'] body {
+    line-height: 1.65;
+  }
+
+  /* IBM Plex Sans Arabic tops out at a real 700. The 800 weight requested
+     on Arabic headings has no file behind it, so the browser synthesizes
+     it — stretched joins, crushed counters, mushy bold. Snap Arabic
+     headings to the genuine 700; Latin keeps its true 800. */
+  html[lang='ar'] :is(h1, h2, h3, h4) {
+    font-weight: 700;
+  }
   /* Numerals inside Arabic sentences keep Latin digits and tabular width so
      figures in tables and stat tiles line up. */
   .tnum {
@@ -443,6 +566,201 @@
   opacity: 0.5;
 }
 
+/* ------------------------------------------------------------------ *
+ * Autonomous aurora blobs — the field's own motion.
+ *
+ * The pointer blooms above only move when the visitor moves, so the
+ * page is static between inputs. These three gradient orbs drift on a
+ * slow loop with no input at all, which is what makes the background
+ * read as alive rather than reactive. They layer *under* the pointer
+ * blooms so a cursor pass still brightens the near edge on top.
+ *
+ * Two rules the whole set obeys:
+ *   - Transform and opacity only. A `filter: blur()` is not GPU-
+ *     composited and would repaint every frame — the blobs are soft
+ *     radial gradients instead, which rasterize once.
+ *   - Each blob has its own duration, phase and axis, so the three
+ *     never line up into one slab sliding across the page.
+ * ------------------------------------------------------------------ */
+@keyframes ambient-drift-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(5%, -7%, 0) scale(1.14);
+  }
+}
+@keyframes ambient-drift-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.06);
+  }
+  50% {
+    transform: translate3d(-7%, 6%, 0) scale(0.9);
+  }
+}
+@keyframes ambient-drift-c {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.96);
+  }
+  50% {
+    transform: translate3d(6%, 5%, 0) scale(1.12);
+  }
+}
+
+/* Base shape: a large soft orb. Colour and opacity come from the
+   per-blob utilities so light and dark can tune each one. */
+@utility ambient-blob {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+/* Violet, upper-start. */
+@utility ambient-blob-a {
+  background: radial-gradient(
+    closest-side circle,
+    color-mix(in oklab, var(--color-ghost-500) 55%, transparent),
+    transparent 72%
+  );
+  opacity: 0.16;
+  animation: ambient-drift-a 26s var(--ease-out-expo) infinite;
+}
+/* Teal, lower-end — the accent the violet gets its depth from. */
+@utility ambient-blob-b {
+  background: radial-gradient(
+    closest-side circle,
+    color-mix(in oklab, var(--color-veil-500) 55%, transparent),
+    transparent 72%
+  );
+  opacity: 0.13;
+  animation: ambient-drift-b 34s var(--ease-out-expo) infinite;
+}
+/* A cooler mid violet that crosses the centre and ties the two apart. */
+@utility ambient-blob-c {
+  background: radial-gradient(
+    closest-side circle,
+    color-mix(in oklab, var(--color-ghost-400) 45%, transparent),
+    transparent 74%
+  );
+  opacity: 0.12;
+  animation: ambient-drift-c 42s var(--ease-out-expo) infinite;
+}
+
+@keyframes ambient-drift-d {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-7%, -6%, 0) scale(1.15);
+  }
+}
+
+/* Warm magenta/amber glow, mid-end — brings subtle warmth from landing.love */
+@utility ambient-blob-d {
+  background: radial-gradient(
+    closest-side circle,
+    color-mix(in oklab, #9061f9 45%, #ec4899 35%),
+    transparent 74%
+  );
+  opacity: 0.11;
+  animation: ambient-drift-d 38s var(--ease-out-expo) infinite;
+}
+
+/* Top aurora light sweep */
+@keyframes ambient-aurora-sweep {
+  0%, 100% {
+    transform: translate3d(-8%, 0, 0) scaleX(1);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate3d(8%, 0, 0) scaleX(1.1);
+    opacity: 0.72;
+  }
+}
+
+@utility ambient-aurora {
+  position: absolute;
+  top: 0;
+  left: -15%;
+  right: -15%;
+  height: 32rem;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% -10%,
+    color-mix(in oklab, var(--color-ghost-500) 24%, transparent) 0%,
+    color-mix(in oklab, var(--color-veil-400) 12%, transparent) 40%,
+    color-mix(in oklab, #8b5cf6 6%, transparent) 65%,
+    transparent 85%
+  );
+  will-change: transform, opacity;
+  animation: ambient-aurora-sweep 24s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* Fine organic grain texture */
+@utility ambient-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Dark mode can afford to let the orbs be seen without muddying text. */
+.dark .ambient-blob-a {
+  opacity: 0.3;
+}
+.dark .ambient-blob-b {
+  opacity: 0.26;
+}
+.dark .ambient-blob-c {
+  opacity: 0.24;
+}
+.dark .ambient-blob-d {
+  opacity: 0.22;
+}
+.dark .ambient-aurora {
+  background: radial-gradient(
+    ellipse 70% 60% at 50% -10%,
+    color-mix(in oklab, var(--color-ghost-400) 34%, transparent) 0%,
+    color-mix(in oklab, var(--color-veil-400) 18%, transparent) 40%,
+    color-mix(in oklab, #a78bfa 10%, transparent) 65%,
+    transparent 85%
+  );
+  opacity: 0.9;
+}
+.dark .ambient-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.045'/%3E%3C/svg%3E");
+}
+
+/* Shimmer animation for text */
+@keyframes text-shimmer-anim {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@utility text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--fg) 0%,
+    var(--accent) 50%,
+    var(--fg) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: text-shimmer-anim 6s linear infinite;
+}
+
+
 /* Interactive dot-grid backdrop (21st.dev: n1m4mz/sonar-grid). */
 @utility dot-grid {
   background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
@@ -500,10 +818,16 @@
 @utility container-app {
   width: 100%;
   margin-inline: auto;
-  max-width: 78rem;
+  /* 82rem: the same composition the pages were drawn at, with the extra
+     width going into the gutters rather than into longer line lengths —
+     wider screens stop stranding two dead columns at the edges. */
+  max-width: 82rem;
   padding-inline: 1.25rem;
   @media (width >= 48rem) {
     padding-inline: 2rem;
+  }
+  @media (width >= 80rem) {
+    padding-inline: 2.5rem;
   }
 }
 
@@ -537,16 +861,21 @@
    :root, which painted the hover colours onto <html> instead of the button. */
 /* Zidex primary: a violet gradient twice as wide as the button, so hover
    slides it instead of swapping colours, plus a violet glow and a lift. */
+/* Flat, single-colour primary — the Swiss direction, site-wide. A crisp
+   micro-interaction (1px lift + tightened shadow) replaces the gradient sweep
+   and glow; active press lives on the .btn base. */
 @utility btn-primary {
-  background-image: linear-gradient(135deg, #6d5cff 0%, #8b7cff 50%, #6d5cff 100%);
-  background-size: 200% auto;
-  color: #ffffff;
-  box-shadow: 0 8px 24px rgb(109 92 255 / 0.35);
+  background: var(--accent);
+  color: var(--accent-fg);
+  box-shadow: 0 2px 8px color-mix(in oklab, var(--accent) 28%, transparent);
   &:hover {
-    background-position: right center;
-    transform: translateY(-2px);
-    box-shadow: 0 14px 34px rgb(109 92 255 / 0.45);
+    background: color-mix(in oklab, var(--accent) 88%, #000);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px color-mix(in oklab, var(--accent) 34%, transparent);
   }
+}
+.dark .btn-primary:hover {
+  background: color-mix(in oklab, var(--accent) 88%, #fff);
 }
 
 /* The Zidex mark: violet into lavender into teal. */
@@ -967,6 +1296,25 @@
   transform: scale(0.985);
 }
 
+/* Tooltip pop for the collapsed rail (RailTip in AppShell): the card is
+   re-mounted on every hover, so a short scale-in with an overshoot-less
+   expo reads as a slide, not a blink. The position (translate) is inline
+   on the wrapper — the animation lives on the inner card so the two
+   transforms never fight. */
+@keyframes tip-in {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.tip-in {
+  animation: tip-in 0.16s var(--ease-out-expo) both;
+}
+
 /* The icon that follows a link on hover: nudges along the reading
    direction. Physical left in RTL, right in LTR. */
 .arrow-nudge {
@@ -1063,38 +1411,55 @@
  * Swiss International Typographic Style — Home (phase 1 redesign).
  * A typographic index, not a dashboard: strict grid, hairline rules,
  * one flat violet accent, square corners, no glass/shadow depth.
- * Scoped to .home-swiss so pages not yet redesigned keep their look.
+ * Scoped to .swiss so pages not yet redesigned keep their look.
  * ------------------------------------------------------------------ */
-.home-swiss {
+.swiss {
   --swiss-accent: #6d5cff;
 }
-.dark .home-swiss {
+.dark .swiss {
   /* ghost-400 — lifts off the near-black ground where #6d5cff goes muddy */
   --swiss-accent: #9187ff;
 }
 
-.home-swiss :is(h1, h2, h3, .swiss-display) {
-  font-family: 'Archivo Expanded', 'Archivo', 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
-  letter-spacing: -0.02em;
+/* The accent half of a split headline. A class rather than an inline style
+   because SplitAccent applies it to each word span, and inline styles on a
+   dozen spans is both noisy and impossible to override in dark mode. */
+.swiss .swiss-accent-text {
+  color: var(--swiss-accent);
+  background: linear-gradient(
+    135deg,
+    var(--swiss-accent) 0%,
+    color-mix(in oklab, var(--swiss-accent) 72%, var(--color-veil-400)) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Archivo Expanded is the statement voice — reserved for page H1 and anything
+   explicitly marked display, so section and card headings stay in Archivo. */
+.swiss :is(h1, .swiss-headline, .swiss-display) {
+  font-family: 'Plus Jakarta Sans', 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.015em;
   text-wrap: balance;
   font-weight: 800;
 }
 /* Arabic joins on the baseline; negative tracking collides the descenders. */
-[dir='rtl'] .home-swiss :is(h1, h2, h3, .swiss-display) {
+[dir='rtl'] .swiss :is(h1, .swiss-headline, .swiss-display) {
   letter-spacing: 0;
 }
 
-.home-swiss .swiss-headline {
-  font-size: clamp(2.5rem, 6.5vw, 5rem);
-  line-height: 1.03;
-  font-weight: 900;
+.swiss .swiss-headline {
+  font-size: clamp(2.25rem, 5.5vw, 4rem);
+  line-height: 1.08;
+  font-weight: 800;
 }
-[dir='rtl'] .home-swiss .swiss-headline {
+[dir='rtl'] .swiss .swiss-headline {
   line-height: 1.16;
 }
 
 /* Small tracked label — the masthead nameplate, section tags, data labels. */
-.home-swiss .swiss-label {
+.swiss .swiss-label {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 0.6875rem;
   letter-spacing: 0.2em;
@@ -1102,14 +1467,14 @@
   line-height: 1.4;
 }
 /* Arabic has no case and dislikes wide tracking; keep it legible. */
-[dir='rtl'] .home-swiss .swiss-label {
+[dir='rtl'] .swiss .swiss-label {
   letter-spacing: 0.04em;
   text-transform: none;
   font-family: 'IBM Plex Sans Arabic', 'JetBrains Mono', ui-sans-serif, sans-serif;
 }
 
 /* Tabular figures for the data index. */
-.home-swiss .swiss-figure {
+.swiss .swiss-figure {
   font-family: 'Archivo', ui-sans-serif, system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
   font-weight: 800;
@@ -1117,14 +1482,14 @@
 }
 
 /* Flat Swiss buttons — square, no gradient, no glow. */
-.home-swiss .btn-swiss {
+.swiss .btn-swiss {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  height: 3.25rem;
+  height: 3rem;
   padding-inline: 1.5rem;
-  border-radius: 0;
+  border-radius: 0.9rem;
   font-weight: 700;
   font-size: 0.9375rem;
   letter-spacing: 0.01em;
@@ -1135,40 +1500,56 @@
     border-color 0.2s,
     transform 0.15s var(--ease-out-expo);
 }
-.home-swiss .btn-swiss:active {
+.swiss .btn-swiss:active {
   transform: translateY(1px);
 }
-.home-swiss .btn-swiss-primary {
+.swiss .btn-swiss-primary {
   background: var(--swiss-accent);
   color: #ffffff;
 }
-.dark .home-swiss .btn-swiss-primary {
+.dark .swiss .btn-swiss-primary {
   color: #05060a;
 }
-.home-swiss .btn-swiss-primary:hover {
+.swiss .btn-swiss-primary:hover {
   background: color-mix(in oklab, var(--swiss-accent) 85%, #000);
 }
-.dark .home-swiss .btn-swiss-primary:hover {
+.dark .swiss .btn-swiss-primary:hover {
   background: color-mix(in oklab, var(--swiss-accent) 85%, #fff);
 }
-.home-swiss .btn-swiss-line {
+.swiss .btn-swiss-line {
   border: 1px solid var(--fg);
   color: var(--fg);
   background: transparent;
 }
-.home-swiss .btn-swiss-line:hover {
+.swiss .btn-swiss-line:hover {
   background: var(--fg);
   color: var(--bg);
 }
 
 /* A directory row in the data index: label + big figure, hairline below,
    the whole row shifts toward the content on hover (transform, not layout). */
-.home-swiss .swiss-index-row {
+.swiss .swiss-index-row {
   transition: transform 0.25s var(--ease-out-expo);
 }
-.home-swiss .swiss-index-row:hover {
+.swiss .swiss-index-row:hover {
   transform: translateX(0.5rem);
 }
-[dir='rtl'] .home-swiss .swiss-index-row:hover {
+[dir='rtl'] .swiss .swiss-index-row:hover {
   transform: translateX(-0.5rem);
+}
+
+/* ------------------------------------------------------------------ *
+ * Arabic synthetic-bold snap.
+ *
+ * Unlayered on purpose: it must beat Tailwind's `font-black` / 
+ * `font-extrabold` utilities, which live in @layer utilities — and any
+ * rule inside a lower layer loses to a higher one no matter what the
+ * specificity says. IBM Plex Sans Arabic ships 400-700 only, so every
+ * Arabic 800/900 request today is the browser stretching the 700 file:
+ * inflated counters, glued-together joins. Snapping to the real 700
+ * keeps the weight honest and the text crisp (Latin keeps its true
+ * heavy cuts on every other page).
+ * ------------------------------------------------------------------ */
+html[lang='ar'] :is(.font-black, .font-extrabold) {
+  font-weight: 700;
 }

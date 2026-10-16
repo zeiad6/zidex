@@ -40,14 +40,14 @@ export default function TemplatePreview() {
   return (
     <div className="container-app flex flex-col gap-6 py-8 sm:py-10">
       <Reveal>
-        <Link to="/templates" className="text-muted hover:text-app inline-flex items-center gap-1.5 text-[14px] font-bold">
-          <ArrowLeft className="size-4 rtl:rotate-180" aria-hidden="true" />
+        <Link to="/templates" className="text-muted hover:text-app group inline-flex items-center gap-1.5 text-[14px] font-bold">
+          <ArrowLeft className="size-4 transition-transform duration-200 rtl:rotate-180 group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0.5" aria-hidden="true" />
           {t('كل القوالب', 'All templates')}
         </Link>
       </Reveal>
 
       <Reveal>
-        <div className="border-app bg-surface rounded-panel flex flex-wrap items-center justify-between gap-4 border p-4 sm:p-5">
+        <div className="border-app bg-elevated shadow-app-md rounded-panel flex flex-wrap items-center justify-between gap-4 border p-4 sm:p-5">
           <div className="min-w-0">
             <h1 className="text-app text-xl font-black sm:text-2xl">{t(tpl.name.ar, tpl.name.en)}</h1>
             <p className="text-muted text-[14px] font-semibold">{t(tpl.tagline.ar, tpl.tagline.en)}</p>
@@ -111,7 +111,7 @@ export default function TemplatePreview() {
       </Reveal>
 
       <Reveal>
-        <div className="border-app bg-surface rounded-panel overflow-hidden border">
+        <div className="border-app bg-elevated shadow-app-md rounded-panel overflow-hidden border">
           <div className="border-app text-muted flex items-center gap-2 border-b px-4 py-2 text-[12px] font-bold">
             <MonitorPlay className="size-3.5" aria-hidden="true" />
             <span className="truncate">
@@ -124,7 +124,7 @@ export default function TemplatePreview() {
           </div>
           <iframe
             key={device}
-            src={tpl.demoPath}
+            src={`${tpl.demoPath}index.html`}
             title={`${t(tpl.name.ar, tpl.name.en)} — ${t('تجربة حية', 'live trial')}`}
             className={`block w-full border-0 bg-white ${device === 'mobile' ? 'mx-auto max-w-[390px]' : ''}`}
             style={{ height: 'min(78vh, 780px)' }}
@@ -136,26 +136,27 @@ export default function TemplatePreview() {
 
       <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
         <Reveal>
-          <div className="border-app bg-surface rounded-panel border p-5 sm:p-6">
+          <div className="border-app bg-elevated shadow-app rounded-panel border p-5 sm:p-6">
             <h2 className="text-app text-lg font-black">{t('عن هذا القالب', 'About this template')}</h2>
             <p className="text-muted mt-2 leading-relaxed">{t(tpl.description.ar, tpl.description.en)}</p>
-            <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+            <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
               {tpl.features.map((f) => (
-                <li key={f.en} className="text-app text-[14px]">
-                  • {t(f.ar, f.en)}
+                <li key={f.en} className="text-app flex items-start gap-2 text-[14px]">
+                  <span aria-hidden="true" className="bg-accent mt-2 size-1.5 shrink-0 rounded-full" />
+                  {t(f.ar, f.en)}
                 </li>
               ))}
             </ul>
           </div>
         </Reveal>
         <Reveal delay={0.06}>
-          <div className="border-app bg-surface rounded-panel flex h-full flex-col gap-3 border p-5 sm:p-6">
+          <div className="border-app bg-elevated shadow-app rounded-panel flex h-full flex-col gap-3 border p-5 sm:p-6">
             <h2 className="text-app text-lg font-black">{t('قوالب أخرى', 'Other templates')}</h2>
             {others.map((o) => (
               <Link
                 key={o.slug}
                 to={`/templates/${o.slug}`}
-                className="border-app hover:border-accent flex items-center gap-3 rounded-2xl border p-3"
+                className="border-app card-lift hover-ring hover:border-accent flex items-center gap-3 rounded-2xl border p-3"
               >
                 <span className="size-10 shrink-0 rounded-xl" style={{ background: o.swatch }} aria-hidden="true" />
                 <span className="min-w-0">

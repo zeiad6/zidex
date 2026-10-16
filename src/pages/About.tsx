@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { Glyph } from '@/components/ui/Glyphs'
 import {
   Accessibility,
   Gauge,
@@ -12,10 +11,8 @@ import {
 import { cn } from '@/lib/utils'
 import { site, socials, tiktok } from '@/lib/site'
 import { allPosts } from '@/data/posts'
-import { AuroraBackdrop } from '@/components/ui/AuroraBackdrop'
 import { Reveal } from '@/components/ui/Reveal'
 import { SectionHeading } from '@/components/ui/Primitives'
-import { Magnetic } from '@/components/ui/Interactive'
 import { useI18n } from '@/lib/i18n'
 import { usePageMeta } from '@/hooks/usePageMeta'
 
@@ -38,8 +35,8 @@ const principles = [
     icon: Type,
     title: 'خط واحد بوزنين',
     titleEn: 'One typeface, two weights',
-    body: 'Alexandria للعناوين مع دعم كامل للتشكيل، و IBM Plex Sans Arabic للنص. لا خطوط احتياطية سيئة.',
-    bodyEn: 'Alexandria for headings, with full Arabic diacritics support, and IBM Plex Sans Arabic for text. No ugly fallback fonts.',
+    body: 'Archivo (grotesque) للعناوين اللاتينية، و IBM Plex Sans Arabic للعربية — خطّان متناسقان بلا بدائل سيئة.',
+    bodyEn: 'Archivo (a grotesque) for Latin headings, and IBM Plex Sans Arabic for Arabic — two matched faces, no ugly fallbacks.',
   },
   {
     icon: Moon,
@@ -70,7 +67,7 @@ const stack = [
   { k: 'الحركة', kEn: 'Motion', v: 'Framer Motion' },
   { k: 'التوجيه', kEn: 'Routing', v: 'React Router 7' },
   { k: 'الخلفية', kEn: 'Backdrop', v: 'Canvas + pure CSS' },
-  { k: 'الاستضافة', kEn: 'Hosting', v: 'Netlify' },
+  { k: 'الاستضافة', kEn: 'Hosting', v: 'Cloudflare' },
 ]
 
 export default function About() {
@@ -84,23 +81,22 @@ export default function About() {
 
   return (
     <>
-      <section className="relative overflow-hidden pt-24 pb-10 sm:pt-28 sm:pb-12">
-        <AuroraBackdrop intensity="md" className="opacity-70" />
+      <section className="swiss relative pt-10 pb-10 sm:pt-12 sm:pb-12">
         <div className="container-app relative">
-          <Reveal>
-            <span className="chip bg-accent-soft text-accent mb-5 w-fit">
-              <Glyph name="spark" size={13} aria-hidden="true" />
-              {t('عن المنصة', 'About')}
-            </span>
-          </Reveal>
+          <div className="h-px w-full" style={{ background: 'var(--line-strong)' }} />
+          <div className="flex items-center justify-between gap-4 py-3">
+            <span className="swiss-label text-app font-semibold">{t('عن المنصة', 'About')}</span>
+            <span className="swiss-label text-subtle">{t('المنصة الرسمية', 'The official hub')}</span>
+          </div>
+          <div className="h-px w-full" style={{ background: 'var(--line-strong)' }} />
           <Reveal delay={0.06}>
-            <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+            <h1 className="swiss-headline swiss-display text-app mt-10">
               {t(
                 <>
-                  بوابة واحدة، <span className="gradient-text">مبنيّة بعناية</span>
+                  بوابة واحدة، <span style={{ color: 'var(--swiss-accent)' }}>مبنيّة بعناية.</span>
                 </>,
                 <>
-                  One hub, <span className="gradient-text">built with care</span>
+                  One hub, <span style={{ color: 'var(--swiss-accent)' }}>built with care.</span>
                 </>,
               )}
             </h1>
@@ -115,17 +111,10 @@ export default function About() {
           </Reveal>
           <Reveal delay={0.18}>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Magnetic>
-                <a
-                  href={tiktok.profile}
-                  target="_blank"
-                  rel="noopener noreferrer nofollow"
-                  className="btn tiktok-gradient h-12 cursor-pointer px-7 text-white shadow-md"
-                >
-                  {t('الحساب على تيك توك', 'The account on TikTok')}
-                </a>
-              </Magnetic>
-              <Link to="/blog" className="btn btn-ghost h-12 cursor-pointer px-7">
+              <a href={tiktok.profile} target="_blank" rel="noopener noreferrer nofollow" className="btn btn-primary h-11 px-6">
+                {t('الحساب على تيك توك', 'The account on TikTok')}
+              </a>
+              <Link to="/blog" className="btn btn-ghost h-11 px-6">
                 {t('اقرأ المدونة', 'Read the blog')} ({allPosts.length})
               </Link>
             </div>
@@ -149,7 +138,7 @@ export default function About() {
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {principles.map(({ icon: Icon, title, titleEn, body, bodyEn }, i) => (
             <Reveal key={title} delay={Math.min(i * 0.05, 0.3)} className="h-full">
-              <div className="bg-elevated/70 hover:border-strong group flex h-full flex-col gap-3 rounded-3xl border border-app p-6 transition-colors">
+              <div className="bg-elevated shadow-app card-lift hover-ring group flex h-full flex-col gap-3 rounded-panel border border-app p-6">
                 <span className="bg-accent-soft text-accent grid size-11 place-items-center rounded-2xl transition-transform duration-300 group-hover:scale-110">
                   <Icon className="size-5" aria-hidden="true" />
                 </span>
@@ -164,7 +153,7 @@ export default function About() {
       {/* Stack */}
       <section className="container-app py-6 sm:py-8">
         <Reveal>
-          <div className="bg-elevated/70 overflow-hidden rounded-4xl border border-app">
+          <div className="bg-elevated shadow-app overflow-hidden rounded-panel border border-app">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3">
               {stack.map((s, i) => (
                 <div
@@ -193,7 +182,7 @@ export default function About() {
       {/* Privacy */}
       <section id="privacy" className="container-app scroll-mt-24 py-12 sm:py-14">
         <Reveal>
-          <div className="border-app overflow-hidden rounded-4xl border">
+          <div className="border-app shadow-app overflow-hidden rounded-panel border">
             <div className="border-app flex items-center gap-3 border-b px-7 py-5">
               <span className="bg-accent-soft text-accent grid size-10 place-items-center rounded-2xl">
                 <Lock className="size-4.5" aria-hidden="true" />

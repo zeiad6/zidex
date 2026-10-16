@@ -37,9 +37,9 @@ export function ChannelServices({ catalog, services }: { catalog: Catalog; servi
         ))}
 
         <Reveal as="li" delay={Math.min(services.length * 0.05, 0.2)} className="h-full">
-          <HoverCard className="bg-elevated border-app hover:border-ghost-400/60 flex h-full flex-col justify-between gap-4 border border-dashed p-5">
+          <HoverCard className="bg-elevated border-app hover:border-ghost-400/60 flex h-full flex-col justify-between gap-4 rounded-card border border-dashed p-5">
             <div>
-              <span className="bg-accent-soft text-accent grid size-11 place-items-center rounded-2xl" aria-hidden="true">
+              <span className="bg-accent-soft text-accent grid size-11 place-items-center rounded-xl" aria-hidden="true">
                 <Sparkles className="size-5" />
               </span>
               <h3 className="text-app mt-3 text-[16px] leading-snug font-black">
@@ -75,7 +75,7 @@ function ServiceRow({ product, catalog }: { product: StoreProduct; catalog: Cata
   return (
     <HoverCard
       as="article"
-      className="bg-elevated shadow-app-md border-app flex h-full items-start gap-3.5 border p-4"
+      className="bg-elevated border-app flex h-full items-start gap-3.5 rounded-card border p-4"
     >
       <ProductMark
         product={product}

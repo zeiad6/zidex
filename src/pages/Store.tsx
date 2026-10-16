@@ -1,4 +1,4 @@
-import { ArrowLeft, Bot, Gem, Send, ShoppingBag, Sparkles } from 'lucide-react'
+import { ArrowLeft, Bot, Gem, Send, ShoppingBag } from 'lucide-react'
 import { useI18n } from '@/lib/i18n'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { site } from '@/lib/site'
@@ -12,12 +12,10 @@ import {
   useProductCopy,
 } from '@/lib/store'
 import { Reveal } from '@/components/ui/Reveal'
-import { AuroraBackdrop } from '@/components/ui/AuroraBackdrop'
 import { ArrowNudge, LiveDot, SweepLink } from '@/components/ui/Motion'
 import { ChatDemo } from '@/components/store/organisms/ChatDemo'
 import { OpeningOffer } from '@/components/store/organisms/OpeningOffer'
 import { PackageCard } from '@/components/store/organisms/PackageCard'
-import { Magnetic } from '@/components/ui/Interactive'
 import { StoreSection } from '@/components/store/templates/StoreSection'
 import { StoreFaq } from '@/components/store/organisms/StoreFaq'
 import { ChannelServices } from '@/components/store/organisms/ChannelServices'
@@ -46,13 +44,19 @@ export default function Store() {
 
   return (
     <>
-      <section className="relative overflow-hidden pt-10 pb-10 sm:pt-14 lg:pb-14">
-        <AuroraBackdrop intensity="md" className="opacity-70" />
-        <div className="container-app relative grid items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
+      <section className="swiss container-app pt-8 pb-10 sm:pt-10 lg:pb-14">
+        <div className="h-px w-full" style={{ background: 'var(--line-strong)' }} />
+        <div className="flex items-center justify-between gap-4 py-3">
+          <span className="swiss-label text-app font-semibold">{t('المتجر', 'Store')}</span>
+          <span className="swiss-label text-subtle">{t('دفع بالنجوم والكريمي', 'Stars & Kuraimi')}</span>
+        </div>
+        <div className="h-px w-full" style={{ background: 'var(--line-strong)' }} />
+        <div className="grid items-center gap-x-10 gap-y-10 pt-10 lg:grid-cols-[1.1fr_1fr] lg:pt-14">
           <div>
             <Reveal>
-              <h1 className="text-app text-[2rem] leading-[1.15] font-black tracking-tight text-balance sm:text-5xl">
-                {t('بوت متجر رقمي يبيع عنك على تيليجرام', 'A digital-store bot that sells for you on Telegram')}
+              <h1 className="swiss-headline swiss-display text-app">
+                {t('بوت متجر رقمي ', 'A store bot that ')}
+                <span style={{ color: 'var(--swiss-accent)' }}>{t('يبيع عنك.', 'sells for you.')}</span>
               </h1>
             </Reveal>
             <Reveal delay={0.06}>
@@ -66,26 +70,24 @@ export default function Store() {
             <Reveal delay={0.1}>
               <div className="mt-8 flex flex-wrap gap-3">
                 {catalog && pro ? (
-                  <Magnetic strength={0.2}>
-                    <a
-                      href={buyLink(catalog, pro.sku)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-primary h-12 cursor-pointer px-6 text-[15px] font-bold"
-                    >
-                      <Send className="size-4" aria-hidden="true" />
-                      {t(`اطلب ${copy(pro).title}`, `Order ${copy(pro).title}`)}
-                    </a>
-                  </Magnetic>
+                  <a
+                    href={buyLink(catalog, pro.sku)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary group h-11 px-6"
+                  >
+                    <Send className="size-4 transition-transform group-hover:scale-110" aria-hidden="true" />
+                    {t(`اطلب ${copy(pro).title}`, `Order ${copy(pro).title}`)}
+                  </a>
                 ) : null}
                 {catalog ? (
                   <a
                     href={botLink(catalog)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn btn-ghost h-12 cursor-pointer px-6 text-[15px]"
+                    className="btn btn-ghost group h-11 px-6"
                   >
-                    <Bot className="size-4" aria-hidden="true" />
+                    <Bot className="size-4 transition-transform group-hover:scale-110" aria-hidden="true" />
                     {t('جرّب البوت الآن', 'Try the bot now')}
                   </a>
                 ) : null}
@@ -188,8 +190,7 @@ export default function Store() {
           <StoreFaq />
         </StoreSection>
 
-        <section aria-labelledby="shop-stars" className="brand-gradient relative overflow-hidden rounded-panel p-6 text-white sm:p-10">
-          <Sparkles className="absolute -end-6 -top-6 size-40 opacity-15" aria-hidden="true" />
+        <section aria-labelledby="shop-stars" className="bg-ink-950 relative overflow-hidden rounded-panel p-8 text-white sm:p-10">
           <h2 id="shop-stars" className="max-w-[24ch] text-2xl font-black text-balance sm:text-3xl">
             {t('ليس لديك نجوم؟ اشحن في ثوانٍ', 'No Stars yet? Top up in seconds')}
           </h2>
@@ -203,19 +204,19 @@ export default function Store() {
           {/* The concrete numbers, because "cheaper" is a claim and this is the
               evidence for it: 1,000 Stars is $15 in-app and $9.74 through Fragment. */}
           <dl className="mt-6 grid max-w-lg grid-cols-3 gap-2.5 text-center">
-            <div className="rounded-2xl bg-white/12 p-3">
+            <div className="rounded-xl border border-white/15 p-3">
               <dt className="text-[11px] font-bold text-white/70">{t('داخل التطبيق', 'In the app')}</dt>
               <dd className="mt-1 text-lg font-black" dir="ltr">
                 $15
               </dd>
             </div>
-            <div className="rounded-2xl bg-white/12 p-3">
+            <div className="rounded-xl border border-white/15 p-3">
               <dt className="text-[11px] font-bold text-white/70">{t('عبر Fragment', 'Via Fragment')}</dt>
               <dd className="mt-1 text-lg font-black" dir="ltr">
                 $9.74
               </dd>
             </div>
-            <div className="rounded-2xl bg-white/25 p-3 ring-1 ring-white/40">
+            <div className="rounded-xl border border-white/40 bg-white/10 p-3">
               <dt className="text-[11px] font-bold text-white/80">{t('التوفير على 1000 نجمة', 'You save on 1,000')}</dt>
               <dd className="mt-1 flex items-center justify-center gap-1 text-lg font-black">
                 <LiveDot tone="ok" />
@@ -245,7 +246,7 @@ export default function Store() {
               <Gem className="size-4" aria-hidden="true" />
               {t('Fragment — بعملة TON', 'Fragment — pay with TON')}
               <ArrowNudge>
-                <ArrowLeft className="size-4" />
+                <ArrowLeft className="size-4 ltr:rotate-180" />
               </ArrowNudge>
             </a>
           </div>

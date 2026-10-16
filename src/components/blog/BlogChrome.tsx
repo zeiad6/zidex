@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Glyph } from '@/components/ui/Glyphs'
 import { getHeadings, type PostMeta } from '@/data/posts'
+import { getScrollPane } from '@/lib/scroll'
 import { cn } from '@/lib/utils'
 import { useI18n } from '@/lib/i18n'
 
@@ -38,8 +39,11 @@ export function TableOfContents({ post }: { post: PostMeta }) {
     }
 
     onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    // The page column is the scrollport now; scroll events do not bubble,
+    // so the listener attaches to the pane itself, not the window.
+    const target = getScrollPane()
+    target.addEventListener('scroll', onScroll, { passive: true })
+    return () => target.removeEventListener('scroll', onScroll)
   }, [headings])
 
   if (headings.length < 2) return null
@@ -94,14 +98,16 @@ export function ReadingProgress() {
       if (ticking) return
       ticking = true
       requestAnimationFrame(() => {
-        const max = document.documentElement.scrollHeight - window.innerHeight
-        setProgress(max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0)
+        const p = getScrollPane()
+        const max = p.scrollHeight - p.clientHeight
+        setProgress(max > 0 ? Math.min(100, (p.scrollTop / max) * 100) : 0)
         ticking = false
       })
     }
     onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const target = getScrollPane()
+    target.addEventListener('scroll', onScroll, { passive: true })
+    return () => target.removeEventListener('scroll', onScroll)
   }, [])
 
   return (

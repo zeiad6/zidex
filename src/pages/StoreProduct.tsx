@@ -63,13 +63,20 @@ export default function StoreProduct() {
   const isBot = product.category === 'bots' || product.category === 'types'
 
   return (
-    <div className="container-app py-8 sm:py-10">
-      <Link to="/shop" className="text-subtle hover:text-accent inline-flex items-center gap-1.5 text-[13px] font-bold">
-        <ArrowRight className="size-4 ltr:rotate-180" aria-hidden="true" />
-        {t('كل المنتجات', 'All products')}
-      </Link>
+    <div className="swiss container-app py-8 sm:py-10">
+      <div className="h-px w-full" style={{ background: 'var(--line-strong)' }} />
+      <div className="flex items-center justify-between gap-4 py-3">
+        <Link to="/shop" className="swiss-label text-app inline-flex items-center gap-2 transition-colors hover:text-accent">
+          <ArrowRight className="size-3.5 ltr:rotate-180" aria-hidden="true" />
+          {t('كل المنتجات', 'All products')}
+        </Link>
+        <span className="swiss-label text-subtle font-mono" dir="ltr">
+          {product.sku}
+        </span>
+      </div>
+      <div className="h-px w-full" style={{ background: 'var(--line-strong)' }} />
 
-      <div className="mt-6 grid gap-10 lg:grid-cols-[1fr_1.05fr]">
+      <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_1.05fr]">
         <Reveal>
           <figure className="flex flex-col gap-3">
             <TiltCard max={8} radius="var(--radius-panel)">
@@ -108,7 +115,7 @@ export default function StoreProduct() {
 
         <Reveal delay={0.06}>
           <div>
-            <h1 className="text-app text-3xl leading-tight font-black tracking-tight text-balance sm:text-4xl">{c.title}</h1>
+            <h1 className="text-app text-3xl leading-tight font-black text-balance sm:text-4xl">{c.title}</h1>
             <div className="mt-4">
               <Price product={product} size="lg" showUsd />
             </div>
@@ -120,7 +127,7 @@ export default function StoreProduct() {
                   <WalletCards className="size-3.5" aria-hidden="true" />
                   {t('الدفع', 'Billing')}
                 </dt>
-                <dd className="text-app mt-1 font-bold">
+                <dd className="text-app mt-1 font-bold tabular-nums">
                   {product.monthly ? t('كل 30 يوماً', 'Every 30 days') : t('مرة واحدة', 'One-time')}
                 </dd>
               </div>
@@ -129,7 +136,7 @@ export default function StoreProduct() {
                   <CalendarClock className="size-3.5" aria-hidden="true" />
                   {t('العملة', 'Currency')}
                 </dt>
-                <dd className="text-app mt-1 flex items-center gap-1 font-bold">
+                <dd className="text-app mt-1 flex items-center gap-1 font-bold tabular-nums">
                   <Star className="size-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
                   {t('نجوم تيليجرام', 'Telegram Stars')}
                 </dd>

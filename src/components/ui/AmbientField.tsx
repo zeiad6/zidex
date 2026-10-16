@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { getScrollPane } from '@/lib/scroll'
 import { cn } from '@/lib/utils'
 
 /**
@@ -66,7 +67,10 @@ export function AmbientField({ className }: { className?: string }) {
     }
 
     const onScroll = () => {
-      sy = Math.min(window.scrollY / Math.max(window.innerHeight, 1), 1.4)
+      // Spread over the page column's scrollport: the pane is what scrolls
+      // these days, and scroll events do not bubble past it.
+      const p = getScrollPane()
+      sy = Math.min(p.scrollTop / Math.max(p.clientHeight, 1), 1.4)
       wake()
     }
 
@@ -103,15 +107,16 @@ export function AmbientField({ className }: { className?: string }) {
 
     // Safari fires pointermove with pointerType "mouse"; a touch drag would
     // otherwise drag the bloom around, so the mouse-only guard matters.
+    const scrollTarget = getScrollPane()
+    scrollTarget.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('pointermove', onPointer, { passive: true })
-    window.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
 
     return () => {
       running = false
       if (raf) cancelAnimationFrame(raf)
       window.removeEventListener('pointermove', onPointer)
-      window.removeEventListener('scroll', onScroll)
+      scrollTarget.removeEventListener('scroll', onScroll)
     }
   }, [])
 
@@ -121,6 +126,15 @@ export function AmbientField({ className }: { className?: string }) {
       aria-hidden="true"
       className={cn('pointer-events-none fixed inset-0 z-0 overflow-hidden', className)}
     >
+      {/* Top Aurora subtle atmospheric wash */}
+      <div className="ambient-aurora" />
+
+      {/* Autonomous drifting orbs — multi-axis chromatic depth */}
+      <div className="ambient-blob ambient-blob-a -start-[8%] -top-[10%] size-[55vmax]" />
+      <div className="ambient-blob ambient-blob-b -end-[12%] -bottom-[14%] size-[50vmax]" />
+      <div className="ambient-blob ambient-blob-c top-[18%] end-[10%] size-[46vmax]" />
+      <div className="ambient-blob ambient-blob-d bottom-[15%] start-[12%] size-[42vmax]" />
+
       {/* Far bloom. Larger, cooler, and slower. */}
       <div
         className="ambient-far absolute -inset-[30%]"
@@ -139,6 +153,9 @@ export function AmbientField({ className }: { className?: string }) {
         className="ambient-grid absolute inset-0"
         style={{ transform: 'translate3d(0, calc(var(--sy, 0) * 26px), 0)' }}
       />
+
+      {/* Fine tactile grain for high-end Landing.love / Dribbble aesthetic */}
+      <div className="ambient-grain" />
     </div>
   )
 }

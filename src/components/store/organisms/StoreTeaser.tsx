@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ShoppingBag } from 'lucide-react'
 import { BorderBeam } from '@/components/ui/Decor'
+import { GradientText } from '@/components/ui/SplitReveal'
 import { useI18n } from '@/lib/i18n'
 import { useCatalog } from '@/lib/store'
 import { ProductMark } from '../atoms/ProductMark'
@@ -20,7 +21,14 @@ export function StoreTeaser() {
       <BorderBeam size={120} duration={9} />
       <div>
         <h2 id="home-store" className="text-app text-2xl leading-tight font-black text-balance">
-          {t('بوت متجر رقمي لقناتك — بالدفع بالنجوم', 'A digital-store bot for your channel — paid in Stars')}
+          {t('بوت متجر رقمي لقناتك — ', 'A digital-store bot for your channel — ')}
+          {/* The sweep is decorative, so GradientText is aria-hidden and the
+              same words stay in the DOM as plain text for screen readers and
+              for copy-paste. */}
+          <GradientText className="font-black">
+            {t('بالدفع بالنجوم', 'paid in Stars')}
+          </GradientText>
+          <span className="sr-only">{t('بالدفع بالنجوم', 'paid in Stars')}</span>
         </h2>
         <p className="text-muted mt-3 max-w-[52ch] text-[15px] leading-relaxed">
           {t(
@@ -28,8 +36,8 @@ export function StoreTeaser() {
             'Your store inside Telegram: customers pay in Stars and orders reach you instantly. Three fixed-price packages.',
           )}
         </p>
-        <Link to="/shop" className="btn btn-primary mt-5 h-11 cursor-pointer px-5 font-bold">
-          <ShoppingBag className="size-4" aria-hidden="true" />
+        <Link to="/shop" className="btn btn-primary shadow-app-accent group mt-5 h-11 cursor-pointer px-5 font-bold transition-all duration-300 hover:-translate-y-0.5">
+          <ShoppingBag className="size-4 transition-transform group-hover:scale-110" aria-hidden="true" />
           {t('ادخل المتجر', 'Visit the store')}
         </Link>
       </div>
@@ -38,17 +46,17 @@ export function StoreTeaser() {
           <li key={p.sku}>
             <Link
               to={`/shop/${p.sku}`}
-              className="bg-sunken hover:border-ghost-400/50 group flex items-center gap-3 rounded-2xl border border-transparent p-3 transition-colors"
+              className="bg-sunken/70 hover:bg-elevated hover:border-accent/40 hover:shadow-app group flex items-center gap-3 rounded-2xl border border-app/60 p-3.5 transition-all duration-300 hover:-translate-y-0.5"
             >
               <ProductMark product={p} size={40} className="transition-transform duration-300 group-hover:scale-110 motion-reduce:transition-none" />
               <span className="min-w-0 flex-1">
-                <span className="text-app block text-[14px] leading-snug font-bold">{lang === 'en' ? p.title_en : p.title}</span>
+                <span className="text-app group-hover:text-accent block text-[14px] leading-snug font-bold transition-colors">{lang === 'en' ? p.title_en : p.title}</span>
                 <span className="text-subtle text-[12px]">
                   {p.monthly ? t('اشتراك شهري', 'Monthly subscription') : t('دفعة واحدة', 'One-time')}
                 </span>
               </span>
               <StarAmount value={p.stars} className="text-app" />
-              <ArrowLeft className="text-subtle size-4 transition-transform ltr:rotate-180 rtl:group-hover:-translate-x-0.5 ltr:group-hover:translate-x-0.5" aria-hidden="true" />
+              <ArrowLeft className="text-subtle group-hover:text-accent size-4 transition-all duration-200 ltr:rotate-180 ltr:group-hover:translate-x-1 rtl:group-hover:-translate-x-1" aria-hidden="true" />
             </Link>
           </li>
         ))}

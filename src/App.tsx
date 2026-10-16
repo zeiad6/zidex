@@ -21,6 +21,7 @@ const Store = lazy(() => import('@/pages/Store'))
 const StoreProduct = lazy(() => import('@/pages/StoreProduct'))
 const Dashboard = lazy(() => import('@/pages/Dashboard'))
 const Search = lazy(() => import('@/pages/Search'))
+const Accounting = lazy(() => import('@/pages/Accounting'))
 
 /** Every navigation starts at the top — except a deep link with a hash. */
 function ScrollManager() {
@@ -109,6 +110,7 @@ export default function App() {
                 <Route path="/shop/:sku" element={<StoreProduct />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/accounting" element={<Accounting />} />
                 <Route path="/about" element={<About />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

@@ -1,12 +1,11 @@
 import { useMemo, useState } from 'react'
-import { Glyph } from '@/components/ui/Glyphs'
+import { Glyph, type GlyphName } from '@/components/ui/Glyphs'
 import { Link } from 'react-router-dom'
 import { allPosts, categories, categoryLabel, postsFor, searchPosts, type Category } from '@/data/posts'
 import { useI18n } from '@/lib/i18n'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { site } from '@/lib/site'
 import { cn } from '@/lib/utils'
-import { AuroraBackdrop } from '@/components/ui/AuroraBackdrop'
 import { Reveal } from '@/components/ui/Reveal'
 import { PostCard } from '@/components/blog/PostCard'
 import { BlogSearch } from '@/components/blog/BlogChrome'
@@ -45,21 +44,18 @@ export default function Blog() {
   return (
     <>
       {/* Header */}
-      <section className="relative overflow-hidden pt-24 pb-8 sm:pt-28">
-        <AuroraBackdrop intensity="md" className="opacity-70" />
+      <section className="swiss relative pt-10 pb-8 sm:pt-12">
         <div className="container-app relative">
-          <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-end">
+          <div className="h-px w-full" style={{ background: 'var(--line-strong)' }} />
+          <div className="flex items-center justify-between gap-4 py-3">
+            <span className="swiss-label text-app font-semibold">{t('المدونة', 'Blog')}</span>
+            <span className="swiss-label text-subtle">{t(`${allPosts.length} مقالات`, `${allPosts.length} articles`)}</span>
+          </div>
+          <div className="h-px w-full" style={{ background: 'var(--line-strong)' }} />
+          <div className="flex flex-col items-start justify-between gap-8 pt-10 lg:flex-row lg:items-end">
             <div className="flex-1">
-              <Reveal>
-                <span className="chip bg-accent-soft text-accent mb-5 w-fit">
-                  <Glyph name="book" size={13} aria-hidden="true" />
-                  {t(`${allPosts.length} مقالات`, `${allPosts.length} articles`)}
-                </span>
-              </Reveal>
               <Reveal delay={0.06}>
-                <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
-                  <span className="gradient-text">{t('المدونة', 'Blog')}</span>
-                </h1>
+                <h1 className="swiss-headline swiss-display text-app">{t('المدونة.', 'The blog.')}</h1>
               </Reveal>
               <Reveal delay={0.12}>
                 <p className="text-muted mt-5 max-w-xl text-lg leading-relaxed">
@@ -84,13 +80,13 @@ export default function Blog() {
                 onClick={() => setCategory('all')}
                 aria-pressed={category === 'all'}
                 className={cn(
-                  'focus-visible:ring-accent cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-all focus-visible:ring-2 focus-visible:outline-none',
+                  'focus-visible:ring-accent cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none',
                   category === 'all'
                     ? 'border-accent bg-accent text-accent-fg'
                     : 'border-app text-muted hover:border-strong hover:text-app',
                 )}
               >
-                {t('الكل', 'All')} <span className="ms-1.5 font-mono text-[10px] opacity-70">{categoryCounts.get('all')}</span>
+                {t('الكل', 'All')} <span className="ms-1.5 font-mono text-[10px] tabular-nums opacity-70">{categoryCounts.get('all')}</span>
               </button>
               {categories.map((c) => (
                 <button
@@ -99,13 +95,13 @@ export default function Blog() {
                   onClick={() => setCategory(c)}
                   aria-pressed={category === c}
                   className={cn(
-                    'focus-visible:ring-accent cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-all focus-visible:ring-2 focus-visible:outline-none',
+                    'focus-visible:ring-accent cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none',
                     category === c
                       ? 'border-accent bg-accent text-accent-fg'
                       : 'border-app text-muted hover:border-strong hover:text-app',
                   )}
                 >
-                  {categoryLabel(c, lang)} <span className="ms-1.5 font-mono text-[10px] opacity-70">{categoryCounts.get(c) ?? 0}</span>
+                  {categoryLabel(c, lang)} <span className="ms-1.5 font-mono text-[10px] tabular-nums opacity-70">{categoryCounts.get(c) ?? 0}</span>
                 </button>
               ))}
             </div>
@@ -117,46 +113,34 @@ export default function Blog() {
       {showHero ? (
         <section className="container-app pb-2">
           <Reveal>
-            <article className="group relative overflow-hidden rounded-4xl border border-app focus-within:border-accent">
-              <div
-                className={cn(
-                  'relative bg-gradient-to-br',
-                  featured.coverFrom,
-                  featured.coverTo,
-                )}
-              >
-                <span className="dot-grid absolute inset-0 opacity-25" aria-hidden="true" />
+            <article className="border-app bg-elevated card-lift group relative overflow-hidden rounded-2xl border shadow-app hover:border-accent/40 hover:shadow-app-md focus-within:border-accent">
+              <div className="relative flex flex-col gap-6 p-8 sm:flex-row sm:items-center sm:p-10">
                 <span
+                  className="text-accent shrink-0 transition-transform duration-500 group-hover:-translate-y-1"
                   aria-hidden="true"
-                  className="absolute inset-0 bg-[radial-gradient(ellipse_70%_90%_at_85%_15%,rgb(0_0_0/0.35),transparent_60%)]"
-                />
-                <div className="relative flex flex-col gap-6 p-8 sm:flex-row sm:items-end sm:p-10">
-                  <span
-                    className="text-7xl drop-shadow-2xl transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-6 sm:text-8xl"
-                    aria-hidden="true"
-                  >
-                    {featured.cover}
+                >
+                  <Glyph name={featured.cover as GlyphName} size={72} strokeWidth={1.4} />
+                </span>
+                <div className="flex-1">
+                  <span className="text-accent font-mono text-[11px] tracking-widest uppercase">
+                    {t('المقال الأبرز', 'Featured post')}
                   </span>
-                  <div className="flex-1">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-1 text-[11px] font-semibold text-white backdrop-blur-sm">
-                      <Glyph name="spark" size={13} aria-hidden="true" />
-                      {t('المقال الأبرز', 'Featured post')}
-                    </span>
-                    <h2 className="mt-3 text-2xl leading-tight font-extrabold text-white sm:text-3xl">
-                      {/* <Link>, not <a>: a raw anchor re-downloads every chunk
-                          and flashes the Suspense fallback on the site's
-                          slowest-first path. */}
-                      <Link to={`/blog/${featured.slug}`} className="after:absolute after:inset-0">
-                        {featured.title}
-                      </Link>
-                    </h2>
-                    <p className="mt-2.5 max-w-2xl text-sm leading-relaxed text-white/85 sm:text-base">
-                      {featured.excerpt}
-                    </p>
-                    <p className="mt-4 font-mono text-[11px] text-white/70">
-                      {categoryLabel(featured.category, lang)} · {t(`${featured.readMinutes} دقائق قراءة`, `${featured.readMinutes} min read`)}
-                    </p>
-                  </div>
+                  {/* <Link>, not <a>: a raw anchor re-downloads every chunk and
+                      flashes the Suspense fallback on the slowest-first path. */}
+                  <h2 className="text-app mt-3 text-2xl leading-tight font-extrabold sm:text-4xl">
+                    <Link
+                      to={`/blog/${featured.slug}`}
+                      className="hover:text-accent transition-colors after:absolute after:inset-0"
+                    >
+                      {featured.title}
+                    </Link>
+                  </h2>
+                  <p className="text-muted mt-3 max-w-2xl text-sm leading-relaxed sm:text-base">
+                    {featured.excerpt}
+                  </p>
+                  <p className="text-subtle mt-4 font-mono text-[11px]">
+                    {categoryLabel(featured.category, lang)} · {t(`${featured.readMinutes} دقائق قراءة`, `${featured.readMinutes} min read`)}
+                  </p>
                 </div>
               </div>
             </article>
