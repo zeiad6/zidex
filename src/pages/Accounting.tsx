@@ -4,6 +4,7 @@ import {
   BarChart3,
   Boxes,
   Calculator,
+  ExternalLink,
   FileText,
   MessageCircle,
   Receipt,
@@ -21,8 +22,9 @@ import { site } from '@/lib/site'
  * Accounting systems — a services section, not a fake catalogue.
  * ZeidexSoft builds bespoke accounting systems on request; nothing on
  * this page pretends to be an off-the-shelf product. Every card says
- * what gets built when it is ordered, the flow says how, and the two
- * honest CTAs are WhatsApp (scope + quote) and the store (ready bots).
+ * what gets built when it is ordered, the flow says how, and the three
+ * honest CTAs are WhatsApp (scope + quote), the store (ready bots), and
+ * the live demo of the Mithqal accounting system.
  * ================================================================== */
 
 const modules = [
@@ -108,7 +110,7 @@ export default function Accounting() {
 
   return (
     <div className="container-app flex flex-col gap-8 py-6 sm:py-8">
-      {/* Hero — one card, one accent word, two honest CTAs. */}
+      {/* Hero — one card, one accent word, three honest CTAs. */}
       <Reveal>
         <section className="border-app bg-elevated shadow-app-lg relative overflow-hidden rounded-panel border">
           <span
@@ -149,6 +151,15 @@ export default function Accounting() {
               <Link to="/shop" className="btn btn-ghost h-11 px-6">
                 {t('تصفح المتجر', 'Browse the store')}
               </Link>
+              <a
+                href="https://zeidex-mithqal.pages.dev/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-ghost h-11 px-6"
+              >
+                <ExternalLink className="size-4" aria-hidden="true" />
+                {t('جرّب النظام الحي', 'Try the live system')}
+              </a>
             </div>
 
             {/* Facts strip: honest, sourced, tabular. */}

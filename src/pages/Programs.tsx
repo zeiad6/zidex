@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Glyph } from '@/components/ui/Glyphs'
-import { ArrowLeft, ArrowUpLeft, HardDrive, Download, Package, Cloud, Flame, Smartphone, Monitor } from 'lucide-react'
+import { ArrowLeft, ArrowUpLeft, ChevronDown, HardDrive, Download, History, Package, Cloud, Flame, Smartphone, Monitor } from 'lucide-react'
 import { motion, useReducedMotion } from 'framer-motion'
 import {
   primaryDownload,
@@ -9,6 +9,7 @@ import {
   type Program,
   type ProgramKind,
 } from '@/data/programs'
+import { baselineFor, releasesFor } from '@/data/programReleases'
 import { useDownloadCount } from '@/lib/downloads'
 import { useI18n } from '@/lib/i18n'
 import { usePageMeta } from '@/hooks/usePageMeta'
@@ -133,6 +134,17 @@ function hostIcon(host: string) {
   return Package
 }
 
+/** A short human label for a release file: "Portable" / "Setup" / its extension. */
+function fileLabel(name: string) {
+  const lower = name.toLowerCase()
+  if (lower.includes('portable')) return 'Portable'
+  if (lower.includes('setup')) return 'Setup'
+  if (lower.endsWith('.apk')) return 'APK'
+  if (lower.endsWith('.msi')) return 'MSI'
+  if (lower.endsWith('.zip')) return 'ZIP'
+  return name.split('.').pop()?.toUpperCase() ?? name
+}
+
 function ProgramTile({
   program,
   index,
@@ -145,6 +157,12 @@ function ProgramTile({
   const { lang, t } = useI18n()
   const primary = primaryDownload(program)
   const { count, bump } = useDownloadCount(program.slug)
+  const releases = releasesFor(program.slug)
+  // The honest total: the site's own click counter plus the real download
+  // figures the release mirrors report (GitHub) — for the author's own
+  // programs. Third-party cards keep the plain counter.
+  const total = count === null ? null : count + baselineFor(program.slug)
+  const fmt = (n: number) => n.toLocaleString(lang === 'en' ? 'en' : 'ar')
 
   return (
     <Reveal delay={Math.min(index * 0.06, 0.24)} className="h-full">
@@ -195,19 +213,25 @@ function ProgramTile({
               <Download className="size-3" aria-hidden="true" />
               {primary.size}
             </span>
-            {count !== null && (
-              <span className="text-subtle flex items-center gap-1">
+            {total !== null && (
+              <span
+                className="text-subtle flex items-center gap-1"
+                title={t(
+                  'المجموع من كل الروابط: عدّاد الموقع + التنزيلات المسجّلة على مصادر الإصدارات',
+                  'Total across every link: site counter + downloads recorded on the release mirrors',
+                )}
+              >
                 <Download className="size-3" aria-hidden="true" />
                 {reduce ? (
-                  count.toLocaleString(lang === 'en' ? 'en' : 'ar')
+                  fmt(total)
                 ) : (
                   <motion.span
-                    key={count}
+                    key={total}
                     initial={{ scale: 1.35, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    {count.toLocaleString(lang === 'en' ? 'en' : 'ar')}
+                    {fmt(total)}
                   </motion.span>
                 )}{' '}
                 {t('تحميل', 'downloads')}
@@ -263,6 +287,64 @@ function ProgramTile({
               </a>
             ) : null}
           </div>
+
+          {/* Previous versions — the author's own programs only, from real
+              release data (scripts/sync-programs.mjs). A native <details>
+              keeps it keyboard-accessible with zero JS. */}
+          {releases && releases.versions.length > 0 ? (
+            <details className="group/ver relative mt-3 border-t border-app pt-3">
+              <summary className="text-muted hover:text-app flex cursor-pointer items-center gap-2 text-[12.5px] font-bold transition-colors select-none [&::-webkit-details-marker]:hidden">
+                <History className="size-3.5 shrink-0" aria-hidden="true" />
+                {t('الإصدارات السابقة', 'Previous versions')}
+                <span className="bg-sunken text-subtle rounded-full px-1.5 py-0.5 font-mono text-[10px] tabular-nums">
+                  {releases.versions.length}
+                </span>
+                <ChevronDown
+                  className="ms-auto size-3.5 shrink-0 transition-transform duration-300 group-open/ver:rotate-180"
+                  aria-hidden="true"
+                />
+              </summary>
+              <div className="mt-2.5 flex flex-col gap-2">
+                {releases.versions.map((v) => (
+                  <div key={v.version} className="bg-sunken rounded-xl p-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-app font-mono text-[11.5px] font-bold" dir="ltr">
+                        v{v.version}
+                      </span>
+                      <time dateTime={v.date} className="text-subtle font-mono text-[10.5px] tabular-nums">
+                        {formatDate(v.date, lang === 'en' ? 'en' : 'ar')}
+                      </time>
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {v.files.map((f) => (
+                        <a
+                          key={f.href}
+                          href={f.href}
+                          target="_blank"
+                          rel="noopener noreferrer nofollow"
+                          title={f.name}
+                          className="btn btn-ghost h-8 gap-1.5 px-2.5 text-[12px]"
+                        >
+                          <Download className="size-3" aria-hidden="true" />
+                          <span className="font-mono">{fileLabel(f.name)}</span>
+                          <span className="text-subtle font-mono text-[10.5px] tabular-nums">{f.size}</span>
+                          <span className="text-subtle font-mono text-[10.5px] tabular-nums" dir="ltr">
+                            ↓{f.downloads}
+                          </span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+                <p className="text-subtle text-[10.5px] leading-relaxed">
+                  {t(
+                    'نسخ أقدم تبقى متاحة للرجوع — الأحدث فقط يتلقّى الإصلاحات.',
+                    'Older builds stay available for reference — only the newest receives fixes.',
+                  )}
+                </p>
+              </div>
+            </details>
+          ) : null}
         </div>
       </TiltCard>
     </Reveal>

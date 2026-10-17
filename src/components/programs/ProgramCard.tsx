@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import { Glyph } from '@/components/ui/Glyphs'
 import { primaryDownload, type Program } from '@/data/programs'
+import { baselineFor } from '@/data/programReleases'
 import { useDownloadCount } from '@/lib/downloads'
 import { useI18n } from '@/lib/i18n'
 import { Cloud, Download, Flame, Package, Smartphone, Monitor } from 'lucide-react'
@@ -16,6 +17,9 @@ export function ProgramCard({ program }: { program: Program }) {
   const { t, lang } = useI18n()
   const primary = primaryDownload(program)
   const { count, bump } = useDownloadCount(program.slug)
+  // The same honest total the /programs cards show: site clicks plus the
+  // real download figures the release mirrors report (author's own programs).
+  const total = count === null ? null : count + baselineFor(program.slug)
   const reduce = useReducedMotion()
 
   return (
@@ -50,19 +54,19 @@ export function ProgramCard({ program }: { program: Program }) {
         <p className="text-subtle mt-1.5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-[11px]" dir="ltr">
           <span>{program.platform}</span>
           <span>{primary.size}</span>
-          {count !== null && (
+          {total !== null && (
             <span className="flex items-center gap-1">
               <Download className="size-3" aria-hidden="true" />
               {reduce ? (
-                count.toLocaleString(lang === 'en' ? 'en' : 'ar')
+                total.toLocaleString(lang === 'en' ? 'en' : 'ar')
               ) : (
                 <motion.span
-                  key={count}
+                  key={total}
                   initial={{ scale: 1.35, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  {count.toLocaleString(lang === 'en' ? 'en' : 'ar')}
+                  {total.toLocaleString(lang === 'en' ? 'en' : 'ar')}
                 </motion.span>
               )}
             </span>

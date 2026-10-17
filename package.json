@@ -12,6 +12,8 @@
     "lint": "eslint .",
     "sync-meta": "node scripts/sync-post-meta.mjs",
     "sync-meta:write": "node scripts/sync-post-meta.mjs --write",
+    "sync:programs": "node scripts/sync-programs.mjs",
+    "check:downloads": "node scripts/check-downloads.mjs",
     "deploy:cf": "npm run build && node scripts/cf-headers.mjs && rm -f dist/_redirects && npx -y wrangler@4 deploy",
     "indexnow": "node scripts/indexnow.mjs",
     "test:license": "node scripts/test-license.mjs",
