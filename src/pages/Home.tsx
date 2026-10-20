@@ -4,7 +4,7 @@ import { animate, motion, useReducedMotion } from 'framer-motion'
 import { ArrowLeft, Gift, ShoppingBag } from 'lucide-react'
 import { allPosts, categories, categoryLabel, postsFor, type Category } from '@/data/posts'
 import { primaryDownload as primaryOf, programs } from '@/data/programs'
-import { site, tiktok } from '@/lib/site'
+import { hubLinks, site, tiktok } from '@/lib/site'
 import { useI18n } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import { Reveal } from '@/components/ui/Reveal'
@@ -15,6 +15,8 @@ import { ProgramCard } from '@/components/programs/ProgramCard'
 import { StoreTeaser } from '@/components/store/organisms/StoreTeaser'
 import { OpeningOffer } from '@/components/store/organisms/OpeningOffer'
 import { useCatalog } from '@/lib/store'
+import { InteractiveStudioVisualizer } from '@/components/home/InteractiveStudioVisualizer'
+import { Magnetic } from '@/components/ui/Interactive'
 
 /* ------------------------------------------------------------------ *
  * Home — Swiss International Typographic Style (phase 1 redesign).
@@ -236,20 +238,48 @@ function Masthead() {
           </motion.p>
 
           <motion.div className="mt-9 flex flex-wrap gap-3" {...rise(0.4)}>
-            <Link to="/shop" className="btn btn-primary group h-11 px-6">
-              <ShoppingBag className="size-4 transition-transform group-hover:scale-110" aria-hidden="true" />
-              <span>{t('تصفح البوتات', 'Browse bots')}</span>
-            </Link>
-            <a href={trialLink} target="_blank" rel="noopener noreferrer" className="btn btn-ghost group h-11 px-6">
-              <Gift className="size-4 transition-transform group-hover:rotate-12" aria-hidden="true" />
-              <span>{t('بوت متجر مجاني لمدة شهر', 'A free store bot for a month')}</span>
+            <Magnetic strength={0.2}>
+              <Link to="/shop" className="btn btn-primary group h-11 px-6 shadow-app-sm hover:shadow-app-md transition-shadow">
+                <ShoppingBag className="size-4 transition-transform group-hover:scale-110" aria-hidden="true" />
+                <span>{t('تصفح البوتات', 'Browse bots')}</span>
+              </Link>
+            </Magnetic>
+            <Magnetic strength={0.15}>
+              <a href={trialLink} target="_blank" rel="noopener noreferrer" className="btn btn-ghost group h-11 px-6">
+                <Gift className="size-4 transition-transform group-hover:rotate-12" aria-hidden="true" />
+                <span>{t('بوت متجر مجاني لمدة شهر', 'A free store bot for a month')}</span>
+              </a>
+            </Magnetic>
+          </motion.div>
+
+          <motion.div className="mt-8 flex flex-wrap items-center gap-3 text-xs" {...rise(0.48)}>
+            <a
+              href={tiktok.profile}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              className="inline-flex items-center gap-2 rounded-full border border-app bg-elevated/90 px-3.5 py-1.5 font-medium transition-all duration-200 hover:border-accent hover:shadow-xs hover:text-app"
+            >
+              <span className="size-2 rounded-full bg-[#fe2c55] animate-pulse" />
+              <span className="text-muted">{t('تيك توك الرسمي', 'Official TikTok')}:</span>
+              <span className="font-mono font-bold text-app" dir="ltr">{site.handle}</span>
             </a>
+            <Link
+              to="/links"
+              className="inline-flex items-center gap-1.5 rounded-full border border-app bg-elevated/90 px-3.5 py-1.5 font-medium transition-all duration-200 hover:border-accent hover:shadow-xs hover:text-app"
+            >
+              <span className="text-accent">🔗</span>
+              <span className="text-app font-semibold">{t('مركز الروابط والبايو', 'Link Hub & Bio')}</span>
+              <span className="font-mono text-muted text-[11px]">({hubLinks.length} {t('روابط', 'links')})</span>
+            </Link>
           </motion.div>
         </div>
 
-        <div className="lg:col-span-5 lg:ps-10 lg:border-s lg:border-app">
-          <span className="swiss-label text-subtle mb-1 block">{t('الفهرس', 'The index')}</span>
-          <DataIndex entries={entries} />
+        <div className="lg:col-span-5 lg:ps-10 lg:border-s lg:border-app flex flex-col gap-8">
+          <InteractiveStudioVisualizer />
+          <div>
+            <span className="swiss-label text-subtle mb-1 block">{t('الفهرس', 'The index')}</span>
+            <DataIndex entries={entries} />
+          </div>
         </div>
       </div>
     </section>

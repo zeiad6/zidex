@@ -1,6 +1,6 @@
 # Ghost 778 — Tiktokweb
 
-بوابة ويب لحساب **[@ghost.7784](https://www.tiktok.com/@ghost.7784)** على تيك توك: مشغّل فيديو مدمج،
+بوابة ويب لحساب **[@zeidexsoft](https://www.tiktok.com/@zeidexsoft)** على تيك توك: مشغّل فيديو مدمج،
 صفحة روابط تفاعلية، ومدونة بتصميم نهاري/ليلي.
 
 ## Stack

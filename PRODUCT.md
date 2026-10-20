@@ -12,7 +12,7 @@ Primary: small merchants and creators in the Arabic market (Yemen-first) who wan
 a ready-made Telegram bot to run a business — a digital storefront, group
 management, customer support, bookings, or paid subscriptions — without building
 one. Secondary: a general Arabic/English technical audience who arrive from the
-owner's TikTok (@ghost.7784) for the free Windows/Android programs and the
+owner's TikTok (@zeidexsoft) for the free Windows/Android programs and the
 how-to articles, and convert into bot customers.
 
 [Inferred from repository evidence (Kuraimi rail, Arabic-first bilingual copy,
@@ -56,7 +56,7 @@ payment is the combination a neighboring product cannot truthfully copy.
 
 ## Brand Commitments
 
-- Name: ZeidexSoft. Domain: zeidexsoft.com. TikTok handle @ghost.7784.
+- Name: ZeidexSoft. Domain: zeidexsoft.com. TikTok handle @zeidexsoft.
 - Brand accent: violet #6D5CFF (with teal #00C9A7 as the historical partner hue).
 - Bilingual parity (Arabic-first) is non-negotiable; Arabic must never read as a
   translation afterthought.

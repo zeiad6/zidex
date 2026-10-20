@@ -111,6 +111,14 @@ const routes = [
         ${p.features?.length ? `<h2>ما الذي تحصل عليه</h2><ul>${p.features.map((f) => `<li>${esc(f)}</li>`).join('')}</ul>` : ''}`,
     })),
   { path: '/links', title: `الروابط — ${SITE}`, description: 'كل الروابط المهمة لـ ZeidexSoft في مكان واحد.', body: '<h1>الروابط</h1>' },
+  {
+    path: '/accounting',
+    title: `أنظمة محاسبية مخصصة — ${SITE}`,
+    description: 'نبني أنظمة محاسبية مخصصة للمنشآت والمتاجر: فواتير، مخزون، كشوفات حساب، وتقارير دقيقة بربط مباشر مع بوتات تيليجرام وZeidexLink.',
+    body: `<h1>أنظمة محاسبية مخصصة للمنشآت</h1>
+      <p>فواتير، سندات، إدارة مخزون ومستودعات، كشوفات حساب للعملاء والموردين، وتقارير مالية تفصيلية.</p>
+      <p><a href="https://zeidexlink.zeidexsoft.com/">بوابة ZeidexLink الإلكترونية</a> · <a href="/shop">المتجر</a></p>`,
+  },
   { path: '/about', title: `عن المنصة — ${SITE}`, description: 'عن تصميم وتقنية ZeidexSoft، وسياسة الخصوصية.', body: '<h1>عن المنصة</h1>' },
 ]
 
@@ -139,6 +147,11 @@ function render({ path, title, description, image, body }) {
   return html.replace('<div id="root"></div>', () => `<div id="root"><main class="prerender">${nav}${body}</main></div>`)
 }
 
+// Static pages shipped as full documents from public/ (vite copies them verbatim)
+// are not prerendered — prerendering them here would overwrite the hand-written
+// page with the SPA shell. They only need a sitemap entry.
+const sitemapOnlyRoutes = ['/zeidexlink']
+
 // The sitemap is generated from the same route list, so a new post or product can never
 // be missing from it.
 const today = new Date().toISOString().slice(0, 10)
@@ -146,8 +159,8 @@ const lastmod = (path) => allPosts.find((p) => `/blog/${p.slug}` === path)?.date
 writeFileSync(
   resolve(root, 'dist/sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    routes
-      .map(({ path }) => `  <url><loc>${ORIGIN}${path}</loc><lastmod>${lastmod(path)}</lastmod></url>`)
+    [...routes.map(({ path }) => path), ...sitemapOnlyRoutes]
+      .map((path) => `  <url><loc>${ORIGIN}${path}</loc><lastmod>${lastmod(path)}</lastmod></url>`)
       .join('\n') +
     '\n</urlset>\n',
 )

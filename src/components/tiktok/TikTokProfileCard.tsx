@@ -68,16 +68,16 @@ export function TikTokProfileCard() {
                 decoding="async"
                 referrerPolicy="no-referrer"
                 onError={() => setImgOk(false)}
-                className="relative size-[5.5rem] rounded-full border border-app object-cover"
+                className="relative size-[5.5rem] rounded-full border border-app object-cover shadow-app"
               />
             ) : (
-              <span
-                className="bg-accent relative grid size-[5.5rem] place-items-center rounded-full text-3xl font-bold text-white"
-                role="img"
-                aria-label={t(`صورة حساب ${site.handle}`, `${site.handle} profile picture`)}
-              >
-                G
-              </span>
+              <img
+                src="/zeidex-mark.png"
+                alt={site.name}
+                width={88}
+                height={88}
+                className="relative size-[5.5rem] rounded-full border border-app object-cover shadow-app"
+              />
             )}
           </div>
 

@@ -6,6 +6,7 @@ import {
   Calculator,
   ExternalLink,
   FileText,
+  Link2,
   MessageCircle,
   Receipt,
   ShieldCheck,
@@ -148,6 +149,15 @@ export default function Accounting() {
                 <MessageCircle className="size-4" aria-hidden="true" />
                 {t('اطلب عرض سعر', 'Request a quote')}
               </a>
+              <a
+                href="https://zeidexlink.zeidexsoft.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-secondary h-11 px-6 border-accent/40 hover:border-accent"
+              >
+                <Link2 className="size-4 text-accent" aria-hidden="true" />
+                {t('بوابة ZeidexLink', 'ZeidexLink Portal')}
+              </a>
               <Link to="/shop" className="btn btn-ghost h-11 px-6">
                 {t('تصفح المتجر', 'Browse the store')}
               </Link>
@@ -175,6 +185,47 @@ export default function Accounting() {
                 </div>
               ))}
             </dl>
+          </div>
+        </section>
+      </Reveal>
+
+      {/* ZeidexLink — the free front door that pairs with the books:
+          menu, shop and payments on one link, live at its own subdomain. */}
+      <Reveal>
+        <section className="border-app bg-elevated shadow-app card-lift relative overflow-hidden rounded-2xl border p-5 sm:p-6">
+          <span aria-hidden="true" className="brand-gradient absolute inset-y-0 start-0 w-1 opacity-80" />
+          <div className="flex flex-wrap items-center justify-between gap-5">
+            <div className="flex min-w-0 items-start gap-4">
+              <span className="bg-accent-soft text-accent grid size-12 shrink-0 place-items-center rounded-2xl">
+                <Link2 className="size-5" aria-hidden="true" />
+              </span>
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="text-app text-lg font-black">ZeidexLink</h2>
+                  <span className="chip bg-accent-soft text-accent">{t('مجاني بالكامل', 'Free forever')}</span>
+                </div>
+                <p className="text-muted mt-1 max-w-2xl text-[13.5px] leading-relaxed">
+                  {t(
+                    'واجهة نشاطك أمام العملاء: منيو إلكتروني، متجر، حجوزات ومدفوعات وQR في رابط واحد — مع 150 قالباً، وكل الميزات مجانية.',
+                    'Your business front door: digital menu, shop, bookings, payments and QR on one link — 150 templates, every feature free.',
+                  )}
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-2.5">
+              <a
+                href="https://zeidexlink.zeidexsoft.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary h-11 px-6"
+              >
+                <ExternalLink className="size-4" aria-hidden="true" />
+                {t('افتح ZeidexLink', 'Open ZeidexLink')}
+              </a>
+              <a href="/zeidexlink" className="btn btn-ghost h-11 px-5">
+                {t('تعرّف على المشروع', 'About the project')}
+              </a>
+            </div>
           </div>
         </section>
       </Reveal>
@@ -262,13 +313,24 @@ export default function Accounting() {
                 )}
               </p>
             </div>
-            <Link
-              to="/shop"
-              className="press shadow-app-accent bg-accent text-accent-fg inline-flex items-center gap-2 rounded-xl px-5 py-3 text-[14px] font-black"
-            >
-              {t('شاهد البوتات الجاهزة', 'See the ready bots')}
-              <ArrowUpRight className="size-4" aria-hidden="true" />
-            </Link>
+            <div className="flex flex-wrap items-center gap-3">
+              <a
+                href="https://zeidexlink.zeidexsoft.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="press shadow-app-accent bg-accent text-accent-fg inline-flex items-center gap-2 rounded-xl px-5 py-3 text-[14px] font-black"
+              >
+                <Link2 className="size-4" aria-hidden="true" />
+                {t('فتح منصة ZeidexLink', 'Open ZeidexLink Platform')}
+              </a>
+              <Link
+                to="/shop"
+                className="bg-elevated/90 hover:bg-sunken text-app border border-app inline-flex items-center gap-2 rounded-xl px-5 py-3 text-[14px] font-bold transition-colors"
+              >
+                {t('شاهد البوتات الجاهزة', 'See the ready bots')}
+                <ArrowUpRight className="size-4" aria-hidden="true" />
+              </Link>
+            </div>
           </div>
           <motion.span
             aria-hidden="true"

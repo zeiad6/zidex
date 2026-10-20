@@ -71,10 +71,8 @@ export function GlyphTikTok(props: GlyphProps) {
 export function GlyphZidex(props: GlyphProps) {
   return (
     <Svg {...props} variant="outline">
-      <path d="M3 7V4.5h9.4" />
-      <path d="M3.6 4.9 11 12.4V20" />
-      <path d="M21 17v2.5h-9.4" />
-      <path d="M20.4 19.1 13 11.6V4" />
+      <path d="M4.5 6.5h15L6.5 17.5h15" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="12" cy="12" r="1.5" fill="currentColor" />
     </Svg>
   )
 }

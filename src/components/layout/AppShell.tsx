@@ -222,7 +222,7 @@ function SidebarRail({ onSearch }: { onSearch: () => void }) {
             className="brand-gradient absolute -inset-1 rounded-[1.3rem] opacity-30 blur-[8px] transition-opacity duration-300 group-hover/rail-logo:opacity-60"
           />
           <img
-            src="/icon-192.png"
+            src="/zeidex-mark.png"
             alt=""
             width={44}
             height={44}
@@ -421,7 +421,7 @@ function Sidebar({ onSearch }: { onSearch: () => void }) {
               className="brand-gradient absolute -inset-1.5 rounded-[1.3rem] opacity-30 blur-[10px] transition-opacity duration-300 group-hover/brand:opacity-60"
             />
             <img
-              src="/icon-192.png"
+              src="/zeidex-mark.png"
               alt=""
               width={56}
               height={56}
@@ -984,6 +984,20 @@ export function AppShell({ children }: { children: ReactNode }) {
               >
                 <Menu className="size-5" aria-hidden="true" />
               </button>
+
+              <Link
+                to="/"
+                aria-label={site.name}
+                className="group/mobile-brand flex shrink-0 items-center gap-2 md:hidden"
+              >
+                <img
+                  src="/zeidex-mark.png"
+                  alt={site.name}
+                  width={34}
+                  height={34}
+                  className="size-8.5 rounded-xl border border-app object-cover shadow-xs transition-transform active:scale-95"
+                />
+              </Link>
 
               <div className="min-w-0">
                 <p className="text-subtle hidden items-center gap-2 text-[11px] font-medium sm:flex">

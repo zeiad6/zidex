@@ -1,47 +1,76 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#05060a" />
-      <stop offset="55%" stop-color="#0b1024" />
-      <stop offset="100%" stop-color="#16071a" />
+    <linearGradient id="ogBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#080a14" />
+      <stop offset="50%" stop-color="#0d1326" />
+      <stop offset="100%" stop-color="#05070e" />
     </linearGradient>
-    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#25f4ee" />
-      <stop offset="52%" stop-color="#fe2c55" />
-      <stop offset="100%" stop-color="#a855f7" />
+    <linearGradient id="ogBrand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00f2fe" />
+      <stop offset="50%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#00e676" />
     </linearGradient>
-    <radialGradient id="glow" cx="50%" cy="0%" r="70%">
-      <stop offset="0%" stop-color="#3663f6" stop-opacity="0.45" />
-      <stop offset="100%" stop-color="#3663f6" stop-opacity="0" />
+    <radialGradient id="ogGlow" cx="75%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.35" />
+      <stop offset="50%" stop-color="#00f2fe" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
     </radialGradient>
   </defs>
 
-  <rect width="1200" height="630" fill="url(#bg)" />
-  <rect width="1200" height="630" fill="url(#glow)" />
+  <rect width="1200" height="630" fill="url(#ogBg)" />
+  <rect width="1200" height="630" fill="url(#ogGlow)" />
 
-  <g fill="#ffffff" opacity="0.08">
-    <circle cx="80" cy="80" r="2" /><circle cx="160" cy="80" r="2" /><circle cx="240" cy="80" r="2" />
-    <circle cx="320" cy="80" r="2" /><circle cx="400" cy="80" r="2" /><circle cx="480" cy="80" r="2" />
-    <circle cx="560" cy="80" r="2" /><circle cx="640" cy="80" r="2" /><circle cx="720" cy="80" r="2" />
-    <circle cx="800" cy="80" r="2" /><circle cx="880" cy="80" r="2" /><circle cx="960" cy="80" r="2" />
-    <circle cx="1040" cy="80" r="2" /><circle cx="1120" cy="80" r="2" />
+  <!-- Grid dots -->
+  <g fill="#ffffff" opacity="0.05">
+    <circle cx="100" cy="100" r="2"/><circle cx="200" cy="100" r="2"/><circle cx="300" cy="100" r="2"/>
+    <circle cx="400" cy="100" r="2"/><circle cx="500" cy="100" r="2"/><circle cx="600" cy="100" r="2"/>
+    <circle cx="700" cy="100" r="2"/><circle cx="800" cy="100" r="2"/><circle cx="900" cy="100" r="2"/>
+    <circle cx="1000" cy="100" r="2"/><circle cx="1100" cy="100" r="2"/>
+    <circle cx="100" cy="200" r="2"/><circle cx="200" cy="200" r="2"/><circle cx="300" cy="200" r="2"/>
+    <circle cx="400" cy="200" r="2"/><circle cx="500" cy="200" r="2"/><circle cx="600" cy="200" r="2"/>
+    <circle cx="700" cy="200" r="2"/><circle cx="800" cy="200" r="2"/><circle cx="900" cy="200" r="2"/>
+    <circle cx="1000" cy="200" r="2"/><circle cx="1100" cy="200" r="2"/>
   </g>
 
-  <rect x="90" y="120" width="112" height="112" rx="34" fill="url(#brand)" />
-  <text x="146" y="200" font-family="Helvetica, Arial, sans-serif" font-size="64" font-weight="700"
-        fill="#ffffff" text-anchor="middle">Z</text>
+  <!-- Big Glowing Logo Badge -->
+  <g transform="translate(800, 165)">
+    <rect x="0" y="0" width="300" height="300" rx="68" fill="#0c1020" stroke="url(#ogBrand)" stroke-width="4"/>
+    <path d="M 65 72 L 235 72 C 248 72 255 86 247 96 L 205 150 C 200 156 193 160 185 160 L 80 160 C 70 160 65 145 73 135 Z" fill="url(#ogBrand)"/>
+    <polygon points="240,90 252,104 105,250 75,250 65,235 210,90" fill="#00f2fe"/>
+    <path d="M 235 240 L 65 240 C 52 240 45 226 53 216 L 95 162 C 100 156 107 152 115 152 L 220 152 C 230 152 235 167 227 177 Z" fill="url(#ogBrand)"/>
+    <circle cx="150" cy="150" r="14" fill="#ffffff" opacity="0.9"/>
+  </g>
 
-  <text x="90" y="330" font-family="Helvetica, Arial, sans-serif" font-size="82" font-weight="800" fill="#ffffff">
-    Zidex
-  </text>
-  <text x="90" y="392" font-family="Helvetica, Arial, sans-serif" font-size="34" fill="#90b7ff">
-    @ghost.7784
+  <!-- Brand Title and Typography -->
+  <text x="100" y="160" font-family="'IBM Plex Sans Arabic', system-ui, sans-serif" font-size="24" font-weight="700" fill="#00f2fe" letter-spacing="2">
+    ZEIDEXSOFT · OFFICIAL PLATFORM
   </text>
 
-  <text x="90" y="490" font-family="Helvetica, Arial, sans-serif" font-size="40" font-weight="600" fill="url(#brand)">
-    TikTok &#183; Links &#183; Blog
+  <text x="100" y="255" font-family="'IBM Plex Sans Arabic', system-ui, sans-serif" font-size="68" font-weight="900" fill="#ffffff">
+    ZeidexSoft
   </text>
-  <text x="90" y="546" font-family="Helvetica, Arial, sans-serif" font-size="26" fill="#a2a8b8">
-    One fast page — light and dark.
+
+  <text x="100" y="335" font-family="'IBM Plex Sans Arabic', system-ui, sans-serif" font-size="34" font-weight="600" fill="#94a3b8">
+    بوتات تيليجرام ومتاجر رقمية وبرمجيات احترافية
+  </text>
+
+  <text x="100" y="410" font-family="'IBM Plex Sans Arabic', system-ui, sans-serif" font-size="22" fill="#64748b">
+    دفع بنجوم تيليجرام والكريمي · استضافة سحابية · تسليم فوري وتلقائي
+  </text>
+
+  <!-- Tag Pills -->
+  <g transform="translate(100, 470)">
+    <rect x="0" y="0" width="170" height="46" rx="23" fill="#1e293b" stroke="#334155"/>
+    <text x="85" y="30" font-family="'IBM Plex Sans Arabic', system-ui, sans-serif" font-size="18" font-weight="700" fill="#38bdf8" text-anchor="middle">Telegram Bots</text>
+
+    <rect x="185" y="0" width="150" height="46" rx="23" fill="#1e293b" stroke="#334155"/>
+    <text x="260" y="30" font-family="'IBM Plex Sans Arabic', system-ui, sans-serif" font-size="18" font-weight="700" fill="#00e676" text-anchor="middle">ZeidexLink</text>
+
+    <rect x="350" y="0" width="160" height="46" rx="23" fill="#1e293b" stroke="#334155"/>
+    <text x="430" y="30" font-family="'IBM Plex Sans Arabic', system-ui, sans-serif" font-size="18" font-weight="700" fill="#c084fc" text-anchor="middle">Digital Stores</text>
+  </g>
+
+  <text x="100" y="580" font-family="monospace" font-size="20" font-weight="700" fill="#00f2fe">
+    https://zeidexsoft.com
   </text>
 </svg>

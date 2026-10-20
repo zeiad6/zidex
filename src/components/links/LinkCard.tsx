@@ -105,7 +105,7 @@ export function LinkCard({ link, onToast }: Props) {
       <div
         className={cn(
           'bg-elevated shadow-app relative flex h-full min-w-0 flex-col rounded-2xl border border-app p-5',
-          'card-lift hover-ring',
+          'card-lift hover-ring card-kinetic',
         )}
       >
         {isInternal ? (

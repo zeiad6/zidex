@@ -1553,3 +1553,31 @@
 html[lang='ar'] :is(.font-black, .font-extrabold) {
   font-weight: 700;
 }
+
+/* ------------------------------------------------------------------ *
+ * Modern Kinetic & Interactive Visualizer Utilities
+ * ------------------------------------------------------------------ */
+@keyframes cyber-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+.card-kinetic {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+.card-kinetic:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow: 0 16px 36px -12px rgba(124, 58, 237, 0.16), 0 0 0 1px rgba(0, 242, 254, 0.22);
+}
+
+.hologram-glow {
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.12), rgba(124, 58, 237, 0.08), rgba(0, 230, 118, 0.08));
+  border: 1px solid rgba(0, 242, 254, 0.25);
+  box-shadow: 0 0 24px -6px rgba(0, 242, 254, 0.2);
+}

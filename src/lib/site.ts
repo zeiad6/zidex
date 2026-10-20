@@ -10,8 +10,8 @@ export const site = {
   /** Default document title; pages that set their own restore this on unmount. */
   title: 'ZeidexSoft — بوتات تيليجرام وبرمجيات احترافية',
   titleEn: 'ZeidexSoft — Telegram bots & professional software',
-  handle: '@ghost.7784',
-  handleBare: 'ghost.7784',
+  handle: '@zeidexsoft',
+  handleBare: 'zeidexsoft',
   tagline: 'الموقع الرسمي',
   description:
     'نبني بوتات تيليجرام ومتاجر رقمية وبرمجيات احترافية: دفع بالنجوم والكريمي، بوت متجر مجاني لمدة شهر وتجربة يومين، وحماية من الدرجة الأولى.',
@@ -27,7 +27,8 @@ export const site = {
 } as const
 
 export const tiktok = {
-  profile: 'https://www.tiktok.com/@ghost.7784',
+  profile: 'https://www.tiktok.com/@zeidexsoft?_r=1&_t=ZN-9Ai9w3oEV1C',
+  profileClean: 'https://www.tiktok.com/@zeidexsoft',
   /** Live figures pulled from the public profile on 2026-09-27. */
   stats: {
     followers: 12,
@@ -36,9 +37,8 @@ export const tiktok = {
     videos: 5,
   },
   /** Shown when the public API is unreachable (no auth, CORS-restricted). */
-  updatedAt: '2026-09-27',
-  avatar:
-    'https://p16-common-sign.tiktokcdn-eu.com/tos-no1a-avt-0068c001-no~f5202aff71489aaadb4641652593b9d8~tplv-tiktokx-cropcenter:1080:1080.jpeg',
+  updatedAt: '2026-10-20',
+  avatar: '/zeidex-mark.png',
 } as const
 
 export const nav = [
@@ -106,7 +106,7 @@ export const hubLinks: HubLink[] = [
     titleEn: 'All videos',
     description: 'تصفّح مكتبة الفيديوهات كاملة',
     descriptionEn: 'Browse the full video library',
-    href: `${tiktok.profile}/video`,
+    href: `${tiktok.profileClean}/video`,
     kind: 'social',
     emoji: '📼',
     accent: 'ghost',
@@ -117,7 +117,7 @@ export const hubLinks: HubLink[] = [
     titleEn: 'Saved',
     description: 'الفيديوهات التي حفظتها',
     descriptionEn: 'Videos I have saved',
-    href: `${tiktok.profile}/saved`,
+    href: `${tiktok.profileClean}/saved`,
     kind: 'resource',
     emoji: '🔖',
     accent: 'veil',
@@ -147,6 +147,20 @@ export const hubLinks: HubLink[] = [
     accent: 'veil',
   },
   {
+    id: 'zeidexlink',
+    title: 'زيكس لينك',
+    titleEn: 'ZeidexLink',
+    description: 'صفحة روابط ومتجر ومنيو إلكتروني برابط واحد — مجانية بالكامل',
+    descriptionEn: 'Link-in-bio, shop and digital menu on one free page',
+    // Absolute on purpose: /zeidexlink is a static project page, not a React route.
+    href: 'https://zeidexsoft.com/zeidexlink',
+    kind: 'primary',
+    emoji: '🔗',
+    accent: 'mint',
+    badge: 'جديد',
+    badgeEn: 'New',
+  },
+  {
     id: 'links-page',
     title: 'صفحة الروابط',
     titleEn: 'Links page',
@@ -163,7 +177,7 @@ export const hubLinks: HubLink[] = [
     titleEn: 'Contact & collabs',
     description: 'DM مباشر عبر تيك توك',
     descriptionEn: 'Direct DM on TikTok',
-    href: `${tiktok.profile}?lang=ar`,
+    href: `${tiktok.profileClean}?lang=ar`,
     kind: 'social',
     emoji: '✉️',
     accent: 'ghost',
@@ -210,10 +224,10 @@ export const accentTokens: Record<HubLink['accent'], { rgb: string }> = {
  * ------------------------------------------------------------------ */
 
 /** Official oEmbed endpoint — no API key required. */
-export const tiktokEmbedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(tiktok.profile)}`
+export const tiktokEmbedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(tiktok.profileClean)}`
 
 export function tiktokProfileUrl(opts: { lang?: string } = {}) {
-  return `${tiktok.profile}?_r=1&_t=ZN-9A4XwA4rP9i${opts.lang ? `&lang=${opts.lang}` : ''}`
+  return `${tiktok.profileClean}?_r=1&_t=ZN-9Ai9w3oEV1C${opts.lang ? `&lang=${opts.lang}` : ''}`
 }
 
 export function tiktokVideoUrl(id: string) {
