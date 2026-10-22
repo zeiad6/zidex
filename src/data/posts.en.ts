@@ -9,6 +9,13 @@ import type { Post } from './posts'
 export type PostText = Pick<Post, 'title' | 'excerpt' | 'tags' | 'headings'>
 
 export const postsEn: Record<string, PostText> = {
+  'zeidex-convert-android': {
+    title: 'Zeidex Convert for Android: 100% Offline File Converter, Live Photo Extractor & Media Booster',
+    excerpt:
+      'A standalone Android app that runs 100% offline: extract Motion Photos and Apple Live Photos to MP4, upscale and boost video/image quality, compress media files, and auto-save neatly to phone storage.',
+    tags: ['Android', 'File Converter', 'Motion Photo', 'Live Photo', 'MP4', 'Offline', 'Quality Booster'],
+    headings: [{"id":"features","text":"Key features and capabilities","level":2},{"id":"live-photos","text":"Extract Live Photo & Motion Photo videos","level":2},{"id":"screens","text":"App interface and screenshots","level":2},{"id":"enhancer","text":"Video & Image Quality Booster","level":2},{"id":"storage","text":"Organized automatic phone storage","level":2},{"id":"security","text":"100% local privacy and cryptographic signatures","level":2},{"id":"get","text":"Direct download links","level":2}],
+  },
   'cloudcli-setup-guide': {
     title: 'The complete guide: installing CloudCLI and wiring OpenCode, Codex, and Claude Code to it',
     excerpt:

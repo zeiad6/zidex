@@ -290,7 +290,169 @@ const edmsAndroidEn: Block[] = [
   },
 ]
 
+const zeidexConvertAndroidBodyEn: Block[] = [
+  {
+    type: 'image',
+    src: '/img/zeidex-convert-android-cover.webp',
+    fallback: '/img/zeidex-convert-android-cover.jpg',
+    alt: 'Zeidex Convert for Android — 100% Offline Converter',
+    caption: 'Zeidex Convert v1.2.0 for Android — complete privacy and on-device performance without internet.',
+  },
+  {
+    type: 'download',
+    href: 'https://www.mediafire.com/file/vikc6vaxcd64vyd/zeidex-convert-v1.2.0.apk/file',
+    label: 'Download Zeidex Convert v1.2.0 — APK (MediaFire)',
+    meta: 'zeidex-convert-v1.2.0.apk · Android 8.0+ · 10.8 MB · MediaFire',
+    also: [
+      {
+        href: 'https://github.com/zeiad6/zeidex-convert-android/releases/download/v1.2.0/zeidex-convert-v1.2.0.apk',
+        label: 'Official signed release on GitHub Releases',
+        meta: 'Same signed package · 10.8 MB · GitHub',
+      },
+    ],
+  },
+  {
+    type: 'callout',
+    tone: 'tip',
+    title: '100% Offline & Private',
+    items: [
+      'The app operates entirely on-device and requests zero internet permissions.',
+      'All conversions, compressions, and extractions are performed locally using hardware acceleration.',
+      'The package is cryptographically signed with the official Zeidexsoft release certificate.',
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'features',
+    text: 'Key features and capabilities',
+  },
+  {
+    type: 'p',
+    text: '**Zeidex Convert** is a complete, private, and free tool built with modern Kotlin and Jetpack Compose to process files locally with maximum speed.',
+  },
+  {
+    type: 'ul',
+    items: [
+      '**Multi-format Conversion**: Images (JPG, PNG, WEBP, BMP, PDF, ICO), Audio extraction (MP3, M4A, AAC, WAV), Archives (ZIP, TAR, GZ), and Documents.',
+      '**Robust Live Photo / Motion Photo Extraction**: Seamlessly extracts video streams from Google Pixel, Samsung Galaxy, and Apple Live Photos into clean MP4 files.',
+      '**Quality Booster**: 1080p FHD video upscaling, bitrate boost, and Laplacian edge sharpening for images.',
+      '**Instant Saved Path Notifications**: System notifications showing the full phone path with one-tap play and share actions.',
+      '**Background Processing**: Resumable conversions powered by a foreground service.',
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'live-photos',
+    text: 'Extract Live Photo & Motion Photo videos',
+  },
+  {
+    type: 'p',
+    text: 'A resilient multi-tier binary extractor supporting 6 complementary strategies:',
+  },
+  {
+    type: 'ul',
+    items: [
+      '**Samsung Galaxy**: Parses the MotionPhoto_Data trailer and length integer.',
+      '**Google Pixel**: Scans XMP APP1 segments for MicroVideoOffset and Item:Length.',
+      '**Apple Live Photos**: Extracts bundled .livp ZIP packages and MOV files.',
+      '**Universal Reverse Scan**: Searches for ftyp, moov, and mdat media atoms backwards from EOF.',
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'screens',
+    text: 'App interface and screenshots',
+  },
+  {
+    type: 'image',
+    src: '/img/zeidex-convert-android-1.webp',
+    fallback: '/img/zeidex-convert-android-1.jpg',
+    alt: 'Zeidex Convert Android Main Screen',
+    caption: 'Home screen: interactive conversion cards, format selection, and quality slider.',
+  },
+  {
+    type: 'image',
+    src: '/img/zeidex-convert-android-2.webp',
+    fallback: '/img/zeidex-convert-android-2.jpg',
+    alt: 'Zeidex Convert Android Tools Screen',
+    caption: 'Tools panel: instant motion photo extraction, media quality booster, and PDF tools.',
+  },
+  {
+    type: 'image',
+    src: '/img/zeidex-convert-android-3.webp',
+    fallback: '/img/zeidex-convert-android-3.jpg',
+    alt: 'Zeidex Convert Android Settings Screen',
+    caption: 'Settings: cryptographic signature verification, auto-updates, and storage folders.',
+  },
+  {
+    type: 'h2',
+    id: 'enhancer',
+    text: 'Video & Image Quality Booster',
+  },
+  {
+    type: 'table',
+    head: ['Feature', 'Category', 'Description'],
+    rows: [
+      ['1080p FHD Upscale', 'Video', 'Upscales video resolution to full 1080p using hardware-accelerated MediaMuxer.'],
+      ['Bitrate Boost', 'Video', 'Boosts streaming bitrate up to 10 Mbps and cleans compression artifacts.'],
+      ['Audio Boost', 'Audio/Video', 'Maximizes audio fidelity up to 256 kbps.'],
+      ['Laplacian Sharpening', 'Image', '3x3 convolution filter to emphasize fine edges and micro-details.'],
+      ['Auto-Contrast & Vibrance', 'Image', 'Expands dynamic range and color saturation automatically.'],
+      ['2X Super-Resolution', 'Image', 'Bilinear super-resolution upscaling doubling image dimensions.'],
+      ['BMP Lossless Export', 'Image', 'Exports uncompressed 24-bit Windows Bitmap files.'],
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'storage',
+    text: 'Organized automatic phone storage',
+  },
+  {
+    type: 'p',
+    text: 'All converted files are automatically saved to Download/ZeidexConvert/ with category-specific subfolders (Images, Videos, Audio, PDF, Documents, Archives, LivePhotos, QR) and instantly indexed in gallery apps.',
+  },
+  {
+    type: 'h2',
+    id: 'security',
+    text: '100% local privacy and cryptographic signatures',
+  },
+  {
+    type: 'checklist',
+    items: [
+      'Zero internet permissions requested in AndroidManifest.xml',
+      'No tracking, analytics, or external network requests',
+      'ZipSlip protection preventing malicious path traversals',
+      'Signed with official Zeidexsoft cryptographic key (SHA-256)',
+      'Built-in signature verification ensuring update integrity',
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'get',
+    text: 'Direct download links',
+  },
+  {
+    type: 'download',
+    href: 'https://www.mediafire.com/file/vikc6vaxcd64vyd/zeidex-convert-v1.2.0.apk/file',
+    label: 'Download from MediaFire',
+    meta: 'zeidex-convert-v1.2.0.apk · 10.8 MB · Latest v1.2.0',
+    also: [
+      {
+        href: 'https://github.com/zeiad6/zeidex-convert-android/releases/download/v1.2.0/zeidex-convert-v1.2.0.apk',
+        label: 'Download signed APK from GitHub Releases',
+        meta: 'Same official package · 10.8 MB · GitHub Releases',
+      },
+      {
+        href: 'https://github.com/zeiad6/zeidex-convert-android',
+        label: 'Source code repository on GitHub',
+        meta: 'Open Source · Kotlin & Jetpack Compose',
+      },
+    ],
+  },
+]
+
 export const postBodiesEn: Record<string, Block[]> = {
+  "zeidex-convert-android": zeidexConvertAndroidBodyEn,
   "ai-fake-detector-android": aiFakeEn,
 
   "edms-archive-android": edmsAndroidEn,

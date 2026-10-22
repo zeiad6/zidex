@@ -162,6 +162,38 @@ export const programs: Program[] = [
     date: '2026-10-11',
   },
   {
+    slug: 'zeidex-convert-android',
+    name: 'محوّل الملفات Zeidex Convert — أندرويد',
+    nameEn: 'Zeidex Convert — Android File Converter',
+    tagline:
+      'تطبيق أندرويد محلي 100% لتحويل واستخراج الملفات: استخراج فيديو الصور الحية (Pixel و Samsung و Apple Live Photo)، تحسين جودة الفيديو والصور، ضغط الوسائط، دمج PDF، وتوليد QR — كل شيء على جهازك دون اتصال.',
+    taglineEn:
+      '100% offline Android file converter & enhancer: extract Motion Photos and Apple Live Photos to MP4, boost video/image quality, compress media, merge PDFs, and generate QR codes — all executed locally.',
+    version: '1.2.0',
+    platform: 'Android 8.0+',
+    kind: 'android',
+    downloads: [
+      {
+        href: 'https://www.mediafire.com/file/vikc6vaxcd64vyd/zeidex-convert-v1.2.0.apk/file',
+        host: 'MediaFire',
+        file: 'zeidex-convert-v1.2.0.apk',
+        size: '10.8 MB',
+        note: 'تحميل مباشر (MediaFire)',
+      },
+      {
+        href: 'https://github.com/zeiad6/zeidex-convert-android/releases/download/v1.2.0/zeidex-convert-v1.2.0.apk',
+        host: 'GitHub',
+        file: 'zeidex-convert-v1.2.0.apk',
+        size: '10.8 MB',
+        note: 'نسخة رسمية موقعة',
+      },
+    ],
+    post: 'zeidex-convert-android',
+    docs: 'https://github.com/zeiad6/zeidex-convert-android',
+    glyph: 'spark',
+    date: '2026-10-22',
+  },
+  {
     slug: 'edms-archive-android',
     name: 'أرشيف برو EDMS — أندرويد',
     nameEn: 'Archive Pro EDMS — Android',

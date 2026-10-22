@@ -277,6 +277,171 @@ export const aiFakeBody: Block[] = [
   },
 ]
 
+const zeidexConvertAndroidBody: Block[] = [
+  {
+    type: 'image',
+    src: '/img/zeidex-convert-android-cover.webp',
+    fallback: '/img/zeidex-convert-android-cover.jpg',
+    alt: 'تطبيق Zeidex Convert للأندرويد — محوّل ملفات محلي شامل',
+    caption: 'Zeidex Convert v1.2.0 للأندرويد — خصوصية مطلقة وأداء محلي فائق دون إنترنت.',
+  },
+  {
+    type: 'download',
+    href: 'https://www.mediafire.com/file/vikc6vaxcd64vyd/zeidex-convert-v1.2.0.apk/file',
+    label: 'تحميل Zeidex Convert v1.2.0 — APK (MediaFire)',
+    meta: 'zeidex-convert-v1.2.0.apk · Android 8.0+ · 10.8 MB · MediaFire',
+    also: [
+      {
+        href: 'https://github.com/zeiad6/zeidex-convert-android/releases/download/v1.2.0/zeidex-convert-v1.2.0.apk',
+        label: 'رابط بديل من GitHub Releases (موقع رسمياً)',
+        meta: 'نفس الحزمة الموقعة · 10.8 MB · GitHub',
+      },
+    ],
+  },
+  {
+    type: 'callout',
+    tone: 'tip',
+    title: 'خصوصية تامة 100% دون اتصال بالإنترنت',
+    items: [
+      'التطبيق يعمل بشكل كامل على هاتفك ولا يطلب أي إذن للوصول إلى شبكة الإنترنت.',
+      'كافة عمليات التحويل والضغط واستخراج الفيديو تجري محلياً عبر معالج الرسوميات ومحركات أندرويد الأصلية.',
+      'الحزمة موقعة رقمياً بشهادة Zeidexsoft الرسمية لضمان الأمان والنزاهة.',
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'features',
+    text: 'الميزات الأساسية والقدرات',
+  },
+  {
+    type: 'p',
+    text: 'تطبيق **Zeidex Convert** هو الحل الشامل والمجاني لأجهزة أندرويد لمعالجة كافة أنواع الملفات والوسائط محلياً بسرعة وأمان تام، مبني بأحدث تقنيات Jetpack Compose و Kotlin الحديثة.',
+  },
+  {
+    type: 'ul',
+    items: [
+      '**تحويل متعدد الصيغ**: تحويل الصور (JPG, PNG, WEBP, BMP, PDF, ICO)، استخراج الصوت من الفيديو (MP3, M4A, AAC, WAV)، فك وضغط الأرشيفات (ZIP, TAR, GZ)، وتحويل المستندات.',
+      '**إصلاح ودعم استخراج فيديو الصور الحية**: استخراج مقاطع الفيديو المدمجة في صور Motion Photo وصور Apple Live Photo وحفظها كملفات MP4 نقية.',
+      '**أداة تحسين الجودة (Media Booster)**: تكبير الفيديوهات إلى دقة 1080p FHD، مضاعفة معدل البت، وتوضيح تفاصيل الصور بمصفوفات حِدة متطورة.',
+      '**إشعارات الحفظ الفورية**: إشعار نظام أندرويد يظهر فور اكتمال العملية مع مسار التخزين الكامل وخيارات التشغيل والمشاركة الفورية.',
+      '**العمل بالخلفية والاستئناف**: خدمة أمامية نشطة لمعالجة الملفات الكبيرة في الخلفية مع إمكانية إيقاف واستئناف المهام في أي وقت.',
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'live-photos',
+    text: 'استخراج فيديو الصور الحية (Motion & Live Photos)',
+  },
+  {
+    type: 'p',
+    text: 'حل متكامل يدعم 6 خوارزميات ثنائية ذكية لاستخراج الفيديو عالي الدقة من الصور الحية بمختلف أنواعها دون الحاجة لأي خادم سحابي:',
+  },
+  {
+    type: 'ul',
+    items: [
+      '**Samsung Galaxy**: قراءة مقطورة البيانات الثنائية المخصصة `MotionPhoto_Data` بدقة البايت.',
+      '**Google Pixel وهواتف أندرويد الحديثة**: مسح بيانات XMP APP1 الوصفية واستخراج `MicroVideoOffset` و `Item:Length`.',
+      '**Apple Live Photos**: دعم حزم `.livp` وأرشيفات ZIP وملفات MOV المزدوجة.',
+      '**ماسح ثنائي شامل (Universal Reverse Scan)**: البحث عن صناديق الفيديو (`ftyp`, `moov`, `mdat`, `wide`) للأجهزة التي لا تلتزم بالمعايير القياسية.',
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'screens',
+    text: 'صور وواجهات التطبيق',
+  },
+  {
+    type: 'image',
+    src: '/img/zeidex-convert-android-1.webp',
+    fallback: '/img/zeidex-convert-android-1.jpg',
+    alt: 'شاشة التحويل واختيار الصيغ وإدارة المهام في تطبيق Zeidex Convert للأندرويد',
+    caption: 'الشاشة الرئيسية: بطاقات تحويل تفاعلية مع إمكانية اختيار الصيغ والتحكم بجودة الضغط.',
+  },
+  {
+    type: 'image',
+    src: '/img/zeidex-convert-android-2.webp',
+    fallback: '/img/zeidex-convert-android-2.jpg',
+    alt: 'شاشة الأدوات: استخراج فيديو الصور الحية وأداة تحسين الجودة وتوليد QR ودمج PDF',
+    caption: 'لوحة الأدوات الذكية: استخراج فوري لفيديو الصورة الحية وأداة تحسين الجودة الفائقة.',
+  },
+  {
+    type: 'image',
+    src: '/img/zeidex-convert-android-3.webp',
+    fallback: '/img/zeidex-convert-android-3.jpg',
+    alt: 'شاشة الإعدادات: التحقق من التوقيع الرقمي، التحديثات، والتخزين التلقائي المنظم',
+    caption: 'الإعدادات المتقدمة: التحقق المشفر من توقيع الحزم والتخزين التلقائي المنظم.',
+  },
+  {
+    type: 'h2',
+    id: 'enhancer',
+    text: 'أداة تحسين جودة الفيديو والصور',
+  },
+  {
+    type: 'p',
+    text: 'تتضمن علامة تبويب الأدوات قسماً متخصصاً لرفع جودة الوسائط باستخدام المعالجة الأصلية:',
+  },
+  {
+    type: 'table',
+    head: ['الميزة', 'النوع', 'الوصف'],
+    rows: [
+      ['1080p FHD Upscale', 'فيديو', 'تكبير أبعاد الفيديو إلى دقة 1080p كاملة وتحديث معدل الإطارات عبر تسريع العتاد.'],
+      ['Bitrate Boost', 'فيديو', 'رفع معدل البت حتى 10 Mbps وتنقية تدفق الفيديو من التشويش الرقمي.'],
+      ['Audio Boost', 'صوت وفيديو', 'مضاعفة نقاء مسار الصوت حتى 256 kbps وضبط توازن مستوى الصوت.'],
+      ['Laplacian Sharpening', 'صور', 'مصفوفة 3x3 متطورة لتقوية وتوضيح تفاصيل الحواف والخطوط الدقيقة.'],
+      ['Auto-Contrast & Vibrance', 'صور', 'موازنة ألوان وتباين الصورة وتوسيع المدى الديناميكي تلقائياً.'],
+      ['2X Super-Resolution', 'صور', 'مضاعفة أبعاد الصورة الأصلية مرتين بفلترة ثنائية التكعيب تحافظ على النعومة.'],
+      ['تصدير BMP النقطي', 'صور', 'حفظ صور عالية الدقة بصيغة Windows Bitmap 24-bit غير المضغوطة.'],
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'storage',
+    text: 'الحفظ التلقائي المنظم في ذاكرة الهاتف',
+  },
+  {
+    type: 'p',
+    text: 'تُحفظ كافة الملفات الناتجة تلقائياً في ذاكرة الهاتف داخل مجلد التطبيق المخصص Download/ZeidexConvert/ مع مجلدات فرعية منظمة (Images, Videos, Audio, PDF, Documents, Archives, LivePhotos, QR) مع الفهرسة الفورية في معارض الصور ومشغلات الفيديو.',
+  },
+  {
+    type: 'h2',
+    id: 'security',
+    text: 'الأمان والخصوصية المطلقة 100% محلي',
+  },
+  {
+    type: 'checklist',
+    items: [
+      'بدون إذن إنترنت (INTERNET Permission غير موجود في مانيفست التطبيق نهائياً)',
+      'محلي 100% ولا يتم رفع أي ملف إلى أي سيرفر أو خدمة خارجية',
+      'حماية ضد ZipSlip عند فك ضغط الأرشيفات لمنع استبدال ملفات النظام',
+      'توقيع رقمي رسمي ومحمي بشهادة Zeidexsoft الأصلية (SHA-256)',
+      'كاشف تلقائي للتحديثات يتحقق من مطابقة التوقيع وبصمة الشهادة قبل أي تحديث',
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'get',
+    text: 'روابط التحميل المباشرة',
+  },
+  {
+    type: 'download',
+    href: 'https://www.mediafire.com/file/vikc6vaxcd64vyd/zeidex-convert-v1.2.0.apk/file',
+    label: 'تحميل مباشر من MediaFire',
+    meta: 'zeidex-convert-v1.2.0.apk · 10.8 MB · أحدث إصدار v1.2.0',
+    also: [
+      {
+        href: 'https://github.com/zeiad6/zeidex-convert-android/releases/download/v1.2.0/zeidex-convert-v1.2.0.apk',
+        label: 'تنزيل الحزمة الرسمية الموقعة من GitHub',
+        meta: 'نفس الملف · 10.8 MB · GitHub Releases',
+      },
+      {
+        href: 'https://github.com/zeiad6/zeidex-convert-android',
+        label: 'مستودع الكود المصدري على GitHub',
+        meta: 'Open Source · Jetpack Compose · Kotlin',
+      },
+    ],
+  },
+]
+
 const edmsAndroid: Block[] = [
   {
     type: 'p',
@@ -528,6 +693,8 @@ const archive106: Block[] = [
 ]
 
 export const postBodies: Record<string, Block[]> = {
+  "zeidex-convert-android": zeidexConvertAndroidBody,
+
   "archive-1-0-6": archive106,
 
   "ai-fake-detector-android": aiFakeBody,

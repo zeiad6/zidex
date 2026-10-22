@@ -94,6 +94,21 @@ type RawPost = PostMeta
 
 const raw: RawPost[] = [
   {
+    slug: 'zeidex-convert-android',
+    title: 'Zeidex Convert للأندرويد: محوّل ملفات محلي شامل، استخراج الصور الحية، وتحسين جودة الوسائط',
+    excerpt:
+      'تطبيق أندرويد مستقل يعمل 100% دون إنترنت: استخراج فيديو الصور الحية (Pixel و Samsung و Apple Live Photo) إلى MP4، تحسين دقة وجودة الفيديو والصور، ضغط الملفات وحفظها تلقائياً في ذاكرة الهاتف.',
+    category: 'تقنية',
+    date: '2026-10-22',
+    featured: true,
+    cover: 'spark',
+    coverFrom: 'from-amber-500',
+    coverTo: 'to-orange-700',
+    tags: ['أندرويد', 'تحويل ملفات', 'صور حية', 'Motion Photo', 'MP4', 'تحسين الجودة', 'أوفلاين'],
+    readMinutes: 3,
+    headings: [{"id":"features","text":"الميزات الأساسية والقدرات","level":2},{"id":"live-photos","text":"استخراج فيديو الصور الحية (Motion & Live Photos)","level":2},{"id":"screens","text":"صور وواجهات التطبيق","level":2},{"id":"enhancer","text":"أداة تحسين جودة الفيديو والصور","level":2},{"id":"storage","text":"الحفظ التلقائي المنظم في ذاكرة الهاتف","level":2},{"id":"security","text":"الأمان والخصوصية المطلقة 100% محلي","level":2},{"id":"get","text":"روابط التحميل المباشرة","level":2}],
+  },
+  {
     slug: 'cloudcli-setup-guide',
     title: 'الدليل الشامل: تثبيت CloudCLI وربط OpenCode و Codex و Claude Code به',
     excerpt:
@@ -106,7 +121,7 @@ const raw: RawPost[] = [
     coverTo: 'to-veil-600',
     tags: ['CloudCLI', 'Claude Code', 'Codex', 'OpenCode', 'MCP'],
     readMinutes: 13,
-    headings: [{"id": "roadmap", "text": "خارطة الطريق: ما الذي بنيناه؟", "level": 2}, {"id": "install", "text": "الجزء الأول: تثبيت CloudCLI", "level": 2}, {"id": "what-is-cloudcli", "text": "ما هو CloudCLI؟", "level": 3}, {"id": "install-steps", "text": "خطوات التثبيت", "level": 3}, {"id": "run", "text": "التشغيل", "level": 3}, {"id": "connect", "text": "الجزء الثاني: ربط الوكلاء الثلاثة", "level": 2}, {"id": "connect-claude", "text": "الربط الأول: Claude Code — يقوده CloudCLI مباشرة", "level": 3}, {"id": "connect-codex", "text": "الربط الثاني: Codex — يستهلك browser-use من CloudCLI عبر MCP", "level": 3}, {"id": "connect-opencode", "text": "الربط الثالث: OpenCode — OpenRouter للموديلات + browser-use من CloudCLI", "level": 3}, {"id": "compare", "text": "جدول المقارنة السريع", "level": 3}, {"id": "skills", "text": "الجزء الثالث: المهارات (Skills)", "level": 2}, {"id": "what-is-skill", "text": "ما هي المهارة؟", "level": 3}, {"id": "key-skills", "text": "أهم المهارات المستخدمة هنا", "level": 3}, {"id": "add-skill", "text": "كيف تضيف مهارة جديدة؟", "level": 3}, {"id": "agents", "text": "الجزء الرابع: الوكلاء (Agents)", "level": 2}, {"id": "skill-vs-agent", "text": "الفرق بين المهارة والوكيل", "level": 3}, {"id": "agents-inventory", "text": "ما لدينا فعلياً", "level": 3}, {"id": "add-agent", "text": "كيف تضيف وكيلاً؟", "level": 3}, {"id": "mcp", "text": "الجزء الخامس: سيرفرات MCP", "level": 2}, {"id": "what-is-mcp", "text": "ما هو MCP؟", "level": 3}, {"id": "mcp-inventory", "text": "سيرفرات MCP المستخدمة هنا", "level": 3}, {"id": "add-mcp", "text": "كيف تضيف سيرفر MCP؟", "level": 3}, {"id": "plugins", "text": "الجزء السادس: الإضافات والبلجنز والأوامر", "level": 2}, {"id": "claude-plugins", "text": "إضافات Claude Code (Marketplaces)", "level": 3}, {"id": "opencode-plugins", "text": "بلجنز OpenCode العالمية", "level": 3}, {"id": "opencode-commands", "text": "أوامر OpenCode الجاهزة (21 أمراً)", "level": 3}, {"id": "ops", "text": "الجزء السابع: نصائح تشغيلية من أرض الواقع", "level": 2}, {"id": "proot-socket", "text": "مشكلة cross-session messaging في PRoot", "level": 3}, {"id": "openrouter-402", "text": "مشكلة تحويل Claude Code إلى OpenRouter", "level": 3}, {"id": "keys", "text": "إدارة المفاتيح بأمان", "level": 3}, {"id": "maintenance", "text": "عادات الصيانة", "level": 3}, {"id": "checklist", "text": "قائمة تحقق نهائية", "level": 2}],
+    headings: [{"id":"roadmap","text":"خارطة الطريق: ما الذي بنيناه؟","level":2},{"id":"install","text":"الجزء الأول: تثبيت CloudCLI","level":2},{"id":"what-is-cloudcli","text":"ما هو CloudCLI؟","level":3},{"id":"install-steps","text":"خطوات التثبيت","level":3},{"id":"run","text":"التشغيل","level":3},{"id":"connect","text":"الجزء الثاني: ربط الوكلاء الثلاثة","level":2},{"id":"connect-claude","text":"الربط الأول: Claude Code — يقوده CloudCLI مباشرة","level":3},{"id":"connect-codex","text":"الربط الثاني: Codex — يستهلك browser-use من CloudCLI عبر MCP","level":3},{"id":"connect-opencode","text":"الربط الثالث: OpenCode — OpenRouter للموديلات + browser-use من CloudCLI","level":3},{"id":"compare","text":"جدول المقارنة السريع","level":3},{"id":"skills","text":"الجزء الثالث: المهارات (Skills)","level":2},{"id":"what-is-skill","text":"ما هي المهارة؟","level":3},{"id":"key-skills","text":"أهم المهارات المستخدمة هنا","level":3},{"id":"add-skill","text":"كيف تضيف مهارة جديدة؟","level":3},{"id":"agents","text":"الجزء الرابع: الوكلاء (Agents)","level":2},{"id":"skill-vs-agent","text":"الفرق بين المهارة والوكيل","level":3},{"id":"agents-inventory","text":"ما لدينا فعلياً","level":3},{"id":"add-agent","text":"كيف تضيف وكيلاً؟","level":3},{"id":"mcp","text":"الجزء الخامس: سيرفرات MCP","level":2},{"id":"what-is-mcp","text":"ما هو MCP؟","level":3},{"id":"mcp-inventory","text":"سيرفرات MCP المستخدمة هنا","level":3},{"id":"add-mcp","text":"كيف تضيف سيرفر MCP؟","level":3},{"id":"plugins","text":"الجزء السادس: الإضافات والبلجنز والأوامر","level":2},{"id":"claude-plugins","text":"إضافات Claude Code (Marketplaces)","level":3},{"id":"opencode-plugins","text":"بلجنز OpenCode العالمية","level":3},{"id":"opencode-commands","text":"أوامر OpenCode الجاهزة (21 أمراً)","level":3},{"id":"ops","text":"الجزء السابع: نصائح تشغيلية من أرض الواقع","level":2},{"id":"proot-socket","text":"مشكلة cross-session messaging في PRoot","level":3},{"id":"openrouter-402","text":"مشكلة تحويل Claude Code إلى OpenRouter","level":3},{"id":"keys","text":"إدارة المفاتيح بأمان","level":3},{"id":"maintenance","text":"عادات الصيانة","level":3},{"id":"checklist","text":"قائمة تحقق نهائية","level":2}],
   },
 
   {
