@@ -41,60 +41,6 @@ export const programReleases: Record<string, ProgramReleaseInfo> = {
       }
     ],
     "syncedAt": "2026-10-22"
-  },
-  "zeidex-convert-android": {
-    "baseline": 3,
-    "versions": [
-      {
-        "version": "1.1.0",
-        "date": "2026-10-22",
-        "files": [
-          {
-            "name": "SHA256SUMS.txt",
-            "href": "https://github.com/zeiad6/zeidex-convert-android/releases/download/v1.1.0/SHA256SUMS.txt",
-            "size": "184 B",
-            "downloads": 0
-          },
-          {
-            "name": "zeidex-convert-v1.1.0.aab",
-            "href": "https://github.com/zeiad6/zeidex-convert-android/releases/download/v1.1.0/zeidex-convert-v1.1.0.aab",
-            "size": "10.4 MB",
-            "downloads": 0
-          },
-          {
-            "name": "zeidex-convert-v1.1.0.apk",
-            "href": "https://github.com/zeiad6/zeidex-convert-android/releases/download/v1.1.0/zeidex-convert-v1.1.0.apk",
-            "size": "10.8 MB",
-            "downloads": 1
-          }
-        ]
-      },
-      {
-        "version": "1.0.0",
-        "date": "2026-10-22",
-        "files": [
-          {
-            "name": "SHA256SUMS.txt",
-            "href": "https://github.com/zeiad6/zeidex-convert-android/releases/download/v1.0.0/SHA256SUMS.txt",
-            "size": "184 B",
-            "downloads": 0
-          },
-          {
-            "name": "zeidex-convert-v1.0.0.aab",
-            "href": "https://github.com/zeiad6/zeidex-convert-android/releases/download/v1.0.0/zeidex-convert-v1.0.0.aab",
-            "size": "10.4 MB",
-            "downloads": 0
-          },
-          {
-            "name": "zeidex-convert-v1.0.0.apk",
-            "href": "https://github.com/zeiad6/zeidex-convert-android/releases/download/v1.0.0/zeidex-convert-v1.0.0.apk",
-            "size": "10.7 MB",
-            "downloads": 1
-          }
-        ]
-      }
-    ],
-    "syncedAt": "2026-10-22"
   }
 }
 

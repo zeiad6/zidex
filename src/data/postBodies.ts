@@ -290,13 +290,6 @@ const zeidexConvertAndroidBody: Block[] = [
     href: 'https://www.mediafire.com/file/vikc6vaxcd64vyd/zeidex-convert-v1.2.0.apk/file',
     label: 'تحميل Zeidex Convert v1.2.0 — APK (MediaFire)',
     meta: 'zeidex-convert-v1.2.0.apk · Android 8.0+ · 10.8 MB · MediaFire',
-    also: [
-      {
-        href: 'https://github.com/zeiad6/zeidex-convert-android/releases/download/v1.2.0/zeidex-convert-v1.2.0.apk',
-        label: 'رابط بديل من GitHub Releases (موقع رسمياً)',
-        meta: 'نفس الحزمة الموقعة · 10.8 MB · GitHub',
-      },
-    ],
   },
   {
     type: 'callout',
@@ -427,18 +420,6 @@ const zeidexConvertAndroidBody: Block[] = [
     href: 'https://www.mediafire.com/file/vikc6vaxcd64vyd/zeidex-convert-v1.2.0.apk/file',
     label: 'تحميل مباشر من MediaFire',
     meta: 'zeidex-convert-v1.2.0.apk · 10.8 MB · أحدث إصدار v1.2.0',
-    also: [
-      {
-        href: 'https://github.com/zeiad6/zeidex-convert-android/releases/download/v1.2.0/zeidex-convert-v1.2.0.apk',
-        label: 'تنزيل الحزمة الرسمية الموقعة من GitHub',
-        meta: 'نفس الملف · 10.8 MB · GitHub Releases',
-      },
-      {
-        href: 'https://github.com/zeiad6/zeidex-convert-android',
-        label: 'مستودع الكود المصدري على GitHub',
-        meta: 'Open Source · Jetpack Compose · Kotlin',
-      },
-    ],
   },
 ]
 

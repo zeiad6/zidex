@@ -31,7 +31,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
  */
 const SOURCES = {
   'edms-archive-pro': { repo: 'zeiad6/Edms-archive', current: '1.0.6' },
-  'zeidex-convert-android': { repo: 'zeiad6/zeidex-convert-android', current: '1.2.0' },
+  // 'zeidex-convert-android': { repo: 'zeiad6/zeidex-convert-android', current: '1.2.0' },
   // 'edms-archive-android': { repo: 'zeiad6/Edms-archive-Android', current: '1.0.1' },
   // verityscope: { repo: 'zeiad6/VerityScope', current: '0.4.0' },
 }
