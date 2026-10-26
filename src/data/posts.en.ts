@@ -60,9 +60,9 @@ export const postsEn: Record<string, PostText> = {
   'ai-fake-detector-android': {
     title: 'VerityScope v0.4.0 — AI Deepfake Detector for Android',
     excerpt:
-      'An Android app that detects deepfakes in images, video, text and audio using 5 on-device AI models + digital forensic algorithms (ELA, FFT, noise, spectral) — v0.4.0 adds image forensics engine, 8 audio signals, and 13 text signals.',
+      'An Android app that detects deepfakes in images, video and text on the device with 5 AI models, log-odds fusion and a source-metadata pass — v0.4.0 adds Smart Scan, offline mode, a forensic PDF report, and one APK for every device.',
     tags: ['Android', 'Kotlin', 'ONNX', 'Deepfake', 'AI', 'Forensics'],
-    headings: [{"id":"how-it-works","text":"How it works","level":2},{"id":"models","text":"Available models","level":2},{"id":"metadata","text":"Source-metadata forensics","level":2},{"id":"screens","text":"The interface","level":2},{"id":"limits","text":"Limits you should know","level":2}],
+    headings: [{"id":"whats-new","text":"What is new in v0.4.0","level":2},{"id":"how-it-works","text":"How it works","level":2},{"id":"text-detection","text":"AI-text detection","level":2},{"id":"models","text":"Available models","level":2},{"id":"metadata","text":"Source-metadata forensics","level":2},{"id":"screens","text":"The interface","level":2},{"id":"download","text":"Download","level":2},{"id":"limits","text":"Limits you should know","level":2}],
   },
   'docker-on-android-termux': {
     title: 'Running Docker on Android with Termux — a practical guide',

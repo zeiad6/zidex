@@ -204,7 +204,7 @@ const raw: RawPost[] = [
     slug: 'ai-fake-detector-android',
     title: 'VerityScope v0.4.0 — كاشف التزييف العميق بالذكاء الاصطناعي',
     excerpt:
-      'تطبيق أندرويد يكشف التزييف العميق في الصور والفيديو والنصوص والصوت بـ 5 نماذج AI محلية + محرك طب شرعي رقمي (ELA, FFT, noise, spectral) — v0.4.0 يضيف محرك forensics للصور و 8 إشارات صوتية و 13 إشارة نصية.',
+      'تطبيق أندرويد يكشف التزييف العميق في الصور والفيديو والنصوص محلياً بـ 5 نماذج AI ودمج log-odds وفحص بيانات المصدر — v0.4.0 يضيف الفحص الذكي، ووضع عدم الاتصال، وتقرير PDF جنائياً، وحزمة APK واحدة لكل الأجهزة.',
     category: 'تقنية',
     date: '2026-10-02',
     cover: 'shield',
@@ -212,7 +212,7 @@ const raw: RawPost[] = [
     coverTo: 'to-ink-900',
     tags: ['Android', 'Kotlin', 'ONNX', 'Deepfake', 'AI', 'Forensics'],
     readMinutes: 4,
-    headings: [{"id":"whats-new","text":"ما الجديد في v0.4.0","level":2},{"id":"how-it-works","text":"كيف يعمل","level":2},{"id":"image-forensics","text":"محرك الطب الشرعي للصور","level":2},{"id":"audio-detection","text":"كشف التزييف الصوتي","level":2},{"id":"text-detection","text":"كشف النصوص المولّدة","level":2},{"id":"models","text":"النماذج المتاحة","level":2},{"id":"metadata","text":"فحص بيانات المصدر","level":2},{"id":"screens","text":"من الواجهة","level":2},{"id":"download","text":"التحميل","level":2},{"id":"limits","text":"حدود يجب أن تعرفها","level":2}],
+    headings: [{"id":"whats-new","text":"ما الجديد في v0.4.0","level":2},{"id":"how-it-works","text":"كيف يعمل","level":2},{"id":"text-detection","text":"كشف النصوص المولّدة","level":2},{"id":"models","text":"النماذج المتاحة","level":2},{"id":"metadata","text":"فحص بيانات المصدر","level":2},{"id":"screens","text":"من الواجهة","level":2},{"id":"download","text":"التحميل","level":2},{"id":"limits","text":"حدود يجب أن تعرفها","level":2}],
   },
 
   {

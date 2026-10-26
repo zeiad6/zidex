@@ -221,9 +221,9 @@ export const programs: Program[] = [
     name: 'VerityScope — كاشف التزييف العميق',
     nameEn: 'VerityScope — AI Deepfake Detector',
     tagline:
-      'تطبيق أندرويد يكشف التزييف العميق في الصور والفيديو والنصوص والصوت بـ 5 نماذج ذكاء اصطناعي محلية + خوارزميات طب شرعي رقمي (ELA, FFT, noise) — كل شيء على الجهاز، بياناتك لا تغادر. حزمة واحدة شاملة تعمل على كل الأجهزة (arm64-v8a, armeabi-v7a, x86, x86_64).',
+      'تطبيق أندرويد يكشف التزييف العميق في الصور والفيديو والنصوص بـ 5 نماذج ذكاء اصطناعي محلية + فحص بيانات المصدر (C2PA, EXIF) — كل شيء على الجهاز، بياناتك لا تغادر. حزمة واحدة شاملة تعمل على كل الأجهزة (arm64-v8a, armeabi-v7a, x86, x86_64).',
     taglineEn:
-      'Android app that detects deepfakes in images, video, text and audio using 5 on-device AI models + digital forensic algorithms (ELA, FFT, noise) — everything runs locally, your data never leaves. One universal APK for every device (arm64-v8a, armeabi-v7a, x86, x86_64).',
+      'Android app that detects deepfakes in images, video and text using 5 on-device AI models + source-metadata forensics (C2PA, EXIF) — everything runs locally, your data never leaves. One universal APK for every device (arm64-v8a, armeabi-v7a, x86, x86_64).',
     version: '0.4.0',
     platform: 'Android 8.0+',
     kind: 'android',

@@ -18,20 +18,13 @@ const edmsDownload: Block = {
 const aiFakeEn: Block[] = [
   {
     type: 'p',
-    text: 'An Android app that checks images, videos, video links and text **entirely on the device**, with no file ever uploaded. Written in Kotlin and Jetpack Compose on top of `onnxruntime-android`, so the deepfake detectors run locally.',
+    text: '**VerityScope** is an Android app that checks **images, videos and text** for deepfakes **entirely on the device**, with no file ever uploaded. Written in Kotlin and Jetpack Compose on top of `onnxruntime-android`, it combines 5 ViT models with a source-metadata pass into one verdict that carries its evidence.',
   },
   {
     type: 'download',
-    href: 'https://www.mediafire.com/file/medmpqfun7h00e3/AiFake-v0.1.0-release-new.apk/file',
-    label: 'Download AiFake v0.1.0 — APK',
-    meta: 'AiFake-v0.1.0-release-new.apk · Android 8.0+ · MediaFire',
-    also: [
-      {
-        href: 'https://drive.google.com/uc?export=download&id=1zhU55QMifujaTSbzXLHtuwZpzDFzH9hD',
-        label: 'Mirror on Google Drive',
-        meta: 'same file · Google Drive',
-      },
-    ],
+    href: 'https://www.mediafire.com/file/38z57gqtgndpioy/VerityScope-v0.4.0-universal.apk/file',
+    label: 'Download VerityScope v0.4.0 — APK',
+    meta: 'VerityScope-v0.4.0-universal.apk · 240.1 MB · Android 8.0+ · every CPU · MediaFire',
   },
   {
     type: 'callout',
@@ -39,8 +32,38 @@ const aiFakeEn: Block[] = [
     title: 'Before you install',
     items: [
       'You have to allow installation from **unknown sources**.',
-      'The file is large — the base model ships inside the package.',
-      'The signing fingerprint has changed since earlier builds. An existing install signed with the old key needs `uninstall` first, or the system refuses the upgrade.',
+      'The file is 240.1 MB — one universal package for every CPU (arm64-v8a, armeabi-v7a, x86, x86_64), with the base model inside.',
+      'If Android says the package "appears to be invalid", the download is incomplete: download it again and check the SHA-256 is `4053c21f1f24ff759218f4bc5ac391d4536ea67b5a579736ff059871a7c32ba7`.',
+      'An earlier v0.4.0 install updates in place (same package, same signing key). Older builds signed with the previous key need `uninstall` first.',
+    ],
+  },
+
+  {
+    type: 'h2',
+    id: 'whats-new',
+    text: 'What is new in v0.4.0',
+  },
+  {
+    type: 'stats',
+    items: [
+      { value: '5', label: 'on-device AI models' },
+      { value: '3', label: 'models at most in Smart Scan' },
+      { value: '10', label: 'free scans per day' },
+      { value: '4', label: 'CPU architectures, one APK' },
+    ],
+  },
+  {
+    type: 'ul',
+    items: [
+      '**Smart Scan** — picks the strongest verified model on your phone and adds partners by device tier (1, 2 or 3 models), then fuses their readings.',
+      '**Offline mode** — a local scan only starts with a model whose SHA-256 matched, with optional preloading over unmetered Wi-Fi. With no local model you get a clear message instead of a silent failure.',
+      '**Memory guard** — a device-capability probe in Settings warns before you pick a model heavier than the phone can hold.',
+      '**Forensic PDF report** — every model reading plus the metadata findings in one report, saved to Downloads or shared directly.',
+      '**Home-screen widget + share target** — one-tap scanning from the widget, and images, videos and text received from any app through Share (one file or several).',
+      '**Language switch** — Arabic/English from inside the app.',
+      '**One universal APK** — runs on every CPU instead of a separate file per architecture.',
+      '**Scan quota** — 10 free scans per day, reset at midnight; unlimited for premium accounts.',
+      '**Safe history upgrades** — scan history migrates on upgrade, and going back to an older build no longer crashes (the history is recreated empty).',
     ],
   },
 
@@ -51,19 +74,41 @@ const aiFakeEn: Block[] = [
   },
   {
     type: 'p',
-    text: 'The base is a ViT model quantised to INT8 and bundled inside the app at 23 MB, running on a `1×3×384×384` input. On top of that sits **multi-model fusion**: every scan combines the selected model with the other verified models through an equally weighted log-odds average.',
+    text: 'Every image or video frame runs through ViT models on ONNX Runtime, and the readings are combined with **log-odds fusion**: each model adds its evidence in log space instead of a plain probability average that one overconfident model can drag off course. The source-metadata pass is applied on top.',
   },
   {
     type: 'ul',
     items: [
-      '**Cap by device tier:** LOW=1 model, MID=2, HIGH=3.',
-      'Models run sequentially in a single in-memory session — the cost is **time, not memory**.',
-      'The ensemble never downloads a model on its own.',
+      '**Images:** the selected model — or up to 3 models in Smart Scan — plus source metadata.',
+      '**Video:** frame sampling with peak-aware blending: frames above 80% pull the score up, so a short faked moment does not vanish into the average.',
+      '**Text:** 7 stylistic signals, in Arabic and English.',
+      '**Cloud (optional):** Sightengine, Hive, Reality Defender and Sensity with your own key, combined with the local result.',
+      'Every result carries **evidence**: each model\'s own reading, whether they agree, and the risk level.',
     ],
+  },
+
+  {
+    type: 'h2',
+    id: 'text-detection',
+    text: 'AI-text detection',
   },
   {
     type: 'p',
-    text: 'What separates it from a percentage generator is that every result carries **evidence**: each model\'s individual reading and whether they agree, a per-frame AI probability that catches partial edits, how many faces were examined, and a source-metadata pass.',
+    text: 'A statistical, stylistic check with no language model. It needs at least 40 words and combines 7 signals:',
+  },
+  {
+    type: 'table',
+    caption: 'Text signals and the weight of each in the score.',
+    head: ['Signal', 'Weight'],
+    rows: [
+      ['Sentence-length variation (burstiness)', '28%'],
+      ['Vocabulary variety (type-token ratio)', '20%'],
+      ['Known AI phrases (39, of them 10 Arabic)', '18%'],
+      ['Sentence-opener variety', '10%'],
+      ['Paragraph-length uniformity', '10%'],
+      ['Repeated trigrams', '8%'],
+      ['Em-dash density (—)', '6%'],
+    ],
   },
 
   {
@@ -73,14 +118,14 @@ const aiFakeEn: Block[] = [
   },
   {
     type: 'table',
-    caption: 'What ships inside the package, and what downloads on demand.',
-    head: ['Model', 'Size', 'Status'],
+    caption: 'The first model ships inside the package; the rest download on demand, and every file is checked against its SHA-256 before use.',
+    head: ['Model', 'Size', 'Best for'],
     rows: [
-      ['DeepfakeDet-ViT INT8', '23 MB', 'Bundled · default'],
-      ['CommunityForensics 2026', '44 MB', 'Trained on 2025–2026 generators · first in the ensemble'],
-      ['Deepfake ViT-base/16', '84 MB', 'Strongest'],
-      ['Deep-Fake Detector v2', '87 MB', 'Experimental'],
-      ['AI vs Deepfake vs Real', '87 MB', 'Separates deepfake from AI'],
+      ['CommunityForensics ViT INT8', '23 MB', 'Bundled · default · common AI images'],
+      ['Frontier 2026 FP16', '44 MB', '2025–2026 generators (FLUX, GPT Image, Imagen 4)'],
+      ['Real vs Fake ViT', '87 MB', 'Strong general detector · ensemble partner'],
+      ['3-Class ViT', '87 MB', 'Separates deepfake from AI-generated'],
+      ['Deep-Fake Detector v2', '87 MB', 'Independent experimental architecture'],
     ],
   },
 
@@ -91,7 +136,7 @@ const aiFakeEn: Block[] = [
   },
   {
     type: 'p',
-    text: 'The app reads the fingerprint a generator leaves in the file itself: C2PA, IPTC `trainedAlgorithmicMedia`, Stable Diffusion / ComfyUI / InvokeAI parameters in PNG, generator names, and camera EXIF.',
+    text: 'The app reads the fingerprint a generator leaves in the file itself: C2PA Content Credentials, IPTC `trainedAlgorithmicMedia`, Stable Diffusion / ComfyUI / InvokeAI parameters, the names of about 30 generators (FLUX, Midjourney, DALL·E, Imagen, Seedream, Kling, Sora, Veo…), and camera EXIF.',
   },
   {
     type: 'callout',
@@ -99,7 +144,7 @@ const aiFakeEn: Block[] = [
     title: 'How it affects the verdict',
     items: [
       'An explicit generator marker pushes the AI probability to **at least 95%**.',
-      'Missing data, or a clean camera, changes **nothing** — both are trivial to strip or forge.',
+      'A camera in EXIF raises confidence in a "real" verdict by only 5%, capped at 92% — this data is trivial to strip or forge.',
     ],
   },
 
@@ -132,6 +177,18 @@ const aiFakeEn: Block[] = [
 
   {
     type: 'h2',
+    id: 'download',
+    text: 'Download',
+  },
+  {
+    type: 'download',
+    href: 'https://www.mediafire.com/file/38z57gqtgndpioy/VerityScope-v0.4.0-universal.apk/file',
+    label: 'Download from MediaFire',
+    meta: 'VerityScope-v0.4.0-universal.apk · 240.1 MB',
+  },
+
+  {
+    type: 'h2',
     id: 'limits',
     text: 'Limits you should know',
   },
@@ -139,10 +196,10 @@ const aiFakeEn: Block[] = [
     type: 'ul',
     items: [
       'Public detector accuracy **drops sharply** on recent deepfakes. The result is always probabilistic.',
-      'Text checking is stylistic, not a language model — deliberately the weakest mode.',
-      'The cloud provider APIs were written from public documentation and never tested with real keys.',
-      'The gap between FP32 and INT8 output can be real on generators outside the training distribution.',
-      'The mixed `int8/uint8` `ConvInteger` path depends on ORT 1.27.0 device kernels and needs an on-device smoke test.',
+      'Text checking is stylistic, not a language model, and capped at 75% confidence.',
+      'Audio files are not supported in this release.',
+      'Smart Scan needs downloaded, verified models; without them it runs on the bundled model alone.',
+      'Low-end phones use one model and fewer video frames — faster, but less accurate.',
     ],
   },
   {
