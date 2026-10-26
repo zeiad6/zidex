@@ -34,16 +34,9 @@ export const aiFakeBody: Block[] = [
   },
   {
     type: 'download',
-    href: 'https://www.mediafire.com/file/0taluz31zdblh8y/VerityScope-v0.4.0-release.apk/file',
+    href: 'https://www.mediafire.com/file/38z57gqtgndpioy/VerityScope-v0.4.0-universal.apk/file',
     label: 'تحميل VerityScope v0.4.0 — APK',
-    meta: 'VerityScope-v0.4.0-release.apk · 81 MB · أندرويد 8.0+ · MediaFire',
-    also: [
-      {
-        href: 'https://drive.google.com/file/d/1skhcwx208qWlxhQinNK7lU_XZuCjSC5_/view?usp=drivesdk',
-        label: 'نسخة بديلة على Google Drive',
-        meta: 'نفس الملف · Google Drive',
-      },
-    ],
+    meta: 'VerityScope-v0.4.0-universal.apk · 240.1 MB · أندرويد 8.0+ · كل المعالجات · MediaFire',
   },
   {
     type: 'callout',
@@ -51,7 +44,8 @@ export const aiFakeBody: Block[] = [
     title: 'قبل التثبيت',
     items: [
       'يتطلب السماح بالتثبيت من **مصادر غير معروفة**.',
-      'حجم الملف 81 MB — النماذج مضمّنة داخل الحزمة.',
+      'حجم الملف 240.1 MB — حزمة شاملة واحدة لكل المعالجات (arm64-v8a, armeabi-v7a, x86, x86_64)، والنماذج مضمّنة داخلها.',
+      'إن ظهرت رسالة «الحزمة تبدو غير صالحة» فالتنزيل لم يكتمل: أعد التحميل وتأكد أن بصمة SHA-256 هي `4053c21f1f24ff759218f4bc5ac391d4536ea67b5a579736ff059871a7c32ba7`.',
       'بصمة التوقيع تغيّرت عن النسخ السابقة؛ أي نسخة مثبّتة بالتوقيع القديم تحتاج `uninstall` أولاً.',
     ],
   },
@@ -240,16 +234,9 @@ export const aiFakeBody: Block[] = [
   },
   {
     type: 'download',
-    href: 'https://www.mediafire.com/file/0taluz31zdblh8y/VerityScope-v0.4.0-release.apk/file',
+    href: 'https://www.mediafire.com/file/38z57gqtgndpioy/VerityScope-v0.4.0-universal.apk/file',
     label: 'تحميل من MediaFire',
-    meta: 'VerityScope-v0.4.0-release.apk · 81 MB',
-    also: [
-      {
-        href: 'https://drive.google.com/file/d/1skhcwx208qWlxhQinNK7lU_XZuCjSC5_/view?usp=drivesdk',
-        label: 'تحميل من Google Drive',
-        meta: 'نفس الملف · نسخة احتياطية',
-      },
-    ],
+    meta: 'VerityScope-v0.4.0-universal.apk · 240.1 MB',
   },
 
   {

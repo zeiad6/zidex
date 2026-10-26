@@ -1099,7 +1099,7 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
         '📥 <i>اختر التطبيق للتحميل المباشر بصيغة APK:</i>'
       const rows = [
         [{ text: '📥 تحميل أرشيف برو EDMS (APK)', url: 'https://www.mediafire.com/file/inn8lf6tznv95nx/app-debug.apk/file' }],
-        [{ text: '📥 تحميل VerityScope (APK)', url: 'https://www.mediafire.com/file/0taluz31zdblh8y/VerityScope-v0.4.0-release.apk/file' }],
+        [{ text: '📥 تحميل VerityScope (APK)', url: 'https://www.mediafire.com/file/38z57gqtgndpioy/VerityScope-v0.4.0-universal.apk/file' }],
         [{ text: '🌐 صفحة البرامج على موقعنا', url: 'https://zeidexsoft.com/programs' }],
         [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
       ]
@@ -1674,7 +1674,7 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
       '📥 <i>اختر التطبيق للتحميل المباشر بصيغة APK:</i>'
     const rows = [
       [{ text: '📥 تحميل أرشيف برو EDMS (APK)', url: 'https://www.mediafire.com/file/inn8lf6tznv95nx/app-debug.apk/file' }],
-      [{ text: '📥 تحميل VerityScope (APK)', url: 'https://www.mediafire.com/file/0taluz31zdblh8y/VerityScope-v0.4.0-release.apk/file' }],
+      [{ text: '📥 تحميل VerityScope (APK)', url: 'https://www.mediafire.com/file/38z57gqtgndpioy/VerityScope-v0.4.0-universal.apk/file' }],
       [{ text: '🌐 صفحة البرامج على موقعنا', url: 'https://zeidexsoft.com/programs' }],
       [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
     ]

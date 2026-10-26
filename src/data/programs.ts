@@ -221,25 +221,18 @@ export const programs: Program[] = [
     name: 'VerityScope — كاشف التزييف العميق',
     nameEn: 'VerityScope — AI Deepfake Detector',
     tagline:
-      'تطبيق أندرويد يكشف التزييف العميق في الصور والفيديو والنصوص والصوت بـ 5 نماذج ذكاء اصطناعي محلية + خوارزميات طب شرعي رقمي (ELA, FFT, noise) — كل شيء على الجهاز، بياناتك لا تغادر.',
+      'تطبيق أندرويد يكشف التزييف العميق في الصور والفيديو والنصوص والصوت بـ 5 نماذج ذكاء اصطناعي محلية + خوارزميات طب شرعي رقمي (ELA, FFT, noise) — كل شيء على الجهاز، بياناتك لا تغادر. حزمة واحدة شاملة تعمل على كل الأجهزة (arm64-v8a, armeabi-v7a, x86, x86_64).',
     taglineEn:
-      'Android app that detects deepfakes in images, video, text and audio using 5 on-device AI models + digital forensic algorithms (ELA, FFT, noise) — everything runs locally, your data never leaves.',
+      'Android app that detects deepfakes in images, video, text and audio using 5 on-device AI models + digital forensic algorithms (ELA, FFT, noise) — everything runs locally, your data never leaves. One universal APK for every device (arm64-v8a, armeabi-v7a, x86, x86_64).',
     version: '0.4.0',
     platform: 'Android 8.0+',
     kind: 'android',
     downloads: [
       {
-        href: 'https://www.mediafire.com/file/0taluz31zdblh8y/VerityScope-v0.4.0-release.apk/file',
+        href: 'https://www.mediafire.com/file/38z57gqtgndpioy/VerityScope-v0.4.0-universal.apk/file',
         host: 'MediaFire',
-        file: 'VerityScope-v0.4.0-release.apk',
-        size: '80.4 MB',
-      },
-      {
-        href: 'https://drive.google.com/file/d/1skhcwx208qWlxhQinNK7lU_XZuCjSC5_/view?usp=drivesdk',
-        host: 'Google Drive',
-        file: 'VerityScope-v0.4.0-release.apk',
-        size: '80.4 MB',
-        note: 'نسخة احتياطية',
+        file: 'VerityScope-v0.4.0-universal.apk',
+        size: '240.1 MB',
       },
     ],
     post: 'ai-fake-detector-android',
