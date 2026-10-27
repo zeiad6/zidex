@@ -9,7 +9,12 @@ import { site } from '@/lib/site'
  * Same rhythm as FloatingWhatsApp — it arrives after the visitor has read for a few seconds
  * (not on paint), opens a one-line prompt once, and remembers a dismissal for the session.
  * It opens the store bot so visitors can browse products and pay with Stars in-app.
+ *
+ * The prompt shares FloatingWhatsApp's `floating-hint` key and fires later, so the two
+ * never stack: on a phone the pair covered a whole section of the page.
  */
+const HINT_KEY = 'floating-hint'
+
 export function FloatingTelegram() {
   const { t } = useI18n()
   const reduce = useReducedMotion() ?? false
@@ -20,11 +25,14 @@ export function FloatingTelegram() {
     const a = window.setTimeout(() => setShown(true), 2000)
     const b = window.setTimeout(() => {
       try {
-        if (!sessionStorage.getItem('tg-hint')) setHint(true)
+        if (!sessionStorage.getItem(HINT_KEY)) {
+          sessionStorage.setItem(HINT_KEY, '1')
+          setHint(true)
+        }
       } catch {
         setHint(true)
       }
-    }, 7500)
+    }, 12000)
     return () => {
       window.clearTimeout(a)
       window.clearTimeout(b)
@@ -34,7 +42,7 @@ export function FloatingTelegram() {
   const dismiss = () => {
     setHint(false)
     try {
-      sessionStorage.setItem('tg-hint', '1')
+      sessionStorage.setItem(HINT_KEY, '1')
     } catch {
       // private mode: the hint simply returns next visit
     }

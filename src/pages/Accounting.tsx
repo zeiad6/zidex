@@ -121,7 +121,7 @@ export default function Accounting() {
           <span aria-hidden="true" className="brand-gradient absolute inset-x-0 top-0 h-0.5 opacity-80" />
 
           <div className="relative flex flex-col gap-6 p-7 sm:p-10">
-            <span className="chip w-fit bg-accent-soft text-accent">
+            <span className="chip w-fit bg-accent-soft text-ghost-700 dark:text-ghost-300">
               <Calculator className="size-3.5" aria-hidden="true" />
               {t('خدمة مخصصة', 'Bespoke service')}
             </span>
@@ -144,44 +144,48 @@ export default function Accounting() {
                 'We build an accounting system that fits your business exactly: invoices and vouchers, inventory, reports, currencies and roles — no yearly subscription, no modules you will never open. On request, we link it to a Telegram bot that answers customer balances and takes orders.',
               )}
             </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" className="btn btn-primary h-11 px-6">
+            <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+              <a
+                href={site.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary h-11 w-full px-6 sm:w-auto"
+              >
                 <MessageCircle className="size-4" aria-hidden="true" />
                 {t('اطلب عرض سعر', 'Request a quote')}
               </a>
-              <a
-                href="https://zeidexlink.zeidexsoft.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-secondary h-11 px-6 border-accent/40 hover:border-accent"
-              >
-                <Link2 className="size-4 text-accent" aria-hidden="true" />
-                {t('بوابة ZeidexLink', 'ZeidexLink Portal')}
-              </a>
-              <Link to="/shop" className="btn btn-ghost h-11 px-6">
-                {t('تصفح المتجر', 'Browse the store')}
-              </Link>
-              <a
-                href="https://zeidex-mithqal.pages.dev/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-ghost h-11 px-6"
-              >
-                <ExternalLink className="size-4" aria-hidden="true" />
-                {t('جرّب النظام الحي', 'Try the live system')}
-              </a>
+              {/* The ZeidexLink portal has its own card directly below — repeating
+                  it here only pushed the two decisions below the fold on phones. */}
+              <div className="grid gap-2.5 sm:flex sm:items-center sm:gap-3">
+                <a
+                  href="https://zeidex-mithqal.pages.dev/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-ghost h-11 w-full px-4 sm:w-auto sm:px-6"
+                >
+                  <ExternalLink className="size-4" aria-hidden="true" />
+                  {t('جرّب النظام الحي', 'Try the live system')}
+                </a>
+                <Link to="/shop" className="btn btn-ghost h-11 w-full px-4 sm:w-auto sm:px-6">
+                  {t('تصفح المتجر', 'Browse the store')}
+                </Link>
+              </div>
             </div>
 
-            {/* Facts strip: honest, sourced, tabular. */}
-            <dl className="border-app grid grid-cols-3 gap-3 border-t pt-5">
+            {/* Facts strip: honest, sourced, tabular. Three columns from `sm` up;
+                on phones each fact gets a full row, because `truncate` in a 89px
+                column silently cut "Fully bespoke" and "Windows · Android". */}
+            <dl className="border-app grid gap-2.5 border-t pt-5 sm:grid-cols-3 sm:gap-3">
               {[
                 { k: t('نظام واحد لكل نشاط', 'One system per business'), v: t('مخصص بالكامل', 'Fully bespoke') },
                 { k: t('يعمل على', 'Runs on'), v: 'Windows · Android' },
                 { k: t('مرافقة بعد التسليم', 'Post-delivery'), v: t('شهر كامل', 'One month') },
               ].map((s) => (
                 <div key={s.k} className="min-w-0">
-                  <dt className="text-subtle text-[11px] font-medium">{s.k}</dt>
-                  <dd className="text-app mt-1 truncate text-sm font-black" dir="auto">{s.v}</dd>
+                  <dt className="text-muted text-[11px] font-medium">{s.k}</dt>
+                  <dd className="text-app mt-0.5 text-[13px] font-black sm:mt-1 sm:text-sm">
+                    <bdi>{s.v}</bdi>
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -202,7 +206,7 @@ export default function Accounting() {
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <h2 className="text-app text-lg font-black">ZeidexLink</h2>
-                  <span className="chip bg-accent-soft text-accent">{t('مجاني بالكامل', 'Free forever')}</span>
+                  <span className="chip bg-accent-soft text-ghost-700 dark:text-ghost-300">{t('مجاني بالكامل', 'Free forever')}</span>
                 </div>
                 <p className="text-muted mt-1 max-w-2xl text-[13.5px] leading-relaxed">
                   {t(
@@ -246,13 +250,15 @@ export default function Accounting() {
           {modules.map(({ icon: Icon, title, titleEn, body, bodyEn }, i) => (
             <Reveal key={titleEn} delay={Math.min(i * 0.05, 0.25)} className="h-full">
               <div className="bg-elevated shadow-app card-lift hover-ring group flex h-full flex-col gap-3 rounded-2xl border border-app p-5">
-                <span className="bg-accent-soft text-accent grid size-11 place-items-center rounded-2xl transition-transform duration-300 group-hover:scale-110">
-                  <Icon className="size-5" aria-hidden="true" />
-                </span>
-                <div>
+                {/* Icon and title share a row: stacked, the icon alone burned a
+                    full line on every card and added ~50% to the phone scroll. */}
+                <div className="flex items-center gap-3">
+                  <span className="bg-accent-soft text-accent grid size-11 shrink-0 place-items-center rounded-2xl transition-transform duration-300 group-hover:scale-110">
+                    <Icon className="size-5" aria-hidden="true" />
+                  </span>
                   <h3 className="text-app text-[15px] font-bold">{t(title, titleEn)}</h3>
-                  <p className="text-muted mt-1.5 text-[13px] leading-relaxed">{t(body, bodyEn)}</p>
                 </div>
+                <p className="text-muted text-[13px] leading-relaxed">{t(body, bodyEn)}</p>
               </div>
             </Reveal>
           ))}
@@ -271,14 +277,16 @@ export default function Accounting() {
           {steps.map(({ icon: Icon, title, titleEn, body, bodyEn }, i) => (
             <Reveal key={titleEn} delay={Math.min(i * 0.06, 0.2)} className="h-full">
               <div className="border-app bg-elevated shadow-app relative h-full rounded-2xl border p-5">
-                <span className="text-subtle absolute end-4 top-4 font-mono text-[11px] font-bold" aria-hidden="true">
+                <span className="text-muted absolute end-4 top-4 font-mono text-[11px] font-bold" aria-hidden="true">
                   {String(i + 1).padStart(2, '0')}
                 </span>
-                <span className="bg-accent-soft text-accent grid size-11 place-items-center rounded-2xl">
-                  <Icon className="size-5" aria-hidden="true" />
-                </span>
-                <h3 className="text-app mt-3 text-[15px] font-bold">{t(title, titleEn)}</h3>
-                <p className="text-muted mt-1.5 text-[13px] leading-relaxed">{t(body, bodyEn)}</p>
+                <div className="flex items-center gap-3 pe-8">
+                  <span className="bg-accent-soft text-accent grid size-11 shrink-0 place-items-center rounded-2xl">
+                    <Icon className="size-5" aria-hidden="true" />
+                  </span>
+                  <h3 className="text-app text-[15px] font-bold">{t(title, titleEn)}</h3>
+                </div>
+                <p className="text-muted mt-3 text-[13px] leading-relaxed">{t(body, bodyEn)}</p>
               </div>
             </Reveal>
           ))}
@@ -288,7 +296,7 @@ export default function Accounting() {
       {/* The one differentiator worth a band: the Telegram link. */}
       <Reveal>
         <section
-          className="relative overflow-hidden rounded-panel p-7 text-white sm:p-9"
+          className="relative overflow-hidden rounded-panel border border-white/10 p-7 text-white sm:p-9"
           style={{ background: 'linear-gradient(135deg, #0f1023, #2a2366)' }}
         >
           <span

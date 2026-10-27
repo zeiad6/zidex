@@ -7,8 +7,11 @@ import { site } from '@/lib/site'
 /**
  * Organism: a WhatsApp contact button pinned above the bottom bar. It arrives after the
  * visitor has read for a few seconds (not on paint), opens a one-line prompt once, and
- * remembers a dismissal for the session.
+ * remembers a dismissal for the session — the Telegram button beside it shares the same
+ * `floating-hint` key, so a visitor is never covered by two prompts at once.
  */
+const HINT_KEY = 'floating-hint'
+
 export function FloatingWhatsApp() {
   const { t } = useI18n()
   const reduce = useReducedMotion() ?? false
@@ -19,11 +22,14 @@ export function FloatingWhatsApp() {
     const a = window.setTimeout(() => setShown(true), 2500)
     const b = window.setTimeout(() => {
       try {
-        if (!sessionStorage.getItem('wa-hint')) setHint(true)
+        if (!sessionStorage.getItem(HINT_KEY)) {
+          sessionStorage.setItem(HINT_KEY, '1')
+          setHint(true)
+        }
       } catch {
         setHint(true)
       }
-    }, 9000)
+    }, 7000)
     return () => {
       window.clearTimeout(a)
       window.clearTimeout(b)
@@ -33,7 +39,7 @@ export function FloatingWhatsApp() {
   const dismiss = () => {
     setHint(false)
     try {
-      sessionStorage.setItem('wa-hint', '1')
+      sessionStorage.setItem(HINT_KEY, '1')
     } catch {
       // private mode: the hint simply returns next visit
     }

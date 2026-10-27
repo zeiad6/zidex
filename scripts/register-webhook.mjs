@@ -39,17 +39,31 @@ await tg('setWebhook', {
   drop_pending_updates: true,
 })
 
-// The customer's entry points in Telegram's "/" menu.
-await tg('setMyCommands', {
-  commands: [
-    { command: 'start', description: 'القائمة الرئيسية' },
-    { command: 'search', description: 'ابحث في المنتجات' },
-    { command: 'catalog', description: 'كل المنتجات' },
-    { command: 'trial', description: 'تجربة كاملة 7 أيام' },
-    { command: 'apps', description: 'تطبيقات أندرويد وويندوز' },
-    { command: 'donate', description: 'دعم وتبرع' },
-    { command: 'help', description: 'المساعدة' },
-  ],
+// The customer's entry points in Telegram's "/" menu (default + Arabic).
+const botCommands = [
+  { command: 'start', description: 'القائمة الرئيسية والترحيب' },
+  { command: 'catalog', description: 'كل المنتجات الرقمية' },
+  { command: 'search', description: 'ابحث في المنتجات' },
+  { command: 'trial', description: 'تجربة مجانية كاملة 7 أيام' },
+  { command: 'apps', description: 'تطبيقات أندرويد وويندوز' },
+  { command: 'donate', description: 'دعم وتبرع للمشاريع' },
+  { command: 'help', description: 'دليل الأوامر والمساعدة' },
+]
+
+await tg('setMyCommands', { commands: botCommands })
+await tg('setMyCommands', { commands: botCommands, language_code: 'ar' })
+
+// Names and descriptions
+await tg('setMyName', { name: 'ZeidexSoft | متجر وبوتات رقمية', language_code: 'ar' })
+await tg('setMyName', { name: 'ZeidexSoft | Store Bot' })
+
+// Menu button for all users: opens the web store
+await tg('setChatMenuButton', {
+  menu_button: {
+    type: 'web_app',
+    text: '🛍',
+    web_app: { url: `${HOST}/store/` },
+  },
 })
 
 console.log(`webhook → ${url}`)

@@ -17,11 +17,11 @@ export function Footer() {
         <div className="flex flex-col items-center justify-between gap-4 text-xs sm:flex-row">
           <div className="flex items-center gap-2.5">
             <img src="/zeidex-mark.png" alt={site.name} width={22} height={22} className="size-5.5 rounded-md object-cover" />
-            <p className="text-subtle">
+            <p className="text-muted">
               © {new Date().getFullYear()} <span className="font-bold text-app">{site.name}</span> — {t('صُنع باحترافية وإتقان 🤍', 'Crafted with precision 🤍')}
             </p>
           </div>
-          <ul className="flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-subtle">
+          <ul className="flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-muted">
             <li>
               <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" className="link-underline hover:text-accent transition-colors">
                 {t('واتساب', 'WhatsApp')}

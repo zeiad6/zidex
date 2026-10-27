@@ -110,7 +110,7 @@ export function SectionHeading({
       )}
     >
       {eyebrow ? (
-        <span className="chip w-fit bg-accent-soft text-accent">
+        <span className="chip w-fit bg-accent-soft text-ghost-700 dark:text-ghost-300">
           <span className="size-1.5 rounded-full bg-accent" />
           {eyebrow}
         </span>
