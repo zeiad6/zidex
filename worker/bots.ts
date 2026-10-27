@@ -814,7 +814,14 @@ function menuFor(env: BotsEnv, cfg: Cfg, uid?: number) {
       [{ text: '🤖 تفعيل بوت بدون دفع', callback_data: 't:adm_freebot' }]
     )
   }
-  rows.push(...menu.inline_keyboard.map((row) => [...row]))
+  const additionalMenu =
+    cfg.id === platformBotId(env)
+      ? [
+          [{ text: '❓ الأسئلة الشائعة', callback_data: 't:faqs' }],
+          [{ text: '💬 راسل المالك', callback_data: 't:contact' }],
+        ]
+      : menu.inline_keyboard.map((row) => [...row])
+  rows.push(...additionalMenu)
   if (owner) {
     rows.push([{ text: '⚙️ لوحة تحكم الإدارة (/admin)', callback_data: 't:adm_refresh' }])
   }
@@ -855,7 +862,7 @@ const PLATFORM_HELP =
 /** ZeidexSoft's own apps and donation (with its bank accounts) belong to the platform bot.
  *  Every hosted shop answered them too — a customer's store showing our accounts. */
 const PLATFORM_COMMANDS = new Set(['apps', 'myapps', 'android', 'windows', 'donate', 'freebot', 'trial', 'bots'])
-const PLATFORM_CALLBACK = /^t:(android|windows|myapps|donate|don_|don:|freebot|trial)/
+const PLATFORM_CALLBACK = /^t:(android|windows|myapps|apps|donate|don_|don:|freebot|trial)/
 
 /** Fold Arabic and Latin text into one comparable form: lowercase, no harakat or tatweel,
  *  Arabic-Indic and Persian digits as Latin, one alef/ya/ha spelling, no punctuation.
@@ -891,7 +898,7 @@ function searchKeys(cfg: Cfg, query: string) {
   const faqs: number[] = []
   for (const it of cfg.items) {
     if (items.length >= SEARCH_ITEM_CAP) break
-    const hay = norm(`${it.title} ${it.desc}`)
+    const hay = norm(`${it.title} ${it.desc} ${it.sku ?? ''}`)
     if (hay.includes(q) || tokens.some((t) => hay.includes(t))) items.push(it)
   }
   cfg.faqs.forEach((f, i) => {
@@ -1122,7 +1129,7 @@ async function handle(env: BotsEnv, cfg: Cfg, token: string, u: Record<string, a
         [{ text: '🔙 القائمة الرئيسية', callback_data: 't:main' }]
       ]
       await send(token, chat, text, { reply_markup: { inline_keyboard: rows } })
-    } else if (data === 't:myapps') {
+    } else if (data === 't:myapps' || data === 't:apps') {
       const rows = [
         [{ text: '📱 تطبيقات أندرويد (Android)', callback_data: 't:android' }],
         [{ text: '💻 تطبيقات ويندوز (Windows)', callback_data: 't:windows' }],

@@ -101,6 +101,10 @@ const cfg = {
   created: new Date().toISOString(),
   plan: 'paid',
   filesChannel: STORAGE_CHANNEL,
+  hook: 2,
+  pages: [],
+  files: [],
+  banned: [],
 }
 
 // Money-path guard: every SKU bound for auto-delivery must carry its deliver block, and the
