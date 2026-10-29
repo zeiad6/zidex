@@ -104,6 +104,7 @@ export default function App() {
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/programs" element={<Programs />} />
+                <Route path="/program" element={<Programs />} />
                 <Route path="/templates" element={<Templates />} />
                 <Route path="/templates/:slug" element={<TemplatePreview />} />
                 <Route path="/shop" element={<Store />} />

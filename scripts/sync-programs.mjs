@@ -31,6 +31,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
  */
 const SOURCES = {
   'edms-archive-pro': { repo: 'zeiad6/Edms-archive', current: '1.0.6' },
+  'yusr': { repo: 'zeiad6/yusr', current: '0.2.1' },
   // 'zeidex-convert-android': { repo: 'zeiad6/zeidex-convert-android', current: '1.2.0' },
   // 'edms-archive-android': { repo: 'zeiad6/Edms-archive-Android', current: '1.0.1' },
   // verityscope: { repo: 'zeiad6/VerityScope', current: '0.4.0' },
@@ -39,7 +40,13 @@ const SOURCES = {
 /** Auto-update metadata, not a file a human asked to download. */
 const AUX = /\.(ya?ml|blockmap|json|sig|sha256|sha512)$/i
 
-const gh = (path) => JSON.parse(execSync(`gh api "${path}"`, { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }))
+const gh = (path) => {
+  try {
+    return JSON.parse(execSync(`gh api "${path}"`, { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024, stdio: ['pipe', 'pipe', 'ignore'] }))
+  } catch {
+    return JSON.parse(execSync(`curl -sL "https://api.github.com/${path}"`, { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }))
+  }
+}
 
 function fmtSize(bytes) {
   if (bytes >= 1048576) return `${(bytes / 1048576).toFixed(1)} MB`

@@ -25,19 +25,32 @@ export type ProgramDownload = {
  * /programs page grows a section on its own.
  */
 export const programKinds = {
+  microsoft: {
+    label: 'تطبيقات ميكروسوفت (بدائل Office)',
+    labelEn: 'Microsoft Office Apps',
+    hint: 'بدائل مجانية وسريعة لبرامج Word و Excel و PowerPoint مبنية بلغة Rust',
+    hintEn: 'Fast, open-source Rust alternatives for Word, Excel, and PowerPoint',
+    glyph: 'doc',
+  },
+  premium: {
+    label: 'حزمة البرامج الإبداعية والاحترافية (Premium Suite)',
+    labelEn: 'Creative & Pro Suite (Premium)',
+    hint: 'بدائل برامج أدوبي والتصميم والمونتاج والهندسة مفتوحة المصدر وبلا اشتراكات',
+    hintEn: 'Open-source alternatives for Adobe, design, video editing & CAD',
+    glyph: 'spark',
+  },
   windows: {
-    label: 'تطبيقات ويندوز',
-    labelEn: 'Windows apps',
-    /** One line under the section title, so the split explains itself. */
-    hint: 'برامج سطح مكتب لنظام ويندوز',
-    hintEn: 'Desktop programs for Windows',
+    label: 'تطبيقات ويندوز والأنظمة المؤسسية',
+    labelEn: 'Windows & Enterprise Systems',
+    hint: 'أنظمة إدارة المحاسبة والأوقاف والجمعيات الخيرية وإدارة الوثائق والأرشفة المكتبية',
+    hintEn: 'Fund accounting, Awqaf, and document management systems',
     glyph: 'grid',
   },
   android: {
     label: 'تطبيقات أندرويد',
     labelEn: 'Android apps',
-    hint: 'تطبيقات جوّال تعمل على جهازك مباشرة',
-    hintEn: 'Mobile apps that run on your own device',
+    hint: 'تطبيقات جوّال تعمل على جهازك مباشرة دون اتصال بخوادم خارجية',
+    hintEn: 'Mobile apps that run directly on your own device',
     glyph: 'package',
   },
 } as const
@@ -65,6 +78,514 @@ export type Program = {
 }
 
 export const programs: Program[] = [
+  /* ------------------------------------------------------------------ *
+   * 1. Microsoft Office Suite Alternatives (تطبيقات ميكروسوفت)
+   * ------------------------------------------------------------------ */
+  {
+    slug: 'wordcraft',
+    name: 'WordCraft — بديل ميكروسوفت وورد الاحترافي',
+    nameEn: 'WordCraft — Pro Word Processor',
+    tagline:
+      'معالج نصوص متقدم ومفتوح المصدر، إعادة بناء نظيفة لـ Microsoft Word بلغة Rust: تنسيق متقدم، جداول، دعم كامل لملفات DOCX، وتصدير PDF بدون اشتراك أو قيود.',
+    taglineEn:
+      'An open-source clean-room reimplementation of Microsoft Word in pure Rust: rich typography, tables, full DOCX compatibility, and instant PDF export with zero subscription.',
+    version: '0.12.0',
+    platform: 'Windows x64',
+    kind: 'microsoft',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/wordcraft/releases/download/v0.12.0/wordcraft-0.12.0-windows-x64.msi',
+        host: 'GitHub',
+        file: 'wordcraft-0.12.0-windows-x64.msi',
+        size: '84.6 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/wordcraft/releases/download/v0.12.0/wordcraft-0.12.0-windows-x64-portable.zip',
+        host: 'GitHub',
+        file: 'wordcraft-0.12.0-windows-x64-portable.zip',
+        size: '103.9 MB',
+        note: 'نسخة محمولة (بلا تثبيت)',
+      },
+    ],
+    docs: 'https://github.com/storytold/wordcraft',
+    glyph: 'doc',
+    date: '2026-10-28',
+  },
+  {
+    slug: 'gridcraft',
+    name: 'GridCraft — جداول البيانات السريعة (بديل إكسيل)',
+    nameEn: 'GridCraft — High-Performance Spreadsheet',
+    tagline:
+      'جداول بيانات متطورة ومفتوحة المصدر كبديل كامل لـ Microsoft Excel: سرعة فائقة في معالجة مئات آلاف الصفوف، صيغ ودوال حسابية، رسوم بيانية تفاعلية، ودعم صيغ XLSX.',
+    taglineEn:
+      'Fast open-source spreadsheet editor and clean-room Microsoft Excel alternative in pure Rust: handles massive datasets effortlessly with built-in formulas, charts, and XLSX support.',
+    version: '0.13.0',
+    platform: 'Windows x64',
+    kind: 'microsoft',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/gridcraft/releases/download/v0.13.0/gridcraft-0.13.0-windows-x64.msi',
+        host: 'GitHub',
+        file: 'gridcraft-0.13.0-windows-x64.msi',
+        size: '36.3 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/gridcraft/releases/download/v0.13.0/gridcraft-0.13.0-windows-x64-portable.zip',
+        host: 'GitHub',
+        file: 'gridcraft-0.13.0-windows-x64-portable.zip',
+        size: '44.8 MB',
+        note: 'نسخة محمولة (بلا تثبيت)',
+      },
+    ],
+    docs: 'https://github.com/storytold/gridcraft',
+    glyph: 'grid',
+    date: '2026-10-28',
+  },
+  {
+    slug: 'deckcraft',
+    name: 'DeckCraft — العروض التقديمية والشرائح (بديل باوربوينت)',
+    nameEn: 'DeckCraft — Presentation & Slide Deck Studio',
+    tagline:
+      'تصميم وتقديم العروض التفاعلية كبديل نظيف لـ Microsoft PowerPoint: انتقالات سلسة بمعدل إطارات مرتفع، قوالب عصرية، تصدير PDF وفيديو، ودعم ملفات PPTX بلغة Rust.',
+    taglineEn:
+      'Clean-room presentation suite alternative to Microsoft PowerPoint in pure Rust: high frame-rate transitions, modern layouts, PPTX compatibility, and presenter mode.',
+    version: '0.12.0',
+    platform: 'Windows x64',
+    kind: 'microsoft',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/deckcraft/releases/download/v0.12.0/deckcraft-0.12.0-windows-x64.msi',
+        host: 'GitHub',
+        file: 'deckcraft-0.12.0-windows-x64.msi',
+        size: '78.6 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/deckcraft/releases/download/v0.12.0/deckcraft-0.12.0-windows-x64-portable.zip',
+        host: 'GitHub',
+        file: 'deckcraft-0.12.0-windows-x64-portable.zip',
+        size: '98.6 MB',
+        note: 'نسخة محمولة (بلا تثبيت)',
+      },
+    ],
+    docs: 'https://github.com/storytold/deckcraft',
+    glyph: 'spark',
+    date: '2026-10-28',
+  },
+
+  /* ------------------------------------------------------------------ *
+   * 2. Premium Creative & Pro Suite (حزمة البرامج الإبداعية والاحترافية)
+   * ------------------------------------------------------------------ */
+  {
+    slug: 'photocraft',
+    name: 'PhotoCraft — محرّر الصور الاحترافي (بديل فوتوشوب)',
+    nameEn: 'PhotoCraft — Pro Image Editor',
+    tagline:
+      'محرّر صور مفتوح المصدر، إعادة بناء نظيفة لـ Adobe Photoshop: طبقات، أقنعة، مرشّحات، أدوات تحديد ذكية، دعم PSD، وتحرير غير متلف — بديل مجاني كامل بلا اشتراك يعمل محلياً.',
+    taglineEn:
+      'An open-source image editor, a clean-room reimplementation of Adobe Photoshop: layers, masks, filters, smart selection, PSD support and non-destructive editing — free with no subscription.',
+    version: '0.17.0',
+    platform: 'Windows x64',
+    kind: 'premium',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/photocraft/releases/download/v0.17.0/photocraft-0.17.0-windows-x64.msi',
+        host: 'GitHub',
+        file: 'photocraft-0.17.0-windows-x64.msi',
+        size: '100.7 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/photocraft/releases/download/v0.17.0/photocraft-0.17.0-windows-x64-portable.zip',
+        host: 'GitHub',
+        file: 'photocraft-0.17.0-windows-x64-portable.zip',
+        size: '120.5 MB',
+        note: 'نسخة محمولة (بلا تثبيت)',
+      },
+    ],
+    docs: 'https://github.com/storytold/photocraft',
+    glyph: 'layers',
+    date: '2026-10-28',
+  },
+  {
+    slug: 'artcraft',
+    name: 'ArtCraft — محرّك الإبداع للفنانين والمصممين',
+    nameEn: 'ArtCraft — Creative Engine',
+    tagline:
+      'بيئة إبداع متكاملة للفنانين والمصممين وصنّاع الأفلام: لوحة دقيقة تجمع التصميم والرسم وأدوات الذكاء الاصطناعي في مكان واحد، بتحكم كامل في كل عنصر. تعمل محلياً على جهازك.',
+    taglineEn:
+      'An open-source creative environment for artists, designers and filmmakers: a precise canvas uniting design, drawing and AI tools with complete control. Runs locally on your machine.',
+    version: '0.41.0',
+    platform: 'Windows x64',
+    kind: 'premium',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.0/ArtCraft_0.41.0_x64-setup.exe',
+        host: 'GitHub',
+        file: 'ArtCraft_0.41.0_x64-setup.exe',
+        size: '39.9 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.0/ArtCraft_0.41.0_x64_en-US.msi',
+        host: 'GitHub',
+        file: 'ArtCraft_0.41.0_x64_en-US.msi',
+        size: '44.7 MB',
+        note: 'حزمة MSI',
+      },
+    ],
+    docs: 'https://github.com/storytold/artcraft',
+    glyph: 'spark',
+    date: '2026-09-26',
+  },
+  {
+    slug: 'filmcraft',
+    name: 'FilmCraft — محرّر ومونتير الفيديو (بديل بريمير)',
+    nameEn: 'FilmCraft — Non-Linear Video Editor',
+    tagline:
+      'محرّر ومونتير فيديو احترافي غير خطي (بديل Adobe Premiere Pro): مسارات صوت وفيديو غير محدودة، تصحيح ألوان سينمائي، مؤثرات انتقالية، وتصدير عالي السرعة بلغة Rust.',
+    taglineEn:
+      'Open-source non-linear video editor (clean-room Adobe Premiere Pro alternative): multi-track timeline, color grading, transitions, and hardware-accelerated rendering in pure Rust.',
+    version: '0.14.0',
+    platform: 'Windows x64',
+    kind: 'premium',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/filmcraft/releases/download/v0.14.0/filmcraft-0.14.0-windows-x64.msi',
+        host: 'GitHub',
+        file: 'filmcraft-0.14.0-windows-x64.msi',
+        size: '84.4 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/filmcraft/releases/download/v0.14.0/filmcraft-0.14.0-windows-x64-portable.zip',
+        host: 'GitHub',
+        file: 'filmcraft-0.14.0-windows-x64-portable.zip',
+        size: '101.7 MB',
+        note: 'نسخة محمولة (بلا تثبيت)',
+      },
+    ],
+    docs: 'https://github.com/storytold/filmcraft',
+    glyph: 'video',
+    date: '2026-10-28',
+  },
+  {
+    slug: 'vectorcraft',
+    name: 'VectorCraft — تصميم الرسوميات المتجهية (بديل إليستريتور)',
+    nameEn: 'VectorCraft — Vector Graphics & SVG Studio',
+    tagline:
+      'استوديو الرسم الشعاعي والمتجهي (بديل Adobe Illustrator): مسارات بيزيه فائقة الدقة، دعم كامل وتصدير لملفات SVG و EPS، وأدوات تصميم شعارات ورسوم توضيحية متقدمة.',
+    taglineEn:
+      'Vector graphics and illustration editor in pure Rust (Adobe Illustrator alternative): sub-pixel precision paths, full SVG/EPS compatibility, and modern vector design tools.',
+    version: '0.18.0',
+    platform: 'Windows x64',
+    kind: 'premium',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/vectorcraft/releases/download/v0.18.0/vectorcraft-0.18.0-windows-x64.msi',
+        host: 'GitHub',
+        file: 'vectorcraft-0.18.0-windows-x64.msi',
+        size: '106.8 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/vectorcraft/releases/download/v0.18.0/vectorcraft-0.18.0-windows-x64-portable.zip',
+        host: 'GitHub',
+        file: 'vectorcraft-0.18.0-windows-x64-portable.zip',
+        size: '132.6 MB',
+        note: 'نسخة محمولة (بلا تثبيت)',
+      },
+    ],
+    docs: 'https://github.com/storytold/vectorcraft',
+    glyph: 'compass',
+    date: '2026-10-28',
+  },
+  {
+    slug: 'designcraft',
+    name: 'DesignCraft — تصميم المطبوعات والنشر المكتبي (بديل إن ديزاين)',
+    nameEn: 'DesignCraft — Page Layout & Publishing Studio',
+    tagline:
+      'استوديو تنسيق الصفحات والنشر المكتبي (بديل Adobe InDesign): تخطيط شبكي متقن للكتب والمجلات والبروشورات، طباعة رقمية وفصل ألوان CMYK، وتصدير PDF عالي الجودة للطباعة.',
+    taglineEn:
+      'Desktop publishing & page layout editor (clean-room Adobe InDesign alternative): multi-page layouts, typography grids, CMYK print preparation, and press-ready PDF export.',
+    version: '0.14.0',
+    platform: 'Windows x64',
+    kind: 'premium',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/designcraft/releases/download/v0.14.0/designcraft-0.14.0-windows-x64.msi',
+        host: 'GitHub',
+        file: 'designcraft-0.14.0-windows-x64.msi',
+        size: '92.8 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/designcraft/releases/download/v0.14.0/designcraft-0.14.0-windows-x64-portable.zip',
+        host: 'GitHub',
+        file: 'designcraft-0.14.0-windows-x64-portable.zip',
+        size: '117.0 MB',
+        note: 'نسخة محمولة (بلا تثبيت)',
+      },
+    ],
+    docs: 'https://github.com/storytold/designcraft',
+    glyph: 'book',
+    date: '2026-10-28',
+  },
+  {
+    slug: 'effectcraft',
+    name: 'EffectCraft — الموشن جرافيكس والمؤثرات البصرية (بديل أفتر إفكتس)',
+    nameEn: 'EffectCraft — Motion Graphics & VFX Compositor',
+    tagline:
+      'محرك المؤثرات البصرية والرسوم المتحركة (بديل Adobe After Effects): تحريك الإطارات المفتاحية Keyframes، تركيب طبقات متعددة، ومؤثرات سينمائية بصرية مسرعة عتادياً بلغة Rust.',
+    taglineEn:
+      'Motion design & VFX compositing suite (clean-room After Effects alternative): node & layer compositing, curve keyframing, and GPU-accelerated motion graphics in pure Rust.',
+    version: '0.18.0',
+    platform: 'Windows x64',
+    kind: 'premium',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/effectcraft/releases/download/v0.18.0/effectcraft-0.18.0-windows-x64.msi',
+        host: 'GitHub',
+        file: 'effectcraft-0.18.0-windows-x64.msi',
+        size: '53.9 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/effectcraft/releases/download/v0.18.0/effectcraft-0.18.0-windows-x64-portable.zip',
+        host: 'GitHub',
+        file: 'effectcraft-0.18.0-windows-x64-portable.zip',
+        size: '71.1 MB',
+        note: 'نسخة محمولة (بلا تثبيت)',
+      },
+    ],
+    docs: 'https://github.com/storytold/effectcraft',
+    glyph: 'spark',
+    date: '2026-10-28',
+  },
+  {
+    slug: 'soundcraft',
+    name: 'SoundCraft — الهندسة الصوتية والتوزيع الرقمي (بديل برو تولز)',
+    nameEn: 'SoundCraft — Digital Audio Workstation',
+    tagline:
+      'محطة عمل صوت رقمية احترافية DAW (بديل Avid Pro Tools و Adobe Audition): تسجيل ومكساج متعدد المسارات، تحرير موجات الصوت بدقة زمنية متناهية، وماسترنج نقي دون تأخير.',
+    taglineEn:
+      'Pro DAW audio workstation in pure Rust (clean-room Avid Pro Tools & Audition alternative): multi-track recording, waveform editing, low-latency DSP mixing, and mastering.',
+    version: '0.14.0',
+    platform: 'Windows x64',
+    kind: 'premium',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/soundcraft/releases/download/v0.14.0/soundcraft-0.14.0-windows-x64.msi',
+        host: 'GitHub',
+        file: 'soundcraft-0.14.0-windows-x64.msi',
+        size: '13.7 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/soundcraft/releases/download/v0.14.0/soundcraft-0.14.0-windows-x64-portable.zip',
+        host: 'GitHub',
+        file: 'soundcraft-0.14.0-windows-x64-portable.zip',
+        size: '17.7 MB',
+        note: 'نسخة محمولة (بلا تثبيت)',
+      },
+    ],
+    docs: 'https://github.com/storytold/soundcraft',
+    glyph: 'tiktok',
+    date: '2026-10-28',
+  },
+  {
+    slug: 'lightcraft',
+    name: 'LightCraft — تحميض ومعالجة صور RAW (بديل لايتروم)',
+    nameEn: 'LightCraft — Non-Destructive RAW Photo Studio',
+    tagline:
+      'معمل تظهير وتعديل ألوان الصور الفوتوغرافية (بديل Adobe Lightroom): تحرير غير متلف لملفات الكاميرا الخام RAW، تدرج لوني سينمائي، تعديل التعريض والتباين، وتنظيم مكتبات الصور.',
+    taglineEn:
+      'Non-destructive RAW photo developer and clean-room Adobe Lightroom alternative: color grading, tone curve adjustment, exposure balance, and batch photo export.',
+    version: '0.15.0',
+    platform: 'Windows x64',
+    kind: 'premium',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/lightcraft/releases/download/v0.15.0/lightcraft-0.15.0-windows-x64.msi',
+        host: 'GitHub',
+        file: 'lightcraft-0.15.0-windows-x64.msi',
+        size: '92.7 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/lightcraft/releases/download/v0.15.0/lightcraft-0.15.0-windows-x64-portable.zip',
+        host: 'GitHub',
+        file: 'lightcraft-0.15.0-windows-x64-portable.zip',
+        size: '113.4 MB',
+        note: 'نسخة محمولة (بلا تثبيت)',
+      },
+    ],
+    docs: 'https://github.com/storytold/lightcraft',
+    glyph: 'sun',
+    date: '2026-10-28',
+  },
+  {
+    slug: 'figcraft',
+    name: 'FigCraft — تصميم واجهات المستخدم والنماذج الأولية (بديل فيجما)',
+    nameEn: 'FigCraft — UI/UX Interface Design & Prototyping',
+    tagline:
+      'بيئة تصميم تجربة وواجهة المستخدم والنماذج التفاعلية (بديل Figma): مكونات قابلة لإعادة الاستخدام، تخطيط تلقائي Auto-Layout، نماذج أولية تفاعلية، يعمل محلياً بالكامل بلا اتصال وبأعلى درجات الخصوصية.',
+    taglineEn:
+      'Interface design and interactive prototyping suite (clean-room Figma alternative): auto-layout frames, interactive component variants, and 100% offline local privacy.',
+    version: '0.12.1',
+    platform: 'Windows x64',
+    kind: 'premium',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/figcraft/releases/download/v0.12.1/figcraft-0.12.1-windows-x64.msi',
+        host: 'GitHub',
+        file: 'figcraft-0.12.1-windows-x64.msi',
+        size: '71.5 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/figcraft/releases/download/v0.12.1/figcraft-0.12.1-windows-x64-portable.zip',
+        host: 'GitHub',
+        file: 'figcraft-0.12.1-windows-x64-portable.zip',
+        size: '89.4 MB',
+        note: 'نسخة محمولة (بلا تثبيت)',
+      },
+    ],
+    docs: 'https://github.com/storytold/figcraft',
+    glyph: 'layers',
+    date: '2026-10-28',
+  },
+  {
+    slug: 'pdfcraft',
+    name: 'PdfCraft — قارئ ومحرّر مستندات PDF الاحترافي (بديل أكروبات)',
+    nameEn: 'PdfCraft — PDF Reader, Editor & Studio',
+    tagline:
+      'أداة متكاملة لقراءة وتحرير وإدارة ملفات PDF (بديل Adobe Acrobat Pro): دمج الصفحات وتقسيمها، التوقيع الرقمي، التعليقات التوضيحية، وتحويل المستندات بسرعة فائقة وأمان تام.',
+    taglineEn:
+      'Comprehensive PDF editor and clean-room Adobe Acrobat alternative in Rust: merge, split, annotate, digital signatures, OCR readiness, and instant export with full privacy.',
+    version: '0.15.0',
+    platform: 'Windows x64',
+    kind: 'premium',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/pdfcraft/releases/download/v0.15.0/pdfcraft-0.15.0-windows-x64.msi',
+        host: 'GitHub',
+        file: 'pdfcraft-0.15.0-windows-x64.msi',
+        size: '87.1 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/pdfcraft/releases/download/v0.15.0/pdfcraft-0.15.0-windows-x64-portable.zip',
+        host: 'GitHub',
+        file: 'pdfcraft-0.15.0-windows-x64-portable.zip',
+        size: '106.3 MB',
+        note: 'نسخة محمولة (بلا تثبيت)',
+      },
+    ],
+    docs: 'https://github.com/storytold/pdfcraft',
+    glyph: 'doc',
+    date: '2026-10-28',
+  },
+  {
+    slug: 'cadcraft',
+    name: 'CadCraft — التصميم الهندسي والمعماري CAD (بديل أوتوكاد)',
+    nameEn: 'CadCraft — 2D/3D CAD & Drafting Studio',
+    tagline:
+      'برنامج التصميم بمساعدة الحاسوب والنمذجة الهندسية والمعمارية (بديل AutoCAD): قياسات دقيقة بالميليمتر، طبقات رسم معمارية، دعم ملفات DWG و DXF، وأداء عالي بلغة Rust.',
+    taglineEn:
+      'Computer-aided drafting & design in pure Rust (clean-room AutoCAD alternative): precision 2D drawing, architectural snapping, DWG/DXF support, and zero subscription fee.',
+    version: '0.14.0',
+    platform: 'Windows x64',
+    kind: 'premium',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/cadcraft/releases/download/v0.14.0/cadcraft-0.14.0-windows-x64.msi',
+        host: 'GitHub',
+        file: 'cadcraft-0.14.0-windows-x64.msi',
+        size: '54.1 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/cadcraft/releases/download/v0.14.0/cadcraft-0.14.0-windows-x64-portable.zip',
+        host: 'GitHub',
+        file: 'cadcraft-0.14.0-windows-x64-portable.zip',
+        size: '67.7 MB',
+        note: 'نسخة محمولة (بلا تثبيت)',
+      },
+    ],
+    docs: 'https://github.com/storytold/cadcraft',
+    glyph: 'grid',
+    date: '2026-10-28',
+  },
+  {
+    slug: 'craft-launcher',
+    name: 'Craft Launcher — المشغّل الموحّد لحزمة البرامج',
+    nameEn: 'Craft Launcher — Unified Suite Manager',
+    tagline:
+      'المشغل والمثبّت الموحد لكافة تطبيقات وحزم Craft الإبداعية والمكتبية: تثبيت بضغطة زر، تحديث تلقائي آمن، تشغيل مباشر، وإدارة مركزية لجميع الأدوات على جهازك.',
+    taglineEn:
+      'Unified application manager and installer for the entire Craft suite: one-click installation, centralized updates, launch control, and offline tool management.',
+    version: '0.9.0',
+    platform: 'Windows x64',
+    kind: 'premium',
+    downloads: [
+      {
+        href: 'https://github.com/storytold/craft-launcher/releases/download/v0.9.0/artcraft-launcher-0.9.0-windows-x64.msi',
+        host: 'GitHub',
+        file: 'artcraft-launcher-0.9.0-windows-x64.msi',
+        size: '9.4 MB',
+        note: 'مثبّت (موصى به)',
+      },
+      {
+        href: 'https://github.com/storytold/craft-launcher/releases/download/v0.9.0/artcraft-launcher-0.9.0-windows-x64-portable.zip',
+        host: 'GitHub',
+        file: 'artcraft-launcher-0.9.0-windows-x64-portable.zip',
+        size: '10.4 MB',
+        note: 'نسخة محمولة (بلا تثبيت)',
+      },
+    ],
+    docs: 'https://github.com/storytold/craft-launcher',
+    glyph: 'package',
+    date: '2026-10-28',
+  },
+
+  /* ------------------------------------------------------------------ *
+   * 3. Windows & Desktop Systems (تطبيقات ويندوز والأنظمة المؤسسية)
+   * ------------------------------------------------------------------ */
+  {
+    slug: 'yusr',
+    name: 'يُسر — نظام المحاسبة وإدارة الأوقاف والجمعيات الخيرية',
+    nameEn: 'Yusr — Fund Accounting & Management Suite for Charities',
+    tagline:
+      'نظام مالي وإداري سيادي متكامل للمنظمات غير الربحية والجمعيات الخيرية ولجان الزكاة والأوقاف: دفتر أستاذ مشفّر بسلسلة SHA-256 لمنع التلاعب، مستشار ذكي محلي (AI Advisor)، دعم فوترة ZATCA المرحلة الثانية، نسخ احتياطي تلقائي، وتوافق شبكي LAN مع عمل مستقل 100% بدون إنترنت.',
+    taglineEn:
+      'Sovereign fund accounting & back-office suite for charities, Awqaf, and Zakat committees: tamper-evident SHA-256 ledger, local AI advisor, ZATCA Phase 2 e-invoicing, multi-target backup, and 100% offline-first architecture.',
+    version: '0.2.1',
+    platform: 'Windows x64 / Linux',
+    kind: 'windows',
+    downloads: [
+      {
+        href: 'https://github.com/zeiad6/yusr/releases/download/v0.2.1/Yusr-Lite_0.2.1_x64_en-US.msi',
+        host: 'GitHub',
+        file: 'Yusr-Lite_0.2.1_x64_en-US.msi',
+        size: '255.8 MB',
+        note: 'مثبّت ويندوز Lite (موصى به)',
+      },
+      {
+        href: 'https://github.com/zeiad6/yusr/releases/download/v0.2.1/Yusr_0.2.1_amd64.deb',
+        host: 'GitHub',
+        file: 'Yusr_0.2.1_amd64.deb',
+        size: '7.2 MB',
+        note: 'حزمة دبيان / أوبونتو (.deb)',
+      },
+    ],
+    post: 'yusr',
+    docs: 'https://github.com/zeiad6/yusr',
+    glyph: 'shield',
+    date: '2026-10-29',
+  },
   {
     slug: 'edms-archive-pro',
     name: 'أرشيف برو EDMS',
@@ -99,68 +620,10 @@ export const programs: Program[] = [
     glyph: 'archive',
     date: '2026-10-04',
   },
-  {
-    slug: 'artcraft',
-    name: 'ArtCraft — محرّك الإبداع للفنانين',
-    nameEn: 'ArtCraft — Creative Engine',
-    tagline:
-      'بيئة إبداع مفتوحة المصدر للفنانين والمصممين وصنّاع الأفلام: لوحة دقيقة تجمع التصميم والرسم وأدوات الذكاء الاصطناعي في مكان واحد، بتحكم كامل في كل عنصر. تعمل محلياً على جهازك.',
-    taglineEn:
-      'An open-source creative environment for artists, designers and filmmakers: a precise canvas that unites design, drawing and AI tools in one place, with full control over every element. Runs locally on your machine.',
-    version: '0.41.0',
-    platform: 'Windows x64',
-    kind: 'windows',
-    downloads: [
-      {
-        href: 'https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.0/ArtCraft_0.41.0_x64-setup.exe',
-        host: 'GitHub',
-        file: 'ArtCraft_0.41.0_x64-setup.exe',
-        size: '39.9 MB',
-        note: 'مثبّت (موصى به)',
-      },
-      {
-        href: 'https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.0/ArtCraft_0.41.0_x64_en-US.msi',
-        host: 'GitHub',
-        file: 'ArtCraft_0.41.0_x64_en-US.msi',
-        size: '44.7 MB',
-        note: 'حزمة MSI',
-      },
-    ],
-    docs: 'https://github.com/storytold/artcraft',
-    glyph: 'spark',
-    date: '2026-09-26',
-  },
-  {
-    slug: 'photocraft',
-    name: 'PhotoCraft — محرّر الصور الاحترافي',
-    nameEn: 'PhotoCraft — Pro Image Editor',
-    tagline:
-      'محرّر صور مفتوح المصدر، إعادة بناء نظيفة لـ Adobe Photoshop: طبقات، أقنعة، مرشّحات، أدوات تحديد ذكية، دعم PSD، وتحرير غير متلف — بديل مجاني كامل بلا اشتراك. يعمل محلياً على جهازك.',
-    taglineEn:
-      'An open-source image editor, a clean-room reimplementation of Adobe Photoshop: layers, masks, filters, smart selection, PSD support and non-destructive editing — a full free alternative with no subscription. Runs locally on your machine.',
-    version: '0.7.0',
-    platform: 'Windows x64',
-    kind: 'windows',
-    downloads: [
-      {
-        href: 'https://github.com/storytold/photocraft/releases/download/v0.7.0/photocraft-0.7.0-windows-x64.msi',
-        host: 'GitHub',
-        file: 'photocraft-0.7.0-windows-x64.msi',
-        size: '61.6 MB',
-        note: 'مثبّت (موصى به)',
-      },
-      {
-        href: 'https://github.com/storytold/photocraft/releases/download/v0.7.0/photocraft-0.7.0-windows-x64-portable.zip',
-        host: 'GitHub',
-        file: 'photocraft-0.7.0-windows-x64-portable.zip',
-        size: '73.3 MB',
-        note: 'نسخة محمولة (بلا تثبيت)',
-      },
-    ],
-    docs: 'https://github.com/storytold/photocraft',
-    glyph: 'layers',
-    date: '2026-10-11',
-  },
+
+  /* ------------------------------------------------------------------ *
+   * 4. Android Mobile Apps (تطبيقات أندرويد)
+   * ------------------------------------------------------------------ */
   {
     slug: 'zeidex-convert-android',
     name: 'محوّل الملفات Zeidex Convert — أندرويد',

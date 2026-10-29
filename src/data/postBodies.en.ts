@@ -15,6 +15,136 @@ const edmsDownload: Block = {
   meta: `${edmsFile.file} · ${edmsFile.size} · ${edmsFile.host}`,
 }
 
+const yusrProg = getProgram('yusr')!
+const yusrPrimary = primaryDownload(yusrProg)
+const yusrDownloadEn: Block = {
+  type: 'download',
+  href: yusrPrimary.href,
+  label: `${yusrProg.nameEn} — ${yusrPrimary.file}`,
+  meta: `${yusrPrimary.file} · ${yusrPrimary.size} · ${yusrPrimary.host}`,
+  also: yusrProg.downloads.slice(1).map((d) => ({
+    href: d.href,
+    label: `${d.file} (${d.note || d.host})`,
+    meta: `${d.file} · ${d.size} · ${d.host}`,
+  })),
+}
+
+export const yusrBodyEn: Block[] = [
+  {
+    type: 'image',
+    src: '/img/screen-dashboard.png',
+    fallback: '/img/screen-dashboard.png',
+    alt: 'Yusr Suite Financial Dashboard',
+    caption: 'Yusr v0.2.1 — Sovereign Fund Accounting & Executive Dashboard.',
+  },
+  {
+    type: 'p',
+    text: '**Yusr (يُسر)** is a sovereign, enterprise-grade back-office and fund accounting suite engineered specifically for non-profits, charitable foundations, Zakat committees, and endowment funds (Awqaf). Built on a strict 100% offline-first architecture, it provides complete local control with zero mandatory cloud dependencies or subscriptions.',
+  },
+  yusrDownloadEn,
+  {
+    type: 'h2',
+    id: 'overview',
+    text: 'Overview of Yusr Suite',
+  },
+  {
+    type: 'p',
+    text: 'Powered by an ultra-fast **Rust** backend engine with an embedded **PostgreSQL 18** database cluster bundled directly in the installer with zero manual configuration. The modern desktop shell is built on **Tauri v2** with full bilingual support (Arabic and English) and native RTL typography.',
+  },
+  {
+    type: 'stats',
+    items: [
+      { value: '100%', label: 'Offline-First' },
+      { value: 'SHA-256', label: 'Tamper-Evident Ledger' },
+      { value: 'PostgreSQL 18', label: 'Embedded Engine' },
+      { value: 'ZATCA', label: 'Phase 2 E-Invoicing' },
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'ledger',
+    text: 'Tamper-Evident SHA-256 Hash-Chain Ledger',
+  },
+  {
+    type: 'p',
+    text: 'Financial integrity is enforced via a write-once, append-only cryptographic hash chain. Posted journal entries cannot be silently edited or deleted; corrections occur strictly through reversing entries with verifiable audit timestamps and operator identity.',
+  },
+  {
+    type: 'image',
+    src: '/img/screen-report.png',
+    fallback: '/img/screen-report.png',
+    alt: 'Cryptographically Signed Donor Reports in Yusr',
+    caption: 'Verifiable financial reports stamped with SHA-256 block hash and QR code.',
+  },
+  {
+    type: 'h2',
+    id: 'advisor',
+    text: 'Offline Local AI Advisor',
+  },
+  {
+    type: 'p',
+    text: 'Features an embedded AI financial advisor trained on non-profit fund accounting standards and Zakat governance. Running natively via llama.cpp on your CPU/GPU, it answers queries and analyzes fund health without sending sensitive records to external cloud providers.',
+  },
+  {
+    type: 'image',
+    src: '/img/screen-advisor.png',
+    fallback: '/img/screen-advisor.png',
+    alt: 'Local AI Advisor in Yusr Suite',
+    caption: 'Instant local advisory and financial analysis with zero internet connection.',
+  },
+  {
+    type: 'h2',
+    id: 'zatca',
+    text: 'ZATCA Phase 2 Electronic Invoicing',
+  },
+  {
+    type: 'p',
+    text: 'Fully equipped for Saudi ZATCA Phase 2 requirements: cryptographic stamps, ECDSA secp256k1 signatures, UBL 2.1 XML invoices, and sequential invoice hashing.',
+  },
+  {
+    type: 'h2',
+    id: 'backup',
+    text: 'Multi-Target Automated Backup Engine',
+  },
+  {
+    type: 'p',
+    text: 'Automated atomic snapshots powered by pg_dump running in the background with SHA-256 verification. Routes backups to secondary partitions, removable USB media, and optional client-side encrypted cloud targets.',
+  },
+  {
+    type: 'image',
+    src: '/img/screen-backup.png',
+    fallback: '/img/screen-backup.png',
+    alt: 'Automated Multi-Target Backup in Yusr',
+    caption: 'Automated atomic snapshots with cryptographic hash verification.',
+  },
+  {
+    type: 'h2',
+    id: 'network',
+    text: 'LAN Collaboration & Granular RBAC',
+  },
+  {
+    type: 'p',
+    text: 'Switch effortlessly from single-seat standalone mode (127.0.0.1) to LAN Server mode (0.0.0.0), enabling your team of accountants, auditors, and social workers to collaborate smoothly with granular role-based permissions.',
+  },
+  {
+    type: 'callout',
+    tone: 'info',
+    title: 'Default Credentials',
+    items: [
+      'Default Username: admin',
+      'Default Password: admin12345',
+      'Instant Auto-fill button is available on the sign-in screen.',
+      'We recommend updating the password immediately in Settings after first login.',
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'get',
+    text: 'Download & Verification',
+  },
+  yusrDownloadEn,
+]
+
 const aiFakeEn: Block[] = [
   {
     type: 'p',
@@ -490,6 +620,7 @@ const zeidexConvertAndroidBodyEn: Block[] = [
 ]
 
 export const postBodiesEn: Record<string, Block[]> = {
+  "yusr": yusrBodyEn,
   "zeidex-convert-android": zeidexConvertAndroidBodyEn,
   "ai-fake-detector-android": aiFakeEn,
 

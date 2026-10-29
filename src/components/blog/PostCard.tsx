@@ -33,16 +33,15 @@ export function PostCard({ post, index = 0 }: { post: PostMeta; index?: number }
             <span className={cn('grid size-9 place-items-center rounded-lg border border-app transition-transform duration-300 group-hover:scale-105', style.text)}>
               <Glyph name={post.cover as GlyphName} size={16} />
             </span>
-            {prog?.kind === 'android' && (
+            {prog?.kind === 'android' ? (
               <span className="absolute -end-1 -bottom-1 grid size-4 place-items-center rounded-full bg-emerald-500 text-white">
                 <Smartphone className="size-2.5" />
               </span>
-            )}
-            {prog?.kind === 'windows' && (
+            ) : prog ? (
               <span className="absolute -end-1 -bottom-1 grid size-4 place-items-center rounded-full bg-blue-500 text-white">
                 <Monitor className="size-2.5" />
               </span>
-            )}
+            ) : null}
           </span>
           <span className={cn('flex items-center gap-1 text-[11px] font-semibold tracking-wide', style.text)}>
             <Glyph name={icon} size={12} aria-hidden="true" />

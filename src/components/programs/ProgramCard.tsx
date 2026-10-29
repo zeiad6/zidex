@@ -31,12 +31,11 @@ export function ProgramCard({ program }: { program: Program }) {
         >
           <Glyph name={program.glyph} size={20} className="text-accent" />
         </span>
-        {program.kind === 'android' && (
+        {program.kind === 'android' ? (
           <span className="absolute -end-1.5 -bottom-1.5 grid size-5 place-items-center rounded-full bg-emerald-500 text-white shadow-sm">
             <Smartphone className="size-3" />
           </span>
-        )}
-        {program.kind === 'windows' && (
+        ) : (
           <span className="absolute -end-1.5 -bottom-1.5 grid size-5 place-items-center rounded-full bg-blue-500 text-white shadow-sm">
             <Monitor className="size-3" />
           </span>

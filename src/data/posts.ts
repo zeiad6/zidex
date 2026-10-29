@@ -94,6 +94,21 @@ type RawPost = PostMeta
 
 const raw: RawPost[] = [
   {
+    slug: 'yusr',
+    title: 'نظام يُسر (Yusr): المنظومة المحاسبية والمالية المستقلة للمنظمات غير الربحية والأوقاف',
+    excerpt:
+      'نظام سيادي مكتمل لإدارة أموال وصناديق الجمعيات الخيرية ولجان الزكاة: دفتر أستاذ غير قابل للتلاعب بسلسلة كتل SHA-256، مستشار ذكي محلي، فوترة ZATCA، وتثبيت ذاتي يعمل دون إنترنت 100%.',
+    category: 'تقنية',
+    date: '2026-10-29',
+    featured: true,
+    cover: 'shield',
+    coverFrom: 'from-emerald-600',
+    coverTo: 'to-ink-900',
+    tags: ['محاسبة', 'أوقاف', 'زكاة', 'ZATCA', 'Rust', 'PostgreSQL', 'ذكاء اصطناعي'],
+    readMinutes: 2,
+    headings: [{"id":"overview","text":"نظرة عامة على نظام يُسر","level":2},{"id":"ledger","text":"دفتر الأستاذ الرقمي ومكافحة التلاعب","level":2},{"id":"advisor","text":"المستشار الذكي المحلي (Offline AI Advisor)","level":2},{"id":"zatca","text":"الفاتورة الإلكترونية وهيئة الزكاة (ZATCA)","level":2},{"id":"backup","text":"النسخ الاحتياطي التلقائي متعدد المسارات","level":2},{"id":"network","text":"العمل في شبكة داخلية LAN والصلاحيات","level":2},{"id":"get","text":"التحميل والتثبيت","level":2}],
+  },
+  {
     slug: 'zeidex-convert-android',
     title: 'Zeidex Convert للأندرويد: محوّل ملفات محلي شامل، استخراج الصور الحية، وتحسين جودة الوسائط',
     excerpt:

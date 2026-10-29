@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Glyph } from '@/components/ui/Glyphs'
 import { ArrowLeft, ArrowUpLeft, ChevronDown, HardDrive, Download, History, Package, Cloud, Flame, Smartphone, Monitor } from 'lucide-react'
@@ -14,7 +15,7 @@ import { useDownloadCount } from '@/lib/downloads'
 import { useI18n } from '@/lib/i18n'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { site } from '@/lib/site'
-import { formatDate } from '@/lib/utils'
+import { cn, formatDate } from '@/lib/utils'
 import { Reveal } from '@/components/ui/Reveal'
 import { Magnetic } from '@/components/ui/Interactive'
 import { TiltCard } from '@/components/ui/Interactive'
@@ -39,9 +40,13 @@ export default function Programs() {
 
   if (programs.length === 0) return <NotFound />
 
+  const [activeKind, setActiveKind] = useState<ProgramKind | 'all'>('all')
+
   const groups = (Object.keys(programKinds) as ProgramKind[])
     .map((kind) => ({ kind, meta: programKinds[kind], items: programs.filter((p) => p.kind === kind) }))
     .filter((g) => g.items.length > 0)
+
+  const displayedGroups = activeKind === 'all' ? groups : groups.filter((g) => g.kind === activeKind)
 
   return (
     <>
@@ -63,17 +68,52 @@ export default function Programs() {
           <Reveal delay={0.12}>
             <p className="text-muted mt-5 max-w-2xl text-lg leading-relaxed">
               {t(
-                'مقسّمة حسب المنصة. لكل برنامج توثيق يشرح كيف يعمل وما حدوده — لا رابط بلا سياق.',
-                'Split by platform. Every program ships with documentation explaining what it does and where it stops — no bare links.',
+                'مقسّمة حسب المنصة والحزمة. لكل برنامج توثيق يشرح كيف يعمل وما حدوده — لا رابط بلا سياق.',
+                'Organized by platform and suite. Every program ships with documentation explaining what it does and where it stops — no bare links.',
               )}
             </p>
+          </Reveal>
+
+          {/* Category filter pills */}
+          <Reveal delay={0.16}>
+            <div className="mt-8 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setActiveKind('all')}
+                className={cn(
+                  'rounded-full px-4 py-2 text-xs font-bold transition-all cursor-pointer',
+                  activeKind === 'all'
+                    ? 'bg-accent text-white shadow-app-sm scale-[1.02]'
+                    : 'bg-elevated border-app hover:border-app-strong text-subtle hover:text-app border'
+                )}
+              >
+                {t('كل الأقسام', 'All sections')} ({programs.length})
+              </button>
+              {groups.map(({ kind, meta, items }) => (
+                <button
+                  key={kind}
+                  type="button"
+                  onClick={() => setActiveKind(kind)}
+                  className={cn(
+                    'flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold transition-all cursor-pointer',
+                    activeKind === kind
+                      ? 'bg-accent text-white shadow-app-sm scale-[1.02]'
+                      : 'bg-elevated border-app hover:border-app-strong text-subtle hover:text-app border'
+                  )}
+                >
+                  <Glyph name={meta.glyph} size={14} />
+                  <span>{t(meta.label, meta.labelEn)}</span>
+                  <span className="opacity-75 tabular-nums text-[11px]">({items.length})</span>
+                </button>
+              ))}
+            </div>
           </Reveal>
         </div>
       </section>
 
-      {/* Sections, one per platform */}
+      {/* Sections */}
       <div className="container-app flex flex-col gap-14 pb-16 sm:pb-20">
-        {groups.map(({ kind, meta, items }, gi) => (
+        {displayedGroups.map(({ kind, meta, items }, gi) => (
           <section key={kind} aria-labelledby={`programs-${kind}`}>
             <Reveal delay={Math.min(gi * 0.06, 0.2)}>
               <div className="mb-6 flex flex-wrap items-end justify-between gap-4 border-b border-app pb-4">
@@ -176,12 +216,11 @@ function ProgramTile({
               >
                 <Glyph name={program.glyph} size={22} />
               </span>
-              {program.kind === 'android' && (
+              {program.kind === 'android' ? (
                 <span className="absolute -end-1.5 -bottom-1.5 grid size-5 place-items-center rounded-full bg-emerald-500 text-white shadow-sm">
                   <Smartphone className="size-3" />
                 </span>
-              )}
-              {program.kind === 'windows' && (
+              ) : (
                 <span className="absolute -end-1.5 -bottom-1.5 grid size-5 place-items-center rounded-full bg-blue-500 text-white shadow-sm">
                   <Monitor className="size-3" />
                 </span>

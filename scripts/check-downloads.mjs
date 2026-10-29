@@ -60,32 +60,63 @@ const fmt = (b) => `${(b / 1048576).toFixed(1)} MB`
 let broken = 0
 
 async function checkGithub(href) {
-  const res = await fetch(href, { redirect: 'follow', method: 'GET' })
-  res.body?.cancel?.()
-  if (res.status !== 200) throw new Error(`HTTP ${res.status}`)
-  return `HTTP 200 · ${decodeURIComponent(href.split('/').pop())}`
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const res = await fetch(href, { redirect: 'follow', method: 'HEAD' })
+      if (res.status === 200) {
+        return `HTTP 200 · ${decodeURIComponent(href.split('/').pop())}`
+      }
+      if (res.status === 405) {
+        const getRes = await fetch(href, { redirect: 'follow', method: 'GET' })
+        getRes.body?.cancel?.()
+        if (getRes.status === 200) {
+          return `HTTP 200 · ${decodeURIComponent(href.split('/').pop())}`
+        }
+      }
+      if (res.status !== 200 && attempt === 2) {
+        throw new Error(`HTTP ${res.status}`)
+      }
+    } catch (err) {
+      if (attempt === 2) throw err
+      await new Promise((r) => setTimeout(r, 600))
+    }
+  }
 }
 
 async function checkMediaFire(href) {
   const key = href.match(/mediafire\.com\/file\/([^/]+)/)?.[1]
   if (!key) throw new Error('no quick_key in URL')
-  const res = await fetch(`https://www.mediafire.com/api/1.5/file/get_info.php?quick_key=${key}&response_format=json`)
-  const info = (await res.json())?.response?.file_info
-  if (!info) throw new Error('API returned no file_info')
-  if (info.ready !== 'yes') throw new Error(`not ready (${info.ready})`)
-  if (info.privacy !== 'public') throw new Error(`not public (${info.privacy})`)
-  return `${info.filename} · ${fmt(Number(info.size))} · ready/public`
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const res = await fetch(`https://www.mediafire.com/api/1.5/file/get_info.php?quick_key=${key}&response_format=json`)
+      const info = (await res.json())?.response?.file_info
+      if (!info) throw new Error('API returned no file_info')
+      if (info.ready !== 'yes') throw new Error(`not ready (${info.ready})`)
+      if (info.privacy !== 'public') throw new Error(`not public (${info.privacy})`)
+      return `${info.filename} · ${fmt(Number(info.size))} · ready/public`
+    } catch (err) {
+      if (attempt === 2) throw err
+      await new Promise((r) => setTimeout(r, 600))
+    }
+  }
 }
 
 async function checkDrive(href) {
   const id = href.match(/\/file\/d\/([^/]+)/)?.[1] ?? href.match(/[?&]id=([^&]+)/)?.[1]
   if (!id) throw new Error('no file id in URL')
-  const res = await fetch(`https://drive.google.com/file/d/${id}/view`, { redirect: 'follow' })
-  const html = await res.text()
-  if (res.status !== 200) throw new Error(`HTTP ${res.status}`)
-  if (/accounts\.google\.com|\/ServiceLogin/.test(res.url)) throw new Error('requires sign-in (not public)')
-  const title = html.match(/<title>([^<]+)<\/title>/)?.[1]?.replace(/\s*-\s*Google Drive$/, '').trim()
-  return title ? `public · “${title.slice(0, 60)}”` : 'public (no title)'
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const res = await fetch(`https://drive.google.com/file/d/${id}/view`, { redirect: 'follow' })
+      const html = await res.text()
+      if (res.status !== 200) throw new Error(`HTTP ${res.status}`)
+      if (/accounts\.google\.com|\/ServiceLogin/.test(res.url)) throw new Error('requires sign-in (not public)')
+      const title = html.match(/<title>([^<]+)<\/title>/)?.[1]?.replace(/\s*-\s*Google Drive$/, '').trim()
+      return title ? `public · “${title.slice(0, 60)}”` : 'public (no title)'
+    } catch (err) {
+      if (attempt === 2) throw err
+      await new Promise((r) => setTimeout(r, 600))
+    }
+  }
 }
 
 function checkerFor(href) {

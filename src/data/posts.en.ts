@@ -9,6 +9,13 @@ import type { Post } from './posts'
 export type PostText = Pick<Post, 'title' | 'excerpt' | 'tags' | 'headings'>
 
 export const postsEn: Record<string, PostText> = {
+  'yusr': {
+    title: 'Yusr: Sovereign Autonomous Fund Accounting Suite for Charities & Awqaf',
+    excerpt:
+      'Enterprise-grade back-office and fund accounting suite for non-profits: tamper-evident SHA-256 ledger, local AI advisor, ZATCA Phase 2 e-invoicing, and 100% offline-first architecture.',
+    tags: ['Accounting', 'Non-Profit', 'Zakat', 'ZATCA', 'Rust', 'PostgreSQL', 'AI'],
+    headings: [{"id":"overview","text":"Overview of Yusr Suite","level":2},{"id":"ledger","text":"Tamper-Evident SHA-256 Hash-Chain Ledger","level":2},{"id":"advisor","text":"Offline Local AI Advisor","level":2},{"id":"zatca","text":"ZATCA Phase 2 Electronic Invoicing","level":2},{"id":"backup","text":"Multi-Target Automated Backup Engine","level":2},{"id":"network","text":"LAN Collaboration & Granular RBAC","level":2},{"id":"get","text":"Download & Verification","level":2}],
+  },
   'zeidex-convert-android': {
     title: 'Zeidex Convert for Android: 100% Offline File Converter, Live Photo Extractor & Media Booster',
     excerpt:

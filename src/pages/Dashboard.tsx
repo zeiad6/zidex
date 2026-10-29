@@ -410,7 +410,7 @@ export default function Dashboard() {
   const maxDownloads = counts ? Math.max(1, ...Object.values(counts)) : 1
 
   // Platform split, derived from the catalogue — real counts, no estimates.
-  const winCount = programs.filter((p) => p.kind === 'windows').length
+  const winCount = programs.filter((p) => p.kind !== 'android').length
   const androidCount = programs.filter((p) => p.kind === 'android').length
   const newest = [...programs].sort((a, b) => b.date.localeCompare(a.date))[0]
   // Honest category counts: one chip per published category plus its post count.
