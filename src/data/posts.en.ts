@@ -9,6 +9,13 @@ import type { Post } from './posts'
 export type PostText = Pick<Post, 'title' | 'excerpt' | 'tags' | 'headings'>
 
 export const postsEn: Record<string, PostText> = {
+  'local-cicd-guide': {
+    title: 'The Definitive Guide: Running Local CI/CD & GitHub Actions on Linux, Windows & Termux Without Errors',
+    excerpt:
+      'How to install and run CI/CD pipelines locally with act and Docker across Windows, Linux, and Termux/PRoot: flawless setup, .actrc tuning, secrets management, and definitive fixes for the top 7 errors.',
+    tags: ['CI/CD', 'GitHub Actions', 'Docker', 'act', 'Linux', 'Windows', 'Termux'],
+    headings: [{"id":"why-local","text":"Why Run CI/CD Locally?","level":2},{"id":"how-it-works","text":"How Local CI/CD Works (Architecture)","level":2},{"id":"install-linux","text":"Installation on Linux (Ubuntu / Debian / Arch)","level":2},{"id":"install-windows","text":"Installation on Windows (PowerShell & WSL2)","level":2},{"id":"install-termux","text":"Running in Constrained Environments (Android / Termux / PRoot)","level":2},{"id":"config-actrc","text":"Configuring .actrc & Runner Image Selection","level":2},{"id":"daily-usage","text":"Everyday Commands & Secrets Management (.secrets)","level":2},{"id":"troubleshoot","text":"Troubleshooting Critical Common Errors (Top 7 Fixes)","level":2},{"id":"err-daemon","text":"1. Docker Daemon Inaccessible (Cannot connect to Docker daemon)","level":3},{"id":"err-arch","text":"2. Architecture Mismatch on ARM64 & Apple Silicon (exec format error)","level":3},{"id":"err-crlf","text":"3. Windows Line Ending Errors (\\r: command not found)","level":3},{"id":"err-composite","text":"4. Failed to Resolve Composite Actions (401 Unauthorized)","level":3},{"id":"err-services","text":"5. Service Containers & Docker-in-Docker (DinD) Failures","level":3},{"id":"err-artifacts","text":"6. Artifact Storage Failures (upload-artifact / download-artifact)","level":3},{"id":"err-space","text":"7. Out of Disk Space (No space left on device)","level":3},{"id":"checklist","text":"Pre-Flight Pipeline Checklist","level":2}],
+  },
   'yusr': {
     title: 'Yusr: Sovereign Autonomous Fund Accounting Suite for Charities & Awqaf',
     excerpt:

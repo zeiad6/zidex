@@ -94,6 +94,21 @@ type RawPost = PostMeta
 
 const raw: RawPost[] = [
   {
+    slug: 'local-cicd-guide',
+    title: 'الدليل العملي الشامل: تشغيل وتثبيت CI/CD محلياً على Linux و Windows و Termux دون أخطاء',
+    excerpt:
+      'كيف تشغل وتبني خطوط الأنابيب CI/CD محلياً على جهازك باستخدام act و Docker في بيئات Windows و Linux و Termux/PRoot: تثبيت سليم، إعداد .actrc، إدارة الأسرار، وحلول قطعية لأشهر 7 أخطاء شائعة.',
+    category: 'تقنية',
+    date: '2026-10-29',
+    featured: true,
+    cover: 'terminal',
+    coverFrom: 'from-sky-500',
+    coverTo: 'to-ink-900',
+    tags: ['CI/CD', 'GitHub Actions', 'Docker', 'act', 'Linux', 'Windows', 'Termux'],
+    readMinutes: 7,
+    headings: [{"id":"why-local","text":"لماذا تشغيل CI/CD محلياً على جهازك؟","level":2},{"id":"how-it-works","text":"كيف يعمل محرك CI/CD المحلي (المعمارية)","level":2},{"id":"install-linux","text":"التثبيت على أنظمة Linux (Ubuntu / Debian / Arch)","level":2},{"id":"install-windows","text":"التثبيت على نظام Windows (PowerShell و WSL2)","level":2},{"id":"install-termux","text":"التشغيل في البيئات المقيدة (Android / Termux / PRoot)","level":2},{"id":"config-actrc","text":"ضبط ملف الإعداد السحري .actrc وصور الحاويات","level":2},{"id":"daily-usage","text":"أوامر التشغيل اليومية وتمرير الأسرار (.secrets)","level":2},{"id":"troubleshoot","text":"حلول الأخطاء الشائعة والحرجة (7 مشاكل شائعة)","level":2},{"id":"err-daemon","text":"1. فشل الاتصال بمقبس دوكر (Cannot connect to Docker daemon)","level":3},{"id":"err-arch","text":"2. خطأ المعمارية على معالجات ARM64 و Apple Silicon (exec format error)","level":3},{"id":"err-crlf","text":"3. أخطاء نهايات الأسطر في ويندوز (\\r: command not found)","level":3},{"id":"err-composite","text":"4. فشل استنساخ الحركات المركبة (Failed to resolve action / 401)","level":3},{"id":"err-services","text":"5. فشل تشغيل حاويات الخدمات (Postgres و Redis و Docker-in-Docker)","level":3},{"id":"err-artifacts","text":"6. تعذر حفظ واسترجاع النواتج (upload-artifact / download-artifact)","level":3},{"id":"err-space","text":"7. خطأ نفاد مساحة القرص (No space left on device)","level":3},{"id":"checklist","text":"قائمة التحقق السريعة قبل تشغيل الـ Pipeline","level":2}],
+  },
+  {
     slug: 'yusr',
     title: 'نظام يُسر (Yusr): المنظومة المحاسبية والمالية المستقلة للمنظمات غير الربحية والأوقاف',
     excerpt:

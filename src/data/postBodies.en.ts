@@ -29,6 +29,393 @@ const yusrDownloadEn: Block = {
   })),
 }
 
+export const localCicdBodyEn: Block[] = [
+  {
+    type: 'image',
+    src: '/img/local-cicd-cover.png',
+    fallback: '/img/local-cicd-cover.png',
+    alt: 'Running local CI/CD pipelines with act and Docker',
+    caption: 'The complete guide to running and testing GitHub Actions locally across all environments.',
+  },
+  {
+    type: 'p',
+    text: 'Every software engineer knows the painful loop: make a tiny 1-line config change, commit, `git push`, and wait 5 to 10 minutes for cloud runners to spin up—only to discover a minor syntax typo, a missing environment variable, or a broken test that could have been detected in under a second on your own machine.',
+  },
+  {
+    type: 'p',
+    text: 'Running continuous integration and continuous deployment (CI/CD) **locally** fundamentally transforms software delivery: instantaneous feedback, zero cloud minute burn, total offline functionality (100% offline-first), and airtight security for your private API tokens.',
+  },
+  {
+    type: 'stats',
+    items: [
+      { value: '0 min', label: 'Cloud Minutes Consumed' },
+      { value: '< 1s', label: 'Local Runner Spin-up' },
+      { value: '100%', label: 'GitHub Actions Parity' },
+      { value: 'Multi-OS', label: 'Linux, Windows, & Termux' },
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'why-local',
+    text: 'Why Run CI/CD Locally?',
+  },
+  {
+    type: 'p',
+    text: 'Switching to local workflow execution is not merely a convenience; it resolves four systemic engineering bottlenecks for teams and solo developers alike:',
+  },
+  {
+    type: 'ul',
+    items: [
+      'Shrinks the feedback loop from 5-10 cloud queue minutes to sub-second local execution.',
+      'Saves your monthly GitHub Actions quota for production deployments and release builds.',
+      'Enables interactive workflow debugging: attach a bash shell directly inside the container upon failure.',
+      'Full offline development capability—test pipelines on planes, remote networks, or during GitHub outages.',
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'how-it-works',
+    text: 'How Local CI/CD Works (Architecture)',
+  },
+  {
+    type: 'image',
+    src: '/img/local-cicd-architecture.png',
+    fallback: '/img/local-cicd-architecture.png',
+    alt: 'act Engine and Docker Daemon Bridge Architecture',
+    caption: 'Unified architecture: parsing YAML workflows, mounting workspaces, and streaming container logs.',
+  },
+  {
+    type: 'p',
+    text: 'The open-source gold standard for local GitHub Actions is **act** (built by the nektos community). It parses workflow definitions in `.github/workflows/*.yml`, builds the execution graph (DAG), and interfaces directly with your local Docker Daemon:',
+  },
+  {
+    type: 'ol',
+    items: [
+      'Resolves the requested runner environment for each job (e.g. ubuntu-latest or ubuntu-22.04).',
+      'Pulls or reuses curated container images from CatTheHacker matching official GitHub virtual environments.',
+      'Bind-mounts your current workspace directory into the container with zero upload overhead.',
+      'Injects secrets and environment variables safely from local .secrets and .env files.',
+      'Executes steps sequentially, tracks exit codes, and renders colored streaming output in your terminal.',
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'install-linux',
+    text: 'Installation on Linux (Ubuntu / Debian / Arch)',
+  },
+  {
+    type: 'p',
+    text: 'On Linux, you obtain near-bare-metal execution speeds via direct Unix socket communication with the host kernel.',
+  },
+  {
+    type: 'p',
+    text: 'Step 1: Install official Docker Engine and grant non-root permissions:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# Install official Docker Engine via upstream script:
+curl -fsSL https://get.docker.com | sh
+
+# Add your user to the docker group:
+sudo usermod -aG docker $USER
+newgrp docker
+
+# Enable and start the system service:
+sudo systemctl enable --now docker`,
+  },
+  {
+    type: 'p',
+    text: 'Step 2: Install the act CLI binary:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# On Ubuntu, Debian, or Fedora via official installer:
+curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
+
+# On Arch Linux via AUR:
+yay -S act-cli
+
+# Verify installation:
+act --version`,
+  },
+  {
+    type: 'h2',
+    id: 'install-windows',
+    text: 'Installation on Windows (PowerShell & WSL2)',
+  },
+  {
+    type: 'callout',
+    tone: 'tip',
+    title: 'Recommended Path: WSL2 + Docker Desktop',
+    items: [
+      'Docker Desktop backed by the WSL2 engine offers native Linux filesystem I/O and zero POSIX translation friction.',
+      'Running act directly inside a WSL2 Ubuntu shell provides 100% parity with cloud Linux runners.',
+    ],
+  },
+  {
+    type: 'p',
+    text: 'If you prefer running act directly from Windows PowerShell or Windows Terminal (Native Windows), use your package manager of choice:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# Option 1: Via Windows Package Manager (winget):
+winget install nektos.act
+
+# Option 2: Via Scoop (recommended for CLI tools):
+scoop install act
+
+# Option 3: Via Chocolatey:
+choco install act-cli`,
+  },
+  {
+    type: 'p',
+    text: 'Important note for Windows users: ensure Docker Desktop is running before invoking act, with "Use the WSL 2 based engine" enabled in settings.',
+  },
+  {
+    type: 'h2',
+    id: 'install-termux',
+    text: 'Running in Constrained Environments (Android / Termux / PRoot)',
+  },
+  {
+    type: 'p',
+    text: 'On Android devices running Termux or PRoot (such as user-space Ubuntu roots), Android kernels disallow direct Docker daemon execution due to missing cgroup controllers and lack of root namespaces.',
+  },
+  {
+    type: 'p',
+    text: 'The battle-tested architectural pattern is routing the Docker socket over TCP to a local bridge or remote VPS daemon:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# 1. Point Docker client to local TCP daemon:
+export DOCKER_HOST="tcp://127.0.0.1:2375"
+
+# 2. Or tunnel securely from a remote development server or VPS:
+ssh -N -L 2375:/var/run/docker.sock user@remote-vps &
+export DOCKER_HOST="tcp://127.0.0.1:2375"
+
+# 3. Install act ARM64 binary into user path:
+curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | bash -s -- -b /usr/local/bin`,
+  },
+  {
+    type: 'h2',
+    id: 'config-actrc',
+    text: 'Configuring .actrc & Runner Image Selection',
+  },
+  {
+    type: 'p',
+    text: 'To avoid passing lengthy flags on every run, create a global config file in \`~/.actrc\` or a project-specific config in \`.actrc\`. This defines default images and default architecture:',
+  },
+  {
+    type: 'code',
+    lang: 'text',
+    code: `-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
+-P ubuntu-22.04=ghcr.io/catthehacker/ubuntu:act-22.04
+-P ubuntu-20.04=ghcr.io/catthehacker/ubuntu:act-20.04
+--container-architecture linux/amd64`,
+  },
+  {
+    type: 'table',
+    caption: 'Comparison of act Runner Image Flavors',
+    head: ['Image Size', 'Container Target', 'Bundled Tooling', 'Best For'],
+    rows: [
+      ['~200 MB', 'node:slim (Micro)', 'Fastest pull, minimal packages', 'Simple JavaScript / Node lint & test jobs'],
+      ['~1.5 GB', 'catthehacker act-latest (Medium)', 'Balanced; includes Git, Python, Node, Docker CLI', 'Recommended for 95% of typical repositories'],
+      ['~18 GB', 'catthehacker full (Large)', 'Complete parity with GitHub (Rust, Android, .NET)', 'Complex desktop builds, compilers, and emulators'],
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'daily-usage',
+    text: 'Everyday Commands & Secrets Management (.secrets)',
+  },
+  {
+    type: 'image',
+    src: '/img/local-cicd-terminal.png',
+    fallback: '/img/local-cicd-terminal.png',
+    alt: 'Terminal execution of act validating workflows locally',
+    caption: 'Fast, structured, colored workflow test results running completely offline.',
+  },
+  {
+    type: 'p',
+    text: 'The core CLI commands for your daily development workflow:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# 1. List all available workflows and job IDs:
+act -l
+
+# 2. Simulate a push event across all matching triggers:
+act push
+
+# 3. Run a specific targeted job (e.g. 'test' only, saving time):
+act -j test
+
+# 4. Simulate pull request triggers before creating a PR:
+act pull_request
+
+# 5. Inject local secrets and environment overrides:
+act -j test --secret-file .secrets --env-file .env`,
+  },
+  {
+    type: 'callout',
+    tone: 'warn',
+    title: 'Securing Your .secrets File',
+    items: [
+      'The .secrets file stores raw tokens such as GITHUB_TOKEN and connection strings.',
+      'Always include .secrets and .secrets.* in your .gitignore to prevent accidental leakage.',
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'troubleshoot',
+    text: 'Troubleshooting Critical Common Errors (Top 7 Fixes)',
+  },
+  {
+    type: 'image',
+    src: '/img/local-cicd-troubleshoot.png',
+    fallback: '/img/local-cicd-troubleshoot.png',
+    alt: 'Diagnostic matrix for local CI/CD failures and remedies',
+    caption: 'Actionable remedies for the top 7 friction points in local workflow execution.',
+  },
+  {
+    type: 'p',
+    text: 'These solutions address the most common roadblocks encountered when running local CI/CD pipelines:',
+  },
+  {
+    type: 'h3',
+    id: 'err-daemon',
+    text: '1. Docker Daemon Inaccessible (Cannot connect to Docker daemon)',
+  },
+  {
+    type: 'p',
+    text: 'Cause: Docker service stopped or user lacks permission on \`/var/run/docker.sock\`. Fix:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `sudo systemctl start docker
+sudo usermod -aG docker $USER
+newgrp docker`,
+  },
+  {
+    type: 'h3',
+    id: 'err-arch',
+    text: '2. Architecture Mismatch on ARM64 & Apple Silicon (exec format error)',
+  },
+  {
+    type: 'p',
+    text: 'Cause: Attempting to run x86_64 container binaries on ARM64 hardware without QEMU emulation. Fix:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# Force container architecture:
+act --container-architecture linux/amd64
+
+# Or register kernel binfmt emulation handlers:
+docker run --privileged --rm tonistiigi/binfmt --install all`,
+  },
+  {
+    type: 'h3',
+    id: 'err-crlf',
+    text: '3. Windows Line Ending Errors (\\r: command not found)',
+  },
+  {
+    type: 'p',
+    text: 'Cause: Windows editors inserting CRLF line endings into bash scripts. Fix: configure Git for LF endings:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# Enforce LF checkout in Git:
+git config core.autocrlf input
+
+# Convert existing workflow files to UNIX line endings:
+dos2unix .github/workflows/*.yml`,
+  },
+  {
+    type: 'h3',
+    id: 'err-composite',
+    text: '4. Failed to Resolve Composite Actions (401 Unauthorized)',
+  },
+  {
+    type: 'p',
+    text: 'Cause: Marketplace actions hitting GitHub rate limits or requiring repo read permissions. Fix: pass a valid personal or gh CLI token:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# Pass active token from GitHub CLI:
+act -s GITHUB_TOKEN="$(gh auth token)"
+
+# Or persist in local .secrets:
+echo "GITHUB_TOKEN=$(gh auth token)" >> .secrets`,
+  },
+  {
+    type: 'h3',
+    id: 'err-services',
+    text: '5. Service Containers & Docker-in-Docker (DinD) Failures',
+  },
+  {
+    type: 'p',
+    text: 'Cause: Standard container isolation blocks internal daemon creation. Fix: run act in privileged mode with host socket sharing:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `act --privileged --container-daemon-socket /var/run/docker.sock`,
+  },
+  {
+    type: 'h3',
+    id: 'err-artifacts',
+    text: '6. Artifact Storage Failures (upload-artifact / download-artifact)',
+  },
+  {
+    type: 'p',
+    text: 'Cause: act cannot reach the cloud blob storage used by GitHub. Fix: enable the built-in local artifact server:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `act --artifact-server-path /tmp/artifacts`,
+  },
+  {
+    type: 'h3',
+    id: 'err-space',
+    text: '7. Out of Disk Space (No space left on device)',
+  },
+  {
+    type: 'p',
+    text: 'Cause: Accumulation of dangling runner layers and orphaned networks. Fix: prune the Docker environment:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `docker system prune -f --volumes`,
+  },
+  {
+    type: 'h2',
+    id: 'checklist',
+    text: 'Pre-Flight Pipeline Checklist',
+  },
+  {
+    type: 'checklist',
+    items: [
+      'Docker daemon is verified active via: docker info',
+      'Config file .actrc defines preferred runner images and architectures',
+      'Secrets file .secrets is strictly listed in .gitignore',
+      'All workflow files use UNIX LF line endings',
+      'Workflow list verified locally via: act -l',
+      'Target job tested with: act -j test before pushing upstream',
+    ],
+  },
+]
+
 export const yusrBodyEn: Block[] = [
   {
     type: 'image',
@@ -620,6 +1007,7 @@ const zeidexConvertAndroidBodyEn: Block[] = [
 ]
 
 export const postBodiesEn: Record<string, Block[]> = {
+  "local-cicd-guide": localCicdBodyEn,
   "yusr": yusrBodyEn,
   "zeidex-convert-android": zeidexConvertAndroidBodyEn,
   "ai-fake-detector-android": aiFakeEn,

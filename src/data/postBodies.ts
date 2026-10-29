@@ -33,6 +33,393 @@ const yusrDownload: Block = {
   })),
 }
 
+export const localCicdBody: Block[] = [
+  {
+    type: 'image',
+    src: '/img/local-cicd-cover.png',
+    fallback: '/img/local-cicd-cover.png',
+    alt: 'تشغيل خطوط الأنابيب CI/CD محلياً عبر act و Docker',
+    caption: 'دليل شامل لتشغيل واختبار سيرفرات GitHub Actions محلياً في كافة البيئات.',
+  },
+  {
+    type: 'p',
+    text: 'كل مطور برمجيات خاض تلك التجربة المزعجة: تعدل سطراً واحداً في الكود أو ملف إعدادات، تدفعه إلى المستودع عبر `git push`، ثم تجلس دقائق طويلة بانتظار تشغيل خوادم GitHub Actions في السحاب لتكتشف في النهاية وجود خطأ تنسيق تافه، أو غياب متغير بيئي، أو فشل حزمة اختبار كان بالإمكان اكتشافها خلال أجزاء من الثانية على جهازك الشخصي.',
+  },
+  {
+    type: 'p',
+    text: 'تشغيل خطوط أنابيب التكامل المستمر والتسليم المستمر (CI/CD) **محلياً** ينقل تجربة التطوير إلى مستوى آخر تماماً: تغذية راجعة فورية، انعدام تام لاستهلاك رصيد الدقائق السحابية المجانية، إمكانية التطوير والاختبار دون الحاجة لأي اتصال بالإنترنت (100% Offline-First)، وحماية الأسرار ومفاتيح الـ API من التسريب.',
+  },
+  {
+    type: 'stats',
+    items: [
+      { value: '0 دقيقة', label: 'استهلاك دقائق سحابية' },
+      { value: '< 1 ثانية', label: 'زمن بدء تشغيل الـ Runner' },
+      { value: '100%', label: 'مطابقة لمعمارية GitHub' },
+      { value: 'Multi-OS', label: 'Linux و Windows و Termux' },
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'why-local',
+    text: 'لماذا تشغيل CI/CD محلياً على جهازك؟',
+  },
+  {
+    type: 'p',
+    text: 'الانتقال إلى تشغيل الـ Workflows محلياً لا يقتصر على كونه رفاهية، بل هو معيار احترافي يحل أربع معضلات أساسية يواجهها كل مهندس برمجيات وفرق العمل الحديثة:',
+  },
+  {
+    type: 'ul',
+    items: [
+      'تقليص حلقة التغذية الراجعة (Feedback Loop) من 5-10 دقائق سحابياً إلى بضع ثوانٍ معدودة محلياً.',
+      'حماية الحصة الشهرية للدقائق المجانية (GitHub Actions Free Tier) وتوفير تكاليف الخوادم للفرق والمشاريع الخاصة.',
+      'إمكانية تصحيح أخطاء الـ Workflows تفاعلياً والدخول المباشر إلى الحاوية عبر طرفية bash لفحص المشكلة فور وقوعها.',
+      'العمل الكامل في وضع عدم الاتصال (Offline) دون الاعتماد على توفر خدمة GitHub أو جودة اتصال الإنترنت.',
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'how-it-works',
+    text: 'كيف يعمل محرك CI/CD المحلي (المعمارية)',
+  },
+  {
+    type: 'image',
+    src: '/img/local-cicd-architecture.png',
+    fallback: '/img/local-cicd-architecture.png',
+    alt: 'معمارية عمل محرك act وربطه بمقبس ديمون دوكر',
+    caption: 'المعمارية المتكاملة: من قراءة ملفات YAML وحتى تشغيل الحاوية ومطابقة مسارات العمل.',
+  },
+  {
+    type: 'p',
+    text: 'الأداة القياسية الأقوى عالمياً في هذا المجال هي **act** (المطورة من قبل مجتمع nektos المفتوح المصدر). تعتمد فكرة الأداة على قراءة ملفات المسارات الموجودة في مجلد `.github/workflows/*.yml` وتحليل شجرة الاعتمادات (Dependency Graph)، ثم تتصل بمقبس Docker Daemon المحلي لتنفيذ المراحل الآتية:',
+  },
+  {
+    type: 'ol',
+    items: [
+      'تحديد الـ Runner المطلوب لكل مهمة (مثل ubuntu-latest أو ubuntu-22.04).',
+      'سحب أو استخدام صورة الحاوية المطابقة محلياً من سجل CatTheHacker المخصص لمحاكاة بيئة خوادم GitHub الرسمية.',
+      'ربط مسار مشروعك الحالي (Workspace Mount) بداخل الحاوية دون الحاجة لإعادة رفع أو نقل الأكواد.',
+      'حقن متغيرات البيئة والأسرار من ملفات .env و .secrets المحلية بأمان تام.',
+      'تنفيذ كل خطوة (Step) ومراقبة شفرة الخروج (Exit Code) وعرض المخرجات الملونة في الطرفية لحظة بلحظة.',
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'install-linux',
+    text: 'التثبيت على أنظمة Linux (Ubuntu / Debian / Arch)',
+  },
+  {
+    type: 'p',
+    text: 'على توزيعات لينكس ستحصل على الأداء الأسرع والأكثر كفاءة بفضل الاتصال المباشر بمقبس Unix Socket ونواة النظام.',
+  },
+  {
+    type: 'p',
+    text: 'أولاً: تثبيت محرك Docker Engine الرسمي وتفعيل إمكانية التشغيل دون الحاجة لكلمة مرور root:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# تثبيت دوكر الرسمي عبر السكريبت الآلي المعتمد:
+curl -fsSL https://get.docker.com | sh
+
+# إضافة المستخدم الحالي لمجموعة دوكر لتفادي مشاكل الأذونات:
+sudo usermod -aG docker $USER
+newgrp docker
+
+# تفعيل وتشغيل خدمة دوكر في خلفية النظام:
+sudo systemctl enable --now docker`,
+  },
+  {
+    type: 'p',
+    text: 'ثانياً: تثبيت أداة act عبر السكريبت المباشر أو مدير الحزم:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# على أنظمة Ubuntu و Debian و Fedora عبر السكريبت المعتمد:
+curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
+
+# على توزيعة Arch Linux عبر AUR:
+yay -S act-cli
+
+# التحقق من نجاح التثبيت وعرض الإصدار:
+act --version`,
+  },
+  {
+    type: 'h2',
+    id: 'install-windows',
+    text: 'التثبيت على نظام Windows (PowerShell و WSL2)',
+  },
+  {
+    type: 'callout',
+    tone: 'tip',
+    title: 'المسار الموصى به: WSL2 + Docker Desktop',
+    items: [
+      'تشغيل Docker Desktop مع تفعيل محرك WSL2 يوفر سرعة إدخال/إخراج فائقة وتوافقاً تاماً مع نظام ملفات لينكس.',
+      'يمكنك تشغيل act مباشرة داخل نافذة Ubuntu في WSL2 كأنك تعمل على خادم لينكس حقيقي.',
+    ],
+  },
+  {
+    type: 'p',
+    text: 'إذا كنت تفضل تثبيت act واستخدامه مباشرة من خلال Windows PowerShell أو Windows Terminal (Native Windows)، يمكنك استخدام أحد مديري الحزم الرسميين:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# الخيار 1: عبر مدير الحزم الافتراضي في ويندوز (winget):
+winget install nektos.act
+
+# الخيار 2: عبر Scoop (المفضل لمطوري الأدوات والأوامر):
+scoop install act
+
+# الخيار 3: عبر Chocolatey:
+choco install act-cli`,
+  },
+  {
+    type: 'p',
+    text: 'ملاحظة مهمة لمستخدمي ويندوز: تأكد من تشغيل تطبيق Docker Desktop قبل إطلاق الأداة، وتأكد من تفعيل إعداد «Use the WSL 2 based engine» في إعدادات التطبيق العامة.',
+  },
+  {
+    type: 'h2',
+    id: 'install-termux',
+    text: 'التشغيل في البيئات المقيدة (Android / Termux / PRoot)',
+  },
+  {
+    type: 'p',
+    text: 'في بيئات أندرويد عبر Termux أو بيئات PRoot المعزولة (مثل توزيعات Ubuntu المصغرة على الهواتف الذكية أو بيئات الحوسبة المحمولة)، لا تملك النواة صلاحية تشغيل كيرنل Docker بشكل مباشر لعدم توفر cgroups وصلاحيات root للنواة الأساسية.',
+  },
+  {
+    type: 'p',
+    text: 'الحل التقني الصحيح هو ربط act عبر مقبس شبكي (TCP Socket) بخادم Docker يعمل على نفس الشبكة المحلية أو عبر نفق SSH آمن:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# 1. توجيه مقبس دوكر عبر منفذ TCP محلي:
+export DOCKER_HOST="tcp://127.0.0.1:2375"
+
+# 2. في حال كان دوكر يعمل على خادم خارجي أو VPS:
+ssh -N -L 2375:/var/run/docker.sock user@remote-vps &
+export DOCKER_HOST="tcp://127.0.0.1:2375"
+
+# 3. تثبيت ثنائية act لمعمارية ARM64 داخل Termux أو PRoot:
+curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | bash -s -- -b /usr/local/bin`,
+  },
+  {
+    type: 'h2',
+    id: 'config-actrc',
+    text: 'ضبط ملف الإعداد السحري .actrc وصور الحاويات',
+  },
+  {
+    type: 'p',
+    text: 'لكي لا تضطر لتحديد الخيارات وصور الحاويات في كل مرة تشغل فيها أمراً، يدعم act ملف إعدادات افتراضي يوضع في مجلدك الرئيسي (~/.actrc) أو في جذر المشروع (.actrc). هذا الملف يمثل التكوين الذهبي الذي يحل 90% من المشاكل مقدماً:',
+  },
+  {
+    type: 'code',
+    lang: 'text',
+    code: `-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
+-P ubuntu-22.04=ghcr.io/catthehacker/ubuntu:act-22.04
+-P ubuntu-20.04=ghcr.io/catthehacker/ubuntu:act-20.04
+--container-architecture linux/amd64`,
+  },
+  {
+    type: 'table',
+    caption: 'مقارنة خيارات صور المشغل (Runner Images) لأداة act',
+    head: ['حجم الصورة', 'اسم الحاوية', 'المزايا والمكتبات', 'الاستخدام الأمثل'],
+    rows: [
+      ['~200 MB', 'node:slim (Micro)', 'سريعة التحميل وخفيفة جداً', 'المشاريع البسيطة التي تتطلب Node فقط'],
+      ['~1.5 GB', 'catthehacker act-latest (Medium)', 'متوازنة وتضم Git, Python, Node, Docker CLI', 'الخيار الموصى به لـ 95% من المشاريع'],
+      ['~18 GB', 'catthehacker full (Large)', 'مطابقة تامة لسيرفرات GitHub (Rust, .NET, Android)', 'المشاريع الضخمة التي تبني حزم أندرويد وسطح المكتب'],
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'daily-usage',
+    text: 'أوامر التشغيل اليومية وتمرير الأسرار (.secrets)',
+  },
+  {
+    type: 'image',
+    src: '/img/local-cicd-terminal.png',
+    fallback: '/img/local-cicd-terminal.png',
+    alt: 'طرفية تشغيل act بنجاح واختبار المشاريع',
+    caption: 'تنفيذ المهام واختبارها محلياً في ثوانٍ مع نتائج ملونة وشاملة.',
+  },
+  {
+    type: 'p',
+    text: 'أهم الأوامر العملية التي ستستخدمها في يومك البرمجي لإجراء الفحوصات قبل كل عملية push:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# 1. استعراض كافة المسارات والمهام (Jobs) المعرفة في المشروع:
+act -l
+
+# 2. تشغيل حدث الـ Push الافتراضي:
+act push
+
+# 3. تشغيل مهمة معينة بالاسم (مثلاً وظيفة test فقط توفيراً للوقت):
+act -j test
+
+# 4. محاكاة حدث الـ Pull Request لفحص فروع الترقية:
+act pull_request
+
+# 5. تشغيل مع تمرير الأسرار والمتغيرات البيئية من ملفات محلية:
+act -j test --secret-file .secrets --env-file .env`,
+  },
+  {
+    type: 'callout',
+    tone: 'warn',
+    title: 'تأمين ملف الأسرار (.secrets)',
+    items: [
+      'ملف .secrets يحتوي على مفاتيح حساسة مثل GITHUB_TOKEN و DATABASE_URL.',
+      'أضف فوراً .secrets و .secrets.* إلى ملف .gitignore لمنع رفعها إلى المستودع العام بطريق الخطأ.',
+    ],
+  },
+  {
+    type: 'h2',
+    id: 'troubleshoot',
+    text: 'حلول الأخطاء الشائعة والحرجة (7 مشاكل شائعة)',
+  },
+  {
+    type: 'image',
+    src: '/img/local-cicd-troubleshoot.png',
+    fallback: '/img/local-cicd-troubleshoot.png',
+    alt: 'جدول تشخيص وحل أعطال CI/CD محلياً',
+    caption: 'خارطة تشخيص الأعطال الشائعة والحلول المباشرة لتشغيل CI/CD دون عوائق.',
+  },
+  {
+    type: 'p',
+    text: 'هذه الحلول تمثل خلاصة التجارب العملية لمعالجة أشهر 7 أخطاء يتعثر بها المطورون عند تشغيل CI/CD محلياً:',
+  },
+  {
+    type: 'h3',
+    id: 'err-daemon',
+    text: '1. فشل الاتصال بمقبس دوكر (Cannot connect to Docker daemon)',
+  },
+  {
+    type: 'p',
+    text: 'السبب: خدمة Docker غير مشغلة، أو أن المستخدم لا يملك صلاحية القراءة من مقبس `/var/run/docker.sock`. الحل الجذري:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `sudo systemctl start docker
+sudo usermod -aG docker $USER
+newgrp docker`,
+  },
+  {
+    type: 'h3',
+    id: 'err-arch',
+    text: '2. خطأ المعمارية على معالجات ARM64 و Apple Silicon (exec format error)',
+  },
+  {
+    type: 'p',
+    text: 'السبب: تشغيل حاوية x86_64 على معالج ARM64 دون توجيه المحاكي. الحل: إضافة خيار المعمارية الصريح للأمر أو وضعه في .actrc:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# تمرير معمارية الحاوية صراحة:
+act --container-architecture linux/amd64
+
+# أو تثبيت محاكي qemu للنواة لدعم تشغيل كافة المنصات:
+docker run --privileged --rm tonistiigi/binfmt --install all`,
+  },
+  {
+    type: 'h3',
+    id: 'err-crlf',
+    text: '3. أخطاء نهايات الأسطر في ويندوز (\\r: command not found)',
+  },
+  {
+    type: 'p',
+    text: 'السبب: Git على ويندوز يقوم أحياناً بتحويل نهايات الأسطر إلى CRLF مما يعطل مفسر bash داخل الحاوية. الحل: توحيد نهايات الأسطر إلى LF:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# ضبط إعدادات Git لمنع تحويل الأسطر إلى CRLF:
+git config core.autocrlf input
+
+# تحويل الملفات الحالية دفعة واحدة:
+dos2unix .github/workflows/*.yml`,
+  },
+  {
+    type: 'h3',
+    id: 'err-composite',
+    text: '4. فشل استنساخ الحركات المركبة (Failed to resolve action / 401)',
+  },
+  {
+    type: 'p',
+    text: 'السبب: بعض الحركات (Actions) تتطلب رمز دخول مصرح من GitHub لتنزيل ملفات الـ Action من الـ Marketplace. الحل: تمرير توكن GitHub الحقيقي للأداة:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `# قراءة التوكن مباشرة من أداة gh الرسمية:
+act -s GITHUB_TOKEN="$(gh auth token)"
+
+# أو حفظه في ملف .secrets:
+echo "GITHUB_TOKEN=$(gh auth token)" >> .secrets`,
+  },
+  {
+    type: 'h3',
+    id: 'err-services',
+    text: '5. فشل تشغيل حاويات الخدمات (Postgres و Redis و Docker-in-Docker)',
+  },
+  {
+    type: 'p',
+    text: 'السبب: قيود العزل الافتراضية تمنع الحاوية من تشغيل ديمون فرعي أو الوصول لمنافذ الخدمات. الحل: تشغيل act بصلاحيات مميزة ودعم الـ DinD:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `act --privileged --container-daemon-socket /var/run/docker.sock`,
+  },
+  {
+    type: 'h3',
+    id: 'err-artifacts',
+    text: '6. تعذر حفظ واسترجاع النواتج (upload-artifact / download-artifact)',
+  },
+  {
+    type: 'p',
+    text: 'السبب: أداة act لا تتصل بسيرفر التخزين السحابي لـ GitHub لحفظ النواتج والمخرجات. الحل: تفعيل خادم النواتج المحلي المدمج:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `act --artifact-server-path /tmp/artifacts`,
+  },
+  {
+    type: 'h3',
+    id: 'err-space',
+    text: '7. خطأ نفاد مساحة القرص (No space left on device)',
+  },
+  {
+    type: 'p',
+    text: 'السبب: تراكم الحاويات المنتهية وشبكات act المعزولة بمرور الوقت. الحل: تنظيف دوري للبيئة:',
+  },
+  {
+    type: 'code',
+    lang: 'bash',
+    code: `docker system prune -f --volumes`,
+  },
+  {
+    type: 'h2',
+    id: 'checklist',
+    text: 'قائمة التحقق السريعة قبل تشغيل الـ Pipeline',
+  },
+  {
+    type: 'checklist',
+    items: [
+      'التأكد من تشغيل ديمون Docker محلياً والتحقق عبر: docker info',
+      'وجود ملف .actrc في مجلد المشروع لتعريف صور الحاويات المعتمدة',
+      'إدراج ملف .secrets في .gitignore لتفادي تسريب المفاتيح الحساسة',
+      'توحيد نهايات أسطر ملفات الـ Workflows إلى LF وليس CRLF',
+      'فحص المسارات المتاحة محلياً عبر أمر: act -l',
+      'تشغيل الاختبارات محلياً بـ act -j test قبل إطلاق أمر git push إلى المستودع',
+    ],
+  },
+]
+
 export const yusrBody: Block[] = [
   {
     type: 'image',
@@ -752,6 +1139,7 @@ const archive106: Block[] = [
 ]
 
 export const postBodies: Record<string, Block[]> = {
+  "local-cicd-guide": localCicdBody,
   "yusr": yusrBody,
   "zeidex-convert-android": zeidexConvertAndroidBody,
 
