@@ -1,0 +1,1058 @@
+/* ==========================================================================
+   ZeidexSoft — Sovereign Interface
+   Design tokens (Designlang) · RTL base · cyber-sovereign dark surface
+   --------------------------------------------------------------------------
+   Palette rules, not decoration:
+     jade   #10B981 → anything that proves the system is alive (TLS, SHA-256,
+                      sync state, on-device processing).
+     tg     #0088CC → Telegram packages and only Telegram packages.
+     aurum  #F59E0B → value: stars, prices, the free trial, "most ordered".
+   Nothing else is coloured. Depth comes from hairlines and value, not hue.
+   ========================================================================== */
+
+@import 'tailwindcss';
+
+/* Self-hosted so the first paint never waits on a third-party stylesheet.
+   Subsets: Arabic + Latin for the UI face, Latin for the mono face. */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(/fonts/ibm-plex-sans-arabic-300-arabic.woff2) format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC7, U+10EC9-10EEE, U+10EF0-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(/fonts/ibm-plex-sans-arabic-300-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/ibm-plex-sans-arabic-400-arabic.woff2) format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC7, U+10EC9-10EEE, U+10EF0-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/ibm-plex-sans-arabic-400-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/ibm-plex-sans-arabic-500-arabic.woff2) format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC7, U+10EC9-10EEE, U+10EF0-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/ibm-plex-sans-arabic-500-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/ibm-plex-sans-arabic-600-arabic.woff2) format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC7, U+10EC9-10EEE, U+10EF0-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/ibm-plex-sans-arabic-600-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/fonts/ibm-plex-sans-arabic-700-arabic.woff2) format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC7, U+10EC9-10EEE, U+10EF0-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/fonts/ibm-plex-sans-arabic-700-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/jetbrains-mono-400-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/jetbrains-mono-500-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/fonts/jetbrains-mono-700-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Animatable custom property for the slow border sheen. Without the
+   registration the browser interpolates it as a discrete value and the
+   sweep steps instead of travelling. */
+@property --shine-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* ==========================================================================
+   Runtime palette
+   --------------------------------------------------------------------------
+   Every colour utility reads these through `@theme inline`, so switching
+   `data-theme` on <html> repaints the whole interface without a single
+   component knowing that a light theme exists. The dark set is the
+   original cyber-sovereign surface; the light set is paper, not "dark with
+   the brightness turned up" — hairlines invert, shadows soften, and the
+   accents darken until they pass contrast on white.
+   ========================================================================== */
+:root {
+  color-scheme: dark;
+
+  --c-void: #06080d;
+  --c-void-2: #080b12;
+  --c-panel: #0a0e16;
+  --c-panel-2: #0c1119;
+  --c-slab: #070a10;
+  --c-line: #16202d;
+  --c-line-2: #22303f;
+
+  --c-ink: #e9eff8;
+  --c-muted: #9aa9bd;
+  --c-subtle: #7b8ba1;
+
+  --c-jade: #10b981;
+  --c-jade-2: #34d399;
+  --c-tg: #0088cc;
+  --c-tg-2: #38a9de;
+  --c-aurum: #f59e0b;
+  --c-aurum-2: #fbbf24;
+
+  /* Structural tints. Components use these instead of white/black so the
+     same markup works on both surfaces. */
+  --c-hair: rgb(255 255 255 / 0.1);
+  --c-hair-soft: rgb(255 255 255 / 0.07);
+  --c-hair-2: rgb(255 255 255 / 0.2);
+  --c-wash: rgb(255 255 255 / 0.03);
+  --c-wash-2: rgb(255 255 255 / 0.06);
+  --c-sunken: rgb(0 0 0 / 0.26);
+  --c-glass: rgb(10 14 22 / 0.72);
+  --c-glass-2: rgb(10 14 22 / 0.96);
+  --c-seal: rgb(255 255 255 / 0.05);
+  --c-seal-2: rgb(255 255 255 / 0.028);
+
+  --grid-line: rgb(255 255 255 / 0.03);
+  --grid-dot: rgb(255 255 255 / 0.09);
+  --grid-spot: rgb(16 185 129 / 0.34);
+  --grain-opacity: 0.032;
+  --grain-blend: overlay;
+
+  --shadow-lift: 0 40px 90px -44px rgb(0 0 0 / 0.95);
+  --shadow-card: 0 0 0 0 rgb(0 0 0 / 0);
+  --shadow-nav: inset 0 1px 0 0 var(--c-hair-soft), 0 24px 60px -30px rgb(0 0 0 / 0.55);
+  --shadow-panel: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 30px 70px -50px rgb(0 0 0 / 0.9);
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+
+  --c-void: #edf1ec;
+  --c-void-2: #e5ebe4;
+  --c-panel: #ffffff;
+  --c-panel-2: #fbfcf9;
+  --c-slab: #f8faf6;
+  --c-line: #e0e6e0;
+  --c-line-2: #c7d2c9;
+
+  --c-ink: #0b1310;
+  --c-muted: #46564d;
+  --c-subtle: #697a71;
+
+  /* Accents are re-picked for paper: the same hue, two steps deeper. */
+  --c-jade: #0b8f65;
+  --c-jade-2: #0a6f50;
+  --c-tg: #0b6fa4;
+  --c-tg-2: #0a5c88;
+  --c-aurum: #b45309;
+  --c-aurum-2: #92400e;
+
+  --c-hair: rgb(11 19 16 / 0.17);
+  --c-hair-soft: rgb(11 19 16 / 0.11);
+  --c-hair-2: rgb(11 19 16 / 0.3);
+  --c-wash: rgb(11 19 16 / 0.03);
+  --c-wash-2: rgb(11 19 16 / 0.06);
+  --c-sunken: rgb(11 19 16 / 0.05);
+  --c-glass: rgb(255 255 255 / 0.8);
+  --c-glass-2: rgb(255 255 255 / 0.97);
+  --c-seal: rgb(11 19 16 / 0.055);
+  --c-seal-2: rgb(11 19 16 / 0.032);
+
+  --grid-line: rgb(11 19 16 / 0.035);
+  --grid-dot: rgb(11 19 16 / 0.1);
+  --grid-spot: rgb(11 143 101 / 0.3);
+  --grain-opacity: 0.05;
+  --grain-blend: multiply;
+
+  --shadow-lift: 0 34px 80px -46px rgb(18 38 27 / 0.4);
+  --shadow-card: 0 1px 2px rgb(18 38 27 / 0.04), 0 18px 34px -26px rgb(18 38 27 / 0.22);
+  --shadow-nav: inset 0 1px 0 0 rgb(255 255 255 / 0.9), 0 1px 2px rgb(18 38 27 / 0.06), 0 20px 44px -26px rgb(18 38 27 / 0.28);
+  --shadow-panel: 0 1px 0 0 rgb(255 255 255 / 0.9) inset, 0 24px 60px -46px rgb(18 38 27 / 0.3);
+}
+
+/* A deliberate dark island inside a light page: the terminal console and
+   the payment card keep their own surface, so their text tokens are pinned
+   back to the dark set instead of inheriting paper colours. */
+[data-surface='dark'] {
+  color-scheme: dark;
+  --c-ink: #e9eff8;
+  --c-muted: #9aa9bd;
+  --c-subtle: #7b8ba1;
+  --c-hair: rgb(255 255 255 / 0.1);
+  --c-hair-soft: rgb(255 255 255 / 0.07);
+  --c-hair-2: rgb(255 255 255 / 0.2);
+  --c-wash: rgb(255 255 255 / 0.03);
+  --c-wash-2: rgb(255 255 255 / 0.06);
+  --c-seal: rgb(255 255 255 / 0.05);
+  --c-seal-2: rgb(255 255 255 / 0.028);
+}
+
+@theme inline {
+  /* — Surfaces —————————————————————————————————————————————— */
+  --color-void: var(--c-void);
+  --color-void-2: var(--c-void-2);
+  --color-panel: var(--c-panel);
+  --color-panel-2: var(--c-panel-2);
+  --color-slab: var(--c-slab);
+  --color-line: var(--c-line);
+  --color-line-2: var(--c-line-2);
+
+  /* — Text ————————————————————————————————————————————————— */
+  --color-ink: var(--c-ink);
+  --color-muted: var(--c-muted);
+  --color-subtle: var(--c-subtle);
+
+  /* — Accents ——————————————————————————————————————————————— */
+  --color-jade: var(--c-jade);
+  --color-jade-2: var(--c-jade-2);
+  --color-tg: var(--c-tg);
+  --color-tg-2: var(--c-tg-2);
+  --color-aurum: var(--c-aurum);
+  --color-aurum-2: var(--c-aurum-2);
+
+  /* — Structure ————————————————————————————————————————————— */
+  --color-hair: var(--c-hair);
+  --color-hair-soft: var(--c-hair-soft);
+  --color-hair-2: var(--c-hair-2);
+  --color-wash: var(--c-wash);
+  --color-wash-2: var(--c-wash-2);
+  --color-sunken: var(--c-sunken);
+  --color-glass: var(--c-glass);
+  --color-glass-2: var(--c-glass-2);
+  --color-seal: var(--c-seal);
+  --color-seal-2: var(--c-seal-2);
+
+  /* — Type ——————————————————————————————————————————————————
+     Arabic is carried by a geometric-humanist face; Latin by the same
+     family so a mixed sentence never changes rhythm. Mono is reserved
+     for machine facts: commands, hashes, account numbers, versions. */
+  --font-sans: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'IBM Plex Sans Arabic', ui-monospace, monospace;
+
+  /* — Geometry —————————————————————————————————————————————— */
+  --radius-card: 20px;
+  --radius-panel: 26px;
+
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --shadow-lift: var(--shadow-lift);
+  --shadow-panel: var(--shadow-panel);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Sections carry their own scroll-margin (7rem), which matches the
+       status bar + navbar. A scroll-padding here as well would double the
+       offset and land every anchor ~120px too low. */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100svh;
+    background: var(--c-void);
+    color: var(--c-ink);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.7;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  /* English runs longer than Arabic at the same size; a hair of negative
+     tracking keeps headlines from feeling loose without touching Arabic. */
+  html[lang='en'] body {
+    letter-spacing: -0.006em;
+  }
+
+  /* Arabic never wants negative tracking — it breaks the joins visually.
+     Weight and size carry hierarchy instead. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+    font-weight: 600;
+    line-height: 1.26;
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+
+  p {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--c-jade) 32%, transparent);
+    color: var(--c-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--c-jade-2);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  /* Every animation on this page is additive. When motion is reduced the
+     layout is identical, only the travelling stops. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* — Layout ————————————————————————————————————————————————— */
+  .shell {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.15rem, 4vw, 2.25rem);
+  }
+
+  .rule {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--c-hair-2),
+      transparent
+    );
+  }
+
+  /* — Micro-label: the instrument-panel voice of the page. Latin only, so
+       the wide tracking can never touch an Arabic join. ——————————————— */
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    line-height: 1;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-subtle);
+    /* A label that opens with a Latin figure ("20 BUILDS") is reordered by
+       the bidi algorithm when it sits in an RTL paragraph — the number jumps
+       to the far end of the line. Isolation keeps the run intact; the few
+       labels that actually begin with a figure are wrapped in <bdi> at the
+       call site so they resolve LTR without disturbing the line's edge. */
+    unicode-bidi: isolate;
+  }
+
+  /* A dot that breathes once every few seconds: enough to read as "alive"
+     beside a link, quiet enough to ignore while reading. */
+  .live-dot {
+    animation: live-pulse 2.8s ease-in-out infinite;
+  }
+
+  /* A broadcast ring, not a blink. Tailwind's ping fires every second and
+     reads as an alarm; this one opens slowly from the dot and fades before
+     the next breath, so four of them on a page never compete. */
+  .pulse-ring {
+    animation: pulse-ring 3.8s cubic-bezier(0.16, 0.84, 0.44, 1) infinite;
+  }
+
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(0.7);
+      opacity: 0.5;
+    }
+    62%,
+    100% {
+      transform: scale(2.9);
+      opacity: 0;
+    }
+  }
+
+  @keyframes live-pulse {
+    0%,
+    100% {
+      opacity: 0.45;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    border: 1px solid var(--c-hair);
+    background: var(--c-wash);
+    padding: 0.3rem 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    line-height: 1.2;
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+
+  /* — Surfaces ——————————————————————————————————————————————
+     A panel is a hairline and a value step, never a drop shadow alone:
+     on near-black, shadow is invisible and borders do the separating. */
+  .panel {
+    position: relative;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--c-hair-soft);
+    background:
+      linear-gradient(180deg, var(--c-wash), transparent 38%),
+      var(--color-panel);
+    box-shadow: var(--shadow-panel);
+  }
+
+  .panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow: inset 0 1px 0 var(--c-wash-2);
+  }
+
+  /* Corner ticks — the drafting-table detail that makes a box read as an
+     instrument rather than a rounded card. */
+  .ticks::after {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      linear-gradient(var(--color-line-2), var(--color-line-2)) left top / 10px 1px no-repeat,
+      linear-gradient(var(--color-line-2), var(--color-line-2)) left top / 1px 10px no-repeat,
+      linear-gradient(var(--color-line-2), var(--color-line-2)) right bottom / 10px 1px no-repeat,
+      linear-gradient(var(--color-line-2), var(--color-line-2)) right bottom / 1px 10px no-repeat;
+    opacity: 0.9;
+  }
+
+  /* — Film grain. One fixed layer, 3% — texture you feel, not see. ——— */
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    pointer-events: none;
+    opacity: var(--grain-opacity);
+    mix-blend-mode: var(--grain-blend);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+  }
+
+  /* — Buttons ———————————————————————————————————————————————— */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    height: 3rem;
+    padding-inline: 1.35rem;
+    border-radius: 14px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      transform 0.35s var(--ease-expo),
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.35s var(--ease-expo),
+      color 0.25s ease;
+  }
+
+  .btn:active {
+    transform: translateY(1px) scale(0.99);
+  }
+
+  .btn-primary {
+    color: #1a1204;
+    background: linear-gradient(180deg, #fbbf24, #f59e0b);
+    border: 1px solid #fcd34d;
+    box-shadow:
+      0 1px 0 0 rgb(255 255 255 / 0.4) inset,
+      0 14px 34px -16px rgb(245 158 11 / 0.65);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(180deg, #fcd34d, #fbbf24);
+    box-shadow:
+      0 1px 0 0 rgb(255 255 255 / 0.45) inset,
+      0 18px 44px -16px rgb(245 158 11 / 0.8);
+  }
+
+  .btn-ghost {
+    color: var(--color-ink);
+    background: var(--c-wash);
+    border: 1px solid var(--c-hair);
+  }
+
+  .btn-ghost:hover {
+    background: var(--c-wash-2);
+    border-color: var(--c-hair-2);
+  }
+
+  .btn-jade {
+    color: #04140f;
+    background: linear-gradient(180deg, #34d399, #10b981);
+    border: 1px solid #6ee7b7;
+    box-shadow:
+      0 1px 0 0 rgb(255 255 255 / 0.35) inset,
+      0 14px 34px -18px rgb(16 185 129 / 0.7);
+  }
+
+  .btn-jade:hover {
+    background: linear-gradient(180deg, #6ee7b7, #34d399);
+  }
+
+  .btn-tg {
+    color: #fff;
+    background: linear-gradient(180deg, #0a97df, #0088cc);
+    border: 1px solid color-mix(in oklab, #38a9de 70%, transparent);
+    box-shadow:
+      0 1px 0 0 rgb(255 255 255 / 0.18) inset,
+      0 16px 38px -18px rgb(0 136 204 / 0.75);
+  }
+
+  .btn-tg:hover {
+    background: linear-gradient(180deg, #38a9de, #0a97df);
+  }
+
+  .step-badge {
+    box-shadow:
+      0 0 0 6px var(--color-void),
+      inset 0 1px 0 0 rgb(255 255 255 / 0.06);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .step-badge {
+      border-color: color-mix(in oklab, var(--color-jade) 50%, transparent);
+      background-color: color-mix(in oklab, var(--color-jade) 10%, transparent);
+      color: var(--color-jade-2);
+    }
+    .draw-path {
+      stroke-dashoffset: 0 !important;
+    }
+  }
+
+  /* — The "most ordered" sheen: one 1px arc of amber travelling the
+       border. Runs on a registered angle, so it is a compositor-friendly
+       custom-property tween and not a repaint of the box. ——————————— */
+  .shine {
+    position: relative;
+  }
+
+  .shine::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: conic-gradient(
+      from var(--shine-angle),
+      transparent 0deg,
+      transparent 300deg,
+      color-mix(in oklab, var(--color-aurum) 75%, transparent) 342deg,
+      color-mix(in oklab, #fff 70%, transparent) 352deg,
+      transparent 360deg
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    animation: shine-travel 7s linear infinite;
+  }
+
+
+  /* The page body fades; it must not translate or scale, because a
+     transformed ancestor would re-anchor the pinned trial timeline. */
+  .page-enter {
+    animation: page-enter 0.45s var(--ease-expo) both;
+  }
+
+  /* Paper needs a shadow to separate; ink does not. The token is a no-op
+     in the dark set, so the same class is honest in both themes. */
+  .card {
+    box-shadow: var(--shadow-card);
+  }
+
+  /* — Pointer light ————————————————————————————————————————————
+     A card that catches the light where the cursor is. The gradient is
+     painted once and only its origin moves, so this is a composited
+     repaint, never a layout pass. It sits above the card's own fill and
+     below its text. */
+  .spot::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(
+      280px circle at var(--mx, 50%) var(--my, -30%),
+      color-mix(in oklab, var(--color-jade) 13%, transparent),
+      transparent 68%
+    );
+    opacity: 0;
+    transition: opacity 0.45s var(--ease-expo);
+  }
+
+  .spot:hover::before,
+  .spot:focus-visible::before {
+    opacity: 1;
+  }
+
+  /* The same light marks the floor: a 1px jade rail grows along the bottom
+     edge from the reading side, so the card is bounded on hover instead of
+     merely tinted. */
+  .spot::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 1px;
+    background: color-mix(in oklab, var(--color-jade) 62%, transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.55s var(--ease-expo);
+    pointer-events: none;
+  }
+
+  [dir='rtl'] .spot::after {
+    transform-origin: right;
+  }
+
+  .spot:hover::after,
+  .spot:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .nav-shell {
+    /* Glass, not a window: a headline scrolling underneath must not be
+       readable through the bar. 0.72 let the hero CTA ghost through at
+       full contrast, so the pill carries more of its own body. */
+    background-color: color-mix(in oklab, var(--c-panel) 90%, transparent);
+    box-shadow: var(--shadow-nav);
+  }
+
+  /* — Ambient light ——————————————————————————————————————————
+     Two very wide, very low-opacity radial fields that drift on their own
+     clock. They give the void a sense of depth without a single blurred
+     bitmap: the falloff is the gradient itself, so it stays smooth at any
+     DPR and costs nothing but a composited transform. */
+  .aurora {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .aurora-blob {
+    position: absolute;
+    border-radius: 50%;
+    will-change: transform;
+  }
+
+  .aurora-blob[data-glow='jade'] {
+    width: 46rem;
+    height: 46rem;
+    top: -18rem;
+    inset-inline-end: -8rem;
+    background: radial-gradient(
+      circle,
+      color-mix(in oklab, var(--color-jade) 13%, transparent) 0%,
+      color-mix(in oklab, var(--color-jade) 4%, transparent) 42%,
+      transparent 68%
+    );
+    animation: drift-a 28s ease-in-out infinite alternate;
+  }
+
+  .aurora-blob[data-glow='tg'] {
+    width: 38rem;
+    height: 38rem;
+    top: 4rem;
+    inset-inline-start: -12rem;
+    background: radial-gradient(
+      circle,
+      color-mix(in oklab, var(--color-tg) 10%, transparent) 0%,
+      color-mix(in oklab, var(--color-tg) 3%, transparent) 45%,
+      transparent 70%
+    );
+    animation: drift-b 34s ease-in-out infinite alternate;
+  }
+
+  .aurora-blob[data-glow='aurum'] {
+    width: 30rem;
+    height: 30rem;
+    top: 22rem;
+    inset-inline-end: 18%;
+    background: radial-gradient(
+      circle,
+      color-mix(in oklab, var(--color-aurum) 6%, transparent) 0%,
+      transparent 66%
+    );
+    animation: drift-a 40s ease-in-out infinite alternate-reverse;
+  }
+
+  /* — Sheen sweep: a single specular pass on card hover —————— */
+  .sheen-sweep {
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate3d(-55%, 0, 0);
+    background: linear-gradient(
+      104deg,
+      transparent 32%,
+      color-mix(in oklab, var(--tone, var(--color-jade)) 14%, transparent) 46%,
+      color-mix(in oklab, #fff 9%, transparent) 50%,
+      transparent 64%
+    );
+    transition:
+      transform 0.95s var(--ease-expo),
+      opacity 0.45s ease;
+  }
+
+  .group\/spot:hover .sheen-sweep {
+    opacity: 1;
+    transform: translate3d(55%, 0, 0);
+  }
+
+  /* — Ticker: one hairline band of machine facts ————————————— */
+  .ticker {
+    position: relative;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    align-items: center;
+    animation: ticker-run 54s linear infinite;
+    will-change: transform;
+  }
+
+  .ticker:hover .ticker-track {
+    animation-play-state: paused;
+  }
+
+  /* — Terminal ———————————————————————————————————————————————— */
+  .term-scan {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      var(--scan-line) 0px,
+      var(--scan-line) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: overlay;
+  }
+
+  .caret {
+    display: inline-block;
+    width: 7px;
+    height: 14px;
+    translate: 0 2px;
+    background: var(--color-jade-2);
+    box-shadow: 0 0 10px color-mix(in oklab, var(--color-jade) 70%, transparent);
+    animation: caret-blink 1.15s steps(1, end) infinite;
+  }
+
+  /* — Radar ——————————————————————————————————————————————————— */
+  .radar-sweep {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      transparent 300deg,
+      color-mix(in oklab, var(--color-jade) 26%, transparent) 352deg,
+      color-mix(in oklab, var(--color-jade) 55%, transparent) 360deg
+    );
+    animation: radar-spin 5.5s linear infinite;
+    will-change: transform;
+  }
+
+  /* — Tilt card ——————————————————————————————————————————————— */
+  .tilt-scene {
+    perspective: 1100px;
+    perspective-origin: 50% 40%;
+  }
+
+  .tilt-card {
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: box-shadow 0.5s var(--ease-expo);
+  }
+
+  .tilt-layer {
+    transform: translateZ(38px);
+  }
+
+  /* — Scroll-driven SVG line ——————————————————————————————————— */
+  .draw-path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    pathLength: 1;
+  }
+
+  /* — Nav indicator ——————————————————————————————————————————— */
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: 2.25rem;
+    padding-inline: 0.66rem;
+    border-radius: 10px;
+    font-size: 0.79rem;
+    font-weight: 500;
+    color: var(--color-muted);
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .nav-link:hover {
+    color: var(--color-ink);
+    background: var(--c-wash-2);
+  }
+
+  .nav-link[data-active='true'] {
+    color: var(--color-ink);
+  }
+
+  /* — Journal rows ————————————————————————————————————————————— */
+  .row-link {
+    position: relative;
+    display: grid;
+    gap: 0.35rem 1.25rem;
+    padding-block: 1.35rem;
+    border-top: 1px solid var(--c-hair-soft);
+    transition: background-color 0.3s ease;
+  }
+
+  .row-link:last-child {
+    border-bottom: 1px solid var(--c-hair-soft);
+  }
+
+  .row-link:hover {
+    background: var(--c-wash);
+  }
+
+  /* A reading rail that grows down the start edge of the row under the
+     pointer. It marks the entry the way a finger marks a page. */
+  .row-link::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--color-jade), transparent 85%);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.5s var(--ease-expo);
+  }
+
+  .row-link:hover::after,
+  .row-link:focus-visible::after {
+    transform: scaleY(1);
+  }
+
+  /* — Copy button success ————————————————————————————————————— */
+  .copied {
+    border-color: color-mix(in oklab, var(--color-jade) 45%, transparent) !important;
+    background: color-mix(in oklab, var(--color-jade) 12%, transparent) !important;
+    color: var(--color-jade-2) !important;
+  }
+
+  /* — Split words —————————————————————————————————————————————— */
+  .split-word {
+    display: inline-block;
+    will-change: transform, opacity;
+  }
+
+  /* — Modal scroll lock helper ——————————————————————————————— */
+  .scroll-locked {
+    overflow: hidden;
+  }
+}
+
+@layer utilities {
+  .text-glow-jade {
+    text-shadow: 0 0 18px color-mix(in oklab, var(--color-jade) 55%, transparent);
+  }
+
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  }
+
+  .gpu {
+    transform: translateZ(0);
+  }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes drift-a {
+  to {
+    transform: translate3d(-4rem, 3rem, 0) scale(1.08);
+  }
+}
+
+@keyframes drift-b {
+  to {
+    transform: translate3d(4.5rem, -2.5rem, 0) scale(1.06);
+  }
+}
+
+@keyframes ticker-run {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes shine-travel {
+  to {
+    --shine-angle: 360deg;
+  }
+}
+
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes radar-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-jade) 55%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-jade) 0%, transparent);
+  }
+}
+
+/* Direction-aware arrows: the same glyph points up-left in Arabic and
+   up-right in English, so the icon never contradicts the reading flow. */
+html[lang='en'] .arrow-rtl {
+  transform: scaleX(-1);
+}

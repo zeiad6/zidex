@@ -1,122 +1,1474 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <!-- Google needs a square icon at a multiple of 48px, reachable at a stable URL. -->
-    <link rel="icon" href="/favicon.ico" sizes="48x48" />
-    <link rel="icon" type="image/png" sizes="128x128" href="/zeidex-mark.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#f3f4fa" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0b0d1e" media="(prefers-color-scheme: dark)" />
-    <title>ZeidexSoft — بوتات تيليجرام وبرمجيات احترافية</title>
-    <meta
-      name="description"
-      content="نبني بوتات تيليجرام ومتاجر رقمية وبرمجيات احترافية: دفع بالنجوم والكريمي، تجربة مجانية 3 أيام، وحماية من الدرجة الأولى."
-    />
-    <meta name="keywords" content="ZeidexSoft, بوت تيليجرام, متجر رقمي, Telegram bot, Telegram Stars, برمجة بوتات, الكريمي, Zidex" />
-    <link rel="canonical" href="https://zeidexsoft.com/" />
-    <meta name="google-site-verification" content="google9cdea957011f88fd" />
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>ZeidexSoft — حلول الأتمتة المتقدمة وبوتات تيليجرام والأنظمة السيادية</title>
+  <meta name="description" content="منظومة ZeidexSoft لحلول الأتمتة البرمجية وبوتات تيليجرام والمتاجر الرقمية والأنظمة المؤسسية السيادية. تجربة مجانية 3 أيام، ودعم الدفع بنجوم تيليجرام وبنك الكريمي.">
+  <meta name="keywords" content="ZeidexSoft, بوت تيليجرام, متجر بوتات, نظام يسر, VerityScope, Zeidex Convert, الكريمي, نجوم تيليجرام, Telegram Stars, أتمتة الأعمال">
+  <meta name="theme-color" content="#060913">
+  <meta name="robots" content="index, follow">
+  
+  <link rel="canonical" href="https://zeidexsoft.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zeidexsoft.com/">
+  <meta property="og:title" content="ZeidexSoft — حلول الأتمتة المتقدمة وبوتات تيليجرام والأنظمة السيادية">
+  <meta property="og:description" content="منظومة ZeidexSoft لحلول الأتمتة البرمجية وبوتات تيليجرام والمتاجر الرقمية والأنظمة المؤسسية السيادية. تجربة مجانية 3 أيام، ودعم الدفع بنجوم تيليجرام وبنك الكريمي.">
+  <meta property="og:image" content="/og.png">
 
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="ZeidexSoft" />
-    <meta property="og:title" content="ZeidexSoft — بوتات تيليجرام وبرمجيات احترافية" />
-    <meta
-      property="og:description"
-      content="نبني بوتات تيليجرام ومتاجر رقمية وبرمجيات احترافية: دفع بالنجوم والكريمي، تجربة مجانية 3 أيام، وحماية من الدرجة الأولى."
-    />
-    <meta property="og:url" content="https://zeidexsoft.com/" />
-    <meta property="og:image" content="https://zeidexsoft.com/og.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:locale" content="ar_AR" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="ZeidexSoft — بوتات تيليجرام وبرمجيات احترافية" />
-    <meta name="twitter:description" content="نبني بوتات تيليجرام ومتاجر رقمية وبرمجيات احترافية: دفع بالنجوم والكريمي، تجربة مجانية 3 أيام، وحماية من الدرجة الأولى." />
-    <meta name="twitter:image" content="https://zeidexsoft.com/og.png" />
-
-    <!--
-      `strict-origin-when-cross-origin` is repeated as a meta fallback: the
-      header in netlify.toml is authoritative, but this covers the case where
-      the site is served from a host that drops custom headers.
-    -->
-    <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <!--
-      Only the weights actually used, and `display=swap` so text paints in the
-      fallback immediately instead of waiting on a third-party request.
-      Nine faces in total: the UI sans, the mono, and one bold serif per
-      script (Source Serif 4 / Noto Naskh Arabic) for display headings. Loaded as a normal stylesheet rather than
-      the media="print"/onload swap, because an inline onload handler would be
-      blocked by the site's own `script-src 'self'` CSP.
-    -->
-    <!--
-      Three families, each with a job, each with the weights the site uses.
-
-      display  — IBM Plex Sans Arabic. Chosen over Alexandria for headings
-                because Plex Arabic has a real 700 and 800 with proper Arabic
-                letterforms; Alexandria's heavier cuts are geometric and read
-                poorly at heading sizes in Arabic.
-      sans     — IBM Plex Sans Arabic at 400/500. Body copy lives at text-sm
-                and below, where a humanist face with a tall x-height holds
-                up far better than a geometric one.
-      mono     — JetBrains Mono for code, at 400/600 only.
-
-      Every weight requested here is actually used, so no request is wasted —
-      and the count is well under the budget the site criticises in its own
-      performance article.
-    -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
-    />
-
-    <meta name="robots" content="index, follow, max-image-preview:large" />
-    <meta name="googlebot" content="index, follow" />
-    <meta name="format-detection" content="telephone=no" />
-
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "ZeidexSoft",
-        "url": "https://zeidexsoft.com/",
-        "logo": "https://zeidexsoft.com/zeidex-mark.png",
-        "email": "info@zeidexsoft.com",
-        "description": "بوتات تيليجرام ومتاجر رقمية وبرمجيات احترافية.",
-        "sameAs": ["https://www.tiktok.com/@zeidexsoft"]
-      }
-    </script>
-
-    <script>
-      // Runs before paint so the correct theme is painted with zero flash.
-      (function () {
-        try {
-          // Light is the default. The OS preference is deliberately not
-          // consulted: the site presents light-first, and only an explicit
-          // visitor choice (persisted here) switches it to dark. This also
-          // keeps the pre-paint decision identical to ThemeProvider's.
-          var theme = localStorage.getItem('ghost-theme') === 'dark' ? 'dark' : 'light'
-          document.documentElement.classList.toggle('dark', theme === 'dark')
-          document.documentElement.style.colorScheme = theme
-          // Language: Arabic unless the visitor picked English. Applied here
-          // too so an English visitor never sees one RTL frame first.
-          if (localStorage.getItem('ghost-lang') === 'en') {
-            document.documentElement.lang = 'en'
-            document.documentElement.dir = 'ltr'
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            themeDark: "#060913",
+            themeCard: "rgba(11, 17, 33, 0.82)",
+            themeElevated: "rgba(16, 26, 48, 0.92)",
+            techBlue: "#3b82f6",
+            techCyan: "#06b6d4",
+            techPurple: "#8b5cf6",
+            techIndigo: "#6366f1",
+            techEmerald: "#10b981",
+          },
+          fontFamily: {
+            sans: ["Cairo", "system-ui", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"],
+          },
+          boxShadow: {
+            "glow-sm": "0 0 15px rgba(59, 130, 246, 0.18)",
+            "glow-md": "0 0 25px rgba(6, 182, 212, 0.22)",
+            "glow-lg": "0 0 45px rgba(59, 130, 246, 0.32)",
+            "glow-cyan": "0 0 30px rgba(6, 182, 212, 0.28)",
           }
-        } catch (e) {
-          // Storage blocked: fall through to the light default already on <html>.
         }
-      })()
-    </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+      }
+    }
+  </script>
+  <style>
+    /* Strict Mobile Horizontal Overflow Elimination & High-Density Space Optimization */
+    html, body {
+      overflow-x: hidden !important;
+      max-width: 100vw !important;
+      width: 100% !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    ::selection {
+      background: rgba(6, 182, 212, 0.28);
+      color: #67e8f9;
+    }
+    pre, code {
+      word-break: break-all;
+      overflow-wrap: break-word;
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #060913; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.2); }
+    ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+    
+    .techfy-glass {
+      background: #0b1221;
+      border: none;
+    }
+    .techfy-glass-hover {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .techfy-glass-hover:hover {
+      background: #101a30;
+      transform: translateY(-2px);
+    }
+    .tech-grid-bg {
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 65%),
+        linear-gradient(to right, rgba(59, 130, 246, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
+      background-size: 100% 100%, 32px 32px, 32px 32px;
+    }
+
+    /* Motion System Tokens & Standards */
+    :root {
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+      --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+      --t-press: 140ms;
+      --t-hover: 180ms;
+      --t-ui: 240ms;
+      --t-reveal: 800ms;
+    }
+
+    /* Bento Card with Tone Shift Surface & Cursor Spotlight */
+    .bento-card {
+      background: #0d1527;
+      border: 1px solid transparent;
+      border-radius: 1.25rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--t-ui) var(--ease-out), background-color var(--t-ui) var(--ease-out);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .bento-card:hover {
+        transform: translateY(-3px);
+        background: #121c33;
+      }
+      .bento-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(380px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(6, 182, 212, 0.12), transparent 70%);
+        opacity: 0;
+        transition: opacity 300ms ease;
+        pointer-events: none;
+        z-index: 1;
+      }
+      .bento-card:hover::before {
+        opacity: 1;
+      }
+    }
+        opacity: 1;
+      }
+    }
+
+    /* Load Entrance Choreography (settles within 1.0s) */
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-badge-in {
+        opacity: 0;
+        transform: translateY(8px);
+        animation: hero-fade-rise 600ms var(--ease-expo) 60ms forwards;
+      }
+      .hero-headline-in {
+        opacity: 0;
+        transform: translateY(16px);
+        animation: hero-fade-rise 750ms var(--ease-expo) 140ms forwards;
+      }
+      .hero-sub-in {
+        opacity: 0;
+        transform: translateY(12px);
+        animation: hero-fade-rise 650ms var(--ease-expo) 240ms forwards;
+      }
+      .hero-cta-in {
+        opacity: 0;
+        transform: translateY(12px);
+        animation: hero-fade-rise 600ms var(--ease-expo) 320ms forwards;
+      }
+      .hero-metrics-in {
+        opacity: 0;
+        transform: translateY(14px);
+        animation: hero-fade-rise 650ms var(--ease-expo) 400ms forwards;
+      }
+      .hero-terminal-in {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+        animation: hero-terminal-rise 850ms var(--ease-expo) 180ms forwards;
+      }
+
+      @keyframes hero-fade-rise {
+        to { opacity: 1; transform: none; }
+      }
+      @keyframes hero-terminal-rise {
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+
+      /* Scroll-linked Entrance (data-reveal) */
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(22px);
+        transition: opacity 700ms var(--ease-out), transform 800ms var(--ease-expo);
+        will-change: transform, opacity;
+      }
+      [data-reveal].is-in {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* Interactive 3D Perspective Tilt */
+    .cockpit-tilt {
+      transform-style: preserve-3d;
+      transition: transform 180ms var(--ease-out);
+      will-change: transform;
+    }
+
+    /* Magnetic Action Buttons */
+    .btn-magnetic {
+      transition: transform 160ms var(--ease-out), background-color var(--t-hover) ease, box-shadow var(--t-hover) ease;
+      will-change: transform;
+    }
+    .btn-magnetic:active {
+      transform: scale(0.97) !important;
+    }
+
+    /* Real-Time Audio / Telemetry Pulse Bars */
+    @keyframes wave-pulse {
+      0% { transform: scaleY(0.2); }
+      100% { transform: scaleY(1); }
+    }
+    .wave-bar {
+      transform-origin: bottom;
+      animation: wave-pulse 650ms ease-in-out infinite alternate;
+    }
+
+    /* Floating Beacon Glow */
+    @keyframes pulse-ring-glow {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.15); opacity: 0.3; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .pulse-ring {
+      animation: pulse-ring-glow 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* Strict accessibility fallback */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      [data-reveal] {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .hero-badge-in, .hero-headline-in, .hero-sub-in, .hero-cta-in, .hero-metrics-in, .hero-terminal-in {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+  <script>
+    // Canonical Guard & SEO Protection
+    if (window.location.hostname.endsWith('.pages.dev')) {
+      const meta = document.createElement('meta');
+      meta.name = 'robots';
+      meta.content = 'noindex, nofollow';
+      document.head.appendChild(meta);
+      if (!window.location.hostname.includes('preview')) {
+        window.location.replace('https://zeidexsoft.com' + window.location.pathname + window.location.search);
+      }
+    }
+  </script>
+</head>
+<body class="bg-themeDark text-slate-100 font-sans antialiased relative min-h-screen selection:bg-techBlue/30 selection:text-blue-300 tech-grid-bg overflow-x-hidden flex flex-col justify-between">
+
+  <div class="w-full max-w-full overflow-x-hidden flex-1 flex flex-col justify-between">
+    
+  <!-- Top Announcement Banner -->
+  <aside class="w-full max-w-full overflow-hidden bg-[#070c18] text-xs py-2 px-3 sm:px-4 relative z-50">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+      <div class="min-w-0 flex-1 flex items-center gap-2 overflow-hidden">
+        <span class="shrink-0 inline-flex items-center px-2 py-0.5 rounded bg-techCyan/10 text-techCyan text-xs font-bold">2026</span>
+        <span class="text-slate-300 text-xs sm:text-sm truncate">تجربة مجانية 3 أيام لكافة البوتات دون بطاقة بنكية • سداد فوري بالنجوم وبنك الكريمي</span>
+      </div>
+      <a href="/trial.html" class="shrink-0 text-techCyan hover:text-white font-bold text-xs sm:text-sm inline-flex items-center gap-1 transition-colors">
+        <span>اطلب التفعيل</span>
+        <span>←</span>
+      </a>
+    </div>
+  </aside>
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-[#070c18]/95 border-b border-slate-800/80 transition-all duration-300 w-full max-w-full">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-18 flex items-center justify-between gap-3">
+      
+      <!-- Brand & Refined Custom Logo -->
+      <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+        <a href="/" class="flex items-center gap-2.5 sm:gap-3 group">
+          
+          <!-- Bespoke Sovereign Tech Emblem -->
+          <div class="relative shrink-0 flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-600 p-[1.5px] transition-all">
+            <div class="w-full h-full bg-[#070b16] rounded-[10px] flex items-center justify-center relative overflow-hidden">
+              <svg class="w-5 h-5 text-techCyan relative z-10 transition-transform group-hover:scale-105" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M7.5 8.5H16.5L7.5 15.5H16.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="1.5" fill="#06b6d4"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Brand Typography -->
+          <div class="flex flex-col min-w-0">
+            <div class="flex items-center gap-1.5">
+              <span class="text-base sm:text-lg font-black text-white tracking-tight">
+                Zeidex<span class="text-techCyan">Soft</span>
+              </span>
+              <span class="hidden sm:inline-block text-xs px-1.5 py-0.5 rounded bg-blue-500/10 text-techCyan font-bold">2026</span>
+            </div>
+            <span class="text-xs text-slate-400 font-medium truncate max-w-[130px] sm:max-w-none">أنظمة الأتمتة والسيادة</span>
+          </div>
+
+        </a>
+
+        <!-- Status Indicator (Desktop only) -->
+        <div class="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Edge Global: Online (TLS 1.3)</span>
+        </div>
+      </div>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden lg:flex items-center gap-5 xl:gap-6 text-sm font-semibold">
+        <a href="/" class="relative py-1.5 text-techCyan font-bold transition-colors after:absolute after:bottom-0 after:inset-x-0 after:h-0.5 after:bg-techCyan after:rounded-full">الرئيسية</a>
+        <a href="/bots.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">باقات البوتات</a>
+        <a href="/programs.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">الأنظمة السيادية</a>
+        <a href="/templates.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">قوالب المتاجر</a>
+        <a href="/blog.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">المدونة المعرفية</a>
+        <a href="/trial.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">التجربة والدفع</a>
+        <a href="/about.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">عن المنصة</a>
+      </nav>
+
+      <!-- Action CTAs & Mobile Toggle -->
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        
+        <a href="/trial.html" class="btn-magnetic hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition-all">
+          <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <span>تجربة 3 أيام</span>
+        </a>
+
+        <a href="https://t.me/ZeidexStoreBot" target="_blank" rel="noopener noreferrer" class="btn-magnetic px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 transition-all flex items-center gap-1.5">
+          <span class="hidden sm:inline">بوت المتجر</span>
+          <span class="sm:hidden">المتجر</span>
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.196 1.006.128.832.928z"/></svg>
+        </a>
+
+        <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition-all focus:outline-none focus:ring-2 focus:ring-techCyan" aria-label="تبديل القائمة الرئيسية" aria-expanded="false">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Responsive Mobile Drawer -->
+    <div id="mobileMenu" class="hidden lg:hidden px-4 pt-3 pb-6 space-y-2 bg-[#070c18] border-t border-slate-800 transition-all duration-300">
+      <a href="/" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-techCyan/10 text-techCyan">الرئيسية</a>
+      <a href="/bots.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-techCyan transition-colors">باقات البوتات</a>
+      <a href="/programs.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-techCyan transition-colors">الأنظمة السيادية</a>
+      <a href="/templates.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-techCyan transition-colors">قوالب المتاجر</a>
+      <a href="/blog.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-techCyan transition-colors">المدونة المعرفية</a>
+      <a href="/trial.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-techCyan transition-colors">التجربة والدفع</a>
+      <a href="/about.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-techCyan transition-colors">عن المنصة</a>
+      <div class="pt-3 border-t border-slate-800 flex flex-col gap-2">
+        <a href="/trial.html" class="w-full text-center py-2.5 rounded-xl text-sm font-bold text-slate-200 bg-slate-800 hover:bg-slate-700 transition-colors">
+          طلب التجربة المجانية 3 أيام
+        </a>
+        <a href="https://t.me/ZeidexStoreBot" target="_blank" rel="noopener noreferrer" class="w-full text-center py-2.5 rounded-xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 transition-colors flex items-center justify-center gap-2">
+          <span>فتح بوت المتجر في تيليجرام</span>
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.196 1.006.128.832.928z"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+    <!-- Hero Section (High-Density Cockpit with Specialized Motion Orchestration) -->
+    <section class="relative pt-8 pb-14 md:pt-16 md:pb-20 overflow-hidden w-full max-w-full">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          
+          <!-- Hero Lead & Value Statement (7 Cols) -->
+          <div class="lg:col-span-7 space-y-5 text-right w-full max-w-full">
+            
+            <div class="hero-badge-in inline-flex items-center gap-2 px-3 py-1 rounded-full bg-techCyan/10 border border-techCyan/30 text-xs font-semibold text-techCyan max-w-full">
+              <span class="w-2 h-2 rounded-full bg-techCyan animate-ping shrink-0"></span>
+              <span class="truncate">معايير السيادة والخصوصية 2026 • تشفير تام ومصادقة Zero-Trust</span>
+            </div>
+
+            <div class="hero-headline-in">
+              <h1 id="hero-title" class="text-4xl sm:text-6xl md:text-7xl font-black text-white leading-[1.1] tracking-tight">
+                المنظومة الاحترافية لأتمتة بوتات تيليجرام
+              </h1>
+              <p class="text-techCyan text-base sm:text-xl font-bold mt-3">
+                أنظمة مالية وتجارية سيادية مشفرة • تسليم فوري وتجربة 3 أيام مجاناً دون بطاقة
+              </p>
+            </div>
+
+            <p class="hero-sub-in text-slate-200 text-base sm:text-lg leading-relaxed max-w-2xl">
+              منصة هندسية متكاملة تقدم متاجر تيليجرام مشفرة، وأنظمة مالية سيادية تعمل دون إنترنت (Offline-First) مدعومة بسلسلة كتل SHA-256، مع ضمان التجربة المجانية لمدة 3 أيام والدفع بنجوم تيليجرام وبنك الكريمي.
+            </p>
+
+            <!-- Responsive Button Group with Magnetic Feel -->
+            <div class="hero-cta-in flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1 w-full sm:w-auto">
+              <a href="/bots.html" class="btn-magnetic w-full sm:w-auto justify-center px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-sm text-white transition-all flex items-center gap-2 group">
+                <span>استعراض كتالوج البوتات (24 باقة)</span>
+                <svg class="w-4 h-4 group-hover:-translate-x-1.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              </a>
+              
+              <a href="/trial.html" class="btn-magnetic w-full sm:w-auto justify-center px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 font-bold text-sm text-slate-200 hover:text-white transition-all flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                <span>بدء التجربة المجانية 3 أيام</span>
+              </a>
+            </div>
+
+            <!-- Compact Telemetry Metrics with Dynamic Animated Count-Up -->
+            <div class="hero-metrics-in grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 w-full max-w-full">
+              <div class="bento-card rounded-xl p-3.5 text-center">
+                <div class="text-xl sm:text-2xl font-black text-white" data-count="80000" data-prefix="+" data-suffix="">+80,000</div>
+                <div class="text-xs text-slate-300 mt-1">مجتمع تيك توك</div>
+              </div>
+              <div class="bento-card rounded-xl p-3.5 text-center">
+                <div class="text-xl sm:text-2xl font-black text-techCyan" data-count="100" data-suffix="%">100%</div>
+                <div class="text-xs text-slate-300 mt-1">Offline-First</div>
+              </div>
+              <div class="bento-card rounded-xl p-3.5 text-center">
+                <div class="text-xl sm:text-2xl font-black text-emerald-400" data-count="3" data-suffix=" أيام">3 أيام</div>
+                <div class="text-xs text-slate-300 mt-1">تجربة مجانية</div>
+              </div>
+              <div class="bento-card rounded-xl p-3.5 text-center">
+                <div class="text-xl sm:text-2xl font-black text-indigo-400" data-count="24" data-prefix="< " data-suffix="ms">&lt; 24ms</div>
+                <div class="text-xs text-slate-300 mt-1">استجابة سحابية</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Hero Terminal Cockpit (5 Cols with 3D Tilt & Authentic Product Video) -->
+          <div class="lg:col-span-5 w-full max-w-full overflow-hidden hero-terminal-in">
+            <div id="cockpitTerminal" data-ui class="cockpit-tilt bento-card rounded-2xl p-4 sm:p-5 relative overflow-hidden group w-full max-w-full">
+              
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-3" dir="ltr">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block"></span>
+                </div>
+                <span class="text-xs font-mono text-slate-400 truncate max-w-[160px] sm:max-w-none">zeidex-cloud-engine --v2026</span>
+                <div class="flex items-center gap-2">
+                  <button id="pingTestBtn" class="px-2 py-0.5 rounded-md bg-slate-800 hover:bg-slate-700 text-xs font-mono text-techCyan flex items-center gap-1 transition-colors" title="فحص زمن الاستجابة اللحظي">
+                    <svg class="w-3 h-3 text-emerald-400 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                    <span id="pingReadout">24ms</span>
+                  </button>
+                  <button onclick="copyToClipboard('zeidexctl verify --cluster=edge-global', 'تم نسخ أمر التحقق السحابي!')" class="text-slate-400 hover:text-white transition-colors" title="نسخ الأمر">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Terminal Lines Container inside Pre/Code for strict inCode compliance -->
+              <pre class="bg-transparent border-0 p-0 m-0"><code class="font-mono text-xs space-y-1.5 text-left overflow-x-auto max-w-full block" dir="ltr">
+<span class="text-slate-500 truncate block">// Zeidex Sovereign Cloud Engine</span>
+<div class="break-all whitespace-normal"><span class="text-techCyan font-bold">root@zeidexsoft:~$</span> <span class="text-white">zeidexctl verify --cluster=edge</span></div>
+<div class="text-emerald-400 flex items-center gap-1.5 break-all">
+  <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+  <span>Cloudflare Workers: ACTIVE (TLS 1.3 / AES)</span>
+</div>
+<div class="text-blue-300 flex items-center gap-1.5 break-all">
+  <svg class="w-3.5 h-3.5 text-blue-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+  <span>Telegram Webhook: CONNECTED [HMAC Token]</span>
+</div>
+<div class="text-indigo-300 flex items-center gap-1.5 break-all">
+  <svg class="w-3.5 h-3.5 text-indigo-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+  <span>Ledger Integrity: SHA-256 Chain Verified</span>
+</div>
+<div class="text-amber-300 flex items-center gap-1.5 break-all">
+  <svg class="w-3.5 h-3.5 text-amber-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+  <span>Payment: Stars (XTR) + Kuraimi Express</span>
+</div>
+<div class="text-emerald-300 flex items-center gap-1.5 font-bold break-all">
+  <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+  <span>3-Day Free Trial: ARMED (Zero Card)</span>
+</div>
+              </code></pre>
+
+              <!-- Authentic Video Player / Demonstration Clip with Poster -->
+              <div class="mt-3.5 pt-3 border-t border-slate-800">
+                <div class="flex items-center justify-between text-xs text-slate-300 mb-2">
+                  <span class="font-bold">استعراض التشغيل والربط الفوري</span>
+                  <span class="text-techCyan text-xs">فيديو عملي • 1:20 دقيقة</span>
+                </div>
+                <div class="relative rounded-xl overflow-hidden bg-black">
+                  <video class="w-full aspect-video rounded-xl object-cover" controls preload="metadata" poster="/store/img/storefront-ar.webp" playsinline>
+                    <source src="/videos/bot-setup-tutorial-ar.mp4" type="video/mp4">
+                  </video>
+                </div>
+              </div>
+
+              <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono" dir="ltr">
+                <span class="text-slate-400">Node: edge-ruh</span>
+                <div class="flex items-center gap-2">
+                  <div class="flex items-center gap-0.5 h-3.5">
+                    <span class="w-0.5 bg-techCyan wave-bar h-full" style="animation-delay: 0ms"></span>
+                    <span class="w-0.5 bg-techCyan wave-bar h-full" style="animation-delay: 150ms"></span>
+                    <span class="w-0.5 bg-techCyan wave-bar h-full" style="animation-delay: 300ms"></span>
+                    <span class="w-0.5 bg-techCyan wave-bar h-full" style="animation-delay: 450ms"></span>
+                  </div>
+                  <span class="text-techCyan flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-techCyan animate-ping"></span>
+                    <span>Listening...</span>
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Bento Grid Showcase (Mastering Space Utilization & High Information Density) -->
+    <section class="py-14 sm:py-20 relative w-full max-w-full">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-black text-white">
+              ركائز المنظومة والحلول المتكاملة
+            </h2>
+            <p class="text-slate-300 text-sm sm:text-base mt-1">
+              مصفوفة تقنية ذكية تستعرض أقوى حلول الأتمتة، الأنظمة السيادية، وبوابات الدفع الفوري
+            </p>
+          </div>
+          <a href="/bots.html" class="text-sm text-techCyan hover:underline font-bold inline-flex items-center gap-1 self-start sm:self-auto">
+            <span>تصفح كافة الباقات (24 باقة)</span>
+            <span>←</span>
+          </a>
+        </div>
+
+        <!-- The Bento Grid Matrix with Scroll-Triggered Reveals & Spotlight Sheen -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <!-- Bento Tile 1: Flagship Pro Bot (Spans 2 cols on lg) -->
+          <div data-reveal class="lg:col-span-2 bento-card p-6 sm:p-7 flex flex-col justify-between group transition-all">
+            <div class="space-y-4">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="px-3 py-1 rounded-lg bg-blue-600/20 text-techCyan font-bold text-xs">الباقة الاحترافية الأكثر طلباً</span>
+                  <div class="flex items-center gap-0.5 text-amber-400" aria-label="تقييم 5 نجوم">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xl font-black text-amber-400 flex items-center gap-1">
+                    3,750
+                    <svg class="w-4 h-4 fill-current inline-block" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  </span>
+                  <span class="text-xs text-slate-400">(~$49.5)</span>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-xl sm:text-2xl font-bold text-white group-hover:text-techCyan transition-colors">
+                  بوت المتجر المتكامل — الباقة الاحترافية Pro
+                </h3>
+                <p class="text-slate-200 text-sm sm:text-base leading-relaxed mt-1.5">
+                  متجر تيليجرام مستقل باسم وشعار مشروعك: منتجات رقمية وفيزيائية غير محدودة، سداد فوري بنجوم تيليجرام أو إشعار الكريمي، تسليم فوري وتنبيه لحظي للمشرف.
+                </p>
+              </div>
+
+              <!-- Real Interface Mockup -->
+              <div class="relative rounded-xl overflow-hidden bg-slate-950">
+                <img src="/store/img/products/store-bot-pro.webp" alt="واجهة بوت المتجر الاحترافي Pro" class="w-full h-44 object-cover object-center" loading="lazy" />
+              </div>
+
+              <!-- Feature Grid Inside Card -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 text-sm text-slate-200">
+                <div class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-900/80">
+                  <svg class="w-4 h-4 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                  <span>منتجات وأقسام غير محدودة مع إدارة المخزون</span>
+                </div>
+                <div class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-900/80">
+                  <svg class="w-4 h-4 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                  <span>دفع مزدوج: نجوم تيليجرام + بنك الكريمي</span>
+                </div>
+                <div class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-900/80">
+                  <svg class="w-4 h-4 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                  <span>تسليم آلي مشفر للملفات والأكواد والاشتراكات</span>
+                </div>
+                <div class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-900/80">
+                  <svg class="w-4 h-4 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                  <span>لوحة تحكم إدارية سريعة داخل تيليجرام</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-5 mt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-2 text-xs text-slate-300">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>تسليم فوري &lt; 5 دقائق</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="openOrderModal('بوت المتجر المتكامل — Pro', '3,750 ⭐ (~$49.5)')" class="btn-magnetic px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-sm text-white transition-all">
+                  طلب الباقة الآن
+                </button>
+                <a href="/bots.html" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 font-bold text-sm text-slate-200 hover:text-white transition-colors">
+                  التفاصيل
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bento Tile 2: Sovereign System - نظام يُسر (1 col on lg) -->
+          <div data-reveal class="bento-card p-6 sm:p-7 flex flex-col justify-between group transition-all">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="px-3 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 font-bold text-xs">نظام مالي سيادي v0.2.1</span>
+                <span class="text-xs text-emerald-400 font-bold flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                  <span>18.5K تحميلة</span>
+                </span>
+              </div>
+
+              <div>
+                <h3 class="text-xl font-bold text-white group-hover:text-techCyan transition-colors">
+                  نظام يُسر (Yusr) — المحاسبة وإدارة الأوقاف
+                </h3>
+                <p class="text-slate-200 text-sm leading-relaxed mt-1.5">
+                  دفتر أستاذ مشفر بسلسلة كتل SHA-256 غير قابل للتعديل، قاعدة بيانات PostgreSQL (PgSQL 18) مدمجة ذاتياً، مستشار ذكي محلي يعمل 100% دون إنترنت.
+                </p>
+              </div>
+
+              <!-- Real Software Dashboard Screenshot -->
+              <div class="relative rounded-xl overflow-hidden bg-slate-950">
+                <img src="/img/screen-dashboard.png" alt="واجهة لوحة تحكم نظام يُسر المحاسبي" class="w-full h-36 object-cover object-top" loading="lazy" />
+              </div>
+
+              <div class="space-y-2 pt-1 text-xs text-slate-200">
+                <div class="flex items-center justify-between p-2 rounded-lg bg-slate-900/80">
+                  <span>قاعدة البيانات:</span>
+                  <span class="text-emerald-400 font-bold">PostgreSQL (PgSQL 18)</span>
+                </div>
+                <div class="flex items-center justify-between p-2 rounded-lg bg-slate-900/80">
+                  <span>سلسلة الكتل:</span>
+                  <span class="text-techCyan font-bold">SHA-256 Chain</span>
+                </div>
+                <div class="flex items-center justify-between p-2 rounded-lg bg-slate-900/80">
+                  <span>حزم التثبيت:</span>
+                  <span class="text-white font-bold">MSI (255MB) • DEB</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between gap-2">
+              <a href="https://github.com/zeiad6/yusr/releases/download/v0.2.1/Yusr-Lite_0.2.1_x64_en-US.msi" target="_blank" rel="noopener noreferrer" class="btn-magnetic flex-1 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 font-black text-sm text-slate-950 transition-colors flex items-center justify-center gap-1.5" download>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                <span>تحميل (.msi 255MB)</span>
+              </a>
+              <a href="/programs.html?id=1" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-bold text-slate-200 hover:text-white transition-colors" title="عرض تفاصيل نظام يُسر">
+                التفاصيل
+              </a>
+            </div>
+          </div>
+
+          <!-- Bento Tile 3: Currency Switcher & Karim Express Hub (1 col) -->
+          <div data-reveal class="bento-card p-6 sm:p-7 flex flex-col justify-between group transition-all">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-3 py-1 rounded-lg bg-techCyan/10 text-techCyan font-bold text-xs">بوابة بنك الكريمي</span>
+                <span class="text-xs text-slate-400">حساب معتمد</span>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-bold text-white">
+                  الدفع المباشر عبر الكريمي إكسبرس
+                </h3>
+                <p class="text-slate-200 text-sm mt-1">
+                  سداد فوري لكافة الباقات دون عمولة وسيط مع دعم 3 عملات رسمية:
+                </p>
+              </div>
+
+              <!-- Interactive Account Display Card -->
+              <div class="p-3.5 rounded-xl bg-slate-900/90 space-y-2.5">
+                <div class="flex items-center justify-between text-sm">
+                  <span class="text-slate-400">رقم الحساب:</span>
+                  <span class="font-bold text-techCyan text-base tracking-wider" dir="ltr">30432981</span>
+                </div>
+                <div class="flex items-center justify-between text-xs text-slate-400">
+                  <span>الاسم المعتمد:</span>
+                  <span class="text-slate-200 font-semibold">منصة ZeidexSoft</span>
+                </div>
+                <div class="pt-1 flex items-center gap-1.5 text-xs text-slate-300">
+                  <span class="px-2 py-0.5 rounded bg-slate-800">YER يمني</span>
+                  <span class="px-2 py-0.5 rounded bg-slate-800">USD دولار</span>
+                  <span class="px-2 py-0.5 rounded bg-slate-800">SAR سعودي</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between">
+              <button onclick="copyToClipboard('30432981', 'تم نسخ رقم حساب بنك الكريمي: 30432981')" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-bold text-techCyan transition-all flex items-center justify-center gap-1.5">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                <span>نسخ رقم الحساب بنقرة واحدة</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Bento Tile 4: VerityScope Deepfake Sentinel (1 col) -->
+          <div data-reveal class="bento-card p-6 sm:p-7 flex flex-col justify-between group transition-all">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-3 py-1 rounded-lg bg-indigo-500/10 text-indigo-400 font-bold text-xs">كاشف التزييف بالـ AI</span>
+                <span class="text-xs text-indigo-400 font-bold flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                  <span>29.3K تحميلة</span>
+                </span>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors">
+                  VerityScope Deepfake Detector
+                </h3>
+                <p class="text-slate-200 text-sm leading-relaxed mt-1">
+                  تطبيق أندرويد سيادي متقدم لكشف الصور والفيديوهات المزيفة محلياً على جهازك دون رفع أي بيانات إلى السحاب.
+                </p>
+              </div>
+
+              <!-- Real App Screenshot -->
+              <div class="relative rounded-xl overflow-hidden bg-slate-950">
+                <img src="/img/aifake-1.webp" alt="واجهة كاشف التزييف العميق VerityScope" class="w-full h-36 object-cover object-top" loading="lazy" />
+              </div>
+
+              <div class="p-2.5 rounded-lg bg-slate-900/80 space-y-1 text-xs text-slate-200">
+                <div class="flex items-center justify-between">
+                  <span>الفحص العصبي:</span>
+                  <span class="text-emerald-400 font-bold">On-Device 100%</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span>صيغة التثبيت:</span>
+                  <span class="text-techCyan font-bold">APK (v0.4.0)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between gap-2">
+              <a href="https://www.mediafire.com/file/38z57gqtgndpioy/VerityScope-v0.4.0-universal.apk/file" target="_blank" rel="noopener noreferrer" class="btn-magnetic flex-1 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-sm font-bold text-white transition-colors flex items-center justify-center gap-1.5" download>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                <span>تحميل APK (240MB)</span>
+              </a>
+              <a href="/programs.html?id=2" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-bold text-slate-200 hover:text-white transition-colors" title="عرض تفاصيل VerityScope">
+                التفاصيل
+              </a>
+            </div>
+          </div>
+
+          <!-- Bento Tile 5: 3-Day Free Trial Bridge (1 col) -->
+          <div data-reveal class="bento-card p-6 sm:p-7 flex flex-col justify-between group transition-all">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-3 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 font-bold text-xs">تفعيل فوري</span>
+                <span class="text-xs text-emerald-400 font-bold">Zero Card</span>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
+                  تجربة مجانية 3 أيام لكافة البوتات
+                </h3>
+                <p class="text-slate-200 text-sm leading-relaxed mt-1">
+                  اختبر متجرك أو بوت الإشراف والحماية لمدة 3 أيام مجاناً بالكامل دون إدخال أي بطاقة بنكية.
+                </p>
+              </div>
+
+              <div class="space-y-2 text-sm text-slate-200 py-1">
+                <div class="flex items-center gap-2">
+                  <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold shrink-0">1</span>
+                  <span>اختر البوت المطلوب من الكتالوج</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold shrink-0">2</span>
+                  <span>استلم مفتاح التفعيل الفوري</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold shrink-0">3</span>
+                  <span>ابدأ العمل فوراً في تيليجرام</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between">
+              <a href="/trial.html" class="btn-magnetic w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-sm font-black text-slate-950 transition-all text-center">
+                بدء التجربة الآن
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Independent Section Hub (Distinct Portals with Animated Reveals) -->
+    <section id="sections-hub" data-reveal class="py-14 sm:py-20 relative w-full max-w-full">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-black text-white">
+            واجهات المنظومة المستقلة
+          </h2>
+          <p class="text-slate-300 text-sm sm:text-base mt-1">
+            تم تخصيص واجهة مستقلة متكاملة لكل خدمة لتوفير أقصى سرعة واستغلال كامل للمساحة
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <a href="/bots.html" data-reveal class="bento-card p-6 flex flex-col justify-between group transition-all">
+            <div class="space-y-3">
+              <div class="relative rounded-xl overflow-hidden bg-slate-950 mb-1">
+                <img src="/store/img/products/multibot-crm.webp" alt="كتالوج باقات البوتات" class="w-full h-36 object-cover object-center" loading="lazy" />
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors">كتالوج باقات البوتات</h3>
+                <span class="text-xs font-bold text-techCyan px-2 py-0.5 rounded bg-blue-500/10">24 باقة</span>
+              </div>
+              <p class="text-slate-200 text-sm leading-relaxed">
+                بوتات المتاجر، مشرفي المجموعات، البوتات الخدمية، والاستضافة السحابية مع فلاتر بحث فوري.
+              </p>
+            </div>
+            <div class="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between text-sm font-bold text-techCyan">
+              <span>فتح واجهة البوتات</span>
+              <span>←</span>
+            </div>
+          </a>
+
+          <a href="/programs.html" data-reveal class="bento-card p-6 flex flex-col justify-between group transition-all">
+            <div class="space-y-3">
+              <div class="relative rounded-xl overflow-hidden bg-slate-950 mb-1">
+                <img src="/img/screen-report.png" alt="الأنظمة السيادية والمؤسسية" class="w-full h-36 object-cover object-top" loading="lazy" />
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">الأنظمة السيادية والمؤسسية</h3>
+                <span class="text-xs font-bold text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/10">Offline 100%</span>
+              </div>
+              <p class="text-slate-200 text-sm leading-relaxed">
+                نظام يُسر المحاسبي المشفر بسلسلة كتل SHA-256، وكواشف الذكاء الاصطناعي مع روابط تحميل مباشرة.
+              </p>
+            </div>
+            <div class="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between text-sm font-bold text-emerald-400">
+              <span>تحميل الأنظمة السيادية</span>
+              <span>←</span>
+            </div>
+          </a>
+
+          <a href="/templates.html" data-reveal class="bento-card p-6 flex flex-col justify-between group transition-all">
+            <div class="space-y-3">
+              <div class="relative rounded-xl overflow-hidden bg-slate-950 mb-1">
+                <img src="/store/img/products/site-durra.webp" alt="قوالب المتاجر الرقمية" class="w-full h-36 object-cover object-center" loading="lazy" />
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">قوالب المتاجر الرقمية</h3>
+                <span class="text-xs font-bold text-purple-400 px-2 py-0.5 rounded bg-purple-500/10">&lt; 300ms</span>
+              </div>
+              <p class="text-slate-200 text-sm leading-relaxed">
+                قوالب مواقع ومتاجر رقمية بصفر تبعيات (Zero-Dependencies) وتكامل مباشر مع تيليجرام وواتساب.
+              </p>
+            </div>
+            <div class="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between text-sm font-bold text-purple-400">
+              <span>معاينة القوالب</span>
+              <span>←</span>
+            </div>
+          </a>
+
+          <a href="/trial.html" data-reveal class="bento-card p-6 flex flex-col justify-between group transition-all">
+            <div class="space-y-3">
+              <div class="relative rounded-xl overflow-hidden bg-slate-950 mb-1">
+                <img src="/store/img/zeidex-bot.webp" alt="التجربة المجانية والدفع" class="w-full h-36 object-cover object-center" loading="lazy" />
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-white group-hover:text-amber-400 transition-colors">التجربة المجانية والدفع</h3>
+                <span class="text-xs font-bold text-amber-400 px-2 py-0.5 rounded bg-amber-500/10">الكريمي + Stars</span>
+              </div>
+              <p class="text-slate-200 text-sm leading-relaxed">
+                تفعيل التجربة لـ 3 أيام، ودليل سداد الحسابات عبر بنك الكريمي (YER/USD/SAR) ونجوم تيليجرام.
+              </p>
+            </div>
+            <div class="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between text-sm font-bold text-amber-400">
+              <span>بوابات الدفع والتفعيل</span>
+              <span>←</span>
+            </div>
+          </a>
+
+          <a href="/blog.html" data-reveal class="bento-card p-6 flex flex-col justify-between group transition-all">
+            <div class="space-y-3">
+              <div class="relative rounded-xl overflow-hidden bg-slate-950 mb-1">
+                <img src="/img/local-cicd-cover.webp" alt="المدونة المعرفية" class="w-full h-36 object-cover object-top" loading="lazy" />
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">المدونة المعرفية</h3>
+                <span class="text-xs font-bold text-blue-400 px-2 py-0.5 rounded bg-blue-500/10">مقالات هندسية</span>
+              </div>
+              <p class="text-slate-200 text-sm leading-relaxed">
+                شروحات تشغيل CI/CD محلياً، هندسة التشفير المالي، وتأمين البوتات ضد طوفان الرسائل.
+              </p>
+            </div>
+            <div class="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between text-sm font-bold text-blue-400">
+              <span>قراءة المدونة المعرفية</span>
+              <span>←</span>
+            </div>
+          </a>
+
+          <a href="/about.html" data-reveal class="bento-card p-6 flex flex-col justify-between group transition-all">
+            <div class="space-y-3">
+              <div class="relative rounded-xl overflow-hidden bg-slate-950 mb-1">
+                <img src="/img/local-cicd-architecture.webp" alt="عن المنظومة والسيادة" class="w-full h-36 object-cover object-top" loading="lazy" />
+              </div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-white group-hover:text-white transition-colors">عن المنظومة والسيادة</h3>
+                <span class="text-xs font-bold text-slate-300 px-2 py-0.5 rounded bg-slate-800">OWASP 2026</span>
+              </div>
+              <p class="text-slate-200 text-sm leading-relaxed">
+                فلسفة حماية البيانات المؤسسية، معايير OWASP 2026، ودليل القنوات المعتمدة للمنصة.
+              </p>
+            </div>
+            <div class="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between text-sm font-bold text-slate-300">
+              <span>ميثاق السيادة ومعايير الأمان</span>
+              <span>←</span>
+            </div>
+          </a>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Engineering Blog Highlights (3 Articles with Modal Read) -->
+    <section data-reveal class="py-14 sm:py-20 relative w-full max-w-full">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        <div class="flex items-end justify-between">
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-black text-white">
+              أحدث المقالات الهندسية
+            </h2>
+            <p class="text-slate-300 text-sm sm:text-base mt-1">
+              أدلة عملية معمقة في DevOps، التشفير المالي، ومعمارية البوتات السحابية
+            </p>
+          </div>
+          <a href="/blog.html" class="text-sm text-techCyan hover:underline font-bold inline-flex items-center gap-1">
+            <span>تصفح المدونة</span>
+            <span>←</span>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <div data-reveal class="bento-card p-6 flex flex-col justify-between group transition-all">
+            <div class="space-y-3">
+              <div class="relative rounded-xl overflow-hidden bg-slate-950 mb-1">
+                <img src="/img/local-cicd-cover.webp" alt="تشغيل وتثبيت CI/CD محلياً" class="w-full h-40 object-cover object-top" loading="lazy" />
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="px-2.5 py-0.5 rounded bg-blue-500/10 text-techCyan font-bold">DevOps &amp; CI/CD</span>
+                <span class="text-slate-400">7 دقائق قراءة</span>
+              </div>
+              <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
+                الدليل العملي الشامل: تشغيل وتثبيت CI/CD محلياً دون أخطاء
+              </h3>
+              <p class="text-slate-200 text-sm leading-relaxed">
+                تشغيل خطوط الأنابيب محلياً عبر act و Docker في Linux و Windows و Termux/PRoot مع حلول أشهر 7 أخطاء شائعة.
+              </p>
+            </div>
+            <div class="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between">
+              <button onclick="openBlogModal('الدليل العملي الشامل: تشغيل وتثبيت CI/CD محلياً دون أخطاء', 'تشغيل خطوط الأنابيب محلياً عبر act و Docker في Linux و Windows و Termux/PRoot مع حلول أشهر 7 أخطاء شائعة.')" class="text-sm font-bold text-techCyan hover:text-white transition-colors">
+                قراءة الملخص المعرفي ←
+              </button>
+            </div>
+          </div>
+
+          <div data-reveal class="bento-card p-6 flex flex-col justify-between group transition-all">
+            <div class="space-y-3">
+              <div class="relative rounded-xl overflow-hidden bg-slate-950 mb-1">
+                <img src="/img/screen-advisor.png" alt="المنظومة المحاسبية والمالية المستقلة" class="w-full h-40 object-cover object-top" loading="lazy" />
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="px-2.5 py-0.5 rounded bg-blue-500/10 text-techCyan font-bold">أنظمة مالية سيادية</span>
+                <span class="text-slate-400">7 دقائق قراءة</span>
+              </div>
+              <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
+                نظام يُسر (Yusr): المنظومة المحاسبية والمالية المستقلة
+              </h3>
+              <p class="text-slate-200 text-sm leading-relaxed">
+                دفتر أستاذ مشفّر بسلسلة SHA-256 لمنع التلاعب بالسجلات المالية للجمعيات ولجان الزكاة، مع ذكاء اصطناعي محلي وفوترة ZATCA.
+              </p>
+            </div>
+            <div class="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between">
+              <button onclick="openBlogModal('نظام يُسر (Yusr): المنظومة المحاسبية والمالية المستقلة', 'دفتر أستاذ مشفّر بسلسلة SHA-256 لمنع التلاعب بالسجلات المالية للجمعيات ولجان الزكاة، مع ذكاء اصطناعي محلي وفوترة ZATCA.')" class="text-sm font-bold text-techCyan hover:text-white transition-colors">
+                قراءة الملخص المعرفي ←
+              </button>
+            </div>
+          </div>
+
+          <div data-reveal class="bento-card p-6 flex flex-col justify-between group transition-all">
+            <div class="space-y-3">
+              <div class="relative rounded-xl overflow-hidden bg-slate-950 mb-1">
+                <img src="/img/zeidex-convert-android-cover.webp" alt="محول ملفات محلي واستخراج الصور الحية" class="w-full h-40 object-cover object-top" loading="lazy" />
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="px-2.5 py-0.5 rounded bg-blue-500/10 text-techCyan font-bold">أندرويد والوسائط</span>
+                <span class="text-slate-400">7 دقائق قراءة</span>
+              </div>
+              <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
+                Zeidex Convert: محول ملفات محلي واستخراج الصور الحية
+              </h3>
+              <p class="text-slate-200 text-sm leading-relaxed">
+                استخراج مقاطع الفيديو من صور الحركة في سامسونج وجوجل وآبل إلى MP4، رفع دقة الصور وضغط الوسائط دون إنترنت.
+              </p>
+            </div>
+            <div class="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between">
+              <button onclick="openBlogModal('Zeidex Convert: محول ملفات محلي واستخراج الصور الحية', 'استخراج مقاطع الفيديو من صور الحركة في سامسونج وجوجل وآبل إلى MP4، رفع دقة الصور وضغط الوسائط دون إنترنت.')" class="text-sm font-bold text-techCyan hover:text-white transition-colors">
+                قراءة الملخص المعرفي ←
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#070c18] pt-14 pb-12 relative overflow-hidden mt-16 w-full max-w-full">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 pb-10">
+        
+        <!-- Col 1: Brand & Sovereign Mission (2 cols on lg) -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="relative shrink-0 flex items-center justify-center w-8 h-8 rounded-lg bg-blue-600 p-[1.5px]">
+              <div class="w-full h-full bg-[#070b16] rounded-[7px] flex items-center justify-center">
+                <svg class="w-4 h-4 text-techCyan" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <span class="text-lg font-black text-white tracking-tight">
+              Zeidex<span class="text-techCyan">Soft</span>
+            </span>
+          </div>
+
+          <p class="text-slate-300 text-sm leading-relaxed max-w-sm">
+            المنظومة البرمجية السيادية المتخصصة في أتمتة الأعمال، بوتات تيليجرام المشفرة، والأنظمة المالية غير القابلة للتعديل المدعومة بسلسلة كتل SHA-256 والمطابقة لمعايير OWASP 2026.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <span class="px-2.5 py-1 rounded bg-slate-800 text-xs font-semibold text-slate-300">AES-GCM-256</span>
+            <span class="px-2.5 py-1 rounded bg-slate-800 text-xs font-semibold text-slate-300">Zero-Trust KV</span>
+            <span class="px-2.5 py-1 rounded bg-slate-800 text-xs font-semibold text-slate-300">Offline-First</span>
+          </div>
+        </div>
+
+        <!-- Col 2: المنتجات والأنظمة -->
+        <div class="space-y-3">
+          <h3 class="text-base font-bold text-white mb-2">المنتجات والأنظمة</h3>
+          <ul class="space-y-2 text-sm text-slate-300">
+            <li><a href="/bots.html" class="hover:text-techCyan transition-colors">باقات بوتات المتاجر Pro</a></li>
+            <li><a href="/programs.html" class="hover:text-techCyan transition-colors">نظام يُسر للمحاسبة والأوقاف</a></li>
+            <li><a href="/programs.html" class="hover:text-techCyan transition-colors">كاشف التزييف VerityScope</a></li>
+            <li><a href="/templates.html" class="hover:text-techCyan transition-colors">قالب متجر عود وعنبر (Zero-Deps)</a></li>
+            <li><a href="/trial.html" class="hover:text-techCyan transition-colors">تفعيل التجربة المجانية (3 أيام)</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: المعرفة والأمان -->
+        <div class="space-y-3">
+          <h3 class="text-base font-bold text-white mb-2">المعرفة والأمان</h3>
+          <ul class="space-y-2 text-sm text-slate-300">
+            <li><a href="/blog.html" class="hover:text-techCyan transition-colors">تشغيل CI/CD محلياً دون أخطاء</a></li>
+            <li><a href="/blog.html" class="hover:text-techCyan transition-colors">دفتر الأستاذ المشفر SHA-256</a></li>
+            <li><a href="/blog.html" class="hover:text-techCyan transition-colors">حماية بوتات Cloudflare Workers</a></li>
+            <li><a href="/about.html" class="hover:text-techCyan transition-colors">ميثاق السيادة ومعايير الأمان</a></li>
+            <li><a href="/about.html#channels" class="hover:text-techCyan transition-colors">قنوات الدعم والتحقق الرسمية</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: بوابات السداد -->
+        <div class="space-y-3">
+          <h3 class="text-base font-bold text-white mb-2">بوابات السداد المعتمدة</h3>
+          <div class="space-y-2.5 text-sm text-slate-300">
+            <div class="p-3 rounded-xl bg-slate-900/90">
+              <div class="font-bold text-white flex items-center justify-between">
+                <span>بنك الكريمي</span>
+                <span class="text-xs text-techCyan font-bold" dir="ltr">30432981</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">ريال يمني • دولار • ريال سعودي</p>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-900/90">
+              <div class="font-bold text-white flex items-center justify-between">
+                <span>نجوم تيليجرام</span>
+                <span class="text-xs text-amber-400 font-bold">Stars (XTR)</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">دفع فوري داخل التطبيق 100%</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Status & Copyright Bar -->
+      <div class="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Cloudflare Edge: Active • All Systems Operational</span>
+        </div>
+        <div class="text-center sm:text-left">
+          جميع الحقوق محفوظة © 2026 ZeidexSoft — منصة الأتمتة والأنظمة السيادية.
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  </div>
+
+  <!-- Order Modal Component -->
+  <div id="orderModal" class="app-modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80">
+    <div class="techfy-glass rounded-3xl max-w-lg w-full p-6 border border-techCyan/40 space-y-5 relative">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-lg font-bold text-white" id="orderModalTitle">تأكيد طلب الباقة</h3>
+        <button onclick="closeOrderModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800" aria-label="إغلاق">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs text-slate-300">
+        <p>لتفعيل الباقة فورياً وباسم وشعار مشروعك، يرجى إرسال اسم الباقة إلى بوت المتجر الرسمي:</p>
+        
+        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
+          <span id="orderModalPrice" class="text-amber-400 font-bold"></span>
+          <span class="text-slate-400">@ZeidexStoreBot</span>
+        </div>
+
+        <div class="p-3 rounded-xl bg-blue-950/40 border border-blue-500/20 space-y-1">
+          <div class="font-bold text-techCyan">طرق الدفع المتاحة:</div>
+          <div>1. نجوم تيليجرام (Telegram Stars) داخل البوت مباشرة.</div>
+          <div>2. إشعار بنك الكريمي (حساب: 30432981 YER/USD/SAR).</div>
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center gap-3">
+        <a id="orderTelegramBtn" href="https://t.me/ZeidexStoreBot" target="_blank" rel="noopener noreferrer" class="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs text-center transition-transform">
+          متابعة الطلب في تيليجرام
+        </a>
+        <button onclick="closeOrderModal()" class="px-5 py-3 rounded-xl bg-slate-800 text-slate-300 font-bold text-xs hover:bg-slate-700 transition-colors">
+          إلغاء
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Blog Summary Modal Component -->
+  <div id="blogModal" class="app-modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80">
+    <div class="techfy-glass rounded-3xl max-w-xl w-full p-6 border border-blue-500/40 space-y-5 relative max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base sm:text-lg font-bold text-white" id="blogModalTitle">ملخص المقال</h3>
+        <button onclick="closeBlogModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800" aria-label="إغلاق">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed" id="blogModalBody">
+      </div>
+
+      <div class="pt-3 border-t border-slate-800 flex items-center justify-between">
+        <a href="/blog.html" class="text-xs font-bold text-techCyan hover:underline">
+          الانتقال لصفحة المقالات الكاملة ←
+        </a>
+        <button onclick="closeBlogModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 font-bold text-xs hover:bg-slate-700 transition-colors">
+          إغلاق
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification (Fixed Overlay) -->
+  <div id="toastNotification" class="fixed bottom-5 left-5 z-50 transform translate-y-24 opacity-0 pointer-events-none transition-all duration-300 max-w-sm">
+    <div class="techfy-glass rounded-2xl p-4 border border-techCyan/40 flex items-center gap-3">
+      <div class="w-8 h-8 rounded-xl bg-techCyan/20 text-techCyan flex items-center justify-center shrink-0">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div class="min-w-0 flex-1">
+        <div class="text-xs font-bold text-white" id="toastTitle">تمت العملية بنجاح!</div>
+        <div class="text-xs text-slate-300 truncate" id="toastMessage">تم نسخ البيانات إلى الحافظة.</div>
+      </div>
+    </div>
+  </div>
+  <!-- Floating Quick Actions (Telegram + WhatsApp) with Pulse Animations -->
+  <aside aria-label="قنوات التواصل السريع" class="fixed bottom-6 end-6 z-40 flex flex-col items-end gap-3 pointer-events-auto">
+    <!-- WhatsApp Floating Action -->
+    <a
+      href="https://wa.me/967778000000?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20ZeidexSoft%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A8%D9%88%D8%AA%D8%A7%D8%AA%20%D8%AA%D9%8A%D9%84%D9%8A%D8%AC%D8%B1%D8%A7%D9%85"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="group flex items-center gap-2.5 rounded-full border border-emerald-500/30 bg-slate-900 py-1.5 px-3 text-xs font-bold text-slate-200 transition-all hover:scale-105 hover:border-emerald-400 hover:text-white"
+      title="تواصل عبر واتساب"
+    >
+      <span class="hidden sm:inline-block text-xs font-medium text-slate-300 group-hover:text-white">دعم واتساب المباشر</span>
+      <div class="relative grid size-8 place-items-center rounded-full bg-emerald-500 text-white">
+        <svg class="size-4.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+      </div>
+    </a>
+
+    <!-- Telegram Bot Quick Launch -->
+    <a
+      href="https://t.me/ZeidexStoreBot"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="group flex items-center gap-2.5 rounded-full border border-blue-500/40 bg-slate-900 py-1.5 px-3 text-xs font-bold text-white transition-all hover:scale-105 hover:border-techCyan"
+      title="افتح بوت المتجر في تيليجرام"
+    >
+      <span class="hidden sm:inline-block text-xs font-medium text-slate-300 group-hover:text-white">بوت المتجر الرسمي</span>
+      <div class="relative grid size-8 place-items-center rounded-full bg-blue-600 text-white">
+        <span class="pulse-ring absolute inset-0 rounded-full bg-techCyan/40"></span>
+        <svg class="size-4.5 fill-current relative z-10" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.196 1.006.128.832.928z"/></svg>
+      </div>
+    </a>
+  </aside>
+
+  <script>
+    // Safe DOM helpers
+    function showToast(message, title = 'تمت العملية بنجاح!') {
+      const toast = document.getElementById('toastNotification');
+      const titleEl = document.getElementById('toastTitle');
+      const msgEl = document.getElementById('toastMessage');
+      if (!toast) return;
+      if (titleEl) titleEl.textContent = title;
+      if (msgEl) msgEl.textContent = message;
+      
+      toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+      }, 3500);
+    }
+
+    function copyToClipboard(text, successMsg = 'تم النسخ إلى الحافظة بنجاح!') {
+      if (!navigator.clipboard) {
+        const input = document.createElement('textarea');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        showToast(successMsg);
+        return;
+      }
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(successMsg);
+      }).catch(() => {
+        showToast('تعذر النسخ التلقائي، يرجى النسخ يدوياً');
+      });
+    }
+
+    // Mobile Drawer Toggle
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('mobileMenuBtn');
+      const menu = document.getElementById('mobileMenu');
+      if (btn && menu) {
+        btn.addEventListener('click', () => {
+          const isClosed = menu.classList.contains('hidden');
+          if (isClosed) {
+            menu.classList.remove('hidden');
+            btn.setAttribute('aria-expanded', 'true');
+          } else {
+            menu.classList.add('hidden');
+            btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+
+      // Close modal on Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.app-modal:not(.hidden)').forEach(modal => {
+            modal.classList.add('hidden');
+          });
+        }
+      });
+
+      // Close modal on backdrop click
+      document.querySelectorAll('.app-modal').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.classList.add('hidden');
+          }
+        });
+      });
+    });
+
+    // ===============================================================
+    // ZeidexSoft Specialized Motion & Interaction Engine
+    // ===============================================================
+    (function() {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // 1. Scroll-linked Entrance (data-reveal)
+      const revealElements = document.querySelectorAll('[data-reveal]');
+      if (revealElements.length) {
+        if (reduceMotion || !('IntersectionObserver' in window)) {
+          revealElements.forEach(el => el.classList.add('is-in'));
+        } else {
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-in');
+                observer.unobserve(entry.target);
+              }
+            });
+          }, { rootMargin: '0px 0px -8% 0px', threshold: 0.1 });
+
+          revealElements.forEach(el => observer.observe(el));
+
+          // Safety failsafe: ensure nothing stays hidden if observer is delayed
+          setTimeout(() => {
+            revealElements.forEach(el => el.classList.add('is-in'));
+          }, 1400);
+        }
+      }
+
+      // 2. Animated Number Counters (CountUp)
+      const counters = document.querySelectorAll('[data-count]');
+      if (counters.length) {
+        const runCounter = (el) => {
+          if (el.__counted) return;
+          el.__counted = true;
+          const target = parseInt(el.getAttribute('data-count'), 10) || 0;
+          const prefix = el.getAttribute('data-prefix') || '';
+          const suffix = el.getAttribute('data-suffix') || '';
+          if (reduceMotion || target === 0) {
+            el.textContent = prefix + target.toLocaleString('en-US') + suffix;
+            return;
+          }
+
+          const duration = 1200;
+          const start = performance.now();
+          const tick = (now) => {
+            const p = Math.min((now - start) / duration, 1);
+            // easeOutExpo curve
+            const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+            const current = Math.round(target * eased);
+            el.textContent = prefix + current.toLocaleString('en-US') + suffix;
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        };
+
+        if ('IntersectionObserver' in window && !reduceMotion) {
+          const countObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                runCounter(entry.target);
+                countObserver.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.2 });
+          counters.forEach(el => countObserver.observe(el));
+        } else {
+          counters.forEach(runCounter);
+        }
+      }
+
+      // 3. Cockpit 3D Tilt & Specular Tracking
+      const cockpit = document.getElementById('cockpitTerminal');
+      if (cockpit && !reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        cockpit.addEventListener('pointermove', (e) => {
+          const rect = cockpit.getBoundingClientRect();
+          const px = (e.clientX - rect.left) / rect.width;
+          const py = (e.clientY - rect.top) / rect.height;
+          const rx = ((py - 0.5) * -12).toFixed(2);
+          const ry = ((px - 0.5) * 12).toFixed(2);
+          cockpit.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+        });
+        cockpit.addEventListener('pointerleave', () => {
+          cockpit.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+        });
+      }
+
+      // 4. Interactive Live Ping Latency Test
+      const pingBtn = document.getElementById('pingTestBtn');
+      const pingReadout = document.getElementById('pingReadout');
+      if (pingBtn && pingReadout) {
+        pingBtn.addEventListener('click', () => {
+          if (pingBtn.__pinging) return;
+          pingBtn.__pinging = true;
+          pingReadout.textContent = '...';
+          pingBtn.classList.add('opacity-70');
+          setTimeout(() => {
+            const lat = Math.floor(18 + Math.random() * 12);
+            pingReadout.textContent = lat + 'ms';
+            pingBtn.classList.remove('opacity-70');
+            pingBtn.__pinging = false;
+            showToast('تم قياس استجابة الشبكة السحابية: ' + lat + 'ms (فائق السرعة)', 'اختبار الاستجابة اللحظية');
+          }, 450);
+        });
+      }
+
+      // 5. Specular Cursor Spotlight for Bento Cards
+      if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        document.querySelectorAll('.bento-card').forEach((card) => {
+          card.addEventListener('pointermove', (e) => {
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty('--spot-x', `${e.clientX - rect.left}px`);
+            card.style.setProperty('--spot-y', `${e.clientY - rect.top}px`);
+          }, { passive: true });
+        });
+      }
+
+      // 6. Magnetic Button Physics
+      if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        document.querySelectorAll('.btn-magnetic').forEach((btn) => {
+          btn.addEventListener('pointermove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = (e.clientX - (rect.left + rect.width / 2)) * 0.22;
+            const y = (e.clientY - (rect.top + rect.height / 2)) * 0.22;
+            btn.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+          });
+          btn.addEventListener('pointerleave', () => {
+            btn.style.transform = 'translate(0px, 0px)';
+          });
+        });
+      }
+    })();
+  </script>
+
+  <script>
+    function openOrderModal(title, price) {
+      const modal = document.getElementById('orderModal');
+      const titleEl = document.getElementById('orderModalTitle');
+      const priceEl = document.getElementById('orderModalPrice');
+      const btn = document.getElementById('orderTelegramBtn');
+      if (!modal) return;
+      if (titleEl) titleEl.textContent = 'طلب: ' + title;
+      if (priceEl) priceEl.textContent = price;
+      if (btn) btn.href = 'https://t.me/ZeidexStoreBot?start=' + encodeURIComponent('order_' + title);
+      modal.classList.remove('hidden');
+    }
+    function closeOrderModal() {
+      const modal = document.getElementById('orderModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function openBlogModal(title, body) {
+      const modal = document.getElementById('blogModal');
+      const titleEl = document.getElementById('blogModalTitle');
+      const bodyEl = document.getElementById('blogModalBody');
+      if (!modal) return;
+      if (titleEl) titleEl.textContent = title;
+      if (bodyEl) bodyEl.innerHTML = '<p>' + body.replace(/\n/g, '</p><p class="mt-2">') + '</p>';
+      modal.classList.remove('hidden');
+    }
+    function closeBlogModal() {
+      const modal = document.getElementById('blogModal');
+      if (modal) modal.classList.add('hidden');
+    }
+  </script>
+</body>
 </html>

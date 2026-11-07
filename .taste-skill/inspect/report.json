@@ -1,0 +1,1715 @@
+{
+ "url": "dist/index.html",
+ "at": "2026-10-31T20:44:17.889Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 4,
+   "filled": [
+    0.56,
+    0.65,
+    0.65,
+    0.59
+   ],
+   "motion": {
+    "elements": 32,
+    "css": 16,
+    "transitions": 16,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 2925,
+     "screens": 3.3,
+     "words": 846,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 41,
+     "sections": 4,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرام",
+     "words": 5,
+     "chars": 41,
+     "lines": 2,
+     "size": 48,
+     "vw": 3.3,
+     "font": "Cairo",
+     "weight": 900,
+     "tracking": -0.025,
+     "leading": 1,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "right",
+     "position": "right",
+     "widthRatio": 0.48,
+     "top": 196,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرام",
+     "words": 5,
+     "lines": 2,
+     "size": 48,
+     "font": "Cairo"
+    },
+    "headings": [
+     {
+      "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرام",
+      "words": 5,
+      "chars": 41,
+      "lines": 2,
+      "size": 48,
+      "vw": 3.3,
+      "font": "Cairo",
+      "weight": 900,
+      "tracking": -0.025,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "right",
+      "position": "right",
+      "widthRatio": 0.48,
+      "top": 196,
+      "tag": "h1",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 1,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Cairo",
+       "share": 0.84,
+       "mono": false
+      },
+      {
+       "family": "JetBrains Mono",
+       "share": 0.16,
+       "mono": true
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      9,
+      10,
+      11,
+      12,
+      14,
+      16,
+      18,
+      20,
+      24,
+      48
+     ],
+     "sizeCount": 10,
+     "notLoaded": [],
+     "body": {
+      "font": "Cairo",
+      "size": 12,
+      "leading": 1.33,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 12
+     },
+     "measureChars": 84,
+     "max": {
+      "size": 48,
+      "vw": 3.3,
+      "font": "Cairo",
+      "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرا"
+     },
+     "monoShare": 0.16,
+     "monoProseShare": 0.16,
+     "monoFamilies": [
+      "JetBrains Mono"
+     ],
+     "monoSamples": [
+      "2026",
+      "←",
+      "Zeidex",
+      "Soft",
+      "2026",
+      "Edge Global: Online (TLS 1.3)"
+     ],
+     "microLabels": 3,
+     "microLabelShare": 0.01,
+     "microSamples": [
+      "المنتجات والأنظمة",
+      "المعرفة والأمان",
+      "بوابات السداد المعتمدة"
+     ],
+     "upperShare": 0.19,
+     "centerShare": 0.04,
+     "smallText": 110
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#060913",
+     "bodyBgHsl": {
+      "h": 226,
+      "s": 0.52,
+      "l": 0.05
+     },
+     "dark": true,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#94a3b8",
+       "share": 0.36
+      },
+      {
+       "color": "#cbd5e1",
+       "share": 0.27
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.16
+      },
+      {
+       "color": "#06b6d4",
+       "share": 0.1
+      },
+      {
+       "color": "#34d399",
+       "share": 0.04
+      }
+     ],
+     "button": {
+      "bg": "#1e293b",
+      "hsl": {
+       "h": 217,
+       "s": 0.33,
+       "l": 0.17
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": [
+      {
+       "text": "تحميل (.msi 255MB)",
+       "ratio": 3.8,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#ffffff",
+       "bg": "#059669"
+      },
+      {
+       "text": "بدء التجربة الآن",
+       "ratio": 3.8,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#ffffff",
+       "bg": "#059669"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 14,
+     "inHero": 6,
+     "radius": 12,
+     "height": 32,
+     "withShadow": 0,
+     "withGradient": 1,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "تجربة 3 أيام",
+      "بوت المتجر",
+      "استعراض كتالوج البوتات (24 باقة)",
+      "بدء التجربة المجانية 3 أيام",
+      "دعم واتساب المباشر"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 7,
+     "shadowOverlay": 4,
+     "shadowSamples": [
+      "div.hero-badge-in.inline-flex → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "a.btn-magnetic.w-full → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "div#cockpitTerminal.cockpit-tilt.bento-card → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "button.btn-magnetic.px-5 → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0"
+     ],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 21,
+     "hairlineSamples": [
+      "aside.w-full.max-w-full 1440px",
+      "div.flex.items-center 446px",
+      "div.mt-3.pt-2.5 446px",
+      "section.py-10.border-t 1440px",
+      "div.pt-5.mt-4 754px"
+     ],
+     "outlinedBoxes": 17,
+     "dashed": 0,
+     "blurred": 24,
+     "roundedBoxes": 16,
+     "boxRadius": 20,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": [
+      {
+       "count": 6,
+       "iconTopped": true,
+       "rounded": true,
+       "top": 1689
+      },
+      {
+       "count": 3,
+       "iconTopped": false,
+       "rounded": true,
+       "top": 2298
+      }
+     ]
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 10,
+     "fixed": true,
+     "height": 66,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "cairo",
+     "jetbrains mono"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 2925,
+    "margins": {
+     "left": 123,
+     "right": 112
+    },
+    "sections": [
+     {
+      "sel": "section.relative.pt-6",
+      "tag": "section",
+      "top": 101,
+      "height": 558,
+      "words": 129,
+      "media": 0,
+      "middle": 81,
+      "heading": {
+       "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرام",
+       "size": 48,
+       "tag": "h1"
+      },
+      "left": 133,
+      "right": 112,
+      "textLeft": 133,
+      "textRight": 112,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section.py-10.border-t",
+      "tag": "section",
+      "top": 659,
+      "height": 909,
+      "words": 276,
+      "media": 0,
+      "middle": 70,
+      "heading": {
+       "text": "ركائز المنظومة والحلول المتكاملة",
+       "size": 24,
+       "tag": "h2"
+      },
+      "left": 123,
+      "right": 112,
+      "textLeft": 123,
+      "textRight": 112,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#sections-hub.py-10.border-t",
+      "tag": "section",
+      "top": 1568,
+      "height": 609,
+      "words": 150,
+      "media": 0,
+      "middle": 71,
+      "heading": {
+       "text": "واجهات المنظومة المستقلة",
+       "size": 24,
+       "tag": "h2"
+      },
+      "left": 142,
+      "right": 112,
+      "textLeft": 142,
+      "textRight": 112,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section.py-10.border-t",
+      "tag": "section",
+      "top": 2177,
+      "height": 377,
+      "words": 127,
+      "media": 0,
+      "middle": 62,
+      "heading": {
+       "text": "أحدث المقالات الهندسية",
+       "size": 24,
+       "tag": "h2"
+      },
+      "left": 123,
+      "right": 112,
+      "textLeft": 123,
+      "textRight": 112,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.techfy-glass.border-t",
+      "tag": "footer",
+      "top": 2602,
+      "height": 323,
+      "words": 121,
+      "media": 0,
+      "middle": 117,
+      "heading": {
+       "text": "المنتجات والأنظمة",
+       "size": 12,
+       "tag": "h3"
+      },
+      "left": 112,
+      "right": 112,
+      "textLeft": 112,
+      "textRight": 112,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرام",
+      "size": 48,
+      "top": 196,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 321,
+      "n": 2
+     },
+     {
+      "x": 676,
+      "n": 2
+     },
+     {
+      "x": 811,
+      "n": 2
+     },
+     {
+      "x": 910,
+      "n": 2
+     },
+     {
+      "x": 1054,
+      "n": 2
+     },
+     {
+      "x": 170,
+      "n": 1
+     },
+     {
+      "x": 205,
+      "n": 1
+     },
+     {
+      "x": 250,
+      "n": 1
+     },
+     {
+      "x": 560,
+      "n": 1
+     },
+     {
+      "x": 573,
+      "n": 1
+     },
+     {
+      "x": 773,
+      "n": 1
+     },
+     {
+      "x": 949,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 21,
+    "bodySize": 12,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0.09,
+    "voidBox": {
+     "x": 0,
+     "y": 540,
+     "w": 660,
+     "h": 180
+    }
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 5,
+   "filled": [
+    0.65,
+    0.89,
+    0.66,
+    0.75,
+    0.84
+   ],
+   "motion": {
+    "elements": 31,
+    "css": 15,
+    "transitions": 16,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 4180,
+     "screens": 4.1,
+     "words": 828,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 41,
+     "sections": 4,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرام",
+     "words": 5,
+     "chars": 41,
+     "lines": 2,
+     "size": 48,
+     "vw": 6.3,
+     "font": "Cairo",
+     "weight": 900,
+     "tracking": -0.025,
+     "leading": 1,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "right",
+     "position": "center",
+     "widthRatio": 0.94,
+     "top": 196,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرام",
+     "words": 5,
+     "lines": 2,
+     "size": 48,
+     "font": "Cairo"
+    },
+    "headings": [
+     {
+      "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرام",
+      "words": 5,
+      "chars": 41,
+      "lines": 2,
+      "size": 48,
+      "vw": 6.3,
+      "font": "Cairo",
+      "weight": 900,
+      "tracking": -0.025,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "right",
+      "position": "center",
+      "widthRatio": 0.94,
+      "top": 196,
+      "tag": "h1",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 1,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Cairo",
+       "share": 0.84,
+       "mono": false
+      },
+      {
+       "family": "JetBrains Mono",
+       "share": 0.16,
+       "mono": true
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      9,
+      10,
+      11,
+      12,
+      14,
+      16,
+      18,
+      20,
+      24,
+      48
+     ],
+     "sizeCount": 10,
+     "notLoaded": [],
+     "body": {
+      "font": "Cairo",
+      "size": 12,
+      "leading": 1.33,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 12
+     },
+     "measureChars": 84,
+     "max": {
+      "size": 48,
+      "vw": 6.3,
+      "font": "Cairo",
+      "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرا"
+     },
+     "monoShare": 0.16,
+     "monoProseShare": 0.16,
+     "monoFamilies": [
+      "JetBrains Mono"
+     ],
+     "monoSamples": [
+      "2026",
+      "←",
+      "Zeidex",
+      "Soft",
+      "2026",
+      "zeidex-cloud-engine --v2026"
+     ],
+     "microLabels": 3,
+     "microLabelShare": 0.01,
+     "microSamples": [
+      "المنتجات والأنظمة",
+      "المعرفة والأمان",
+      "بوابات السداد المعتمدة"
+     ],
+     "upperShare": 0.2,
+     "centerShare": 0.04,
+     "smallText": 109
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#060913",
+     "bodyBgHsl": {
+      "h": 226,
+      "s": 0.52,
+      "l": 0.05
+     },
+     "dark": true,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#94a3b8",
+       "share": 0.37
+      },
+      {
+       "color": "#cbd5e1",
+       "share": 0.26
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.17
+      },
+      {
+       "color": "#06b6d4",
+       "share": 0.1
+      },
+      {
+       "color": "#34d399",
+       "share": 0.03
+      }
+     ],
+     "button": {
+      "bg": "#1e293b",
+      "hsl": {
+       "h": 217,
+       "s": 0.33,
+       "l": 0.17
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": [
+      {
+       "text": "تحميل (.msi 255MB)",
+       "ratio": 3.8,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#ffffff",
+       "bg": "#059669"
+      },
+      {
+       "text": "بدء التجربة الآن",
+       "ratio": 3.8,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#ffffff",
+       "bg": "#059669"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 14,
+     "inHero": 6,
+     "radius": 12,
+     "height": 32,
+     "withShadow": 0,
+     "withGradient": 1,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "تجربة 3 أيام",
+      "بوت المتجر",
+      "استعراض كتالوج البوتات (24 باقة)",
+      "بدء التجربة المجانية 3 أيام",
+      "دعم واتساب المباشر"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 7,
+     "shadowOverlay": 4,
+     "shadowSamples": [
+      "div.hero-badge-in.inline-flex → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "a.btn-magnetic.w-full → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "div#cockpitTerminal.cockpit-tilt.bento-card → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "button.btn-magnetic.px-5 → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0"
+     ],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 18,
+     "hairlineSamples": [
+      "aside.w-full.max-w-full 768px",
+      "div.flex.items-center 678px",
+      "div.mt-3.pt-2.5 678px",
+      "section.py-10.border-t 768px",
+      "div.pt-5.mt-4 300px"
+     ],
+     "outlinedBoxes": 17,
+     "dashed": 0,
+     "blurred": 24,
+     "roundedBoxes": 16,
+     "boxRadius": 20,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": [
+      {
+       "count": 5,
+       "iconTopped": true,
+       "rounded": true,
+       "top": 1079
+      },
+      {
+       "count": 6,
+       "iconTopped": true,
+       "rounded": true,
+       "top": 2434
+      },
+      {
+       "count": 3,
+       "iconTopped": false,
+       "rounded": true,
+       "top": 3277
+      }
+     ]
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 3,
+     "fixed": true,
+     "height": 66,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "cairo",
+     "jetbrains mono"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 4180,
+    "margins": {
+     "left": 35,
+     "right": 24
+    },
+    "sections": [
+     {
+      "sel": "section.relative.pt-6",
+      "tag": "section",
+      "top": 101,
+      "height": 857,
+      "words": 129,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرام",
+       "size": 48,
+       "tag": "h1"
+      },
+      "left": 45,
+      "right": 24,
+      "textLeft": 45,
+      "textRight": 24,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section.py-10.border-t",
+      "tag": "section",
+      "top": 958,
+      "height": 1355,
+      "words": 276,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "ركائز المنظومة والحلول المتكاملة",
+       "size": 24,
+       "tag": "h2"
+      },
+      "left": 35,
+      "right": 24,
+      "textLeft": 35,
+      "textRight": 24,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#sections-hub.py-10.border-t",
+      "tag": "section",
+      "top": 2313,
+      "height": 843,
+      "words": 150,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "واجهات المنظومة المستقلة",
+       "size": 24,
+       "tag": "h2"
+      },
+      "left": 54,
+      "right": 24,
+      "textLeft": 54,
+      "textRight": 24,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section.py-10.border-t",
+      "tag": "section",
+      "top": 3156,
+      "height": 454,
+      "words": 127,
+      "media": 0,
+      "middle": 63,
+      "heading": {
+       "text": "أحدث المقالات الهندسية",
+       "size": 24,
+       "tag": "h2"
+      },
+      "left": 35,
+      "right": 24,
+      "textLeft": 35,
+      "textRight": 24,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.techfy-glass.border-t",
+      "tag": "footer",
+      "top": 3658,
+      "height": 523,
+      "words": 121,
+      "media": 0,
+      "middle": 67,
+      "heading": {
+       "text": "المنتجات والأنظمة",
+       "size": 12,
+       "tag": "h3"
+      },
+      "left": 25,
+      "right": 25,
+      "textLeft": 25,
+      "textRight": 25,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرام",
+      "size": 48,
+      "top": 196,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 72,
+      "n": 2
+     },
+     {
+      "x": 134,
+      "n": 2
+     },
+     {
+      "x": 191,
+      "n": 2
+     },
+     {
+      "x": 227,
+      "n": 2
+     },
+     {
+      "x": 429,
+      "n": 2
+     },
+     {
+      "x": 470,
+      "n": 2
+     },
+     {
+      "x": 567,
+      "n": 2
+     },
+     {
+      "x": 292,
+      "n": 1
+     },
+     {
+      "x": 326,
+      "n": 1
+     },
+     {
+      "x": 365,
+      "n": 1
+     },
+     {
+      "x": 455,
+      "n": 1
+     },
+     {
+      "x": 490,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 21,
+    "bodySize": 12,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 8,
+   "filled": [
+    0.91,
+    0.78,
+    0.73,
+    0.83,
+    0.73,
+    0.79,
+    0.75,
+    0.99
+   ],
+   "motion": {
+    "elements": 31,
+    "css": 15,
+    "transitions": 16,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 6524,
+     "screens": 7.7,
+     "words": 817,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 41,
+     "sections": 4,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرام",
+     "words": 5,
+     "chars": 41,
+     "lines": 2,
+     "size": 30,
+     "vw": 7.7,
+     "font": "Cairo",
+     "weight": 900,
+     "tracking": -0.025,
+     "leading": 1.25,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "right",
+     "position": "center",
+     "widthRatio": 0.92,
+     "top": 168,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرام",
+     "words": 5,
+     "lines": 2,
+     "size": 30,
+     "font": "Cairo"
+    },
+    "headings": [
+     {
+      "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرام",
+      "words": 5,
+      "chars": 41,
+      "lines": 2,
+      "size": 30,
+      "vw": 7.7,
+      "font": "Cairo",
+      "weight": 900,
+      "tracking": -0.025,
+      "leading": 1.25,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "right",
+      "position": "center",
+      "widthRatio": 0.92,
+      "top": 168,
+      "tag": "h1",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 1,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Cairo",
+       "share": 0.84,
+       "mono": false
+      },
+      {
+       "family": "JetBrains Mono",
+       "share": 0.16,
+       "mono": true
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      9,
+      10,
+      11,
+      12,
+      14,
+      16,
+      18,
+      20,
+      30
+     ],
+     "sizeCount": 9,
+     "notLoaded": [],
+     "body": {
+      "font": "Cairo",
+      "size": 12,
+      "leading": 1.33,
+      "weight": 600,
+      "tracking": 0,
+      "contrast": null
+     },
+     "measureChars": 60,
+     "max": {
+      "size": 30,
+      "vw": 7.7,
+      "font": "Cairo",
+      "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرا"
+     },
+     "monoShare": 0.16,
+     "monoProseShare": 0.16,
+     "monoFamilies": [
+      "JetBrains Mono"
+     ],
+     "monoSamples": [
+      "2026",
+      "←",
+      "Zeidex",
+      "Soft",
+      "zeidex-cloud-engine --v2026",
+      "24ms"
+     ],
+     "microLabels": 3,
+     "microLabelShare": 0.011,
+     "microSamples": [
+      "المنتجات والأنظمة",
+      "المعرفة والأمان",
+      "بوابات السداد المعتمدة"
+     ],
+     "upperShare": 0.2,
+     "centerShare": 0.05,
+     "smallText": 113
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#060913",
+     "bodyBgHsl": {
+      "h": 226,
+      "s": 0.52,
+      "l": 0.05
+     },
+     "dark": true,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#94a3b8",
+       "share": 0.37
+      },
+      {
+       "color": "#cbd5e1",
+       "share": 0.26
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.17
+      },
+      {
+       "color": "#06b6d4",
+       "share": 0.1
+      },
+      {
+       "color": "#34d399",
+       "share": 0.03
+      }
+     ],
+     "button": {
+      "bg": "#1e293b",
+      "hsl": {
+       "h": 217,
+       "s": 0.33,
+       "l": 0.17
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": [
+      {
+       "text": "تحميل (.msi 255MB)",
+       "ratio": 3.8,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#ffffff",
+       "bg": "#059669"
+      },
+      {
+       "text": "بدء التجربة الآن",
+       "ratio": 3.8,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#ffffff",
+       "bg": "#059669"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 11,
+     "inHero": 3,
+     "radius": 12,
+     "height": 32,
+     "withShadow": 0,
+     "withGradient": 1,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "المتجر",
+      "استعراض كتالوج البوتات (24 باقة)",
+      "بدء التجربة المجانية 3 أيام"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 7,
+     "shadowOverlay": 4,
+     "shadowSamples": [
+      "div.hero-badge-in.inline-flex → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "a.btn-magnetic.w-full → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "div#cockpitTerminal.cockpit-tilt.bento-card → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "button.btn-magnetic.px-5 → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0"
+     ],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 21,
+     "hairlineSamples": [
+      "aside.w-full.max-w-full 390px",
+      "div.flex.items-center 324px",
+      "div.mt-3.pt-2.5 324px",
+      "section.py-10.border-t 390px",
+      "div.pt-5.mt-4 308px"
+     ],
+     "outlinedBoxes": 17,
+     "dashed": 0,
+     "blurred": 24,
+     "roundedBoxes": 16,
+     "boxRadius": 20,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 2,
+     "fixed": true,
+     "height": 66,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "cairo",
+     "jetbrains mono"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 6524,
+    "margins": {
+     "left": 23,
+     "right": 16
+    },
+    "sections": [
+     {
+      "sel": "section.relative.pt-6",
+      "tag": "section",
+      "top": 101,
+      "height": 905,
+      "words": 129,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرام",
+       "size": 30,
+       "tag": "h1"
+      },
+      "left": 22,
+      "right": 16,
+      "textLeft": 22,
+      "textRight": 16,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section.py-10.border-t",
+      "tag": "section",
+      "top": 1006,
+      "height": 2142,
+      "words": 276,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "ركائز المنظومة والحلول المتكاملة",
+       "size": 20,
+       "tag": "h2"
+      },
+      "left": 41,
+      "right": 16,
+      "textLeft": 41,
+      "textRight": 16,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section#sections-hub.py-10.border-t",
+      "tag": "section",
+      "top": 3148,
+      "height": 1553,
+      "words": 150,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "واجهات المنظومة المستقلة",
+       "size": 20,
+       "tag": "h2"
+      },
+      "left": 46,
+      "right": 16,
+      "textLeft": 46,
+      "textRight": 16,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section.py-10.border-t",
+      "tag": "section",
+      "top": 4701,
+      "height": 877,
+      "words": 127,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "أحدث المقالات الهندسية",
+       "size": 20,
+       "tag": "h2"
+      },
+      "left": 37,
+      "right": 16,
+      "textLeft": 37,
+      "textRight": 16,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.techfy-glass.border-t",
+      "tag": "footer",
+      "top": 5626,
+      "height": 899,
+      "words": 121,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "المنتجات والأنظمة",
+       "size": 12,
+       "tag": "h3"
+      },
+      "left": 24,
+      "right": 17,
+      "textLeft": 24,
+      "textRight": 17,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "المنظومة الاحترافية لأتمتة بوتات تيليجرام",
+      "size": 30,
+      "top": 168,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 111,
+      "n": 3
+     },
+     {
+      "x": 191,
+      "n": 3
+     },
+     {
+      "x": 40,
+      "n": 2
+     },
+     {
+      "x": 92,
+      "n": 2
+     },
+     {
+      "x": 134,
+      "n": 2
+     },
+     {
+      "x": 58,
+      "n": 1
+     },
+     {
+      "x": 75,
+      "n": 1
+     },
+     {
+      "x": 148,
+      "n": 1
+     },
+     {
+      "x": 209,
+      "n": 1
+     },
+     {
+      "x": 231,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 17,
+    "bodySize": 12,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "FAIL",
+   "id": "mono",
+   "width": 1440,
+   "message": "Monospace type outside code: JetBrains Mono — e.g. \"2026\", \"←\", \"Zeidex\", \"Soft\"",
+   "fix": "Set it in the text face. Monospace is for literal code inside <pre>/<code> only.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "micro-label",
+   "width": 1440,
+   "message": "3 tiny uppercase letter-spaced labels (e.g. \"المنتجات والأنظمة\", \"المعرفة والأمان\", \"بوابات السداد المعتمدة\").",
+   "fix": "Use sentence-case text at a readable size, or delete the label.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "shadow",
+   "width": 1440,
+   "message": "7 box-shadow(s) on elements at rest: div.hero-badge-in.inline-flex → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0 | a.btn-magnetic.w-full → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0 | div#cockpitTerminal.cockpit-tilt.bento-card → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+   "fix": "Remove. Separate surfaces with a tone step or space. Shadows are for things that really float (menus, dialogs, sticky bars).",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "button-fx",
+   "width": 1440,
+   "message": "Buttons with gradient fill.",
+   "fix": "Flat fill, one colour.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "hairline",
+   "width": 1440,
+   "message": "21 thin rule(s)/divider line(s): aside.w-full.max-w-full 1440px | div.flex.items-center 446px | div.mt-3.pt-2.5 446px | section.py-10.border-t 1440px",
+   "fix": "Delete. Separate with space, a tone change, or scale. Lines are only for real tables and form fields.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "outlined-box",
+   "width": 1440,
+   "message": "17 boxes drawn with a 1px outline.",
+   "fix": "Define a surface by its fill (one tone step from the page) or leave the content unboxed.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "glass",
+   "width": 1440,
+   "message": "24 backdrop-blur surfaces.",
+   "fix": "One blurred sticky bar at most; glass cards are a tell.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "icon-cards",
+   "width": 1440,
+   "message": "1 row(s) of identical cards each topped with a small icon (6 cards).",
+   "fix": "Replace with one composed section from the direction: a narrative split, a list set in large type, or real imagery per item.",
+   "alsoAt": [
+    768
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "contrast",
+   "width": 1440,
+   "message": "Low-contrast text: \"تحميل (.msi 255MB)\" 3.8:1 needs 4.5:1; \"بدء التجربة الآن\" 3.8:1 needs 4.5:1",
+   "fix": "Darken or lighten the text colour.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "size-count",
+   "width": 1440,
+   "message": "10 different font sizes (9, 10, 11, 12, 14, 16, 18, 20, 24, 48).",
+   "fix": "A page needs about five: display, heading, lead, body, small.",
+   "alsoAt": [
+    768
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "body-size",
+   "width": 1440,
+   "message": "Body text is 12px (the size most of the running text is set in).",
+   "fix": "Body copy 16–20px. Map small sizes from blueprints onto your body step.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "few-pictures",
+   "width": 1440,
+   "message": "Only 0 picture(s) on the page (0 photographs, footage or raster images, 0 interface fragments). Drawings in SVG do not count.",
+   "fix": "Find real pictures of the subject's world with scripts/assets.mjs (photographs, archival images, maps, engravings, footage), download them to assets/ and give them room: a hero picture, one per section that has a subject, a full-width band. At least four, usually six to twelve."
+  },
+  {
+   "level": "WARN",
+   "id": "no-footage",
+   "width": 1440,
+   "message": "No video anywhere on the page.",
+   "fix": "Look for one honest clip with scripts/assets.mjs --video (the place, the material, the process) and use it as a muted loop with a poster frame. Defend its absence only if no clip fits the subject."
+  },
+  {
+   "level": "FAIL",
+   "id": "small-text",
+   "width": 1440,
+   "message": "110 text blocks under 13px.",
+   "fix": "Nothing meant to be read goes below 13px.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "focal-point",
+   "width": 1440,
+   "message": "The first screen has no dominant element: the largest type is 48px (3.3vw) and no single picture holds a third of the viewport.",
+   "fix": "Make one thing lead: the headline at display size, or one large picture. A grid of many small pictures is not one thing; in blind tests jurors marked a first screen without a headline down every time. On the strongest studied sites the largest type has a median of 8.4vw."
+  },
+  {
+   "level": "WARN",
+   "id": "ragged-edges",
+   "width": 1440,
+   "message": "Left-aligned text starts at 12 different lines (321px, 676px, 811px, 910px, 1054px, 170px, 205px); the three most used hold only 29% of it.",
+   "fix": "Pick two or three anchor lines from the grid and start every heading and paragraph on one of them.",
+   "alsoAt": [
+    768
+   ]
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "/root/Downloads/Tiktokweb/.taste-skill/inspect/desktop-fold.jpg",
+   "pages": [
+    "/root/Downloads/Tiktokweb/.taste-skill/inspect/desktop-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "/root/Downloads/Tiktokweb/.taste-skill/inspect/tablet-fold.jpg",
+   "pages": [
+    "/root/Downloads/Tiktokweb/.taste-skill/inspect/tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "/root/Downloads/Tiktokweb/.taste-skill/inspect/mobile-fold.jpg",
+   "pages": [
+    "/root/Downloads/Tiktokweb/.taste-skill/inspect/mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}

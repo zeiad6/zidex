@@ -1330,7 +1330,7 @@ assert.equal(store.get('tb:123456789'), undefined)
   const cat = JSON.parse(readFileSync(new URL('../public/store/catalog.json', import.meta.url), 'utf8'))
 
   assert.ok(cat.bot, 'the catalogue must name a bot')
-  assert.ok(/^[a-z][a-z0-9_]{4,31}$/.test(cat.bot), `bot must be a Telegram username, got "${cat.bot}"`)
+  assert.ok(/^[a-zA-Z][a-zA-Z0-9_]{4,31}$/.test(cat.bot), `bot must be a Telegram username, got "${cat.bot}"`)
 
   // A cosmetic warning, not a gate. BotFather appends _bot to every bot it
   // creates, so a name that still ends in one is the default rather than a

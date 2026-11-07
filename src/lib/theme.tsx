@@ -12,9 +12,9 @@ type ThemeContextValue = {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null)
 
-/** Light is the default; the pre-paint script in index.html already applied it. */
+/** Dark is the default; the pre-paint script in index.html already applied it. */
 function readInitialTheme(): Theme {
-  if (typeof document === 'undefined') return 'light'
+  if (typeof document === 'undefined') return 'dark'
   return document.documentElement.classList.contains('dark') ? 'dark' : 'light'
 }
 
@@ -58,7 +58,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       meta.name = 'theme-color'
       document.head.appendChild(meta)
     }
-    meta.content = theme === 'dark' ? '#0b0d1e' : '#f3f4fa'
+    meta.content = theme === 'dark' ? '#05060f' : '#f3f4fa'
   }, [theme])
 
   // Auto-follow system theme when the user hasn't made an explicit choice
@@ -70,7 +70,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       /* private mode */
     }
     if (!stored) {
-      setThemeState(systemTheme)
+      // Dark is the default identity; the OS preference no longer overrides it.
+      setThemeState('dark')
     }
   }, [systemTheme])
 

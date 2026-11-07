@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="dark" data-theme-mode="system">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#06080D" />
+
+    <title>ZeidexSoft — المنظومة الاحترافية لأتمتة بوتات تيليجرام والأنظمة السيادية</title>
+    <meta
+      name="description"
+      content="منظومة هندسية لأتمتة بوتات تيليجرام، وأنظمة مالية سيادية تعمل دون إنترنت بدفتر أستاذ مشفّر بسلسلة SHA-256. تجربة مجانية 3 أيام دون بطاقة بنكية."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link rel="icon" type="image/png" href="/zeidex-mark.png" />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/ibm-plex-sans-arabic-400-arabic.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/ibm-plex-sans-arabic-600-arabic.woff2"
+      crossorigin
+    />
+
+    <script>
+      /* Runs before the bundle: the theme and the language are decided from
+         storage (or the OS) here, so the first paint never flashes the wrong
+         direction or the wrong surface. React reads these attributes. */
+      ;(function () {
+        try {
+          var root = document.documentElement
+          var mode = localStorage.getItem('zeidex-theme') || 'system'
+          if (mode !== 'light' && mode !== 'dark' && mode !== 'system') mode = 'system'
+          var light = window.matchMedia('(prefers-color-scheme: light)').matches
+          var resolved = mode === 'system' ? (light ? 'light' : 'dark') : mode
+          root.dataset.theme = resolved
+          root.dataset.themeMode = mode
+          root.style.colorScheme = resolved
+          var themeMeta = document.querySelector('meta[name="theme-color"]')
+          if (themeMeta) themeMeta.content = resolved === 'light' ? '#f5f7f3' : '#06080D'
+
+          var lang = localStorage.getItem('zeidex-lang') || 'ar'
+          if (lang !== 'ar' && lang !== 'en') lang = 'ar'
+          root.lang = lang
+          root.dir = lang === 'ar' ? 'rtl' : 'ltr'
+        } catch (error) {
+          /* storage blocked — the defaults above still paint a valid page */
+        }
+      })()
+    </script>
+
+    <style>
+      /* Painted before the bundle parses, so the first frame is already the
+         right surface. Both palettes are declared, not switched by JS here. */
+      html,
+      body {
+        margin: 0;
+        background: #06080d;
+        color: #e9eff8;
+      }
+      html[data-theme='light'],
+      html[data-theme='light'] body {
+        background: #f5f7f3;
+        color: #0b1310;
+      }
+      #root {
+        min-height: 100svh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

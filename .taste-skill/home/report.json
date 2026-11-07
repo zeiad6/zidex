@@ -1,0 +1,3065 @@
+{
+ "url": "http://127.0.0.1:5180/#/",
+ "at": "2026-11-02T21:49:14.726Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 4,
+   "filled": [
+    0.38,
+    0.67,
+    0.29,
+    0.37
+   ],
+   "motion": {
+    "elements": 55,
+    "css": 10,
+    "transitions": 0,
+    "scripted": 45,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 3521,
+     "screens": 3.9,
+     "words": 636,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 41,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [
+      "✔"
+     ],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "المنظومة الاحترافية المنظومة الاحترافية لأتمتة بوتات تيليجرام لأتمتة بوتات تيليجرام والأنظمة السيادية والأنظمة السيادية",
+     "words": 14,
+     "chars": 119,
+     "lines": 3,
+     "size": 52,
+     "vw": 3.6,
+     "font": "IBM Plex Sans Arabic",
+     "weight": 600,
+     "tracking": 0,
+     "leading": 1.24,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "right",
+     "widthRatio": 0.45,
+     "top": 202,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "المنظومة الاحترافية المنظومة الاحترافية لأتمتة بوتات تيليجرام لأتمتة بوتات تيليجرام والأنظمة السيادية والأنظمة السيادية",
+     "words": 14,
+     "lines": 3,
+     "size": 52,
+     "font": "IBM Plex Sans Arabic"
+    },
+    "headings": [
+     {
+      "text": "المنظومة الاحترافية المنظومة الاحترافية لأتمتة بوتات تيليجرام لأتمتة بوتات تيليجرام والأنظمة السيادية والأنظمة السيادية",
+      "words": 14,
+      "chars": 119,
+      "lines": 3,
+      "size": 52,
+      "vw": 3.6,
+      "font": "IBM Plex Sans Arabic",
+      "weight": 600,
+      "tracking": 0,
+      "leading": 1.24,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.45,
+      "top": 202,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "+80,000",
+      "words": 1,
+      "chars": 7,
+      "lines": 1,
+      "size": 36,
+      "vw": 2.5,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": -0.02,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.26,
+      "top": 715,
+      "tag": "p",
+      "kind": "statement"
+     },
+     {
+      "text": "100%",
+      "words": 1,
+      "chars": 4,
+      "lines": 1,
+      "size": 36,
+      "vw": 2.5,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": -0.02,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.24,
+      "top": 715,
+      "tag": "p",
+      "kind": "statement"
+     },
+     {
+      "text": "<50ms",
+      "words": 1,
+      "chars": 5,
+      "lines": 1,
+      "size": 36,
+      "vw": 2.5,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": -0.02,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.24,
+      "top": 715,
+      "tag": "p",
+      "kind": "statement"
+     },
+     {
+      "text": "كل قسم له صفحته، وكل صفحة لها سبب",
+      "words": 8,
+      "chars": 33,
+      "lines": 2,
+      "size": 44.8,
+      "vw": 3.1,
+      "font": "IBM Plex Sans Arabic",
+      "weight": 600,
+      "tracking": 0,
+      "leading": 1.22,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.37,
+      "top": 1034,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "01",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 2.1,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.03,
+      "top": 1237,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "02",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 2.1,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.03,
+      "top": 1237,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "03",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 2.1,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.03,
+      "top": 1337,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "04",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 2.1,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.03,
+      "top": 1337,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "05",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 2.1,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.03,
+      "top": 1437,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "06",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 2.1,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.03,
+      "top": 1437,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "07",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 2.1,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.03,
+      "top": 1536,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "08",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 2.1,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.03,
+      "top": 1536,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "ثلاثة أيام تكفي لتعرف",
+      "words": 4,
+      "chars": 21,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 2.1,
+      "font": "IBM Plex Sans Arabic",
+      "weight": 600,
+      "tracking": 0,
+      "leading": 1.26,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.23,
+      "top": 1756,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "أحدث ما كتبناه",
+      "words": 3,
+      "chars": 14,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 2.1,
+      "font": "IBM Plex Sans Arabic",
+      "weight": 600,
+      "tracking": 0,
+      "leading": 1.26,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.18,
+      "top": 2165,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "قناة واحدة، وردّ من إنسان",
+      "words": 5,
+      "chars": 25,
+      "lines": 1,
+      "size": 28,
+      "vw": 1.9,
+      "font": "IBM Plex Sans Arabic",
+      "weight": 600,
+      "tracking": 0,
+      "leading": 1.26,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.6,
+      "top": 2714,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "ZEIDEXSOFT",
+      "words": 1,
+      "chars": 10,
+      "lines": 1,
+      "size": 88,
+      "vw": 6.1,
+      "font": "JetBrains Mono",
+      "weight": 700,
+      "tracking": 0.18,
+      "leading": 1,
+      "upper": true,
+      "italic": false,
+      "mono": true,
+      "align": "center",
+      "position": "center",
+      "widthRatio": 0.79,
+      "top": 3393,
+      "tag": "p",
+      "kind": "statement"
+     }
+    ],
+    "headingSummary": {
+     "count": 17,
+     "maxLines": 3,
+     "over2Lines": 1,
+     "statements": 4,
+     "centered": 1,
+     "medianWords": 1,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "IBM Plex Sans Arabic",
+       "share": 0.66,
+       "mono": false
+      },
+      {
+       "family": "JetBrains Mono",
+       "share": 0.34,
+       "mono": true
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      28,
+      30,
+      36,
+      45,
+      52,
+      88
+     ],
+     "sizeCount": 15,
+     "notLoaded": [],
+     "body": {
+      "font": "IBM Plex Sans Arabic",
+      "size": 11,
+      "leading": 1.8,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": null
+     },
+     "measureChars": 67,
+     "max": {
+      "size": 88,
+      "vw": 6.1,
+      "font": "JetBrains Mono",
+      "text": "ZEIDEXSOFT"
+     },
+     "monoShare": 0.34,
+     "monoProseShare": 0.34,
+     "monoFamilies": [
+      "JetBrains Mono"
+     ],
+     "monoSamples": [
+      "EDGE GLOBAL",
+      ":",
+      "ONLINE",
+      "(TLS 1.3)",
+      "SANAA",
+      "00:49"
+     ],
+     "microLabels": 42,
+     "microLabelShare": 0.155,
+     "microSamples": [
+      "EDGE GLOBAL",
+      "ONLINE",
+      "SANAA",
+      "ZEIDEXSOFT",
+      "SOVEREIGN ENGINE",
+      "zeidex-cloud-engine"
+     ],
+     "upperShare": 0.26,
+     "centerShare": 0.01,
+     "smallText": 68
+    },
+    "eyebrows": [
+     {
+      "text": "v2026.11",
+      "above": "المنظومة الاحترافية المنظومة الاحترافية ",
+      "upper": false,
+      "tracked": false,
+      "mono": true,
+      "pill": true,
+      "size": 9.5,
+      "top": 154
+     },
+     {
+      "text": "INDEX · 8 DOORS",
+      "above": "كل قسم له صفحته، وكل صفحة لها سبب",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 10.5,
+      "top": 1007
+     },
+     {
+      "text": "FREE TRIAL",
+      "above": "ثلاثة أيام تكفي لتعرف",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 9,
+      "top": 1732
+     },
+     {
+      "text": "LATEST WRITING",
+      "above": "أحدث ما كتبناه",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 9,
+      "top": 2135
+     },
+     {
+      "text": "DIRECT LINES",
+      "above": "قناة واحدة، وردّ من إنسان",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 10.5,
+      "top": 2691
+     }
+    ],
+    "numbered": [
+     {
+      "text": "00 / 08",
+      "size": 8,
+      "top": 528
+     },
+     {
+      "text": "08",
+      "size": 11,
+      "top": 1116
+     },
+     {
+      "text": "01",
+      "size": 30.4,
+      "top": 1237
+     },
+     {
+      "text": "02",
+      "size": 30.4,
+      "top": 1237
+     },
+     {
+      "text": "03",
+      "size": 30.4,
+      "top": 1337
+     },
+     {
+      "text": "04",
+      "size": 30.4,
+      "top": 1337
+     },
+     {
+      "text": "05",
+      "size": 30.4,
+      "top": 1437
+     },
+     {
+      "text": "06",
+      "size": 30.4,
+      "top": 1437
+     },
+     {
+      "text": "07",
+      "size": 30.4,
+      "top": 1536
+     },
+     {
+      "text": "08",
+      "size": 30.4,
+      "top": 1536
+     },
+     {
+      "text": "01",
+      "size": 10,
+      "top": 1884
+     },
+     {
+      "text": "02",
+      "size": 10,
+      "top": 1884
+     }
+    ],
+    "color": {
+     "bodyBg": "#f5f7f3",
+     "bodyBgHsl": {
+      "h": 90,
+      "s": 0.2,
+      "l": 0.96
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#edf1ec",
+       "top": 0,
+       "hsl": {
+        "h": 108,
+        "s": 0.15,
+        "l": 0.94
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#46564d",
+       "share": 0.43
+      },
+      {
+       "color": "#0b1310",
+       "share": 0.18
+      },
+      {
+       "color": "#697a71",
+       "share": 0.16
+      },
+      {
+       "color": "#0a6f50",
+       "share": 0.05
+      },
+      {
+       "color": "#697b71",
+       "share": 0.04
+      }
+     ],
+     "button": {
+      "bg": "#fbbf24",
+      "hsl": {
+       "h": 43,
+       "s": 0.96,
+       "l": 0.56
+      },
+      "fg": "#1a1204"
+     },
+     "lowContrast": [
+      {
+       "text": "سلسلة SHA-256",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      },
+      {
+       "text": "PostgreSQL 18 مدمجة",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      },
+      {
+       "text": "TLS 1.3",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      },
+      {
+       "text": "ZATCA · المرحلة الثانية",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      },
+      {
+       "text": "يعمل دون إنترنت",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      },
+      {
+       "text": "تحقق ثابت الزمن",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 8,
+     "inHero": 3,
+     "radius": 14,
+     "height": 48,
+     "withShadow": 4,
+     "withGradient": 4,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "ابدأ التجربة",
+      "جرّب 3 أيام مجاناً",
+      "استعرض الحلول"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 15,
+     "shadowOverlay": 2,
+     "shadowSamples": [
+      "a.btn.btn-primary → rgba(255, 255, 255, 0.4) 0px 1px 0px 0px inset, rgba(245, 158, 11, 0.65) 0px 14p",
+      "figure.panel.ticks → rgba(255, 255, 255, 0.9) 0px 1px 0px 0px inset, rgba(18, 38, 27, 0.3) 0px 24px 6",
+      "a.card.group → rgba(18, 38, 27, 0.04) 0px 1px 2px 0px, rgba(18, 38, 27, 0.22) 0px 18px 34px -26",
+      "a.card.group → rgba(18, 38, 27, 0.04) 0px 1px 2px 0px, rgba(18, 38, 27, 0.22) 0px 18px 34px -26"
+     ],
+     "gradients": 6,
+     "scrims": 3,
+     "gradientSamples": [
+      "div.absolute.inset-x-0 → radial-gradient(110% 70% at 50% -10%, oklab(0.57632 -0.116273 0.0342577 / 0.09), rgba(0, 0, 0, 0) 62%)",
+      "div.absolute.left-0 → radial-gradient(rgba(11, 143, 101, 0.3) 1.1px, rgba(0, 0, 0, 0) 1.1px)",
+      "span.aurora-blob → radial-gradient(circle, oklab(0.57632 -0.116273 0.0342577 / 0.13) 0%, oklab(0.57632 -0.116273 0.0342577 / 0.04",
+      "span.aurora-blob → radial-gradient(circle, oklab(0.517374 -0.0571198 -0.101342 / 0.1) 0%, oklab(0.517374 -0.0571198 -0.101342 / 0"
+     ],
+     "gradientText": 0,
+     "hairlines": 14,
+     "hairlineSamples": [
+      "div.fixed.inset-x-0 1440px",
+      "div.relative.flex 451px",
+      "div.grid.grid-cols-3 451px",
+      "div.relative.mt-10 1144px",
+      "a.row-link.group 1144px"
+     ],
+     "outlinedBoxes": 16,
+     "dashed": 0,
+     "blurred": 2,
+     "roundedBoxes": 16,
+     "boxRadius": 20,
+     "squareMedia": 1,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 3,
+     "cardRows": [
+      {
+       "count": 3,
+       "iconTopped": false,
+       "rounded": true,
+       "top": 1859
+      },
+      {
+       "count": 3,
+       "iconTopped": true,
+       "rounded": false,
+       "top": 2268
+      },
+      {
+       "count": 3,
+       "iconTopped": true,
+       "rounded": true,
+       "top": 2893
+      }
+     ]
+    },
+    "heroMedia": [
+     {
+      "type": "bg-image",
+      "ratio": 1
+     },
+     {
+      "type": "svg",
+      "ratio": 0.25
+     }
+    ],
+    "nav": {
+     "links": 8,
+     "fixed": true,
+     "height": 58,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "ibm plex sans arabic",
+     "jetbrains mono"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 3521,
+    "margins": {
+     "left": 163,
+     "right": 148
+    },
+    "sections": [
+     {
+      "sel": "main#main.relative",
+      "tag": "main",
+      "top": 0,
+      "height": 3022,
+      "words": 466,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "المنظومة",
+       "size": 52,
+       "tag": "h1"
+      },
+      "left": 148,
+      "right": 148,
+      "textLeft": 148,
+      "textRight": 148,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.relative.mt-8",
+      "tag": "footer",
+      "top": 3054,
+      "height": 467,
+      "words": 62,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "ZEIDEXSOFT",
+       "size": 88,
+       "tag": "p"
+      },
+      "left": 148,
+      "right": 148,
+      "textLeft": 148,
+      "textRight": 148,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "المنظومة الاحترافية المنظومة الاحترافية لأتمتة بوتات تيليجرام لأتمتة بوتات تيليج",
+      "size": 52,
+      "top": 202,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [
+     {
+      "text": "ZEIDEXSOFT",
+      "side": "right",
+      "px": 14
+     },
+     {
+      "text": "/ 08",
+      "side": "right",
+      "px": 14
+     }
+    ],
+    "edges": [
+     {
+      "x": 937,
+      "n": 2
+     },
+     {
+      "x": 1008,
+      "n": 2
+     },
+     {
+      "x": 1119,
+      "n": 2
+     },
+     {
+      "x": 245,
+      "n": 1
+     },
+     {
+      "x": 787,
+      "n": 1
+     },
+     {
+      "x": 877,
+      "n": 1
+     },
+     {
+      "x": 905,
+      "n": 1
+     },
+     {
+      "x": 1050,
+      "n": 1
+     },
+     {
+      "x": 1102,
+      "n": 1
+     },
+     {
+      "x": 1177,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 13,
+    "bodySize": 12,
+    "stage": true,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 5,
+   "filled": [
+    0.5,
+    0.51,
+    0.48,
+    0.35,
+    0.21
+   ],
+   "motion": {
+    "elements": 55,
+    "css": 10,
+    "transitions": 0,
+    "scripted": 45,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 4553,
+     "screens": 4.4,
+     "words": 624,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 41,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [
+      "✔"
+     ],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "المنظومة الاحترافية المنظومة الاحترافية لأتمتة بوتات تيليجرام لأتمتة بوتات تيليجرام والأنظمة السيادية والأنظمة السيادية",
+     "words": 14,
+     "chars": 119,
+     "lines": 3,
+     "size": 32.3,
+     "vw": 4.2,
+     "font": "IBM Plex Sans Arabic",
+     "weight": 600,
+     "tracking": 0,
+     "leading": 1.24,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "center",
+     "widthRatio": 0.92,
+     "top": 202,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "المنظومة الاحترافية المنظومة الاحترافية لأتمتة بوتات تيليجرام لأتمتة بوتات تيليجرام والأنظمة السيادية والأنظمة السيادية",
+     "words": 14,
+     "lines": 3,
+     "size": 32.3,
+     "font": "IBM Plex Sans Arabic"
+    },
+    "headings": [
+     {
+      "text": "المنظومة الاحترافية المنظومة الاحترافية لأتمتة بوتات تيليجرام لأتمتة بوتات تيليجرام والأنظمة السيادية والأنظمة السيادية",
+      "words": 14,
+      "chars": 119,
+      "lines": 3,
+      "size": 32.3,
+      "vw": 4.2,
+      "font": "IBM Plex Sans Arabic",
+      "weight": 600,
+      "tracking": 0,
+      "leading": 1.24,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.92,
+      "top": 202,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "+80,000",
+      "words": 1,
+      "chars": 7,
+      "lines": 1,
+      "size": 26.4,
+      "vw": 3.4,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": -0.02,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.31,
+      "top": 1079,
+      "tag": "p",
+      "kind": "statement"
+     },
+     {
+      "text": "100%",
+      "words": 1,
+      "chars": 4,
+      "lines": 1,
+      "size": 26.4,
+      "vw": 3.4,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": -0.02,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.26,
+      "top": 1079,
+      "tag": "p",
+      "kind": "statement"
+     },
+     {
+      "text": "<50ms",
+      "words": 1,
+      "chars": 5,
+      "lines": 1,
+      "size": 26.4,
+      "vw": 3.4,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": -0.02,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.26,
+      "top": 1079,
+      "tag": "p",
+      "kind": "statement"
+     },
+     {
+      "text": "كل قسم له صفحته، وكل صفحة لها سبب",
+      "words": 8,
+      "chars": 33,
+      "lines": 2,
+      "size": 28.8,
+      "vw": 3.8,
+      "font": "IBM Plex Sans Arabic",
+      "weight": 600,
+      "tracking": 0,
+      "leading": 1.22,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.45,
+      "top": 1388,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "01",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 4,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.05,
+      "top": 1679,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "02",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 4,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.05,
+      "top": 1679,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "03",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 4,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.05,
+      "top": 1799,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "04",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 4,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.05,
+      "top": 1799,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "05",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 4,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.05,
+      "top": 1919,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "06",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 4,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.05,
+      "top": 1919,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "07",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 4,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.05,
+      "top": 2039,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "08",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 30.4,
+      "vw": 4,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.05,
+      "top": 2039,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "ZEIDEXSOFT",
+      "words": 1,
+      "chars": 10,
+      "lines": 1,
+      "size": 61.4,
+      "vw": 8,
+      "font": "JetBrains Mono",
+      "weight": 700,
+      "tracking": 0.18,
+      "leading": 1,
+      "upper": true,
+      "italic": false,
+      "mono": true,
+      "align": "center",
+      "position": "center",
+      "widthRatio": 0.92,
+      "top": 4451,
+      "tag": "p",
+      "kind": "statement"
+     }
+    ],
+    "headingSummary": {
+     "count": 14,
+     "maxLines": 3,
+     "over2Lines": 1,
+     "statements": 4,
+     "centered": 1,
+     "medianWords": 1,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "IBM Plex Sans Arabic",
+       "share": 0.66,
+       "mono": false
+      },
+      {
+       "family": "JetBrains Mono",
+       "share": 0.34,
+       "mono": true
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      22,
+      26,
+      29,
+      30,
+      32,
+      61
+     ],
+     "sizeCount": 15,
+     "notLoaded": [],
+     "body": {
+      "font": "IBM Plex Sans Arabic",
+      "size": 11,
+      "leading": 1.8,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": null
+     },
+     "measureChars": 67,
+     "max": {
+      "size": 61.4,
+      "vw": 8,
+      "font": "JetBrains Mono",
+      "text": "ZEIDEXSOFT"
+     },
+     "monoShare": 0.34,
+     "monoProseShare": 0.34,
+     "monoFamilies": [
+      "JetBrains Mono"
+     ],
+     "monoSamples": [
+      "EDGE GLOBAL",
+      ":",
+      "ONLINE",
+      "(TLS 1.3)",
+      "SANAA",
+      "00:49"
+     ],
+     "microLabels": 41,
+     "microLabelShare": 0.155,
+     "microSamples": [
+      "EDGE GLOBAL",
+      "ONLINE",
+      "SANAA",
+      "SOVEREIGN ENGINE",
+      "zeidex-cloud-engine",
+      "LIVE"
+     ],
+     "upperShare": 0.26,
+     "centerShare": 0.01,
+     "smallText": 67
+    },
+    "eyebrows": [
+     {
+      "text": "v2026.11",
+      "above": "المنظومة الاحترافية المنظومة الاحترافية ",
+      "upper": false,
+      "tracked": false,
+      "mono": true,
+      "pill": true,
+      "size": 9.5,
+      "top": 154
+     },
+     {
+      "text": "INDEX · 8 DOORS",
+      "above": "كل قسم له صفحته، وكل صفحة لها سبب",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 10.5,
+      "top": 1361
+     }
+    ],
+    "numbered": [
+     {
+      "text": "08",
+      "size": 11,
+      "top": 1557
+     },
+     {
+      "text": "01",
+      "size": 30.4,
+      "top": 1679
+     },
+     {
+      "text": "02",
+      "size": 30.4,
+      "top": 1679
+     },
+     {
+      "text": "03",
+      "size": 30.4,
+      "top": 1799
+     },
+     {
+      "text": "04",
+      "size": 30.4,
+      "top": 1799
+     },
+     {
+      "text": "05",
+      "size": 30.4,
+      "top": 1919
+     },
+     {
+      "text": "06",
+      "size": 30.4,
+      "top": 1919
+     },
+     {
+      "text": "07",
+      "size": 30.4,
+      "top": 2039
+     },
+     {
+      "text": "08",
+      "size": 30.4,
+      "top": 2039
+     },
+     {
+      "text": "01",
+      "size": 10,
+      "top": 2386
+     },
+     {
+      "text": "02",
+      "size": 10,
+      "top": 2386
+     },
+     {
+      "text": "03",
+      "size": 10,
+      "top": 2386
+     }
+    ],
+    "color": {
+     "bodyBg": "#f5f7f3",
+     "bodyBgHsl": {
+      "h": 90,
+      "s": 0.2,
+      "l": 0.96
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#edf1ec",
+       "top": 0,
+       "hsl": {
+        "h": 108,
+        "s": 0.15,
+        "l": 0.94
+       }
+      },
+      {
+       "color": "#070a10",
+       "top": 589,
+       "hsl": {
+        "h": 220,
+        "s": 0.39,
+        "l": 0.05
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#46564d",
+       "share": 0.43
+      },
+      {
+       "color": "#0b1310",
+       "share": 0.18
+      },
+      {
+       "color": "#697a71",
+       "share": 0.16
+      },
+      {
+       "color": "#0a6f50",
+       "share": 0.05
+      },
+      {
+       "color": "#697b71",
+       "share": 0.05
+      }
+     ],
+     "button": {
+      "bg": "#fbbf24",
+      "hsl": {
+       "h": 43,
+       "s": 0.96,
+       "l": 0.56
+      },
+      "fg": "#1a1204"
+     },
+     "lowContrast": [
+      {
+       "text": "سلسلة SHA-256",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      },
+      {
+       "text": "PostgreSQL 18 مدمجة",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      },
+      {
+       "text": "TLS 1.3",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      },
+      {
+       "text": "ZATCA · المرحلة الثانية",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      },
+      {
+       "text": "يعمل دون إنترنت",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      },
+      {
+       "text": "تحقق ثابت الزمن",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 7,
+     "inHero": 2,
+     "radius": 14,
+     "height": 48,
+     "withShadow": 3,
+     "withGradient": 3,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "جرّب 3 أيام مجاناً",
+      "استعرض الحلول"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 15,
+     "shadowOverlay": 1,
+     "shadowSamples": [
+      "a.btn.btn-primary → rgba(255, 255, 255, 0.4) 0px 1px 0px 0px inset, rgba(245, 158, 11, 0.65) 0px 14p",
+      "figure.panel.ticks → rgba(255, 255, 255, 0.9) 0px 1px 0px 0px inset, rgba(18, 38, 27, 0.3) 0px 24px 6",
+      "a.card.group → rgba(18, 38, 27, 0.04) 0px 1px 2px 0px, rgba(18, 38, 27, 0.22) 0px 18px 34px -26",
+      "a.card.group → rgba(18, 38, 27, 0.04) 0px 1px 2px 0px, rgba(18, 38, 27, 0.22) 0px 18px 34px -26"
+     ],
+     "gradients": 6,
+     "scrims": 3,
+     "gradientSamples": [
+      "div.absolute.inset-x-0 → radial-gradient(110% 70% at 50% -10%, oklab(0.57632 -0.116273 0.0342577 / 0.09), rgba(0, 0, 0, 0) 62%)",
+      "div.absolute.left-0 → radial-gradient(rgba(11, 143, 101, 0.3) 1.1px, rgba(0, 0, 0, 0) 1.1px)",
+      "span.aurora-blob → radial-gradient(circle, oklab(0.57632 -0.116273 0.0342577 / 0.13) 0%, oklab(0.57632 -0.116273 0.0342577 / 0.04",
+      "span.aurora-blob → radial-gradient(circle, oklab(0.517374 -0.0571198 -0.101342 / 0.1) 0%, oklab(0.517374 -0.0571198 -0.101342 / 0"
+     ],
+     "gradientText": 0,
+     "hairlines": 14,
+     "hairlineSamples": [
+      "div.fixed.inset-x-0 768px",
+      "div.relative.flex 705px",
+      "div.grid.grid-cols-3 705px",
+      "div.relative.mt-10 707px",
+      "a.row-link.group 707px"
+     ],
+     "outlinedBoxes": 16,
+     "dashed": 0,
+     "blurred": 2,
+     "roundedBoxes": 16,
+     "boxRadius": 20,
+     "squareMedia": 1,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 3,
+     "cardRows": [
+      {
+       "count": 8,
+       "iconTopped": true,
+       "rounded": true,
+       "top": 1639
+      },
+      {
+       "count": 3,
+       "iconTopped": false,
+       "rounded": true,
+       "top": 2361
+      },
+      {
+       "count": 3,
+       "iconTopped": true,
+       "rounded": true,
+       "top": 3378
+      }
+     ]
+    },
+    "heroMedia": [
+     {
+      "type": "bg-image",
+      "ratio": 1
+     },
+     {
+      "type": "svg",
+      "ratio": 0.41
+     }
+    ],
+    "nav": {
+     "links": 1,
+     "fixed": true,
+     "height": 58,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "ibm plex sans arabic",
+     "jetbrains mono"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 4553,
+    "margins": {
+     "left": 47,
+     "right": 31
+    },
+    "sections": [
+     {
+      "sel": "main#main.relative",
+      "tag": "main",
+      "top": 0,
+      "height": 3507,
+      "words": 454,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "المنظومة",
+       "size": 32,
+       "tag": "h1"
+      },
+      "left": 46,
+      "right": 31,
+      "textLeft": 47,
+      "textRight": 31,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.relative.mt-8",
+      "tag": "footer",
+      "top": 3539,
+      "height": 1014,
+      "words": 62,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 31,
+      "right": 31,
+      "textLeft": 31,
+      "textRight": 31,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "المنظومة الاحترافية المنظومة الاحترافية لأتمتة بوتات تيليجرام لأتمتة بوتات تيليج",
+      "size": 32,
+      "top": 202,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 510,
+      "n": 3
+     },
+     {
+      "x": 610,
+      "n": 2
+     },
+     {
+      "x": 232,
+      "n": 1
+     },
+     {
+      "x": 381,
+      "n": 1
+     },
+     {
+      "x": 480,
+      "n": 1
+     },
+     {
+      "x": 497,
+      "n": 1
+     },
+     {
+      "x": 521,
+      "n": 1
+     },
+     {
+      "x": 587,
+      "n": 1
+     },
+     {
+      "x": 630,
+      "n": 1
+     },
+     {
+      "x": 666,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 13,
+    "bodySize": 12,
+    "stage": true,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 8,
+   "filled": [
+    0.73,
+    0.31,
+    0.83,
+    0.86,
+    0.39,
+    0.68,
+    0.26,
+    0.22
+   ],
+   "motion": {
+    "elements": 55,
+    "css": 10,
+    "transitions": 0,
+    "scripted": 45,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 5992,
+     "screens": 7.1,
+     "words": 600,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 41,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [
+      "✔"
+     ],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "المنظومة الاحترافية المنظومة الاحترافية لأتمتة بوتات تيليجرام لأتمتة بوتات تيليجرام والأنظمة السيادية والأنظمة السيادية",
+     "words": 14,
+     "chars": 119,
+     "lines": 3,
+     "size": 31.2,
+     "vw": 8,
+     "font": "IBM Plex Sans Arabic",
+     "weight": 600,
+     "tracking": 0,
+     "leading": 1.24,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "center",
+     "widthRatio": 0.91,
+     "top": 190,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "المنظومة الاحترافية المنظومة الاحترافية لأتمتة بوتات تيليجرام لأتمتة بوتات تيليجرام والأنظمة السيادية والأنظمة السيادية",
+     "words": 14,
+     "lines": 3,
+     "size": 31.2,
+     "font": "IBM Plex Sans Arabic"
+    },
+    "headings": [
+     {
+      "text": "المنظومة الاحترافية المنظومة الاحترافية لأتمتة بوتات تيليجرام لأتمتة بوتات تيليجرام والأنظمة السيادية والأنظمة السيادية",
+      "words": 14,
+      "chars": 119,
+      "lines": 3,
+      "size": 31.2,
+      "vw": 8,
+      "font": "IBM Plex Sans Arabic",
+      "weight": 600,
+      "tracking": 0,
+      "leading": 1.24,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.91,
+      "top": 190,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "+80,000",
+      "words": 1,
+      "chars": 7,
+      "lines": 1,
+      "size": 26.4,
+      "vw": 6.8,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": -0.02,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.91,
+      "top": 1156,
+      "tag": "p",
+      "kind": "statement"
+     },
+     {
+      "text": "100%",
+      "words": 1,
+      "chars": 4,
+      "lines": 1,
+      "size": 26.4,
+      "vw": 6.8,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": -0.02,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.91,
+      "top": 1280,
+      "tag": "p",
+      "kind": "statement"
+     },
+     {
+      "text": "<50ms",
+      "words": 1,
+      "chars": 5,
+      "lines": 1,
+      "size": 26.4,
+      "vw": 6.8,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": -0.02,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.91,
+      "top": 1403,
+      "tag": "p",
+      "kind": "statement"
+     },
+     {
+      "text": "كل قسم له صفحته، وكل صفحة لها سبب",
+      "words": 8,
+      "chars": 33,
+      "lines": 2,
+      "size": 28.8,
+      "vw": 7.4,
+      "font": "IBM Plex Sans Arabic",
+      "weight": 600,
+      "tracking": 0,
+      "leading": 1.22,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.89,
+      "top": 1688,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "01",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 26.4,
+      "vw": 6.8,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.08,
+      "top": 1977,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "02",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 26.4,
+      "vw": 6.8,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.08,
+      "top": 2088,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "03",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 26.4,
+      "vw": 6.8,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.08,
+      "top": 2200,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "04",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 26.4,
+      "vw": 6.8,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.08,
+      "top": 2311,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "05",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 26.4,
+      "vw": 6.8,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.08,
+      "top": 2422,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "06",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 26.4,
+      "vw": 6.8,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.08,
+      "top": 2533,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "07",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 26.4,
+      "vw": 6.8,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.08,
+      "top": 2634,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "08",
+      "words": 1,
+      "chars": 2,
+      "lines": 1,
+      "size": 26.4,
+      "vw": 6.8,
+      "font": "JetBrains Mono",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": true,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.08,
+      "top": 2735,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "ثلاثة أيام تكفي لتعرف",
+      "words": 4,
+      "chars": 21,
+      "lines": 1,
+      "size": 22.4,
+      "vw": 5.7,
+      "font": "IBM Plex Sans Arabic",
+      "weight": 600,
+      "tracking": 0,
+      "leading": 1.26,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 2914,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "أحدث ما كتبناه",
+      "words": 3,
+      "chars": 14,
+      "lines": 1,
+      "size": 22.4,
+      "vw": 5.7,
+      "font": "IBM Plex Sans Arabic",
+      "weight": 600,
+      "tracking": 0,
+      "leading": 1.26,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.91,
+      "top": 3670,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "ZEIDEXSOFT",
+      "words": 1,
+      "chars": 10,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "JetBrains Mono",
+      "weight": 700,
+      "tracking": 0.18,
+      "leading": 1,
+      "upper": true,
+      "italic": false,
+      "mono": true,
+      "align": "center",
+      "position": "center",
+      "widthRatio": 0.91,
+      "top": 5920,
+      "tag": "p",
+      "kind": "statement"
+     }
+    ],
+    "headingSummary": {
+     "count": 16,
+     "maxLines": 3,
+     "over2Lines": 1,
+     "statements": 4,
+     "centered": 1,
+     "medianWords": 1,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "IBM Plex Sans Arabic",
+       "share": 0.66,
+       "mono": false
+      },
+      {
+       "family": "JetBrains Mono",
+       "share": 0.34,
+       "mono": true
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      22,
+      26,
+      29,
+      31,
+      32
+     ],
+     "sizeCount": 13,
+     "notLoaded": [],
+     "body": {
+      "font": "IBM Plex Sans Arabic",
+      "size": 15,
+      "leading": 1.95,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.2
+     },
+     "measureChars": 47,
+     "max": {
+      "size": 32,
+      "vw": 8.2,
+      "font": "JetBrains Mono",
+      "text": "ZEIDEXSOFT"
+     },
+     "monoShare": 0.34,
+     "monoProseShare": 0.34,
+     "monoFamilies": [
+      "JetBrains Mono"
+     ],
+     "monoSamples": [
+      "EDGE GLOBAL",
+      ":",
+      "ONLINE",
+      "v2026.11",
+      "ZEIDEX",
+      "EN"
+     ],
+     "microLabels": 39,
+     "microLabelShare": 0.153,
+     "microSamples": [
+      "EDGE GLOBAL",
+      "ONLINE",
+      "SOVEREIGN ENGINE",
+      "zeidex-cloud-engine",
+      "LIVE",
+      "REGION"
+     ],
+     "upperShare": 0.26,
+     "centerShare": 0.01,
+     "smallText": 65
+    },
+    "eyebrows": [
+     {
+      "text": "v2026.11",
+      "above": "المنظومة الاحترافية المنظومة الاحترافية ",
+      "upper": false,
+      "tracked": false,
+      "mono": true,
+      "pill": true,
+      "size": 9.5,
+      "top": 142
+     },
+     {
+      "text": "INDEX · 8 DOORS",
+      "above": "كل قسم له صفحته، وكل صفحة لها سبب",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 10.5,
+      "top": 1662
+     },
+     {
+      "text": "FREE TRIAL",
+      "above": "ثلاثة أيام تكفي لتعرف",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 9,
+      "top": 2891
+     },
+     {
+      "text": "LATEST WRITING",
+      "above": "أحدث ما كتبناه",
+      "upper": true,
+      "tracked": true,
+      "mono": true,
+      "pill": false,
+      "size": 9,
+      "top": 3640
+     }
+    ],
+    "numbered": [
+     {
+      "text": "08",
+      "size": 11,
+      "top": 1857
+     },
+     {
+      "text": "01",
+      "size": 26.4,
+      "top": 1977
+     },
+     {
+      "text": "02",
+      "size": 26.4,
+      "top": 2088
+     },
+     {
+      "text": "03",
+      "size": 26.4,
+      "top": 2200
+     },
+     {
+      "text": "04",
+      "size": 26.4,
+      "top": 2311
+     },
+     {
+      "text": "05",
+      "size": 26.4,
+      "top": 2422
+     },
+     {
+      "text": "06",
+      "size": 26.4,
+      "top": 2533
+     },
+     {
+      "text": "07",
+      "size": 26.4,
+      "top": 2634
+     },
+     {
+      "text": "08",
+      "size": 26.4,
+      "top": 2735
+     },
+     {
+      "text": "01",
+      "size": 10,
+      "top": 3125
+     },
+     {
+      "text": "02",
+      "size": 10,
+      "top": 3271
+     },
+     {
+      "text": "03",
+      "size": 10,
+      "top": 3417
+     }
+    ],
+    "color": {
+     "bodyBg": "#f5f7f3",
+     "bodyBgHsl": {
+      "h": 90,
+      "s": 0.2,
+      "l": 0.96
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#edf1ec",
+       "top": 0,
+       "hsl": {
+        "h": 108,
+        "s": 0.15,
+        "l": 0.94
+       }
+      },
+      {
+       "color": "#070a10",
+       "top": 660,
+       "hsl": {
+        "h": 220,
+        "s": 0.39,
+        "l": 0.05
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#46564d",
+       "share": 0.43
+      },
+      {
+       "color": "#0b1310",
+       "share": 0.19
+      },
+      {
+       "color": "#697a71",
+       "share": 0.15
+      },
+      {
+       "color": "#0a6f50",
+       "share": 0.06
+      },
+      {
+       "color": "#697b71",
+       "share": 0.05
+      }
+     ],
+     "button": {
+      "bg": "#fbbf24",
+      "hsl": {
+       "h": 43,
+       "s": 0.96,
+       "l": 0.56
+      },
+      "fg": "#1a1204"
+     },
+     "lowContrast": [
+      {
+       "text": "سلسلة SHA-256",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      },
+      {
+       "text": "PostgreSQL 18 مدمجة",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      },
+      {
+       "text": "TLS 1.3",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      },
+      {
+       "text": "ZATCA · المرحلة الثانية",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      },
+      {
+       "text": "يعمل دون إنترنت",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      },
+      {
+       "text": "تحقق ثابت الزمن",
+       "ratio": 4.2,
+       "need": 4.5,
+       "size": 9.5,
+       "fg": "#697a71",
+       "bg": "#f5f7f3"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 8,
+     "inHero": 2,
+     "radius": 14,
+     "height": 48,
+     "withShadow": 4,
+     "withGradient": 3,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "جرّب 3 أيام مجاناً",
+      "استعرض الحلول"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 15,
+     "shadowOverlay": 1,
+     "shadowSamples": [
+      "a.btn.btn-primary → rgba(255, 255, 255, 0.4) 0px 1px 0px 0px inset, rgba(245, 158, 11, 0.65) 0px 14p",
+      "figure.panel.ticks → rgba(255, 255, 255, 0.9) 0px 1px 0px 0px inset, rgba(18, 38, 27, 0.3) 0px 24px 6",
+      "a.card.group → rgba(18, 38, 27, 0.04) 0px 1px 2px 0px, rgba(18, 38, 27, 0.22) 0px 18px 34px -26",
+      "a.card.group → rgba(18, 38, 27, 0.04) 0px 1px 2px 0px, rgba(18, 38, 27, 0.22) 0px 18px 34px -26"
+     ],
+     "gradients": 9,
+     "scrims": 3,
+     "gradientSamples": [
+      "div.absolute.inset-x-0 → radial-gradient(110% 70% at 50% -10%, oklab(0.57632 -0.116273 0.0342577 / 0.09), rgba(0, 0, 0, 0) 62%)",
+      "div.absolute.left-0 → radial-gradient(rgba(11, 143, 101, 0.3) 1.1px, rgba(0, 0, 0, 0) 1.1px)",
+      "span.aurora-blob → radial-gradient(circle, oklab(0.57632 -0.116273 0.0342577 / 0.13) 0%, oklab(0.57632 -0.116273 0.0342577 / 0.04",
+      "span.aurora-blob → radial-gradient(circle, oklab(0.517374 -0.0571198 -0.101342 / 0.1) 0%, oklab(0.517374 -0.0571198 -0.101342 / 0"
+     ],
+     "gradientText": 0,
+     "hairlines": 15,
+     "hairlineSamples": [
+      "div.fixed.inset-x-0 390px",
+      "div.relative.flex 351px",
+      "div.grid.grid-cols-3 351px",
+      "div.border-t.border-hair-soft 353px",
+      "div.border-t.border-hair-soft 353px"
+     ],
+     "outlinedBoxes": 16,
+     "dashed": 0,
+     "blurred": 2,
+     "roundedBoxes": 16,
+     "boxRadius": 20,
+     "squareMedia": 1,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 3,
+     "cardRows": [
+      {
+       "count": 3,
+       "iconTopped": false,
+       "rounded": true,
+       "top": 3100
+      }
+     ]
+    },
+    "heroMedia": [
+     {
+      "type": "bg-image",
+      "ratio": 1
+     },
+     {
+      "type": "svg",
+      "ratio": 0.63
+     }
+    ],
+    "nav": {
+     "links": 1,
+     "fixed": true,
+     "height": 58,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "ibm plex sans arabic",
+     "jetbrains mono"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 5992,
+    "margins": {
+     "left": 34,
+     "right": 18
+    },
+    "sections": [
+     {
+      "sel": "main#main.relative",
+      "tag": "main",
+      "top": 0,
+      "height": 4947,
+      "words": 440,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "المنظومة",
+       "size": 31,
+       "tag": "h1"
+      },
+      "left": 18,
+      "right": 18,
+      "textLeft": 18,
+      "textRight": 18,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "footer.relative.mt-8",
+      "tag": "footer",
+      "top": 4979,
+      "height": 1013,
+      "words": 62,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 70,
+      "right": 18,
+      "textLeft": 70,
+      "textRight": 18,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "المنظومة الاحترافية المنظومة الاحترافية لأتمتة بوتات تيليجرام لأتمتة بوتات تيليج",
+      "size": 31,
+      "top": 190,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 155,
+      "n": 3
+     },
+     {
+      "x": 139,
+      "n": 2
+     },
+     {
+      "x": 258,
+      "n": 2
+     },
+     {
+      "x": 24,
+      "n": 1
+     },
+     {
+      "x": 45,
+      "n": 1
+     },
+     {
+      "x": 123,
+      "n": 1
+     },
+     {
+      "x": 227,
+      "n": 1
+     },
+     {
+      "x": 244,
+      "n": 1
+     },
+     {
+      "x": 302,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 13,
+    "bodySize": 12,
+    "stage": true,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "FAIL",
+   "id": "headline-lines",
+   "width": 1440,
+   "message": "1 headline(s) wrap past two lines at 1440px: \"المنظومة الاحترافية المنظومة الاحترافية لأتمتة ب\" → 3 lines (14 words, 52px)",
+   "fix": "Cut words first (a headline is a title, not a sentence). Then give it a wider measure. Lower the size only as a last resort and never below the scale you chose. A real statement paragraph belongs in a <p> or <blockquote> at 36px or less."
+  },
+  {
+   "level": "WARN",
+   "id": "hero-words",
+   "width": 1440,
+   "message": "Hero headline is 14 words (\"المنظومة الاحترافية المنظومة الاحترافية لأتمتة بوتات تيليجرا\"). Gallery median is 5.",
+   "fix": "Say the one thing. Move the rest to the supporting line.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "eyebrow",
+   "width": 1440,
+   "message": "5 eyebrow/kicker label(s) above headings: \"v2026.11\" (pill) above \"المنظومة الاحترافية المنظومة الاحترافية \"; \"INDEX · 8 DOORS\" above \"كل قسم له صفحته، وكل صفحة لها سبب\"; \"FREE TRIAL\" above \"ثلاثة أيام تكفي لتعرف\"; \"LATEST WRITING\" above \"أحدث ما كتبناه\"; \"DIRECT LINES\" above \"قناة واحدة، وردّ من إنسان\"",
+   "fix": "Delete them. If the label carried real information, fold it into the headline or the supporting sentence.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "mono",
+   "width": 1440,
+   "message": "Monospace type outside code: JetBrains Mono — e.g. \"EDGE GLOBAL\", \":\", \"ONLINE\", \"(TLS 1.3)\"",
+   "fix": "Set it in the text face. Monospace is for literal code inside <pre>/<code> only.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "numbering",
+   "width": 1440,
+   "message": "Decorative index numbers: \"00 / 08\", \"08\", \"01\", \"02\", \"03\", \"04\"",
+   "fix": "Remove them. If order truly matters, write it into the words (\"First, …\") or use a real <ol>.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "micro-label",
+   "width": 1440,
+   "message": "42 tiny uppercase letter-spaced labels (e.g. \"EDGE GLOBAL\", \"ONLINE\", \"SANAA\", \"ZEIDEXSOFT\").",
+   "fix": "Use sentence-case text at a readable size, or delete the label.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "emoji",
+   "width": 1440,
+   "message": "Emoji in the page: ✔",
+   "fix": "Remove. Use words or real imagery.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "gradient",
+   "width": 1440,
+   "message": "6 gradient fill(s): div.absolute.inset-x-0 → radial-gradient(110% 70% at 50% -10%, oklab(0.57632 -0.116273 0.0342577 / 0.09), rgba(0, 0, 0, 0) 62%) | div.absolute.left-0 → radial-gradient(rgba(11, 143, 101, 0.3) 1.1px, rgba(0, 0, 0, 0) 1.1px) | span.aurora-blob → radial-gradient(circle, oklab(0.57632 -0.116273 0.0342577 / 0.13) 0%, oklab(0.57632 -0.116273 0.0342577 / 0.04",
+   "fix": "Use a flat colour or a real image. The only gradient allowed by default is a neutral scrim over a photo for legibility.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "shadow",
+   "width": 1440,
+   "message": "15 box-shadow(s) on elements at rest: a.btn.btn-primary → rgba(255, 255, 255, 0.4) 0px 1px 0px 0px inset, rgba(245, 158, 11, 0.65) 0px 14p | figure.panel.ticks → rgba(255, 255, 255, 0.9) 0px 1px 0px 0px inset, rgba(18, 38, 27, 0.3) 0px 24px 6 | a.card.group → rgba(18, 38, 27, 0.04) 0px 1px 2px 0px, rgba(18, 38, 27, 0.22) 0px 18px 34px -26",
+   "fix": "Remove. Separate surfaces with a tone step or space. Shadows are for things that really float (menus, dialogs, sticky bars).",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "text-shadow",
+   "width": 1440,
+   "message": "3 text-shadow(s).",
+   "fix": "Remove; fix legibility with a scrim or a different crop.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "button-fx",
+   "width": 1440,
+   "message": "Buttons with gradient fill and shadow/glow.",
+   "fix": "Flat fill, one colour.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "hairline",
+   "width": 1440,
+   "message": "14 thin rule(s)/divider line(s): div.fixed.inset-x-0 1440px | div.relative.flex 451px | div.grid.grid-cols-3 451px | div.relative.mt-10 1144px",
+   "fix": "Delete. Separate with space, a tone change, or scale. Lines are only for real tables and form fields.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "outlined-box",
+   "width": 1440,
+   "message": "16 boxes drawn with a 1px outline.",
+   "fix": "Define a surface by its fill (one tone step from the page) or leave the content unboxed.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "glass",
+   "width": 1440,
+   "message": "2 backdrop-blur surfaces.",
+   "fix": "One blurred sticky bar at most; glass cards are a tell.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "icon-cards",
+   "width": 1440,
+   "message": "2 row(s) of identical cards each topped with a small icon (3, 3 cards).",
+   "fix": "Replace with one composed section from the direction: a narrative split, a list set in large type, or real imagery per item.",
+   "alsoAt": [
+    768
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "contrast",
+   "width": 1440,
+   "message": "Low-contrast text: \"سلسلة SHA-256\" 4.2:1 needs 4.5:1; \"PostgreSQL 18 مدمجة\" 4.2:1 needs 4.5:1; \"TLS 1.3\" 4.2:1 needs 4.5:1; \"ZATCA · المرحلة الثانية\" 4.2:1 needs 4.5:1",
+   "fix": "Darken or lighten the text colour.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "size-count",
+   "width": 1440,
+   "message": "15 different font sizes (8, 9, 10, 11, 12, 13, 14, 15, 16, 28, 30, 36, 45, 52, 88).",
+   "fix": "A page needs about five: display, heading, lead, body, small.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "body-size",
+   "width": 1440,
+   "message": "Body text is 11px (the size most of the running text is set in).",
+   "fix": "Body copy 16–20px. Map small sizes from blueprints onto your body step.",
+   "alsoAt": [
+    768
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "few-pictures",
+   "width": 1440,
+   "message": "Only 0 picture(s) on the page (0 photographs, footage or raster images, 0 interface fragments). Drawings in SVG do not count.",
+   "fix": "Find real pictures of the subject's world with scripts/assets.mjs (photographs, archival images, maps, engravings, footage), download them to assets/ and give them room: a hero picture, one per section that has a subject, a full-width band. At least four, usually six to twelve."
+  },
+  {
+   "level": "WARN",
+   "id": "no-footage",
+   "width": 1440,
+   "message": "No video anywhere on the page.",
+   "fix": "Look for one honest clip with scripts/assets.mjs --video (the place, the material, the process) and use it as a muted loop with a poster frame. Defend its absence only if no clip fits the subject."
+  },
+  {
+   "level": "FAIL",
+   "id": "small-text",
+   "width": 1440,
+   "message": "68 text blocks under 13px.",
+   "fix": "Nothing meant to be read goes below 13px.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "dev-server",
+   "width": 1440,
+   "message": "This page is served by a development server (Vite, webpack or Next in dev mode).",
+   "fix": "Run the last gate on the production build too (vite build && vite preview, next build && next start, or the built index.html): minifiers and bundlers change the CSS a visitor receives.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "late-title",
+   "width": 1440,
+   "message": "The title is not readable 1.2s after the page loaded (it is at 0% opacity).",
+   "fix": "Put the headline in the HTML, painted on the first frame; the load sequence only adds arrival and is settled by 1.2s (references/motion.md, \"Load sequence in 1.2 seconds\"). No preloader, no gate, no waiting for the load event.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "edge-text",
+   "width": 1440,
+   "message": "2 text block(s) sit within 16px of the screen edge: \"ZEIDEXSOFT\" (14px from the right); \"/ 08\" (14px from the right)",
+   "fix": "Keep text inside the page margin (16–32px or more). Only display type deliberately bled past the edge may touch it."
+  },
+  {
+   "level": "WARN",
+   "id": "ragged-edges",
+   "width": 1440,
+   "message": "Left-aligned text starts at 10 different lines (937px, 1008px, 1119px, 245px, 787px, 877px, 905px); the three most used hold only 46% of it.",
+   "fix": "Pick two or three anchor lines from the grid and start every heading and paragraph on one of them.",
+   "alsoAt": [
+    768
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "covered-text",
+   "width": 1440,
+   "message": "Large text lies under another element at some scroll position: \"المنظومة\" (screen 1, 100% hidden); \"الاحترافية\" (screen 1, 100% hidden); \"لأتمتة\" (screen 1, 100% hidden); \"بوتات\" (screen 1, 100% hidden)",
+   "fix": "Nothing may sit on top of a headline or statement. Move the picture, shorten the pinned run, or raise the text above it (z-index) and give it a ground.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "headline-lines",
+   "width": 768,
+   "message": "1 headline(s) wrap past two lines at 768px: \"المنظومة الاحترافية المنظومة الاحترافية لأتمتة ب\" → 3 lines (14 words, 32.3px)",
+   "fix": "Cut words first (a headline is a title, not a sentence). Then give it a wider measure. Lower the size only as a last resort and never below the scale you chose. A real statement paragraph belongs in a <p> or <blockquote> at 32px or less."
+  },
+  {
+   "level": "WARN",
+   "id": "off-centre",
+   "width": 768,
+   "message": "The margins differ: 47px on the left, 31px on the right, at 768px.",
+   "fix": "Put the navigation and the content on one pair of margins; check for padding on one side only, a scrollbar gutter, or a header on another inset than the page.",
+   "alsoAt": [
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "headline-lines",
+   "width": 390,
+   "message": "1 headline(s) wrap past two lines at 390px: \"المنظومة الاحترافية المنظومة الاحترافية لأتمتة ب\" → 3 lines (14 words, 31.2px)",
+   "fix": "Cut words first (a headline is a title, not a sentence). Then give it a wider measure. Lower the size only as a last resort and never below the scale you chose. A real statement paragraph belongs in a <p> or <blockquote> at 24px or less."
+  },
+  {
+   "level": "FAIL",
+   "id": "reduced-hidden",
+   "width": 1440,
+   "message": "With reduced motion requested, 41 text block(s) on the first screen stay invisible: \"SOVEREIGN ENGINE\", \"v2026.11\", \"المنظومة الاحترافية\", \"لأتمتة بوتات تيليجرام\"",
+   "fix": "Put every hidden starting state inside @media (prefers-reduced-motion: no-preference); the reduced page is the finished page (references/motion.md §8)."
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "/root/Downloads/Tiktokweb/.taste-skill/home/desktop-fold.jpg",
+   "pages": [
+    "/root/Downloads/Tiktokweb/.taste-skill/home/desktop-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "/root/Downloads/Tiktokweb/.taste-skill/home/tablet-fold.jpg",
+   "pages": [
+    "/root/Downloads/Tiktokweb/.taste-skill/home/tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "/root/Downloads/Tiktokweb/.taste-skill/home/mobile-fold.jpg",
+   "pages": [
+    "/root/Downloads/Tiktokweb/.taste-skill/home/mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}

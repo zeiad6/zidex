@@ -1,0 +1,28 @@
+# ZeidexMithqalOs — Production Security Headers (FinTech / ZATCA Compliant)
+# Path: /mithqal/* or root for Mithqal Os deployment
+/*
+  # Enforce strictly no MIME sniffing
+  X-Content-Type-Options: nosniff
+
+  # Completely block iframe embedding (anti-Clickjacking in financial context)
+  X-Frame-Options: DENY
+
+  # Cross-Origin Isolation for high-security memory protection
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+  Cross-Origin-Resource-Policy: same-origin
+
+  # Strict Referrer leakage prevention
+  Referrer-Policy: strict-origin-when-cross-origin
+
+  # Disable all sensitive hardware peripherals
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), display-capture=()
+
+  # 2 Years HSTS with Subdomains and Preload
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+
+  # Content-Security-Policy (CSP) - Ultra-strict: No inline eval, no unauthorized domains
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.zatca.gov.sa; font-src 'self'; connect-src 'self' https://api.moyasar.com https://api.stripe.com https://*.zatca.gov.sa; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests;
+
+  # Cache controls for financial portal
+  Cache-Control: private, no-cache, no-store, must-revalidate

@@ -73,3 +73,6 @@ bot-suite/
 CRM/crm.db
 CRM/crm.db-wal
 CRM/crm.db-shm
+dist-sovereign/
+dist_pages/
+.playwright-mcp/

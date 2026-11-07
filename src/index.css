@@ -114,20 +114,20 @@
   }
 
   .dark {
-    --bg: #0b0d1e;
-    --bg-elevated: #151736;
-    --bg-sunken: #1e2042;
-    --fg: #e8eaf7;
-    --fg-muted: #a9add0;
-    --fg-subtle: #8b8fbb;
-    --line: #262952;
-    --line-strong: #3a3d6b;
-    --accent: var(--color-ghost-400);
-    --accent-fg: #05060a;
-    --accent-soft: color-mix(in oklab, var(--color-ghost-400) 16%, transparent);
-    --ring: color-mix(in oklab, var(--color-ghost-400) 55%, transparent);
-    --grid-dot: color-mix(in oklab, #ffffff 13%, transparent);
-    --shadow-color: 237 60% 2%;
+    --bg: #05060f;
+    --bg-elevated: #0d1024;
+    --bg-sunken: #12152e;
+    --fg: #eef0ff;
+    --fg-muted: #a7acd6;
+    --fg-subtle: #858abb;
+    --line: rgb(255 255 255 / 0.08);
+    --line-strong: rgb(255 255 255 / 0.15);
+    --accent: #7c8cff;
+    --accent-fg: #ffffff;
+    --accent-soft: color-mix(in oklab, #7c8cff 18%, transparent);
+    --ring: color-mix(in oklab, #38bdf8 60%, transparent);
+    --grid-dot: color-mix(in oklab, #ffffff 10%, transparent);
+    --shadow-color: 240 80% 2%;
   }
 
   * {
@@ -864,18 +864,19 @@
 /* Flat, single-colour primary — the Swiss direction, site-wide. A crisp
    micro-interaction (1px lift + tightened shadow) replaces the gradient sweep
    and glow; active press lives on the .btn base. */
+/* Neon gradient primary: sky → indigo → violet, twice as wide so hover
+   slides the gradient, with a soft glow and a lift. */
 @utility btn-primary {
-  background: var(--accent);
-  color: var(--accent-fg);
-  box-shadow: 0 2px 8px color-mix(in oklab, var(--accent) 28%, transparent);
+  background-image: linear-gradient(110deg, #38bdf8 0%, #6366f1 45%, #a855f7 100%);
+  background-size: 200% auto;
+  background-position: left center;
+  color: #ffffff;
+  box-shadow: 0 6px 22px -6px rgb(99 102 241 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.2);
   &:hover {
-    background: color-mix(in oklab, var(--accent) 88%, #000);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px color-mix(in oklab, var(--accent) 34%, transparent);
+    background-position: right center;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px -8px rgb(139 92 246 / 0.65), 0 0 0 1px rgb(56 189 248 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.25);
   }
-}
-.dark .btn-primary:hover {
-  background: color-mix(in oklab, var(--accent) 88%, #fff);
 }
 
 /* The Zidex mark: violet into lavender into teal. */
@@ -1580,4 +1581,88 @@ html[lang='ar'] :is(.font-black, .font-extrabold) {
   background: linear-gradient(135deg, rgba(0, 242, 254, 0.12), rgba(124, 58, 237, 0.08), rgba(0, 230, 118, 0.08));
   border: 1px solid rgba(0, 242, 254, 0.25);
   box-shadow: 0 0 24px -6px rgba(0, 242, 254, 0.2);
+}
+
+/* ------------------------------------------------------------------ *
+ * 2026 visual layer — futuristic dark, neon gradients, glassmorphism.
+ * Unlayered so it refines the shipped components without touching JSX.
+ * ------------------------------------------------------------------ */
+html.dark body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(60rem 36rem at 85% -10%, rgb(56 189 248 / 0.13), transparent 60%),
+    radial-gradient(50rem 32rem at -10% 30%, rgb(139 92 246 / 0.14), transparent 60%),
+    radial-gradient(40rem 30rem at 60% 110%, rgb(99 102 241 / 0.12), transparent 60%);
+  background-attachment: fixed;
+}
+/* Glass surfaces: every elevated card becomes frosted glass in dark mode. */
+.dark .bg-elevated {
+  background-color: rgb(255 255 255 / 0.035);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+}
+.dark .bg-sunken {
+  background-color: rgb(255 255 255 / 0.055);
+}
+.dark .glass {
+  background: rgb(8 10 24 / 0.72);
+  border-color: rgb(255 255 255 / 0.08);
+}
+/* Rounded, glowing interactive cards. */
+.card-lift,
+.card-kinetic,
+.hover-ring {
+  transition:
+    transform 0.3s var(--ease-out-expo),
+    box-shadow 0.3s var(--ease-out-expo),
+    border-color 0.25s ease;
+}
+.card-lift:hover,
+.card-kinetic:hover {
+  transform: translateY(-4px);
+  border-color: rgb(56 189 248 / 0.35);
+  box-shadow:
+    0 0 0 1px rgb(56 189 248 / 0.18),
+    0 20px 50px -18px rgb(99 102 241 / 0.45);
+}
+.dark .btn-ghost {
+  background: rgb(255 255 255 / 0.05);
+  border-color: rgb(255 255 255 / 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.dark .btn-ghost:hover {
+  background: rgb(255 255 255 / 0.1);
+  border-color: rgb(56 189 248 / 0.4);
+  box-shadow: 0 0 24px -6px rgb(56 189 248 / 0.4);
+}
+.dark .chip:hover {
+  border-color: rgb(56 189 248 / 0.4);
+}
+/* Neon headline accent. */
+.gradient-text,
+.swiss .swiss-accent-text {
+  background-image: linear-gradient(95deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.dark .swiss .btn-swiss-primary {
+  background-image: linear-gradient(110deg, #38bdf8, #6366f1 50%, #a855f7);
+  color: #ffffff;
+  box-shadow: 0 8px 26px -8px rgb(99 102 241 / 0.6);
+}
+.dark .swiss .btn-swiss-primary:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 12px 34px -8px rgb(139 92 246 / 0.7);
+}
+::selection {
+  background: rgb(99 102 241 / 0.35);
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-lift:hover,
+  .card-kinetic:hover,
+  .btn-primary:hover {
+    transform: none;
+  }
 }
