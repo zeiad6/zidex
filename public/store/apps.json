@@ -6,7 +6,7 @@
       "name_en": "WordCraft — Pro Word Processor",
       "tagline": "معالج نصوص متقدم ومفتوح المصدر، إعادة بناء نظيفة لـ Microsoft Word بلغة Rust: تنسيق متقدم، جداول، دعم كامل لملفات DOCX، وتصدير PDF بدون اشتراك أو قيود.",
       "tagline_en": "An open-source clean-room reimplementation of Microsoft Word in pure Rust: rich typography, tables, full DOCX compatibility, and instant PDF export with zero subscription.",
-      "version": "0.12.0",
+      "version": "0.18.1",
       "platform": "Windows x64",
       "kind": "microsoft",
       "kind_label": "تطبيقات ميكروسوفت (بدائل Office)",
@@ -14,14 +14,19 @@
       "page": "https://zeidexsoft.com/programs#programs-microsoft",
       "downloads": [
         {
-          "href": "https://github.com/storytold/wordcraft/releases/download/v0.12.0/wordcraft-0.12.0-windows-x64.msi",
+          "href": "https://github.com/storytold/wordcraft/releases/download/v0.18.1/wordcraft-0.18.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "84.6 MB"
+          "size": "90.6 MB"
         },
         {
-          "href": "https://github.com/storytold/wordcraft/releases/download/v0.12.0/wordcraft-0.12.0-windows-x64-portable.zip",
+          "href": "https://github.com/storytold/wordcraft/releases/download/v0.18.1/wordcraft-0.18.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "103.9 MB"
+          "size": "114.5 MB"
+        },
+        {
+          "href": "https://github.com/storytold/wordcraft/releases/download/v0.18.1/wordcraft-0.18.1-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "126.1 MB"
         }
       ]
     },
@@ -31,7 +36,7 @@
       "name_en": "GridCraft — High-Performance Spreadsheet",
       "tagline": "جداول بيانات متطورة ومفتوحة المصدر كبديل كامل لـ Microsoft Excel: سرعة فائقة في معالجة مئات آلاف الصفوف، صيغ ودوال حسابية، رسوم بيانية تفاعلية، ودعم صيغ XLSX.",
       "tagline_en": "Fast open-source spreadsheet editor and clean-room Microsoft Excel alternative in pure Rust: handles massive datasets effortlessly with built-in formulas, charts, and XLSX support.",
-      "version": "0.13.0",
+      "version": "0.19.1",
       "platform": "Windows x64",
       "kind": "microsoft",
       "kind_label": "تطبيقات ميكروسوفت (بدائل Office)",
@@ -39,14 +44,19 @@
       "page": "https://zeidexsoft.com/programs#programs-microsoft",
       "downloads": [
         {
-          "href": "https://github.com/storytold/gridcraft/releases/download/v0.13.0/gridcraft-0.13.0-windows-x64.msi",
+          "href": "https://github.com/storytold/gridcraft/releases/download/v0.19.1/gridcraft-0.19.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "36.3 MB"
+          "size": "40 MB"
         },
         {
-          "href": "https://github.com/storytold/gridcraft/releases/download/v0.13.0/gridcraft-0.13.0-windows-x64-portable.zip",
+          "href": "https://github.com/storytold/gridcraft/releases/download/v0.19.1/gridcraft-0.19.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "44.8 MB"
+          "size": "51.2 MB"
+        },
+        {
+          "href": "https://github.com/storytold/gridcraft/releases/download/v0.19.1/gridcraft-0.19.1-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "82.6 MB"
         }
       ]
     },
@@ -56,7 +66,7 @@
       "name_en": "DeckCraft — Presentation & Slide Deck Studio",
       "tagline": "تصميم وتقديم العروض التفاعلية كبديل نظيف لـ Microsoft PowerPoint: انتقالات سلسة بمعدل إطارات مرتفع، قوالب عصرية، تصدير PDF وفيديو، ودعم ملفات PPTX بلغة Rust.",
       "tagline_en": "Clean-room presentation suite alternative to Microsoft PowerPoint in pure Rust: high frame-rate transitions, modern layouts, PPTX compatibility, and presenter mode.",
-      "version": "0.12.0",
+      "version": "0.18.1",
       "platform": "Windows x64",
       "kind": "microsoft",
       "kind_label": "تطبيقات ميكروسوفت (بدائل Office)",
@@ -64,14 +74,19 @@
       "page": "https://zeidexsoft.com/programs#programs-microsoft",
       "downloads": [
         {
-          "href": "https://github.com/storytold/deckcraft/releases/download/v0.12.0/deckcraft-0.12.0-windows-x64.msi",
+          "href": "https://github.com/storytold/deckcraft/releases/download/v0.18.1/deckcraft-0.18.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "78.6 MB"
+          "size": "79.1 MB"
         },
         {
-          "href": "https://github.com/storytold/deckcraft/releases/download/v0.12.0/deckcraft-0.12.0-windows-x64-portable.zip",
+          "href": "https://github.com/storytold/deckcraft/releases/download/v0.18.1/deckcraft-0.18.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "98.6 MB"
+          "size": "101.2 MB"
+        },
+        {
+          "href": "https://github.com/storytold/deckcraft/releases/download/v0.18.1/deckcraft-0.18.1-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "107.5 MB"
         }
       ]
     },
@@ -116,7 +131,7 @@
       "name_en": "PhotoCraft — Pro Image Editor",
       "tagline": "محرّر صور مفتوح المصدر، إعادة بناء نظيفة لـ Adobe Photoshop: طبقات، أقنعة، مرشّحات، أدوات تحديد ذكية، دعم PSD، وتحرير غير متلف — بديل مجاني كامل بلا اشتراك يعمل محلياً.",
       "tagline_en": "An open-source image editor, a clean-room reimplementation of Adobe Photoshop: layers, masks, filters, smart selection, PSD support and non-destructive editing — free with no subscription.",
-      "version": "0.17.0",
+      "version": "0.23.1",
       "platform": "Windows x64",
       "kind": "premium",
       "kind_label": "حزمة البرامج الإبداعية والاحترافية (Premium Suite)",
@@ -124,14 +139,19 @@
       "page": "https://zeidexsoft.com/programs#programs-premium",
       "downloads": [
         {
-          "href": "https://github.com/storytold/photocraft/releases/download/v0.17.0/photocraft-0.17.0-windows-x64.msi",
+          "href": "https://github.com/storytold/photocraft/releases/download/v0.23.1/photocraft-0.23.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "100.7 MB"
+          "size": "112.9 MB"
         },
         {
-          "href": "https://github.com/storytold/photocraft/releases/download/v0.17.0/photocraft-0.17.0-windows-x64-portable.zip",
+          "href": "https://github.com/storytold/photocraft/releases/download/v0.23.1/photocraft-0.23.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "120.5 MB"
+          "size": "135.1 MB"
+        },
+        {
+          "href": "https://github.com/storytold/photocraft/releases/download/v0.23.1/photocraft-0.23.1-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "261.5 MB"
         }
       ]
     },
@@ -141,7 +161,7 @@
       "name_en": "ArtCraft — Creative Engine",
       "tagline": "بيئة إبداع متكاملة للفنانين والمصممين وصنّاع الأفلام: لوحة دقيقة تجمع التصميم والرسم وأدوات الذكاء الاصطناعي في مكان واحد، بتحكم كامل في كل عنصر. تعمل محلياً على جهازك.",
       "tagline_en": "An open-source creative environment for artists, designers and filmmakers: a precise canvas uniting design, drawing and AI tools with complete control. Runs locally on your machine.",
-      "version": "0.41.0",
+      "version": "0.41.1",
       "platform": "Windows x64",
       "kind": "premium",
       "kind_label": "حزمة البرامج الإبداعية والاحترافية (Premium Suite)",
@@ -149,14 +169,19 @@
       "page": "https://zeidexsoft.com/programs#programs-premium",
       "downloads": [
         {
-          "href": "https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.0/ArtCraft_0.41.0_x64-setup.exe",
+          "href": "https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.1/ArtCraft_0.41.1_x64_en-US.msi",
           "host": "GitHub",
-          "size": "39.9 MB"
+          "size": "44.9 MB"
         },
         {
-          "href": "https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.0/ArtCraft_0.41.0_x64_en-US.msi",
+          "href": "https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.1/artcraft-0.41.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "44.7 MB"
+          "size": "47.6 MB"
+        },
+        {
+          "href": "https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.1/ArtCraft_0.41.1_universal.dmg",
+          "host": "GitHub",
+          "size": "90.5 MB"
         }
       ]
     },
@@ -166,7 +191,7 @@
       "name_en": "FilmCraft — Non-Linear Video Editor",
       "tagline": "محرّر ومونتير فيديو احترافي غير خطي (بديل Adobe Premiere Pro): مسارات صوت وفيديو غير محدودة، تصحيح ألوان سينمائي، مؤثرات انتقالية، وتصدير عالي السرعة بلغة Rust.",
       "tagline_en": "Open-source non-linear video editor (clean-room Adobe Premiere Pro alternative): multi-track timeline, color grading, transitions, and hardware-accelerated rendering in pure Rust.",
-      "version": "0.14.0",
+      "version": "0.20.1",
       "platform": "Windows x64",
       "kind": "premium",
       "kind_label": "حزمة البرامج الإبداعية والاحترافية (Premium Suite)",
@@ -174,14 +199,19 @@
       "page": "https://zeidexsoft.com/programs#programs-premium",
       "downloads": [
         {
-          "href": "https://github.com/storytold/filmcraft/releases/download/v0.14.0/filmcraft-0.14.0-windows-x64.msi",
+          "href": "https://github.com/storytold/filmcraft/releases/download/v0.20.1/filmcraft-0.20.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "84.4 MB"
+          "size": "89.1 MB"
         },
         {
-          "href": "https://github.com/storytold/filmcraft/releases/download/v0.14.0/filmcraft-0.14.0-windows-x64-portable.zip",
+          "href": "https://github.com/storytold/filmcraft/releases/download/v0.20.1/filmcraft-0.20.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "101.7 MB"
+          "size": "108.4 MB"
+        },
+        {
+          "href": "https://github.com/storytold/filmcraft/releases/download/v0.20.1/filmcraft-0.20.1-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "113.3 MB"
         }
       ]
     },
@@ -191,7 +221,7 @@
       "name_en": "VectorCraft — Vector Graphics & SVG Studio",
       "tagline": "استوديو الرسم الشعاعي والمتجهي (بديل Adobe Illustrator): مسارات بيزيه فائقة الدقة، دعم كامل وتصدير لملفات SVG و EPS، وأدوات تصميم شعارات ورسوم توضيحية متقدمة.",
       "tagline_en": "Vector graphics and illustration editor in pure Rust (Adobe Illustrator alternative): sub-pixel precision paths, full SVG/EPS compatibility, and modern vector design tools.",
-      "version": "0.18.0",
+      "version": "0.24.1",
       "platform": "Windows x64",
       "kind": "premium",
       "kind_label": "حزمة البرامج الإبداعية والاحترافية (Premium Suite)",
@@ -199,14 +229,19 @@
       "page": "https://zeidexsoft.com/programs#programs-premium",
       "downloads": [
         {
-          "href": "https://github.com/storytold/vectorcraft/releases/download/v0.18.0/vectorcraft-0.18.0-windows-x64.msi",
+          "href": "https://github.com/storytold/vectorcraft/releases/download/v0.24.1/vectorcraft-0.24.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "106.8 MB"
+          "size": "124 MB"
         },
         {
-          "href": "https://github.com/storytold/vectorcraft/releases/download/v0.18.0/vectorcraft-0.18.0-windows-x64-portable.zip",
+          "href": "https://github.com/storytold/vectorcraft/releases/download/v0.24.1/vectorcraft-0.24.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "132.6 MB"
+          "size": "152.8 MB"
+        },
+        {
+          "href": "https://github.com/storytold/vectorcraft/releases/download/v0.24.1/vectorcraft-0.24.1-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "170.1 MB"
         }
       ]
     },
@@ -216,7 +251,7 @@
       "name_en": "DesignCraft — Page Layout & Publishing Studio",
       "tagline": "استوديو تنسيق الصفحات والنشر المكتبي (بديل Adobe InDesign): تخطيط شبكي متقن للكتب والمجلات والبروشورات، طباعة رقمية وفصل ألوان CMYK، وتصدير PDF عالي الجودة للطباعة.",
       "tagline_en": "Desktop publishing & page layout editor (clean-room Adobe InDesign alternative): multi-page layouts, typography grids, CMYK print preparation, and press-ready PDF export.",
-      "version": "0.14.0",
+      "version": "0.20.1",
       "platform": "Windows x64",
       "kind": "premium",
       "kind_label": "حزمة البرامج الإبداعية والاحترافية (Premium Suite)",
@@ -224,14 +259,19 @@
       "page": "https://zeidexsoft.com/programs#programs-premium",
       "downloads": [
         {
-          "href": "https://github.com/storytold/designcraft/releases/download/v0.14.0/designcraft-0.14.0-windows-x64.msi",
+          "href": "https://github.com/storytold/designcraft/releases/download/v0.20.1/designcraft-0.20.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "92.8 MB"
+          "size": "95 MB"
         },
         {
-          "href": "https://github.com/storytold/designcraft/releases/download/v0.14.0/designcraft-0.14.0-windows-x64-portable.zip",
+          "href": "https://github.com/storytold/designcraft/releases/download/v0.20.1/designcraft-0.20.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "117.0 MB"
+          "size": "121 MB"
+        },
+        {
+          "href": "https://github.com/storytold/designcraft/releases/download/v0.20.1/designcraft-0.20.1-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "237.6 MB"
         }
       ]
     },
@@ -241,7 +281,7 @@
       "name_en": "EffectCraft — Motion Graphics & VFX Compositor",
       "tagline": "محرك المؤثرات البصرية والرسوم المتحركة (بديل Adobe After Effects): تحريك الإطارات المفتاحية Keyframes، تركيب طبقات متعددة، ومؤثرات سينمائية بصرية مسرعة عتادياً بلغة Rust.",
       "tagline_en": "Motion design & VFX compositing suite (clean-room After Effects alternative): node & layer compositing, curve keyframing, and GPU-accelerated motion graphics in pure Rust.",
-      "version": "0.18.0",
+      "version": "0.24.1",
       "platform": "Windows x64",
       "kind": "premium",
       "kind_label": "حزمة البرامج الإبداعية والاحترافية (Premium Suite)",
@@ -249,14 +289,19 @@
       "page": "https://zeidexsoft.com/programs#programs-premium",
       "downloads": [
         {
-          "href": "https://github.com/storytold/effectcraft/releases/download/v0.18.0/effectcraft-0.18.0-windows-x64.msi",
+          "href": "https://github.com/storytold/effectcraft/releases/download/v0.24.1/effectcraft-0.24.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "53.9 MB"
+          "size": "61.2 MB"
         },
         {
-          "href": "https://github.com/storytold/effectcraft/releases/download/v0.18.0/effectcraft-0.18.0-windows-x64-portable.zip",
+          "href": "https://github.com/storytold/effectcraft/releases/download/v0.24.1/effectcraft-0.24.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "71.1 MB"
+          "size": "79.8 MB"
+        },
+        {
+          "href": "https://github.com/storytold/effectcraft/releases/download/v0.24.1/effectcraft-0.24.1-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "78.8 MB"
         }
       ]
     },
@@ -266,7 +311,7 @@
       "name_en": "SoundCraft — Digital Audio Workstation",
       "tagline": "محطة عمل صوت رقمية احترافية DAW (بديل Avid Pro Tools و Adobe Audition): تسجيل ومكساج متعدد المسارات، تحرير موجات الصوت بدقة زمنية متناهية، وماسترنج نقي دون تأخير.",
       "tagline_en": "Pro DAW audio workstation in pure Rust (clean-room Avid Pro Tools & Audition alternative): multi-track recording, waveform editing, low-latency DSP mixing, and mastering.",
-      "version": "0.14.0",
+      "version": "0.20.1",
       "platform": "Windows x64",
       "kind": "premium",
       "kind_label": "حزمة البرامج الإبداعية والاحترافية (Premium Suite)",
@@ -274,14 +319,19 @@
       "page": "https://zeidexsoft.com/programs#programs-premium",
       "downloads": [
         {
-          "href": "https://github.com/storytold/soundcraft/releases/download/v0.14.0/soundcraft-0.14.0-windows-x64.msi",
+          "href": "https://github.com/storytold/soundcraft/releases/download/v0.20.1/soundcraft-0.20.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "13.7 MB"
+          "size": "14.7 MB"
         },
         {
-          "href": "https://github.com/storytold/soundcraft/releases/download/v0.14.0/soundcraft-0.14.0-windows-x64-portable.zip",
+          "href": "https://github.com/storytold/soundcraft/releases/download/v0.20.1/soundcraft-0.20.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "17.7 MB"
+          "size": "21.4 MB"
+        },
+        {
+          "href": "https://github.com/storytold/soundcraft/releases/download/v0.20.1/soundcraft-0.20.1-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "30 MB"
         }
       ]
     },
@@ -291,7 +341,7 @@
       "name_en": "LightCraft — Non-Destructive RAW Photo Studio",
       "tagline": "معمل تظهير وتعديل ألوان الصور الفوتوغرافية (بديل Adobe Lightroom): تحرير غير متلف لملفات الكاميرا الخام RAW، تدرج لوني سينمائي، تعديل التعريض والتباين، وتنظيم مكتبات الصور.",
       "tagline_en": "Non-destructive RAW photo developer and clean-room Adobe Lightroom alternative: color grading, tone curve adjustment, exposure balance, and batch photo export.",
-      "version": "0.15.0",
+      "version": "0.21.1",
       "platform": "Windows x64",
       "kind": "premium",
       "kind_label": "حزمة البرامج الإبداعية والاحترافية (Premium Suite)",
@@ -299,14 +349,19 @@
       "page": "https://zeidexsoft.com/programs#programs-premium",
       "downloads": [
         {
-          "href": "https://github.com/storytold/lightcraft/releases/download/v0.15.0/lightcraft-0.15.0-windows-x64.msi",
+          "href": "https://github.com/storytold/lightcraft/releases/download/v0.21.1/lightcraft-0.21.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "92.7 MB"
+          "size": "95.4 MB"
         },
         {
-          "href": "https://github.com/storytold/lightcraft/releases/download/v0.15.0/lightcraft-0.15.0-windows-x64-portable.zip",
+          "href": "https://github.com/storytold/lightcraft/releases/download/v0.21.1/lightcraft-0.21.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "113.4 MB"
+          "size": "118.6 MB"
+        },
+        {
+          "href": "https://github.com/storytold/lightcraft/releases/download/v0.21.1/lightcraft-0.21.1-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "121.4 MB"
         }
       ]
     },
@@ -316,7 +371,7 @@
       "name_en": "FigCraft — UI/UX Interface Design & Prototyping",
       "tagline": "بيئة تصميم تجربة وواجهة المستخدم والنماذج التفاعلية (بديل Figma): مكونات قابلة لإعادة الاستخدام، تخطيط تلقائي Auto-Layout، نماذج أولية تفاعلية، يعمل محلياً بالكامل بلا اتصال وبأعلى درجات الخصوصية.",
       "tagline_en": "Interface design and interactive prototyping suite (clean-room Figma alternative): auto-layout frames, interactive component variants, and 100% offline local privacy.",
-      "version": "0.12.1",
+      "version": "0.18.1",
       "platform": "Windows x64",
       "kind": "premium",
       "kind_label": "حزمة البرامج الإبداعية والاحترافية (Premium Suite)",
@@ -324,14 +379,19 @@
       "page": "https://zeidexsoft.com/programs#programs-premium",
       "downloads": [
         {
-          "href": "https://github.com/storytold/figcraft/releases/download/v0.12.1/figcraft-0.12.1-windows-x64.msi",
+          "href": "https://github.com/storytold/figcraft/releases/download/v0.18.1/figcraft-0.18.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "71.5 MB"
+          "size": "77.6 MB"
         },
         {
-          "href": "https://github.com/storytold/figcraft/releases/download/v0.12.1/figcraft-0.12.1-windows-x64-portable.zip",
+          "href": "https://github.com/storytold/figcraft/releases/download/v0.18.1/figcraft-0.18.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "89.4 MB"
+          "size": "98.9 MB"
+        },
+        {
+          "href": "https://github.com/storytold/figcraft/releases/download/v0.18.1/figcraft-0.18.1-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "106.4 MB"
         }
       ]
     },
@@ -341,7 +401,7 @@
       "name_en": "PdfCraft — PDF Reader, Editor & Studio",
       "tagline": "أداة متكاملة لقراءة وتحرير وإدارة ملفات PDF (بديل Adobe Acrobat Pro): دمج الصفحات وتقسيمها، التوقيع الرقمي، التعليقات التوضيحية، وتحويل المستندات بسرعة فائقة وأمان تام.",
       "tagline_en": "Comprehensive PDF editor and clean-room Adobe Acrobat alternative in Rust: merge, split, annotate, digital signatures, OCR readiness, and instant export with full privacy.",
-      "version": "0.15.0",
+      "version": "0.21.1",
       "platform": "Windows x64",
       "kind": "premium",
       "kind_label": "حزمة البرامج الإبداعية والاحترافية (Premium Suite)",
@@ -349,14 +409,19 @@
       "page": "https://zeidexsoft.com/programs#programs-premium",
       "downloads": [
         {
-          "href": "https://github.com/storytold/pdfcraft/releases/download/v0.15.0/pdfcraft-0.15.0-windows-x64.msi",
+          "href": "https://github.com/storytold/pdfcraft/releases/download/v0.21.1/pdfcraft-0.21.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "87.1 MB"
+          "size": "95.3 MB"
         },
         {
-          "href": "https://github.com/storytold/pdfcraft/releases/download/v0.15.0/pdfcraft-0.15.0-windows-x64-portable.zip",
+          "href": "https://github.com/storytold/pdfcraft/releases/download/v0.21.1/pdfcraft-0.21.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "106.3 MB"
+          "size": "116.8 MB"
+        },
+        {
+          "href": "https://github.com/storytold/pdfcraft/releases/download/v0.21.1/pdfcraft-0.21.1-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "129.2 MB"
         }
       ]
     },
@@ -366,7 +431,7 @@
       "name_en": "CadCraft — 2D/3D CAD & Drafting Studio",
       "tagline": "برنامج التصميم بمساعدة الحاسوب والنمذجة الهندسية والمعمارية (بديل AutoCAD): قياسات دقيقة بالميليمتر، طبقات رسم معمارية، دعم ملفات DWG و DXF، وأداء عالي بلغة Rust.",
       "tagline_en": "Computer-aided drafting & design in pure Rust (clean-room AutoCAD alternative): precision 2D drawing, architectural snapping, DWG/DXF support, and zero subscription fee.",
-      "version": "0.14.0",
+      "version": "0.20.1",
       "platform": "Windows x64",
       "kind": "premium",
       "kind_label": "حزمة البرامج الإبداعية والاحترافية (Premium Suite)",
@@ -374,14 +439,19 @@
       "page": "https://zeidexsoft.com/programs#programs-premium",
       "downloads": [
         {
-          "href": "https://github.com/storytold/cadcraft/releases/download/v0.14.0/cadcraft-0.14.0-windows-x64.msi",
+          "href": "https://github.com/storytold/cadcraft/releases/download/v0.20.1/cadcraft-0.20.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "54.1 MB"
+          "size": "56.7 MB"
         },
         {
-          "href": "https://github.com/storytold/cadcraft/releases/download/v0.14.0/cadcraft-0.14.0-windows-x64-portable.zip",
+          "href": "https://github.com/storytold/cadcraft/releases/download/v0.20.1/cadcraft-0.20.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "67.7 MB"
+          "size": "72.9 MB"
+        },
+        {
+          "href": "https://github.com/storytold/cadcraft/releases/download/v0.20.1/cadcraft-0.20.1-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "80.9 MB"
         }
       ]
     },
@@ -391,7 +461,7 @@
       "name_en": "Craft Launcher — Unified Suite Manager",
       "tagline": "المشغل والمثبّت الموحد لكافة تطبيقات وحزم Craft الإبداعية والمكتبية: تثبيت بضغطة زر، تحديث تلقائي آمن، تشغيل مباشر، وإدارة مركزية لجميع الأدوات على جهازك.",
       "tagline_en": "Unified application manager and installer for the entire Craft suite: one-click installation, centralized updates, launch control, and offline tool management.",
-      "version": "0.9.0",
+      "version": "0.19.2",
       "platform": "Windows x64",
       "kind": "premium",
       "kind_label": "حزمة البرامج الإبداعية والاحترافية (Premium Suite)",
@@ -399,14 +469,19 @@
       "page": "https://zeidexsoft.com/programs#programs-premium",
       "downloads": [
         {
-          "href": "https://github.com/storytold/craft-launcher/releases/download/v0.9.0/artcraft-launcher-0.9.0-windows-x64.msi",
+          "href": "https://github.com/storytold/craft-launcher/releases/download/v0.19.2/artcraft-launcher-0.19.2-windows-x64.msi",
           "host": "GitHub",
-          "size": "9.4 MB"
+          "size": "9.9 MB"
         },
         {
-          "href": "https://github.com/storytold/craft-launcher/releases/download/v0.9.0/artcraft-launcher-0.9.0-windows-x64-portable.zip",
+          "href": "https://github.com/storytold/craft-launcher/releases/download/v0.19.2/artcraft-launcher-0.19.2-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "10.4 MB"
+          "size": "13.5 MB"
+        },
+        {
+          "href": "https://github.com/storytold/craft-launcher/releases/download/v0.19.2/artcraft-launcher-0.19.2-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "20.9 MB"
         }
       ]
     },

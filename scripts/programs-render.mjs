@@ -474,6 +474,7 @@ const dataset = programs.map((p) => ({
   badge: p.badge,
   version: p.version,
   rawVersion: p.rawVersion,
+  released: p.released,
   platform: p.platform,
   title: p.title,
   desc: p.desc,
