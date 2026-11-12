@@ -8,6 +8,7 @@
  */
 import type { Block } from './posts'
 import { getProgram, primaryDownload } from './programs'
+import { selfTeachingBody } from './postBodies.selfteaching'
 
 /** Injected ahead of the EDMS body so the button always matches programs.ts. */
 const edms = getProgram('edms-archive-pro')!
@@ -1139,6 +1140,7 @@ const archive106: Block[] = [
 ]
 
 export const postBodies: Record<string, Block[]> = {
+  "craft-of-selfteaching": selfTeachingBody,
   "local-cicd-guide": localCicdBody,
   "yusr": yusrBody,
   "zeidex-convert-android": zeidexConvertAndroidBody,

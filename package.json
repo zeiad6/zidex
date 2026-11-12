@@ -21,7 +21,7 @@
     "test:botlic": "node scripts/test-bot-licensing.mjs",
     "test:security": "node scripts/test-security-suite.mjs",
     "harden:bla": "node scripts/harden-pipeline.mjs",
-    "test": "node scripts/test-bots.mjs && node scripts/test-whatsapp.mjs && node scripts/test-license.mjs && node scripts/test-bot-licensing.mjs && node scripts/test-kuraimi.mjs && node scripts/test-store-app.mjs && node scripts/test-dash-app.mjs && node scripts/test-tma-panel.mjs && node scripts/test-tma-app.mjs && node scripts/test-anthropic-proxy.mjs",
+    "test": "node scripts/test-bots.mjs && node scripts/test-whatsapp.mjs && node scripts/test-license.mjs && node scripts/test-bot-licensing.mjs && node scripts/test-kuraimi.mjs && node scripts/test-store-app.mjs && node scripts/test-dash-app.mjs && node scripts/test-tma-panel.mjs && node scripts/test-tma-app.mjs && node scripts/test-anthropic-proxy.mjs && node scripts/test-fx-inline-calls.mjs && node scripts/test-build-articles.mjs",
     "gen:license-keys": "node scripts/gen-license-keys.mjs --env",
     "test:store": "node scripts/test-store-app.mjs",
     "test:dash": "node scripts/test-dash-app.mjs",

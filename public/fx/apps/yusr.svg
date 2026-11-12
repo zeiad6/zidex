@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img">
+<defs>
+  <linearGradient id="t1bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#0c1526"/><stop offset="1" stop-color="#05080f"/>
+  </linearGradient>
+  <radialGradient id="t1glow" cx="0.8" cy="0.1" r="0.95">
+    <stop offset="0" stop-color="#10b981" stop-opacity="0.3"/><stop offset="1" stop-color="#10b981" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="t1ac" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#10b981"/>
+  </linearGradient>
+  <pattern id="t1dots" width="26" height="26" patternUnits="userSpaceOnUse">
+    <circle cx="1.2" cy="1.2" r="1.2" fill="#ffffff" fill-opacity="0.07"/>
+  </pattern>
+  <linearGradient id="t1shade" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.55"/>
+  </linearGradient>
+</defs>
+
+<rect width="640" height="400" fill="url(#t1bg)"/>
+<rect width="640" height="400" fill="url(#t1glow)"/>
+<rect width="640" height="400" fill="url(#t1dots)"/>
+<path d="M0 300L640 180" stroke="#ffffff" stroke-opacity="0.04"/>
+<path d="M0 340L640 220" stroke="#ffffff" stroke-opacity="0.03"/>
+
+<!-- product window -->
+<g transform="translate(252 56)">
+  <rect x="0" y="6" width="352" height="300" rx="18" fill="#000" opacity="0.35"/>
+  <rect width="352" height="300" rx="16" fill="#0a1020" stroke="#ffffff" stroke-opacity="0.09"/>
+  <path d="M0 34h352" stroke="#ffffff" stroke-opacity="0.06"/>
+  <circle cx="18" cy="17" r="3.4" fill="#ff5f57" opacity="0.5"/>
+  <circle cx="31" cy="17" r="3.4" fill="#febc2e" opacity="0.5"/>
+  <circle cx="44" cy="17" r="3.4" fill="#28c840" opacity="0.5"/>
+  <rect x="292" y="12" width="44" height="10" rx="5" fill="#ffffff" fill-opacity="0.06"/>
+  <rect x="0" y="0" width="352" height="300" rx="16" fill="url(#t1shade)" opacity="0.35"/>
+  <g>
+    <rect x="22" y="50" width="74" height="7" rx="3.5" fill="#10b981" opacity="0.95"/>
+    <rect x="22" y="66" width="306" height="1" rx="0" fill="#fff" opacity=".08"/>
+    <rect x="22" y="80" width="140" height="9" rx="4.5" fill="#fff" opacity="0.16"/>
+        <rect x="22" y="95" width="96" height="6" rx="3" fill="#fff" opacity="0.07"/>
+        <rect x="238" y="76" width="74" height="20" rx="6" fill="#10b981" opacity=".16"/>
+        <rect x="248" y="83" width="40" height="6" rx="3" fill="#10b981" opacity="0.85"/><rect x="22" y="124" width="128" height="9" rx="4.5" fill="#fff" opacity="0.16"/>
+        <rect x="22" y="139" width="96" height="6" rx="3" fill="#fff" opacity="0.07"/>
+        <rect x="238" y="120" width="74" height="20" rx="6" fill="#10b981" opacity=".16"/>
+        <rect x="248" y="127" width="46" height="6" rx="3" fill="#10b981" opacity="0.85"/><rect x="22" y="168" width="116" height="9" rx="4.5" fill="#fff" opacity="0.16"/>
+        <rect x="22" y="183" width="96" height="6" rx="3" fill="#fff" opacity="0.07"/>
+        <rect x="238" y="164" width="74" height="20" rx="6" fill="#10b981" opacity=".16"/>
+        <rect x="248" y="171" width="52" height="6" rx="3" fill="#10b981" opacity="0.85"/><rect x="22" y="212" width="104" height="9" rx="4.5" fill="#fff" opacity="0.16"/>
+        <rect x="22" y="227" width="96" height="6" rx="3" fill="#fff" opacity="0.07"/>
+        <rect x="238" y="208" width="74" height="20" rx="6" fill="#10b981" opacity=".16"/>
+        <rect x="248" y="215" width="58" height="6" rx="3" fill="#10b981" opacity="0.85"/>
+    <rect x="170" y="74" width="46" height="168" rx="10" fill="#ffffff" opacity=".03"/>
+    <circle cx="193" cy="92" r="4" fill="#10b981" opacity="0.9"/><circle cx="193" cy="136" r="4" fill="#10b981" opacity="0.9"/><circle cx="193" cy="180" r="4" fill="#10b981" opacity="0.9"/><circle cx="193" cy="224" r="4" fill="#ffffff" opacity="0.25"/>
+    <path d="M193 96V220" stroke="#10b981" stroke-opacity=".35" stroke-width="1" stroke-dasharray="2 6"/></g>
+</g>
+
+<!-- identity -->
+<g transform="translate(40 244)">
+  <rect x="0" y="4" width="64" height="64" rx="18" fill="#000" opacity="0.4"/>
+  <rect width="64" height="64" rx="18" fill="url(#t1ac)"/>
+  <g transform="translate(16 16) scale(1.333)" fill="none" stroke="#04120e" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M4 12h9M4 19h6"/><circle cx="18" cy="17" r="3.4"/><path d="M18 13.6v3.4l2 1.4"/></g>
+</g>
+<text x="118" y="274" font-size="21" fill="#f8fafc" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-weight="700">يُسر</text>
+<text x="118" y="294" font-size="9.5" fill="#8ea3bd" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" letter-spacing="1.6">دفتر أستاذ مشفّر</text>
+<g transform="translate(118 304)">
+  <rect width="62" height="21" rx="10.5" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.1"/>
+  <text x="11" y="14.5" font-size="10.5" fill="#cbd5e1" font-family="ui-monospace, Menlo, monospace">v0.2.1</text>
+</g>
+<text x="40" y="352" font-size="9" fill="#64748b" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" letter-spacing="1.4">VERIFIED BUILD · SHA-256</text>
+
+<!-- monogram watermark: legible at any size, no text to turn to mush -->
+<g transform="translate(586 34) scale(0.95)" fill="none" stroke="#f0c674" stroke-opacity="0.28" stroke-width="1.6" stroke-linejoin="round">
+  <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z"/><path d="M7.5 8.5H16.5L7.5 15.5H16.5" stroke-linecap="round"/>
+</g>
+</svg>

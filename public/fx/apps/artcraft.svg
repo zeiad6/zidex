@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img">
+<defs>
+  <linearGradient id="t10bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#0c1526"/><stop offset="1" stop-color="#05080f"/>
+  </linearGradient>
+  <radialGradient id="t10glow" cx="0.8" cy="0.1" r="0.95">
+    <stop offset="0" stop-color="#8b5cf6" stop-opacity="0.3"/><stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="t10ac" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#ec4899"/><stop offset="1" stop-color="#8b5cf6"/>
+  </linearGradient>
+  <pattern id="t10dots" width="26" height="26" patternUnits="userSpaceOnUse">
+    <circle cx="1.2" cy="1.2" r="1.2" fill="#ffffff" fill-opacity="0.07"/>
+  </pattern>
+  <linearGradient id="t10shade" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.55"/>
+  </linearGradient>
+</defs>
+
+<rect width="640" height="400" fill="url(#t10bg)"/>
+<rect width="640" height="400" fill="url(#t10glow)"/>
+<rect width="640" height="400" fill="url(#t10dots)"/>
+<path d="M0 300L640 180" stroke="#ffffff" stroke-opacity="0.04"/>
+<path d="M0 340L640 220" stroke="#ffffff" stroke-opacity="0.03"/>
+
+<!-- product window -->
+<g transform="translate(252 56)">
+  <rect x="0" y="6" width="352" height="300" rx="18" fill="#000" opacity="0.35"/>
+  <rect width="352" height="300" rx="16" fill="#0a1020" stroke="#ffffff" stroke-opacity="0.09"/>
+  <path d="M0 34h352" stroke="#ffffff" stroke-opacity="0.06"/>
+  <circle cx="18" cy="17" r="3.4" fill="#ff5f57" opacity="0.5"/>
+  <circle cx="31" cy="17" r="3.4" fill="#febc2e" opacity="0.5"/>
+  <circle cx="44" cy="17" r="3.4" fill="#28c840" opacity="0.5"/>
+  <rect x="292" y="12" width="44" height="10" rx="5" fill="#ffffff" fill-opacity="0.06"/>
+  <rect x="0" y="0" width="352" height="300" rx="16" fill="url(#t10shade)" opacity="0.35"/>
+  <g>
+    <rect x="18" y="46" width="250" height="196" rx="10" fill="#fff" opacity=".04"/>
+    <path d="M40 196c30-64 54 12 84-40s44 46 84-14" stroke="#8b5cf6" stroke-width="12" fill="none" stroke-linecap="round" opacity=".85"/>
+    <path d="M46 150c28 8 40-42 74-30s44 52 76 26" stroke="#f472b6" stroke-width="6" fill="none" stroke-linecap="round" opacity=".55"/>
+    <path d="M52 118c22-18 46 10 70-6s38-22 62-6" stroke="#22d3ee" stroke-width="3" fill="none" stroke-linecap="round" opacity=".5"/>
+    <circle cx="44" cy="240" r="8" fill="#8b5cf6" opacity=".9"/><circle cx="74" cy="240" r="8" fill="#f472b6" opacity=".9"/><circle cx="104" cy="240" r="8" fill="#22d3ee" opacity=".9"/><circle cx="134" cy="240" r="8" fill="#fbbf24" opacity=".9"/><circle cx="164" cy="240" r="8" fill="#a3e635" opacity=".9"/><circle cx="194" cy="240" r="8" fill="#fb7185" opacity=".9"/>
+    <rect x="286" y="52" width="42" height="190" rx="10" fill="#fff" opacity=".05"/>
+    <rect x="294" y="64" width="26" height="26" rx="7" fill="#fff" opacity=".25"/><rect x="294" y="108" width="26" height="26" rx="7" fill="#fff" opacity=".8"/><rect x="294" y="152" width="26" height="26" rx="7" fill="#fff" opacity=".8"/><rect x="294" y="196" width="26" height="26" rx="7" fill="#fff" opacity=".8"/></g>
+</g>
+
+<!-- identity -->
+<g transform="translate(40 244)">
+  <rect x="0" y="4" width="64" height="64" rx="18" fill="#000" opacity="0.4"/>
+  <rect width="64" height="64" rx="18" fill="url(#t10ac)"/>
+  <g transform="translate(16 16) scale(1.333)" fill="none" stroke="#04120e" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c4 1 5-2 5-4M14 4l6 6-9 9-6-6z"/><path d="M4 20l4-1-3-3z"/></g>
+</g>
+<text x="118" y="274" font-size="21" fill="#f8fafc" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-weight="700">ArtCraft</text>
+<text x="118" y="294" font-size="9.5" fill="#8ea3bd" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" letter-spacing="1.6">الرسم الرقمي للفنانين</text>
+<g transform="translate(118 304)">
+  <rect width="68" height="21" rx="10.5" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.1"/>
+  <text x="11" y="14.5" font-size="10.5" fill="#cbd5e1" font-family="ui-monospace, Menlo, monospace">v0.41.1</text>
+</g>
+<text x="40" y="352" font-size="9" fill="#64748b" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" letter-spacing="1.4">VERIFIED BUILD · SHA-256</text>
+
+<!-- monogram watermark: legible at any size, no text to turn to mush -->
+<g transform="translate(586 34) scale(0.95)" fill="none" stroke="#f0c674" stroke-opacity="0.28" stroke-width="1.6" stroke-linejoin="round">
+  <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z"/><path d="M7.5 8.5H16.5L7.5 15.5H16.5" stroke-linecap="round"/>
+</g>
+</svg>

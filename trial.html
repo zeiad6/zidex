@@ -93,10 +93,8 @@
     }
     .tech-grid-bg {
       background-image: 
-        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 65%),
-        linear-gradient(to right, rgba(59, 130, 246, 0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
-      background-size: 100% 100%, 32px 32px, 32px 32px;
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 65%);
+      background-size: 100% 100%;
     }
     .bento-card {
       background: rgba(11, 18, 33, 0.78);
@@ -121,6 +119,7 @@
       }
     }
   </script>
+  <link rel="stylesheet" href="/fx/site-fx.css">
 </head>
 <body class="bg-themeDark text-slate-100 font-sans antialiased relative min-h-screen selection:bg-techBlue/30 selection:text-blue-300 tech-grid-bg overflow-x-hidden flex flex-col justify-between">
 
@@ -173,7 +172,7 @@
         </a>
 
         <!-- Status Indicator (Desktop only) -->
-        <div class="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
+        <div class="hidden min-[1720px]:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
           <span class="font-mono text-[11px]">Edge Global: Online (TLS 1.3)</span>
         </div>
@@ -183,7 +182,7 @@
       <nav class="hidden lg:flex items-center gap-5 xl:gap-6 text-sm font-semibold">
         <a href="/" class="py-1.5 text-slate-300 hover:text-white transition-colors">الرئيسية</a>
         <a href="/bots.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">باقات البوتات</a>
-        <a href="/programs.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">الأنظمة السيادية</a>
+        <a href="/programs.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">البرامج والتطبيقات</a>
         <a href="/templates.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">قوالب المتاجر</a>
         <a href="/blog.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">المدونة المعرفية</a>
         <a href="/trial.html" class="relative py-1.5 text-techCyan font-bold transition-colors after:absolute after:bottom-0 after:inset-x-0 after:h-0.5 after:bg-techCyan after:rounded-full">التجربة والدفع</a>
@@ -217,7 +216,7 @@
     <div id="mobileMenu" class="hidden lg:hidden px-4 pt-3 pb-6 space-y-2 techfy-glass border-t border-white/10 transition-all duration-300">
       <a href="/" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">الرئيسية</a>
       <a href="/bots.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">باقات البوتات</a>
-      <a href="/programs.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">الأنظمة السيادية</a>
+      <a href="/programs.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">البرامج والتطبيقات</a>
       <a href="/templates.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">قوالب المتاجر</a>
       <a href="/blog.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">المدونة المعرفية</a>
       <a href="/trial.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-techCyan/10 text-techCyan border border-techCyan/20">التجربة والدفع</a>
@@ -237,7 +236,7 @@
     <!-- Header Section -->
     <section class="pt-8 pb-6 border-b border-white/10 w-full max-w-full">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-semibold text-emerald-400">
+        <div class="fx-pill inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-semibold text-emerald-400">
           <span>التفعيل الفوري والدفع المعتمد</span>
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
           <span class="font-mono">Zero-Card • Instant SLA</span>
@@ -398,6 +397,8 @@
             <li><a href="/programs.html" class="hover:text-techCyan transition-colors">كاشف التزييف VerityScope</a></li>
             <li><a href="/templates.html" class="hover:text-techCyan transition-colors">قالب متجر عود وعنبر (Zero-Deps)</a></li>
             <li><a href="/trial.html" class="hover:text-techCyan transition-colors">تفعيل التجربة المجانية (3 أيام)</a></li>
+            <li><a href="https://zeidexlink.zeidexsoft.com/" target="_blank" rel="noopener" class="hover:text-techCyan transition-colors">ZeidexLink — روابط ومنيو QR</a></li>
+            <li><a href="https://mithqal.zeidexsoft.com/" target="_blank" rel="noopener" class="hover:text-techCyan transition-colors">مثقال — المحاسبة السحابية</a></li>
           </ul>
         </div>
 
@@ -548,5 +549,6 @@
       showToast('تم تحديث مفتاح التجربة للباقة المختارة', 'تحديث المفتاح');
     });
   </script>
+  <script src="/fx/site-fx.js" defer></script>
 </body>
 </html>

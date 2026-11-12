@@ -1,0 +1,2426 @@
+/* ============================================================================
+   ZeidexSoft — Interface & Ambient Motion Layer
+   Shared by the seven section pages (index, bots, programs, templates, blog,
+   trial, about). One file owns: the animated background stage, the page shell
+   rhythm, navigation state, entrance choreography, control feedback and the
+   mobile action bar.
+
+   Rules this file obeys:
+   - Only `transform` and `opacity` animate (no layout thrash).
+   - Every effect has a `prefers-reduced-motion` fallback at the bottom.
+   - No rule here hides content permanently: the reveal fallback always shows.
+   ========================================================================== */
+
+:root {
+  --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --fx-ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --fx-cyan: #06b6d4;
+  --fx-cyan-soft: #22d3ee;
+  --fx-blue: #3b82f6;
+  --fx-violet: #8b5cf6;
+  --fx-ink: #060913;
+  --fx-surface: #0d1527;
+  --fx-hairline: rgba(148, 163, 184, 0.14);
+  --fx-header-h: 64px;
+  --fx-top-offset: 0px;
+  --fx-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --fx-sans: 'Cairo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fx-text-secondary: #94a3b8;
+  --fx-band-y: clamp(2.75rem, 4.4vw, 4.5rem);
+}
+
+/* The static 32px grid baked into <body class="tech-grid-bg"> fights the
+   animated grid; the stage owns the texture now. A single soft field keeps
+   the page from reading flat while the script boots. */
+body.tech-grid-bg {
+  background-image: radial-gradient(circle at 50% -10%, rgba(59, 130, 246, 0.09) 0%, transparent 62%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+/* ------------------------------------------------------------------------ *
+ * 1. Ambient stage
+ * ------------------------------------------------------------------------ */
+#fx-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--fx-ink);
+  transform: translateZ(0);
+}
+
+.fx-layer {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  transform: translate3d(0, var(--fx-scroll, 0px), 0);
+}
+
+/* Two slow light fields. Radial gradients, never filters: no blur pass. */
+.fx-aurora {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.fx-aurora--a {
+  width: 130vmax;
+  height: 130vmax;
+  top: -78vmax;
+  left: 50%;
+  margin-left: -65vmax;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(34, 211, 238, 0.17) 0%,
+    rgba(59, 130, 246, 0.11) 26%,
+    rgba(139, 92, 246, 0.05) 48%,
+    transparent 67%
+  );
+  animation: fx-aurora-a 46s var(--fx-ease) infinite alternate;
+}
+
+.fx-aurora--b {
+  width: 110vmax;
+  height: 110vmax;
+  bottom: -62vmax;
+  right: -32vmax;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(59, 130, 246, 0.15) 0%,
+    rgba(139, 92, 246, 0.09) 32%,
+    transparent 66%
+  );
+  animation: fx-aurora-b 58s var(--fx-ease) infinite alternate;
+}
+
+@keyframes fx-aurora-a {
+  from { transform: translate3d(-2%, 0, 0) scale(1); }
+  to   { transform: translate3d(2%, 3.5%, 0) scale(1.08); }
+}
+
+@keyframes fx-aurora-b {
+  from { transform: translate3d(0, 0, 0) scale(1.04); }
+  to   { transform: translate3d(-4%, -3%, 0) scale(0.94); }
+}
+
+/* Dot matrix: the structural texture. Masked so it fades toward the edges. */
+.fx-dots {
+  position: absolute;
+  inset: -12%;
+  background-image: radial-gradient(rgba(148, 163, 184, 0.22) 1px, transparent 1.4px);
+  background-size: 26px 26px;
+  opacity: 0.5;
+  -webkit-mask-image: radial-gradient(ellipse 66% 58% at 50% 26%, #000 0%, rgba(0, 0, 0, 0.55) 46%, transparent 78%);
+  mask-image: radial-gradient(ellipse 66% 58% at 50% 26%, #000 0%, rgba(0, 0, 0, 0.55) 46%, transparent 78%);
+  animation: fx-dots-drift 64s linear infinite;
+  will-change: transform;
+}
+
+@keyframes fx-dots-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(26px, 26px, 0); }
+}
+
+/* Radar sweep: one rotating conic wedge inside a mask ring. It gives the stage
+   a slow, legible "system is scanning" beat without a second animation loop —
+   the whole thing is a single composited rotation. */
+.fx-sweep {
+  position: absolute;
+  top: -46vmax;
+  left: 50%;
+  width: 132vmax;
+  height: 132vmax;
+  margin-left: -66vmax;
+  background: conic-gradient(
+    from 200deg,
+    transparent 0deg,
+    rgba(34, 211, 238, 0) 28deg,
+    rgba(34, 211, 238, 0.075) 46deg,
+    rgba(139, 92, 246, 0.045) 60deg,
+    transparent 86deg
+  );
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 28%, #000 46%, rgba(0, 0, 0, 0.3) 62%, transparent 74%);
+  mask-image: radial-gradient(circle at 50% 50%, transparent 28%, #000 46%, rgba(0, 0, 0, 0.3) 62%, transparent 74%);
+  animation: fx-sweep-spin 44s linear infinite;
+  will-change: transform;
+  opacity: 0.8;
+}
+
+@keyframes fx-sweep-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* The signature: a receding perspective floor. The grid lines are a repeating
+   background; the motion is one translate along the rotated plane, so it stays
+   on the compositor (no background-position repaint). */
+.fx-floor {
+  position: absolute;
+  left: -40%;
+  right: -40%;
+  bottom: 0;
+  height: 170vh;
+  background-image:
+    linear-gradient(to right, rgba(34, 211, 238, 0.34) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(34, 211, 238, 0.26) 1px, transparent 1px);
+  background-size: 46px 46px;
+  transform-origin: 50% 100%;
+  transform: perspective(1100px) rotateX(60deg) translate3d(0, 0, 0);
+  animation: fx-floor-roll 9s linear infinite;
+  -webkit-mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.72) 30%, rgba(0, 0, 0, 0.22) 62%, transparent 86%);
+  mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.72) 30%, rgba(0, 0, 0, 0.22) 62%, transparent 86%);
+  opacity: 0.55;
+  will-change: transform;
+}
+
+/* One tile of travel per loop: the restart is invisible because the pattern
+   repeats every 46px, which is exactly the distance covered. */
+@keyframes fx-floor-roll {
+  from { transform: perspective(1100px) rotateX(60deg) translate3d(0, -46px, 0); }
+  to   { transform: perspective(1100px) rotateX(60deg) translate3d(0, 0, 0); }
+}
+
+/* Where the floor meets the dark: a soft band with one lit seam. */
+.fx-horizon {
+  position: absolute;
+  left: 50%;
+  bottom: 34vh;
+  width: min(1600px, 130vw);
+  height: 200px;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse 48% 52% at 50% 100%,
+    rgba(34, 211, 238, 0.14),
+    rgba(59, 130, 246, 0.06) 44%,
+    transparent 74%
+  );
+  opacity: 0.85;
+}
+
+.fx-horizon::after {
+  content: '';
+  position: absolute;
+  inset-inline: 14%;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(34, 211, 238, 0.3) 18%,
+    rgba(165, 243, 252, 0.42) 50%,
+    rgba(34, 211, 238, 0.3) 82%,
+    transparent
+  );
+  box-shadow: 0 0 26px 1px rgba(34, 211, 238, 0.18);
+}
+
+/* Pointer parallax wrapper: the aurora set leans a few pixels away from the
+   cursor. Transform only, and it is a no-op on touch devices (vars stay 0). */
+.fx-drift {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(calc(var(--fx-px, 0) * -14px), calc(var(--fx-py, 0) * -10px), 0);
+  transition: transform 700ms var(--fx-ease);
+  will-change: transform;
+}
+
+/* Canvas motes injected by the script. */
+#fx-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+}
+
+/* Film grain kills gradient banding on wide screens. */
+.fx-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+}
+
+/* Focus the eye toward the top of the page. */
+.fx-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 96% 72% at 50% 16%, transparent 40%, rgba(3, 7, 18, 0.55) 100%);
+}
+
+/* Cursor-following ambient light (fine pointers only). */
+#fx-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 560px;
+  height: 560px;
+  margin: -280px 0 0 -280px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(34, 211, 238, 0.09),
+    rgba(59, 130, 246, 0.045) 44%,
+    transparent 68%
+  );
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 600ms ease;
+  will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #fx-cursor.is-on { opacity: 1; }
+}
+
+/* ------------------------------------------------------------------------ *
+ * 2. Page shell — header, navigation, rhythm
+ * ------------------------------------------------------------------------ */
+/* One header treatment for all seven pages: the inner pages used a different
+   surface than the home page, which made navigation feel like another site. */
+header {
+  transition: background-color 260ms ease, border-color 260ms ease, box-shadow 260ms ease;
+}
+
+header.fx-scrolled {
+  background-color: rgba(7, 12, 24, 0.94) !important;
+  -webkit-backdrop-filter: saturate(150%) blur(14px);
+  backdrop-filter: saturate(150%) blur(14px);
+  border-color: rgba(30, 41, 59, 0.9) !important;
+  box-shadow: 0 18px 40px -34px rgba(2, 6, 23, 0.95);
+}
+
+/* Navigation state is owned by the script (pathname → aria-current), so the
+   alias routes (/shop, /program, /links, /pricing) light up correctly. */
+nav.fx-nav a,
+#mobileMenu.fx-nav a {
+  transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease;
+}
+
+nav.fx-nav a[aria-current='page'] {
+  position: relative;
+  color: var(--fx-cyan-soft) !important;
+  font-weight: 800;
+}
+
+nav.fx-nav a[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: -2px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--fx-cyan-soft), var(--fx-blue));
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.45);
+}
+
+nav.fx-nav a:not([aria-current='page']):hover {
+  color: #fff;
+}
+
+#mobileMenu.fx-nav a[aria-current='page'] {
+  background-color: rgba(6, 182, 212, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(6, 182, 212, 0.22);
+}
+
+#mobileMenu.fx-nav a:not([aria-current='page']) {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+/* The seven desktop links get tight on 1024–1280px; let the row scroll inside
+   its own track instead of crushing the CTAs or wrapping the Arabic labels. */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  nav.fx-nav {
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 0.85rem;
+    font-size: 0.8rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-inline: 2px;
+  }
+
+  nav.fx-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  nav.fx-nav a {
+    white-space: nowrap;
+  }
+}
+
+/* Anchored section targets must clear the sticky header. */
+section[id],
+div[id] {
+  scroll-margin-top: calc(var(--fx-header-h) + 18px);
+}
+
+/* First band under the header: one light source instead of a hard border. */
+.fx-page-hero {
+  position: relative;
+  isolation: isolate;
+  padding-top: clamp(1.75rem, 3.4vw, 2.75rem) !important;
+  padding-bottom: clamp(1.5rem, 3vw, 2.25rem) !important;
+  border-bottom-color: transparent !important;
+}
+
+.fx-page-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 260px;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(ellipse 58% 100% at 50% 0%, rgba(34, 211, 238, 0.1), transparent 72%);
+}
+
+/* The band used a flat 1px rule; a light seam reads as depth, not as a table. */
+.fx-page-hero::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.32) 22%, rgba(59, 130, 246, 0.32) 78%, transparent);
+}
+
+.fx-page-hero h1 {
+  font-size: clamp(1.5rem, 1.12rem + 1.5vw, 2.2rem);
+  line-height: 1.25;
+}
+
+.fx-on h1,
+.fx-on h2,
+.fx-on h3 {
+  text-wrap: balance;
+}
+
+.fx-on p {
+  text-wrap: pretty;
+}
+
+/* ------------------------------------------------------------------------ *
+ * 3. Entrance choreography
+ * ------------------------------------------------------------------------ */
+/* The page's own CSS hides [data-reveal] elements before the script runs. If
+   the layer never boots (no JS, blocked script), show them instead of leaving
+   whole sections blank. */
+html:not(.fx-on) [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+[data-fx-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  transition:
+    opacity 620ms var(--fx-ease-expo),
+    transform 760ms var(--fx-ease-expo);
+  transition-delay: calc(var(--fx-i, 0) * 70ms);
+  will-change: transform, opacity;
+}
+
+[data-fx-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero word entrance */
+.fx-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.42em);
+  animation: fx-word-in 820ms var(--fx-ease-expo) forwards;
+  animation-delay: calc(var(--i, 0) * 58ms + 100ms);
+}
+
+@keyframes fx-word-in {
+  to { opacity: 1; transform: none; }
+}
+
+/* Blinking terminal caret */
+.fx-caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-inline-start: 0.18em;
+  vertical-align: -0.2em;
+  background: rgba(34, 211, 238, 0.85);
+  animation: fx-caret-blink 1.1s steps(1) infinite;
+}
+
+@keyframes fx-caret-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* ------------------------------------------------------------------------ *
+ * 4. Controls and surfaces
+ * ------------------------------------------------------------------------ */
+.bento-card {
+  transition:
+    border-color 220ms ease,
+    background-color 220ms ease,
+    box-shadow 260ms ease,
+    transform 260ms var(--fx-ease);
+}
+
+.bento-card:hover {
+  border-color: rgba(34, 211, 238, 0.24);
+  box-shadow:
+    inset 0 0 0 1px rgba(148, 163, 184, 0.04),
+    0 22px 48px -38px rgba(6, 182, 212, 0.6);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.fx-on .bento-card:hover {
+    transform: translateY(-3px);
+  }
+}
+
+/* Light sweep across action buttons */
+.btn-magnetic {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-magnetic::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.16) 50%, transparent 68%);
+  transform: translateX(-150%);
+  transition: transform 720ms var(--fx-ease-expo);
+  pointer-events: none;
+}
+
+.btn-magnetic:hover::after {
+  transform: translateX(150%);
+}
+
+.btn-magnetic:active {
+  transform: scale(0.975);
+}
+
+/* Visible focus everywhere, in the brand's own colour. */
+:where(a, button, [tabindex], summary, input, select, textarea):focus-visible {
+  outline: 2px solid var(--fx-cyan-soft);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: rgba(6, 182, 212, 0.28);
+  color: #a5f3fc;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #060913; }
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+
+/* Images never overflow their card on narrow screens. */
+section img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ------------------------------------------------------------------------ *
+ * 5. Scroll progress, back to top, mobile action bar
+ * ------------------------------------------------------------------------ */
+#fx-progress {
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  height: 2px;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, #22d3ee, #3b82f6);
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.45);
+  z-index: 60;
+  pointer-events: none;
+}
+
+#fx-top {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #0d1527;
+  border: 1px solid rgba(59, 130, 246, 0.28);
+  color: var(--fx-cyan-soft);
+  opacity: 0;
+  transform: translateY(14px);
+  pointer-events: none;
+  transition: opacity 240ms ease, transform 240ms var(--fx-ease), background-color 180ms ease;
+  z-index: 45;
+}
+
+#fx-top.is-on {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+#fx-top:hover {
+  background: #12203a;
+}
+
+/* Mobile action bar: appears once the hero CTA row is out of view, so it never
+   competes with the primary action. Hidden on desktop. */
+#fx-mobile-cta {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 44;
+  display: none;
+  gap: 8px;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+  background: rgba(7, 12, 24, 0.94);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+  border-top: 1px solid rgba(30, 41, 59, 0.9);
+  transform: translateY(110%);
+  transition: transform 320ms var(--fx-ease-expo);
+}
+
+#fx-mobile-cta.is-on {
+  transform: none;
+}
+
+#fx-mobile-cta a {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 44px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+#fx-mobile-cta .fx-cta-solid {
+  background: linear-gradient(135deg, #2563eb, #0891b2);
+  color: #fff;
+  box-shadow: 0 10px 26px -16px rgba(34, 211, 238, 0.9);
+}
+
+#fx-mobile-cta .fx-cta-ghost {
+  background: rgba(30, 41, 59, 0.7);
+  color: #e2e8f0;
+  border: 1px solid rgba(71, 85, 105, 0.8);
+}
+
+@media (max-width: 1023px) {
+  #fx-mobile-cta { display: flex; }
+
+  /* Keep the footer clear of the bar, and lift the back-to-top button above it. */
+  body.fx-has-mobile-cta {
+    padding-bottom: 68px !important;
+  }
+
+  #fx-top {
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ------------------------------------------------------------------------ *
+ * 6. Interface normalisation
+ *    The seven pages were written at different times, so the same object
+ *    (a footer, a card title, a section heading) had a different size and
+ *    surface on each page. These rules make one object look the same
+ *    everywhere. Specificity is deliberately higher than Tailwind's utilities:
+ *    the CDN injects its sheet after this file, so classes alone would lose.
+ * ------------------------------------------------------------------------ */
+
+/* 6.1 Vertical rhythm: one gap between bands, on every page. */
+html.fx-on section.fx-band {
+  padding-block: var(--fx-band-y);
+}
+
+/* The hero band already ends with its own seam and bottom padding; a full band
+   gap on top of that leaves a dead screen between the title and the content. */
+html.fx-on .fx-page-hero + .fx-band {
+  padding-top: clamp(1.5rem, 2.4vw, 2.25rem);
+}
+
+/* 6.1b A horizontally scrollable chip row is a legitimate pattern on a phone,
+   but a hard cut reads as a bug. Fade the trailing edge only (the rows are RTL,
+   so the trailing edge is on the left). */
+@media (max-width: 639px) {
+  html.fx-on #filterTabsContainer {
+    -webkit-mask-image: linear-gradient(to left, #000 0, #000 84%, transparent 100%);
+    mask-image: linear-gradient(to left, #000 0, #000 84%, transparent 100%);
+    padding-inline-end: 6px;
+  }
+}
+
+/* 6.2 Section headings: one scale for the whole site. */
+html.fx-on .fx-h2 {
+  font-size: clamp(1.35rem, 1.15rem + 0.9vw, 1.9rem);
+  font-weight: 900;
+  line-height: 1.3;
+  letter-spacing: 0;
+  color: #fff;
+}
+
+/* 6.3 Card titles: the catalogues used 14px, the home page 20px, templates
+   18px. One size, one leading, one weight. */
+html.fx-on .bento-card h3 {
+  font-size: clamp(0.95rem, 0.9rem + 0.18vw, 1.08rem);
+  line-height: 1.45;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+/* 6.4 Footer: the home page shipped a 16px footer on #070c18, the six inner
+   pages a 12px mono footer on glass. One surface, one type scale, one seam. */
+html.fx-on footer {
+  background: #070c18 !important;
+  border-top: 1px solid rgba(30, 41, 59, 0.85) !important;
+  padding-top: clamp(2.5rem, 4vw, 3.5rem);
+  padding-bottom: clamp(2rem, 3vw, 2.75rem);
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+html.fx-on footer > div > div:first-child {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+/* Column titles: no letter-spacing or uppercase here — the labels are Arabic
+   and tracking breaks the joined script. */
+html.fx-on footer h3 {
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1.6;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #f1f5f9;
+  margin-bottom: 0.35rem;
+}
+
+html.fx-on footer p,
+html.fx-on footer li,
+html.fx-on footer a {
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--fx-text-secondary);
+}
+
+html.fx-on footer a:hover {
+  color: var(--fx-cyan-soft);
+}
+
+/* The brand lockup stays Latin + mono on every page. */
+html.fx-on footer .fx-brand-word {
+  font-family: var(--fx-mono);
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+/* 6.5 Page hero: one entry rhythm for the six inner pages. The h1 was already
+   uniform in size; the supporting line and the pill were not. */
+html.fx-on .fx-page-hero h1 {
+  font-size: clamp(1.6rem, 1.15rem + 1.9vw, 2.55rem);
+  line-height: 1.24;
+  letter-spacing: 0;
+}
+
+html.fx-on .fx-page-hero > div > div p,
+html.fx-on .fx-page-hero p {
+  font-size: clamp(0.8rem, 0.76rem + 0.24vw, 0.95rem);
+  line-height: 1.75;
+  color: var(--fx-text-secondary);
+}
+
+html.fx-on .fx-page-hero .fx-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  letter-spacing: 0;
+}
+
+/* 6.6 Navigation feedback: a hovered link gets the same seam the current page
+   has, drawn from the centre. It replaces the browser default with the
+   brand's own motion, and it never moves the layout. */
+nav.fx-nav a:not([aria-current='page'])::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: -2px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--fx-cyan-soft), var(--fx-blue));
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
+  transition: transform 260ms var(--fx-ease-expo);
+  opacity: 0.6;
+}
+
+nav.fx-nav a:not([aria-current='page']):hover::after {
+  transform: scaleX(1);
+}
+
+/* Every nav link needs a positioning context for that seam. */
+nav.fx-nav a {
+  position: relative;
+}
+
+/* 6.7 One press and one focus feel for every control in the shell. */
+html.fx-on a:active,
+html.fx-on button:active {
+  transform: translateY(1px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.fx-on .techfy-glass-hover:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* ------------------------------------------------------------------------ *
+ * 6.8 Colour system
+ *    Before this, one screen carried five hues: a blue-chip, cyan text, an
+ *    amber price, an emerald dot and an indigo label. Each page already had a
+ *    dominant hue of its own (bots cyan, programs emerald, templates violet),
+ *    so the fix is to promote that hue to a single page accent that governs
+ *    every interactive state — and to stop the secondary hues from competing.
+ * ------------------------------------------------------------------------ */
+html.fx-on {
+  --fx-accent: #22d3ee;
+  --fx-accent-soft: #67e8f9;
+  --fx-accent-deep: #0e7490;
+  --fx-accent-rgb: 34, 211, 238;
+  --fx-surface-1: #0d1527;
+  --fx-surface-2: #12203a;
+}
+
+html.fx-on[data-fx-accent='emerald'] {
+  --fx-accent: #10b981;
+  --fx-accent-soft: #34d399;
+  --fx-accent-deep: #047857;
+  --fx-accent-rgb: 16, 185, 129;
+}
+
+html.fx-on[data-fx-accent='violet'] {
+  --fx-accent: #8b5cf6;
+  --fx-accent-soft: #a78bfa;
+  --fx-accent-deep: #6d28d9;
+  --fx-accent-rgb: 139, 92, 246;
+}
+
+html.fx-on[data-fx-accent='blue'] {
+  --fx-accent: #3b82f6;
+  --fx-accent-soft: #60a5fa;
+  --fx-accent-deep: #1d4ed8;
+  --fx-accent-rgb: 59, 130, 246;
+}
+
+html.fx-on[data-fx-accent='amber'] {
+  --fx-accent: #f59e0b;
+  --fx-accent-soft: #fbbf24;
+  --fx-accent-deep: #b45309;
+  --fx-accent-rgb: 245, 158, 11;
+}
+
+/* Indigo and purple carried no meaning of their own (amber = price, emerald =
+   free/healthy, blue = primary action). They were a fourth and fifth hue on
+   the same screen, so they resolve to the page accent. Exact class tokens,
+   because a substring match would switch hover variants on permanently. */
+html.fx-on :is([class~='text-indigo-300'], [class~='text-indigo-400'], [class~='text-purple-400']),
+html.fx-on .group:hover [class~='group-hover:text-purple-400'] {
+  color: var(--fx-accent-soft);
+}
+
+html.fx-on :is([class~='bg-indigo-400'], [class~='bg-purple-400']) {
+  background-color: var(--fx-accent);
+}
+
+html.fx-on :is([class~='bg-indigo-600'], [class~='bg-purple-600']),
+html.fx-on :is([class~='hover:bg-indigo-500'], [class~='hover:bg-purple-500']):hover {
+  background-color: var(--fx-accent-deep);
+}
+
+html.fx-on :is([class~='bg-indigo-500/10'], [class~='bg-purple-500/10']) {
+  background-color: rgba(var(--fx-accent-rgb), 0.1);
+}
+
+html.fx-on :is([class~='bg-purple-500/20'], [class~='bg-purple-600/20']) {
+  background-color: rgba(var(--fx-accent-rgb), 0.2);
+}
+
+html.fx-on [class~='border-purple-500/20'] {
+  border-color: rgba(var(--fx-accent-rgb), 0.2);
+}
+
+html.fx-on :is([class~='hover:border-purple-500/40'], [class~='hover:border-cyan-500/40']):hover {
+  border-color: rgba(var(--fx-accent-rgb), 0.4);
+}
+
+html.fx-on [class~='from-cyan-500/10'] {
+  --tw-gradient-from: rgba(var(--fx-accent-rgb), 0.1) var(--tw-gradient-from-position);
+}
+
+html.fx-on [class~='to-indigo-500/10'] {
+  --tw-gradient-to: rgba(var(--fx-accent-rgb), 0.04) var(--tw-gradient-to-position);
+}
+
+/* One surface for every card and panel. Three different shades for the same
+   object (card #0d1527, glass #0b1221, footer #070c18) read as three systems. */
+html.fx-on .bento-card,
+html.fx-on .techfy-glass {
+  background-color: var(--fx-surface-1);
+}
+
+html.fx-on .bento-card:hover,
+html.fx-on .techfy-glass-hover:hover {
+  background-color: var(--fx-surface-2);
+}
+
+/* A card separates from the ground by tone, not by a lit edge. */
+html.fx-on .bento-card {
+  border-color: rgba(148, 163, 184, 0.1);
+}
+
+html.fx-on .bento-card:hover {
+  border-color: rgba(var(--fx-accent-rgb), 0.28);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 24px 48px -36px rgba(var(--fx-accent-rgb), 0.55);
+}
+
+/* Interactive state, in the page's own accent. */
+html.fx-on nav.fx-nav a[aria-current='page'] {
+  color: var(--fx-accent-soft) !important;
+}
+
+html.fx-on nav.fx-nav a[aria-current='page']::after,
+html.fx-on nav.fx-nav a:not([aria-current='page'])::after {
+  background: linear-gradient(90deg, var(--fx-accent-soft), var(--fx-accent-deep));
+}
+
+html.fx-on nav.fx-nav a[aria-current='page']::after {
+  box-shadow: 0 0 12px rgba(var(--fx-accent-rgb), 0.45);
+}
+
+html.fx-on #mobileMenu.fx-nav a[aria-current='page'] {
+  background-color: rgba(var(--fx-accent-rgb), 0.1);
+  box-shadow: inset 0 0 0 1px rgba(var(--fx-accent-rgb), 0.22);
+}
+
+html.fx-on :where(a, button, [tabindex], summary, input, select, textarea):focus-visible {
+  outline-color: var(--fx-accent-soft);
+}
+
+html.fx-on ::selection {
+  background: rgba(var(--fx-accent-rgb), 0.3);
+  color: var(--fx-accent-soft);
+}
+
+/* Browser-drawn surfaces follow the page accent too: Firefox scrollbar,
+   text caret, native checkboxes/radios/range. */
+html.fx-on {
+  scrollbar-color: #1e293b #060913;
+  caret-color: var(--fx-accent-soft);
+  accent-color: var(--fx-accent-deep);
+}
+
+/* Figures in mono labels (prices, sizes, latency) keep their column width
+   when the value changes. */
+html.fx-on .font-mono {
+  font-variant-numeric: tabular-nums;
+}
+
+/* A dot that radiates forever claims "live" where nothing is live. The steady
+   dot stays; the one real probe keeps its own pulse. */
+html.fx-on .animate-ping {
+  animation: none;
+}
+
+html.fx-on #fx-progress {
+  background: linear-gradient(90deg, var(--fx-accent-soft), var(--fx-accent-deep));
+  box-shadow: 0 0 12px rgba(var(--fx-accent-rgb), 0.45);
+}
+
+html.fx-on #fx-top {
+  border-color: rgba(var(--fx-accent-rgb), 0.3);
+  color: var(--fx-accent-soft);
+}
+
+html.fx-on #fx-mobile-cta .fx-cta-solid {
+  background: var(--fx-accent-deep);
+  box-shadow: none;
+}
+
+/* Two hues on one control: the primary CTA ran blue → indigo → cyan across
+   130 pixels. One hue, shaded top to bottom, keeps the depth without the
+   rainbow. */
+html.fx-on a[class*='bg-gradient-to'],
+html.fx-on button[class*='bg-gradient-to'] {
+  background-image: linear-gradient(180deg, #3b82f6, #1d4ed8);
+}
+
+/* Glows on controls are a 2010 tell. What floats gets a shadow; a button
+   sitting on the page does not need a light source. */
+html.fx-on a[class*='shadow-glow'],
+html.fx-on button[class*='shadow-glow'] {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 12px 24px -18px rgba(2, 6, 23, 0.9);
+}
+
+/* ------------------------------------------------------------------------ *
+ * 6.9 Control motion — every button on every page
+ *    One class, added by the script to each real control. Four moves, all on
+ *    transform/opacity: a pointer-tracked light, a sheen sweep, a press, and a
+ *    hover response in the page accent.
+ * ------------------------------------------------------------------------ */
+.fx-btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 170ms var(--fx-ease),
+    border-color 220ms ease,
+    background-color 220ms ease,
+    color 160ms ease,
+    box-shadow 240ms ease;
+}
+
+/* The light follows the cursor inside the control. */
+.fx-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    130px circle at var(--btn-x, 50%) var(--btn-y, 50%),
+    rgba(255, 255, 255, 0.18),
+    transparent 68%
+  );
+  transition: opacity 260ms ease;
+}
+
+/* The sheen crosses once per hover, then resets out of view. */
+.fx-btn::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.15) 50%, transparent 68%);
+  transform: translateX(-160%);
+  transition: transform 760ms var(--fx-ease-expo);
+}
+
+.fx-btn:hover::after,
+.fx-btn:focus-visible::after {
+  transform: translateX(160%);
+}
+
+.fx-btn:active {
+  transform: scale(0.97);
+}
+
+/* Pointer-only: on a phone a hover state sticks after the tap. */
+@media (hover: hover) and (pointer: fine) {
+  .fx-btn:hover::before {
+    opacity: 1;
+  }
+
+  .fx-btn:hover {
+    border-color: rgba(var(--fx-accent-rgb), 0.5);
+    transform: translateY(-1px);
+  }
+
+  .fx-btn:active {
+    transform: translateY(0) scale(0.97);
+  }
+
+  .fx-btn:hover svg {
+    transform: scale(1.07);
+  }
+}
+
+.fx-btn svg {
+  transition: transform 220ms var(--fx-ease);
+}
+
+/* Tap ripple: ink expands from the press point, then fades. */
+.fx-ripple {
+  position: absolute;
+  z-index: -1;
+  width: var(--fx-ripple-size);
+  height: var(--fx-ripple-size);
+  margin: calc(var(--fx-ripple-size) / -2) 0 0 calc(var(--fx-ripple-size) / -2);
+  border-radius: 50%;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.28);
+  transform: scale(0);
+  animation: fx-ripple 560ms var(--fx-ease) forwards;
+}
+
+@keyframes fx-ripple {
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* Dialogs arrive instead of appearing: the scrim fades, the panel rises from
+   slightly below at reduced scale. Runs each time `.hidden` comes off. */
+.app-modal:not(.hidden) {
+  animation: fx-scrim-in 200ms ease-out both;
+}
+
+.app-modal:not(.hidden) > * {
+  animation: fx-dialog-in 320ms var(--fx-ease-expo) both;
+}
+
+@keyframes fx-scrim-in {
+  from { opacity: 0; }
+}
+
+@keyframes fx-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+}
+
+/* Page-to-page: the seven pages share one header, so a short cross-fade reads
+   as one site instead of seven loads. Browsers without support just navigate. */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 180ms;
+  animation-timing-function: var(--fx-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-modal:not(.hidden),
+  .app-modal:not(.hidden) > * {
+    animation: none;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Inline action links: the underline draws in, the arrow leans. No fill. */
+.fx-link {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 200ms ease, color 180ms ease;
+}
+
+.fx-link svg {
+  transition: transform 220ms var(--fx-ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .fx-link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .fx-link:hover svg {
+    transform: translateX(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-btn,
+  .fx-btn::after,
+  .fx-btn svg {
+    transition: none !important;
+  }
+
+  .fx-btn::after {
+    display: none;
+  }
+
+  .fx-btn:active,
+  .fx-btn:hover {
+    transform: none;
+  }
+
+  .fx-btn::before {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------------ *
+ * 6.10 Program catalogue — one tile, one rhythm
+ *    The twenty cards were hand-written at different times: three column
+ *    counts, three paddings, and a thumbnail-less body that pushed the rows
+ *    out of alignment. One grid, one aspect ratio, one body rhythm. The
+ *    artwork lives in public/fx/apps/*.svg and is generated from
+ *    data/programs.json, so a new release never means a new layout.
+ * ------------------------------------------------------------------------ */
+html.fx-on .prog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 282px), 1fr));
+  gap: clamp(0.85rem, 1.3vw, 1.1rem);
+  align-items: stretch;
+}
+
+html.fx-on .prog-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0) 42%),
+    var(--fx-surface-1);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  box-shadow: 0 18px 36px -30px rgba(2, 6, 16, 0.9);
+  transition:
+    transform 420ms var(--fx-ease-expo),
+    border-color 280ms ease,
+    box-shadow 420ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.fx-on .prog-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(var(--fx-accent-rgb), 0.32);
+    box-shadow: 0 26px 48px -32px rgba(var(--fx-accent-rgb), 0.45);
+  }
+}
+
+/* The filter toggles Tailwind's .hidden; the flex display above would win. */
+html.fx-on .prog-card.hidden {
+  display: none !important;
+}
+
+/* 6.10a Artwork: one ratio for all twenty tiles. */
+html.fx-on .prog-thumb {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #05080f;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+html.fx-on .prog-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.005);
+  transition: transform 900ms var(--fx-ease-expo);
+}
+
+html.fx-on .prog-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.1) 50%, transparent 62%);
+  transform: translateX(-130%);
+  transition: transform 900ms var(--fx-ease-expo);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.fx-on .prog-card:hover .prog-thumb img {
+    transform: scale(1.05);
+  }
+
+  html.fx-on .prog-card:hover .prog-thumb::after {
+    transform: translateX(130%);
+  }
+}
+
+/* 6.10b The mark: one seal on every build, in one place. */
+html.fx-on .prog-seal {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 22px;
+  padding-inline: 7px 9px;
+  border-radius: 999px;
+  background: rgba(6, 10, 20, 0.74);
+  border: 1px solid rgba(240, 198, 116, 0.34);
+  color: #f0c674;
+  font-family: var(--fx-sans);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  line-height: 1;
+  -webkit-backdrop-filter: blur(6px) saturate(140%);
+  backdrop-filter: blur(6px) saturate(140%);
+}
+
+html.fx-on .prog-seal svg {
+  width: 11px;
+  height: 11px;
+}
+
+html.fx-on .prog-seal b {
+  font-weight: 800;
+}
+
+html.fx-on .prog-ver {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  z-index: 2;
+  padding: 4px 7px;
+  border-radius: 7px;
+  background: rgba(6, 10, 20, 0.74);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  color: #cbd5e1;
+  font-family: var(--fx-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  line-height: 1;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+/* 6.10c Body: the same five rows on every card, so the grid reads as a table. */
+html.fx-on .prog-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+  padding: 12px 13px 11px;
+}
+
+html.fx-on .prog-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 20px;
+}
+
+html.fx-on .prog-badge {
+  max-width: 62%;
+  overflow: hidden;
+  padding: 3px 7px;
+  border-radius: 6px;
+  background: rgba(var(--fx-accent-rgb), 0.1);
+  border: 1px solid rgba(var(--fx-accent-rgb), 0.2);
+  color: var(--fx-accent-soft);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+html.fx-on .prog-dl {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  color: var(--fx-accent-soft);
+  font-family: var(--fx-mono);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+html.fx-on .prog-dl svg {
+  width: 11px;
+  height: 11px;
+  opacity: 0.85;
+}
+
+html.fx-on .prog-dl--direct {
+  color: #94a3b8;
+  font-family: var(--fx-sans);
+  font-size: 10px;
+}
+
+html.fx-on .prog-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: 2.9em;
+  color: #f8fafc;
+  font-size: 13.5px;
+  font-weight: 800;
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
+html.fx-on .prog-desc {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: 3.4em;
+  color: #94a3b8;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+html.fx-on .prog-feats {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+html.fx-on .prog-feats li {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+  color: #a9b7ca;
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+
+html.fx-on .prog-feats svg {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  margin-top: 2px;
+  color: var(--fx-accent);
+}
+
+html.fx-on .prog-feats span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 6.10d Actions: always the last row, always the same height. */
+html.fx-on .prog-actions {
+  display: flex;
+  gap: 7px;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid rgba(148, 163, 184, 0.09);
+}
+
+html.fx-on .prog-download {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 33px;
+  padding-inline: 8px;
+  border-radius: 9px;
+  background: linear-gradient(180deg, var(--fx-accent-soft), var(--fx-accent));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #04231a;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+html.fx-on .prog-download svg {
+  width: 13px;
+  height: 13px;
+}
+
+html.fx-on .prog-size {
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: rgba(3, 20, 15, 0.14);
+  font-family: var(--fx-mono);
+  font-size: 9px;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+html.fx-on .prog-more {
+  flex: none;
+  height: 33px;
+  padding-inline: 11px;
+  border-radius: 9px;
+  background: rgba(148, 163, 184, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  color: #cbd5e1;
+  font-size: 11px;
+  font-weight: 700;
+  transition: background-color 200ms ease, border-color 200ms ease, color 160ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.fx-on .prog-more:hover {
+    background: rgba(var(--fx-accent-rgb), 0.12);
+    border-color: rgba(var(--fx-accent-rgb), 0.4);
+    color: #fff;
+  }
+}
+
+/* 6.10e A phone should not carry a 640px artwork. */
+@media (max-width: 639px) {
+  html.fx-on .prog-thumb {
+    aspect-ratio: 16 / 9;
+  }
+
+  html.fx-on .prog-seal {
+    font-size: 8.5px;
+    letter-spacing: 1.3px;
+  }
+}
+
+/* ------------------------------------------------------------------------ *
+ * 6.11 Articles
+ *    Pages under /blog/ are generated by scripts/build-articles.mjs. These
+ *    rules are not gated on html.fx-on: an article must read correctly with
+ *    scripts off, and the Tailwind preflight strips list and heading styles,
+ *    so every element is styled explicitly.
+ * ------------------------------------------------------------------------ */
+.post {
+  --post-accent: var(--fx-accent-soft, #67e8f9);
+  --post-accent-rgb: var(--fx-accent-rgb, 34, 211, 238);
+  --post-line: rgba(148, 163, 184, 0.16);
+  width: min(100% - 2rem, 46rem);
+  margin-inline: auto;
+  padding-block: clamp(1.75rem, 4vw, 3.25rem) 1rem;
+  color: #cbd5e1;
+}
+
+.post-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--fx-text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  transition: color 180ms ease;
+}
+
+.post-back svg {
+  width: 1rem;
+  height: 1rem;
+  transform: scaleX(-1);
+  transition: transform 220ms var(--fx-ease);
+}
+
+.post-back:hover {
+  color: var(--post-accent);
+}
+
+.post-back:hover svg {
+  transform: scaleX(-1) translateX(-3px);
+}
+
+.post-head h1 {
+  margin-top: 1.1rem;
+  color: #f8fafc;
+  font-size: clamp(1.6rem, 1.1rem + 2.4vw, 2.5rem);
+  font-weight: 900;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+.post-lede {
+  margin-top: 0.9rem;
+  color: #a8b4c6;
+  font-size: 1.0625rem;
+  line-height: 1.85;
+  text-wrap: pretty;
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.1rem;
+  margin-top: 1.15rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--post-line);
+  color: var(--fx-text-secondary);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.post-meta span:first-child {
+  color: var(--post-accent);
+  font-weight: 700;
+}
+
+.post-toc {
+  margin-top: 1.5rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--post-line);
+  border-radius: 14px;
+  background: rgba(13, 21, 39, 0.72);
+}
+
+.post-toc p {
+  color: #f1f5f9;
+  font-size: 0.8125rem;
+  font-weight: 800;
+}
+
+.post-toc ol {
+  display: grid;
+  gap: 0.3rem 1.5rem;
+  margin-top: 0.6rem;
+  counter-reset: toc;
+}
+
+@media (min-width: 640px) {
+  .post-toc ol {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.post-toc li {
+  counter-increment: toc;
+  display: flex;
+  gap: 0.55rem;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.post-toc li::before {
+  content: counter(toc, decimal-leading-zero);
+  color: var(--fx-text-secondary);
+  font-family: var(--fx-mono);
+  font-size: 0.75rem;
+  line-height: 2;
+}
+
+.post-toc a:hover {
+  color: var(--post-accent);
+}
+
+.post-body {
+  margin-top: 1.75rem;
+  font-size: 1.0625rem;
+  line-height: 1.95;
+}
+
+.post-body > * + * {
+  margin-top: 1.15rem;
+}
+
+/* More room above a heading than below it: it belongs to what follows. */
+.post-body > h2 {
+  margin-top: 2.9rem;
+  color: #f8fafc;
+  font-size: clamp(1.3rem, 1.1rem + 0.9vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.45;
+  text-wrap: balance;
+  scroll-margin-top: calc(var(--fx-header-h) + 1.25rem);
+}
+
+.post-body > h3 {
+  margin-top: 2rem;
+  color: #e2e8f0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.5;
+  scroll-margin-top: calc(var(--fx-header-h) + 1.25rem);
+}
+
+.post-body > h2 + *,
+.post-body > h3 + * {
+  margin-top: 0.7rem;
+}
+
+.post-body strong {
+  color: #f1f5f9;
+  font-weight: 700;
+}
+
+.post-body a:not(.prog-download) {
+  color: var(--post-accent);
+  text-decoration: underline;
+  text-decoration-color: rgba(var(--post-accent-rgb), 0.4);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 180ms ease;
+}
+
+.post-body a:not(.prog-download):hover {
+  text-decoration-color: currentColor;
+}
+
+.post-body :not(pre) > code {
+  padding: 0.12em 0.4em;
+  border-radius: 6px;
+  background: rgba(148, 163, 184, 0.13);
+  color: #e2e8f0;
+  font-family: var(--fx-mono);
+  font-size: 0.86em;
+  unicode-bidi: isolate;
+}
+
+.post-body > ul,
+.post-body > ol,
+.post-callout ul {
+  padding-inline-start: 1.35rem;
+}
+
+.post-body > ul,
+.post-callout ul {
+  list-style: disc;
+}
+
+.post-body > ol {
+  list-style: decimal;
+}
+
+.post-body li + li {
+  margin-top: 0.45rem;
+}
+
+.post-body li::marker {
+  color: var(--post-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.post-body blockquote {
+  padding: 0.35rem 1.25rem;
+  color: #f1f5f9;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.85;
+  text-wrap: balance;
+}
+
+.post-body blockquote p::before {
+  content: '«';
+  color: var(--post-accent);
+}
+
+.post-body blockquote p::after {
+  content: '»';
+  color: var(--post-accent);
+}
+
+.post-body blockquote cite {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--fx-text-secondary);
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.post-body hr {
+  border: 0;
+  border-top: 1px solid var(--post-line);
+  margin-block: 2.25rem;
+}
+
+/* Tone is carried by a tinted ground and a matching title, not a side stripe. */
+.post-callout {
+  --tone: var(--post-accent-rgb);
+  padding: 1rem 1.15rem;
+  border: 1px solid rgba(var(--tone), 0.26);
+  border-radius: 14px;
+  background: rgba(var(--tone), 0.07);
+  font-size: 0.9875rem;
+  line-height: 1.85;
+}
+
+.post-callout--warn {
+  --tone: 245, 158, 11;
+}
+
+.post-callout--tip {
+  --tone: 16, 185, 129;
+}
+
+.post-callout-title {
+  margin-bottom: 0.4rem;
+  color: rgb(var(--tone));
+  font-weight: 800;
+}
+
+.post-code {
+  position: relative;
+  border: 1px solid var(--post-line);
+  border-radius: 14px;
+  background: #060a14;
+  overflow: hidden;
+}
+
+.post-code-lang {
+  display: block;
+  padding: 0.45rem 1rem;
+  border-bottom: 1px solid var(--post-line);
+  color: var(--fx-text-secondary);
+  font-family: var(--fx-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.post-code pre {
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  color: #dbe4f0;
+  font-family: var(--fx-mono);
+  font-size: 0.8125rem;
+  line-height: 1.75;
+  tab-size: 2;
+}
+
+.post-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  border-block: 1px solid var(--post-line);
+}
+
+.post-stats > div {
+  padding: 1rem 0.25rem;
+}
+
+.post-stats dt {
+  color: #f8fafc;
+  font-size: 1.9rem;
+  font-weight: 900;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.post-stats dd {
+  margin-top: 0.2rem;
+  color: var(--fx-text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.post-checklist li {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.post-checklist svg {
+  flex: none;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.55em;
+  color: #34d399;
+}
+
+/* A wide table scrolls inside its own box; the page never scrolls sideways. */
+.post-table {
+  overflow-x: auto;
+  border: 1px solid var(--post-line);
+  border-radius: 14px;
+}
+
+.post-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+
+.post-table caption {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--post-line);
+  color: var(--fx-text-secondary);
+  font-size: 0.8125rem;
+  text-align: start;
+}
+
+.post-table th,
+.post-table td {
+  padding: 0.6rem 1rem;
+  text-align: start;
+  vertical-align: top;
+}
+
+.post-table th {
+  color: #f1f5f9;
+  font-weight: 800;
+  white-space: nowrap;
+  background: rgba(148, 163, 184, 0.06);
+}
+
+.post-table tbody tr {
+  border-top: 1px solid var(--post-line);
+}
+
+.post-table tbody tr:hover {
+  background: rgba(var(--post-accent-rgb), 0.05);
+}
+
+.post-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--post-line);
+  border-radius: 14px;
+}
+
+.post-figure figcaption,
+.post-player figcaption,
+.post-hub figcaption {
+  margin-top: 0.6rem;
+  color: var(--fx-text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+}
+
+/* One player, one chapter list. The current chapter is marked by ground and
+   weight, so the state does not depend on colour alone. */
+.post-player video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--post-line);
+  border-radius: 14px;
+  background: #000;
+}
+
+.post-player-now {
+  margin-top: 0.7rem;
+  color: #f1f5f9;
+  font-size: 0.9375rem;
+  font-weight: 800;
+}
+
+.post-player ol {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: 0.35rem;
+  margin-top: 0.6rem;
+}
+
+.post-player li a {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: #cbd5e1;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.post-player li a svg {
+  flex: none;
+  width: 0.95rem;
+  height: 0.95rem;
+  color: var(--fx-text-secondary);
+  transition: color 180ms ease, transform 220ms var(--fx-ease);
+}
+
+.post-player li a:hover {
+  background: rgba(148, 163, 184, 0.08);
+  color: #f8fafc;
+}
+
+.post-player li a[aria-current='true'] {
+  border-color: rgba(var(--post-accent-rgb), 0.34);
+  background: rgba(var(--post-accent-rgb), 0.1);
+  color: #f8fafc;
+  font-weight: 800;
+}
+
+.post-player li a[aria-current='true'] svg,
+.post-player li a:hover svg {
+  color: var(--post-accent);
+}
+
+.post-player li a:active svg {
+  transform: scale(0.85);
+}
+
+.post-download {
+  border: 1px solid var(--post-line);
+  border-radius: 14px;
+  background: rgba(13, 21, 39, 0.72);
+}
+
+.post-download-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  padding: 0.95rem 1.15rem;
+}
+
+.post-download-row + .post-download-row {
+  border-top: 1px solid var(--post-line);
+}
+
+.post-download-label {
+  color: #f1f5f9;
+  font-size: 0.9375rem;
+  font-weight: 800;
+}
+
+.post-download-meta {
+  color: var(--fx-text-secondary);
+  font-family: var(--fx-mono);
+  font-size: 0.75rem;
+  text-align: start;
+}
+
+.post-hub ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.post-hub-center,
+.post-hub li {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--post-line);
+  border-radius: 12px;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.post-hub-center {
+  border-color: rgba(var(--post-accent-rgb), 0.34);
+  text-align: center;
+}
+
+.post-hub strong {
+  color: #f1f5f9;
+}
+
+.post-hub em {
+  color: var(--post-accent);
+  font-style: normal;
+}
+
+.post-foot {
+  margin-top: 3rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--post-line);
+}
+
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.post-tags li {
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--post-line);
+  border-radius: 999px;
+  color: var(--fx-text-secondary);
+  font-size: 0.75rem;
+}
+
+.post-siblings {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+
+@media (min-width: 640px) {
+  .post-siblings {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.post-siblings a {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--post-line);
+  border-radius: 14px;
+  transition: border-color 200ms ease, background-color 200ms ease;
+}
+
+.post-siblings a:hover {
+  border-color: rgba(var(--post-accent-rgb), 0.34);
+  background: rgba(var(--post-accent-rgb), 0.05);
+}
+
+.post-siblings span {
+  color: var(--fx-text-secondary);
+  font-size: 0.75rem;
+}
+
+.post-siblings strong {
+  color: #f1f5f9;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+/* ------------------------------------------------------------------------ *
+ * 6.12 Every tile, every page
+ *    Program, article, template and home tiles share one response: a light
+ *    that follows the pointer, a lift on hover, a press on tap. The bento
+ *    cards already had the light from the page CSS; this gives it to the
+ *    generated tiles and adds the artwork zoom and the press to both.
+ * ------------------------------------------------------------------------ */
+html.fx-on .prog-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    260px circle at var(--spot-x, 50%) var(--spot-y, 0%),
+    rgba(var(--fx-accent-rgb), 0.14),
+    transparent 70%
+  );
+  transition: opacity 320ms ease;
+}
+
+html.fx-on .prog-card:active,
+html.fx-on a.bento-card:active {
+  transform: scale(0.985);
+  transition-duration: 120ms;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.fx-on .prog-card:hover::before {
+    opacity: 1;
+  }
+
+  html.fx-on .bento-card img {
+    transition: transform 900ms var(--fx-ease-expo);
+  }
+
+  html.fx-on .bento-card:hover img {
+    transform: scale(1.04);
+  }
+}
+
+html.fx-on a.prog-thumb {
+  display: block;
+}
+
+/* Bot artwork is a square product mark, not a screenshot: it sits whole on the
+   dark ground instead of being cropped to 16:10. */
+html.fx-on .prog-thumb--icon {
+  aspect-ratio: 16 / 7;
+  background:
+    radial-gradient(120% 140% at 50% 0%, rgba(var(--fx-accent-rgb), 0.16), transparent 70%),
+    #05080f;
+}
+
+html.fx-on .prog-thumb--icon img {
+  width: auto;
+  height: 76%;
+  margin: 3.6% auto 0;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 22%;
+  box-shadow: 0 14px 28px -14px rgba(0, 0, 0, 0.8);
+}
+
+/* Four technical facts per bot, as one quiet row of label/value pairs. */
+html.fx-on .prog-specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 10px;
+  padding-block: 7px;
+  border-block: 1px solid rgba(148, 163, 184, 0.1);
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+
+html.fx-on .prog-specs li {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+  color: var(--fx-text-secondary);
+}
+
+html.fx-on .prog-specs b {
+  overflow: hidden;
+  color: #e2e8f0;
+  font-family: var(--fx-mono);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  unicode-bidi: plaintext;
+}
+
+/* Three tiles on the home page read as a row, not as a sparse catalogue. */
+html.fx-on .home-posts {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+
+/* Sister platforms: two wide links, one line of meaning each. */
+.site-links {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+}
+
+.site-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.15rem 1.25rem;
+}
+
+.site-link-mark {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 14px;
+  border: 1px solid rgba(var(--fx-accent-rgb, 34, 211, 238), 0.3);
+  background: rgba(var(--fx-accent-rgb, 34, 211, 238), 0.08);
+  color: var(--fx-accent-soft, #67e8f9);
+  transition: transform 420ms var(--fx-ease-expo);
+}
+
+.site-link-mark svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.site-link-body {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.site-link-name {
+  color: #f8fafc;
+  font-size: 1.0625rem;
+  font-weight: 800;
+}
+
+.site-link-desc {
+  color: #cbd5e1;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.site-link-host {
+  color: var(--fx-text-secondary);
+  font-family: var(--fx-mono);
+  font-size: 0.75rem;
+  text-align: start;
+}
+
+.site-link-go {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--fx-text-secondary);
+  transition: transform 320ms var(--fx-ease-expo), color 200ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .site-link:hover .site-link-mark {
+    transform: rotate(-6deg) scale(1.06);
+  }
+
+  .site-link:hover .site-link-go {
+    color: var(--fx-accent-soft, #67e8f9);
+    transform: translate(-3px, -3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.fx-on .prog-card:active,
+  html.fx-on a.bento-card:active,
+  html.fx-on .bento-card:hover img,
+  .site-link:hover .site-link-mark,
+  .site-link:hover .site-link-go {
+    transform: none;
+  }
+}
+
+/* Article cards reuse the program tile; the whole title is the link. */
+html.fx-on .post-card .prog-title a {
+  color: inherit;
+}
+
+/* The tile's secondary action is a <button> on the programs page and a link
+   on the templates page; a link needs its own centring. */
+html.fx-on a.prog-more {
+  display: inline-flex;
+  align-items: center;
+}
+
+html.fx-on .post-download .prog-download {
+  flex: none;
+  padding-inline: 16px;
+}
+
+html.fx-on .post-card .prog-desc {
+  -webkit-line-clamp: 3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-back svg,
+  .post-player li a svg {
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------------------ *
+ * 7. Small screens — merged from the former site-fx-polish.css
+ * ------------------------------------------------------------------------ */
+@media (max-width: 1023px) {
+  html.fx-on aside[aria-label='قنوات التواصل السريع'] {
+    transform: scale(0.82);
+    transform-origin: bottom left;
+    opacity: 0.95;
+  }
+
+  /* Lift floating controls only while the action bar is actually on screen. */
+  html.fx-on body:has(#fx-mobile-cta.is-on) aside[aria-label='قنوات التواصل السريع'] {
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  html.fx-on body:has(#fx-mobile-cta.is-on) #toastNotification {
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  html.fx-on body:has(#fx-mobile-cta.is-on) #fx-top {
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* Status pills wrap instead of clipping at the screen edge. */
+@media (max-width: 640px) {
+  .fx-pill {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    line-height: 1.6;
+    row-gap: 2px;
+    padding-inline: 10px;
+    text-align: center;
+  }
+
+  .fx-pill span,
+  .fx-pill .truncate {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    max-width: 100%;
+  }
+
+  /* The pulsing dot owns the first line when a pill wraps; drop it. */
+  .fx-pill .animate-ping {
+    display: none;
+  }
+
+  /* Keep the particle field soft rather than dominant. */
+  #fx-canvas { opacity: 0.7; }
+
+  /* Shorter, slower floor: less repainted area on a phone. */
+  .fx-floor {
+    height: 120vh;
+    background-size: 38px 38px;
+    opacity: 0.34;
+    animation-duration: 16s;
+  }
+
+  .fx-sweep { opacity: 0.55; }
+  .fx-horizon { height: 150px; bottom: 27vh; opacity: 0.6; }
+}
+
+/* Section names stay on one line in the header (they are two words long). */
+@media (min-width: 1024px) {
+  html.fx-on header nav a {
+    white-space: nowrap;
+  }
+}
+
+/* ------------------------------------------------------------------------ *
+ * 8. Reduced motion — content stays, travel goes
+ * ------------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .fx-aurora,
+  .fx-dots,
+  .fx-sweep,
+  .fx-floor,
+  .fx-word,
+  .fx-caret {
+    animation: none !important;
+  }
+
+  .fx-floor {
+    transform: perspective(1100px) rotateX(60deg);
+    opacity: 0.4;
+  }
+
+  .fx-sweep { display: none; }
+
+  .fx-word { opacity: 1; transform: none; }
+  #fx-canvas,
+  #fx-cursor { display: none; }
+
+  [data-fx-reveal],
+  [data-fx-reveal].is-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .btn-magnetic::after { display: none; }
+
+  .fx-drift { transform: none; transition: none; }
+
+  .prog-card,
+  .prog-thumb img,
+  .prog-thumb::after {
+    transition: none !important;
+  }
+
+  .prog-thumb::after { display: none; }
+
+  #fx-mobile-cta { transition: none; }
+}

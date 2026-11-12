@@ -89,10 +89,8 @@
     }
     .tech-grid-bg {
       background-image: 
-        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 65%),
-        linear-gradient(to right, rgba(59, 130, 246, 0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
-      background-size: 100% 100%, 32px 32px, 32px 32px;
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 65%);
+      background-size: 100% 100%;
     }
 
     /* Motion System Tokens & Standards */
@@ -132,9 +130,6 @@
         z-index: 1;
       }
       .bento-card:hover::before {
-        opacity: 1;
-      }
-    }
         opacity: 1;
       }
     }
@@ -259,6 +254,7 @@
       }
     }
   </script>
+  <link rel="stylesheet" href="/fx/site-fx.css">
 </head>
 <body class="bg-themeDark text-slate-100 font-sans antialiased relative min-h-screen selection:bg-techBlue/30 selection:text-blue-300 tech-grid-bg overflow-x-hidden flex flex-col justify-between">
 
@@ -310,7 +306,7 @@
         </a>
 
         <!-- Status Indicator (Desktop only) -->
-        <div class="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+        <div class="hidden min-[1720px]:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
           <span>Edge Global: Online (TLS 1.3)</span>
         </div>
@@ -320,7 +316,7 @@
       <nav class="hidden lg:flex items-center gap-5 xl:gap-6 text-sm font-semibold">
         <a href="/" class="relative py-1.5 text-techCyan font-bold transition-colors after:absolute after:bottom-0 after:inset-x-0 after:h-0.5 after:bg-techCyan after:rounded-full">الرئيسية</a>
         <a href="/bots.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">باقات البوتات</a>
-        <a href="/programs.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">الأنظمة السيادية</a>
+        <a href="/programs.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">البرامج والتطبيقات</a>
         <a href="/templates.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">قوالب المتاجر</a>
         <a href="/blog.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">المدونة المعرفية</a>
         <a href="/trial.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">التجربة والدفع</a>
@@ -354,7 +350,7 @@
     <div id="mobileMenu" class="hidden lg:hidden px-4 pt-3 pb-6 space-y-2 bg-[#070c18] border-t border-slate-800 transition-all duration-300">
       <a href="/" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-techCyan/10 text-techCyan">الرئيسية</a>
       <a href="/bots.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-techCyan transition-colors">باقات البوتات</a>
-      <a href="/programs.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-techCyan transition-colors">الأنظمة السيادية</a>
+      <a href="/programs.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-techCyan transition-colors">البرامج والتطبيقات</a>
       <a href="/templates.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-techCyan transition-colors">قوالب المتاجر</a>
       <a href="/blog.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-techCyan transition-colors">المدونة المعرفية</a>
       <a href="/trial.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-techCyan transition-colors">التجربة والدفع</a>
@@ -380,13 +376,13 @@
           <!-- Hero Lead & Value Statement (7 Cols) -->
           <div class="lg:col-span-7 space-y-5 text-right w-full max-w-full">
             
-            <div class="hero-badge-in inline-flex items-center gap-2 px-3 py-1 rounded-full bg-techCyan/10 border border-techCyan/30 text-xs font-semibold text-techCyan max-w-full">
+            <div class="fx-pill hero-badge-in inline-flex items-center gap-2 px-3 py-1 rounded-full bg-techCyan/10 border border-techCyan/30 text-xs font-semibold text-techCyan max-w-full overflow-hidden">
               <span class="w-2 h-2 rounded-full bg-techCyan animate-ping shrink-0"></span>
-              <span class="truncate">معايير السيادة والخصوصية 2026 • تشفير تام ومصادقة Zero-Trust</span>
+              <span class="truncate min-w-0">معايير السيادة والخصوصية 2026<span class="hidden sm:inline"> • تشفير تام ومصادقة Zero-Trust</span></span>
             </div>
 
             <div class="hero-headline-in">
-              <h1 id="hero-title" class="text-4xl sm:text-6xl md:text-7xl font-black text-white leading-[1.1] tracking-tight">
+              <h1 id="hero-title" class="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-[1.15] tracking-tight text-balance">
                 المنظومة الاحترافية لأتمتة بوتات تيليجرام
               </h1>
               <p class="text-techCyan text-base sm:text-xl font-bold mt-3">
@@ -394,7 +390,7 @@
               </p>
             </div>
 
-            <p class="hero-sub-in text-slate-200 text-base sm:text-lg leading-relaxed max-w-2xl">
+            <p class="hero-sub-in text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl">
               منصة هندسية متكاملة تقدم متاجر تيليجرام مشفرة، وأنظمة مالية سيادية تعمل دون إنترنت (Offline-First) مدعومة بسلسلة كتل SHA-256، مع ضمان التجربة المجانية لمدة 3 أيام والدفع بنجوم تيليجرام وبنك الكريمي.
             </p>
 
@@ -426,7 +422,7 @@
                 <div class="text-xs text-slate-300 mt-1">تجربة مجانية</div>
               </div>
               <div class="bento-card rounded-xl p-3.5 text-center">
-                <div class="text-xl sm:text-2xl font-black text-indigo-400" data-count="24" data-prefix="< " data-suffix="ms">&lt; 24ms</div>
+                <div dir="ltr" class="text-xl sm:text-2xl font-black text-indigo-400" data-count="24" data-prefix="< " data-suffix="ms">&lt; 24ms</div>
                 <div class="text-xs text-slate-300 mt-1">استجابة سحابية</div>
               </div>
             </div>
@@ -621,7 +617,7 @@
                 <span class="px-3 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 font-bold text-xs">نظام مالي سيادي v0.2.1</span>
                 <span class="text-xs text-emerald-400 font-bold flex items-center gap-1">
                   <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                  <span>18.5K تحميلة</span>
+                  <span>28 تحميل موثّق</span>
                 </span>
               </div>
 
@@ -637,6 +633,7 @@
               <!-- Real Software Dashboard Screenshot -->
               <div class="relative rounded-xl overflow-hidden bg-slate-950">
                 <img src="/img/screen-dashboard.png" alt="واجهة لوحة تحكم نظام يُسر المحاسبي" class="w-full h-36 object-cover object-top" loading="lazy" />
+                <span class="prog-seal"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2L3 7V17L12 22L21 17V7L12 2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M7.5 8.5H16.5L7.5 15.5H16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><b>ZEIDEX</b></span>
               </div>
 
               <div class="space-y-2 pt-1 text-xs text-slate-200">
@@ -716,7 +713,7 @@
                 <span class="px-3 py-1 rounded-lg bg-indigo-500/10 text-indigo-400 font-bold text-xs">كاشف التزييف بالـ AI</span>
                 <span class="text-xs text-indigo-400 font-bold flex items-center gap-1">
                   <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                  <span>29.3K تحميلة</span>
+                  <span>تنزيل مباشر</span>
                 </span>
               </div>
 
@@ -732,6 +729,7 @@
               <!-- Real App Screenshot -->
               <div class="relative rounded-xl overflow-hidden bg-slate-950">
                 <img src="/img/aifake-1.webp" alt="واجهة كاشف التزييف العميق VerityScope" class="w-full h-36 object-cover object-top" loading="lazy" />
+                <span class="prog-seal"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2L3 7V17L12 22L21 17V7L12 2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M7.5 8.5H16.5L7.5 15.5H16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><b>ZEIDEX</b></span>
               </div>
 
               <div class="p-2.5 rounded-lg bg-slate-900/80 space-y-1 text-xs text-slate-200">
@@ -862,7 +860,7 @@
               </div>
               <div class="flex items-center justify-between">
                 <h3 class="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">قوالب المتاجر الرقمية</h3>
-                <span class="text-xs font-bold text-purple-400 px-2 py-0.5 rounded bg-purple-500/10">&lt; 300ms</span>
+                <span dir="ltr" class="text-xs font-bold text-purple-400 px-2 py-0.5 rounded bg-purple-500/10">&lt; 300ms</span>
               </div>
               <p class="text-slate-200 text-sm leading-relaxed">
                 قوالب مواقع ومتاجر رقمية بصفر تبعيات (Zero-Dependencies) وتكامل مباشر مع تيليجرام وواتساب.
@@ -936,7 +934,37 @@
       </div>
     </section>
 
-    <!-- Engineering Blog Highlights (3 Articles with Modal Read) -->
+    <!-- Sister platforms: separate products on their own subdomains -->
+    <section data-reveal class="py-14 sm:py-20 relative w-full max-w-full">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-black text-white">منصات أخرى من ZeidexSoft</h2>
+          <p class="text-slate-300 text-sm sm:text-base mt-1">منتجان سحابيان يعملان من المتصفح مباشرة، كلٌّ على نطاقه</p>
+        </div>
+        <div class="site-links">
+          <a href="https://zeidexlink.zeidexsoft.com/" target="_blank" rel="noopener" data-reveal class="bento-card site-link">
+            <span class="site-link-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></span>
+            <span class="site-link-body">
+              <span class="site-link-name">ZeidexLink</span>
+              <span class="site-link-desc">صفحة روابط ذكية، منيو إلكتروني بـ QR، متجر مصغّر وحجوزات في رابط واحد.</span>
+              <span class="site-link-host" dir="ltr">zeidexlink.zeidexsoft.com</span>
+            </span>
+            <svg class="site-link-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 7L7 17M7 7v10h10"/></svg>
+          </a>
+          <a href="https://mithqal.zeidexsoft.com/" target="_blank" rel="noopener" data-reveal class="bento-card site-link">
+            <span class="site-link-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 20h12M5 8h14"/><path d="M5 8l-2.5 6a2.6 2.6 0 0 0 5 0zM19 8l-2.5 6a2.6 2.6 0 0 0 5 0z"/></svg></span>
+            <span class="site-link-body">
+              <span class="site-link-name">مثقال <span dir="ltr">ZeidexMithqalOs</span></span>
+              <span class="site-link-desc">محاسبة مزدوجة سحابية بالعربية والإنجليزية: قيود متوازنة، فواتير، تسوية بنكية، ZATCA والزكاة.</span>
+              <span class="site-link-host" dir="ltr">mithqal.zeidexsoft.com</span>
+            </span>
+            <svg class="site-link-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 7L7 17M7 7v10h10"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Engineering Blog Highlights (generated from src/data/posts.ts) -->
     <section data-reveal class="py-14 sm:py-20 relative w-full max-w-full">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
@@ -955,78 +983,58 @@
           </a>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          
-          <div data-reveal class="bento-card p-6 flex flex-col justify-between group transition-all">
-            <div class="space-y-3">
-              <div class="relative rounded-xl overflow-hidden bg-slate-950 mb-1">
-                <img src="/img/local-cicd-cover.webp" alt="تشغيل وتثبيت CI/CD محلياً" class="w-full h-40 object-cover object-top" loading="lazy" />
+        <!-- home-articles:start (generated by scripts/build-articles.mjs) -->
+        <div class="prog-grid home-posts">
+          <article class="prog-card post-card" data-reveal>
+            <a class="prog-thumb" href="/blog/craft-of-selfteaching.html" tabindex="-1" aria-hidden="true">
+              <img src="/fx/posts/craft-of-selfteaching.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-11-12"><span>12 نوفمبر 2026 · 4 د</span></time>
               </div>
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-0.5 rounded bg-blue-500/10 text-techCyan font-bold">DevOps &amp; CI/CD</span>
-                <span class="text-slate-400">7 دقائق قراءة</span>
+              <h3 class="prog-title"><a href="/blog/craft-of-selfteaching.html">فن التعلّم الذاتي: دورة Python كاملة بالعربية — 26 دفتراً و30 فيديو مجاناً</a></h3>
+              <p class="prog-desc">نسخة عربية وإنجليزية محدّثة من كتاب The Craft of Self-Teaching: 13 فصلاً على Python 3.12+، دفاتر Jupyter تعمل على Colab، 24 تحدياً بحلولها، و30 فيديو شارحاً تشاهدها هنا مباشرة.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/craft-of-selfteaching.html" aria-label="قراءة: فن التعلّم الذاتي: دورة Python كاملة بالعربية — 26 دفتراً و30 فيديو مجاناً"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
-              <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                الدليل العملي الشامل: تشغيل وتثبيت CI/CD محلياً دون أخطاء
-              </h3>
-              <p class="text-slate-200 text-sm leading-relaxed">
-                تشغيل خطوط الأنابيب محلياً عبر act و Docker في Linux و Windows و Termux/PRoot مع حلول أشهر 7 أخطاء شائعة.
-              </p>
             </div>
-            <div class="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('الدليل العملي الشامل: تشغيل وتثبيت CI/CD محلياً دون أخطاء', 'تشغيل خطوط الأنابيب محلياً عبر act و Docker في Linux و Windows و Termux/PRoot مع حلول أشهر 7 أخطاء شائعة.')" class="text-sm font-bold text-techCyan hover:text-white transition-colors">
-                قراءة الملخص المعرفي ←
-              </button>
-            </div>
-          </div>
-
-          <div data-reveal class="bento-card p-6 flex flex-col justify-between group transition-all">
-            <div class="space-y-3">
-              <div class="relative rounded-xl overflow-hidden bg-slate-950 mb-1">
-                <img src="/img/screen-advisor.png" alt="المنظومة المحاسبية والمالية المستقلة" class="w-full h-40 object-cover object-top" loading="lazy" />
+          </article>
+          <article class="prog-card post-card" data-reveal>
+            <a class="prog-thumb" href="/blog/local-cicd-guide.html" tabindex="-1" aria-hidden="true">
+              <img src="/img/local-cicd-cover.png" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-10-29"><span>29 أكتوبر 2026 · 7 د</span></time>
               </div>
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-0.5 rounded bg-blue-500/10 text-techCyan font-bold">أنظمة مالية سيادية</span>
-                <span class="text-slate-400">7 دقائق قراءة</span>
+              <h3 class="prog-title"><a href="/blog/local-cicd-guide.html">الدليل العملي الشامل: تشغيل وتثبيت CI/CD محلياً على Linux و Windows و Termux دون أخطاء</a></h3>
+              <p class="prog-desc">كيف تشغل وتبني خطوط الأنابيب CI/CD محلياً على جهازك باستخدام act و Docker في بيئات Windows و Linux و Termux/PRoot: تثبيت سليم، إعداد .actrc، إدارة الأسرار، وحلول قطعية لأشهر 7 أخطاء شائعة.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/local-cicd-guide.html" aria-label="قراءة: الدليل العملي الشامل: تشغيل وتثبيت CI/CD محلياً على Linux و Windows و Termux دون أخطاء"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
-              <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                نظام يُسر (Yusr): المنظومة المحاسبية والمالية المستقلة
-              </h3>
-              <p class="text-slate-200 text-sm leading-relaxed">
-                دفتر أستاذ مشفّر بسلسلة SHA-256 لمنع التلاعب بالسجلات المالية للجمعيات ولجان الزكاة، مع ذكاء اصطناعي محلي وفوترة ZATCA.
-              </p>
             </div>
-            <div class="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('نظام يُسر (Yusr): المنظومة المحاسبية والمالية المستقلة', 'دفتر أستاذ مشفّر بسلسلة SHA-256 لمنع التلاعب بالسجلات المالية للجمعيات ولجان الزكاة، مع ذكاء اصطناعي محلي وفوترة ZATCA.')" class="text-sm font-bold text-techCyan hover:text-white transition-colors">
-                قراءة الملخص المعرفي ←
-              </button>
-            </div>
-          </div>
-
-          <div data-reveal class="bento-card p-6 flex flex-col justify-between group transition-all">
-            <div class="space-y-3">
-              <div class="relative rounded-xl overflow-hidden bg-slate-950 mb-1">
-                <img src="/img/zeidex-convert-android-cover.webp" alt="محول ملفات محلي واستخراج الصور الحية" class="w-full h-40 object-cover object-top" loading="lazy" />
+          </article>
+          <article class="prog-card post-card" data-reveal>
+            <a class="prog-thumb" href="/blog/yusr.html" tabindex="-1" aria-hidden="true">
+              <img src="/img/screen-dashboard.png" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-10-29"><span>29 أكتوبر 2026 · 2 د</span></time>
               </div>
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-0.5 rounded bg-blue-500/10 text-techCyan font-bold">أندرويد والوسائط</span>
-                <span class="text-slate-400">7 دقائق قراءة</span>
+              <h3 class="prog-title"><a href="/blog/yusr.html">نظام يُسر (Yusr): المنظومة المحاسبية والمالية المستقلة للمنظمات غير الربحية والأوقاف</a></h3>
+              <p class="prog-desc">نظام سيادي مكتمل لإدارة أموال وصناديق الجمعيات الخيرية ولجان الزكاة: دفتر أستاذ غير قابل للتلاعب بسلسلة كتل SHA-256، مستشار ذكي محلي، فوترة ZATCA، وتثبيت ذاتي يعمل دون إنترنت 100%.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/yusr.html" aria-label="قراءة: نظام يُسر (Yusr): المنظومة المحاسبية والمالية المستقلة للمنظمات غير الربحية والأوقاف"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
-              <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                Zeidex Convert: محول ملفات محلي واستخراج الصور الحية
-              </h3>
-              <p class="text-slate-200 text-sm leading-relaxed">
-                استخراج مقاطع الفيديو من صور الحركة في سامسونج وجوجل وآبل إلى MP4، رفع دقة الصور وضغط الوسائط دون إنترنت.
-              </p>
             </div>
-            <div class="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('Zeidex Convert: محول ملفات محلي واستخراج الصور الحية', 'استخراج مقاطع الفيديو من صور الحركة في سامسونج وجوجل وآبل إلى MP4، رفع دقة الصور وضغط الوسائط دون إنترنت.')" class="text-sm font-bold text-techCyan hover:text-white transition-colors">
-                قراءة الملخص المعرفي ←
-              </button>
-            </div>
-          </div>
-
+          </article>
         </div>
+        <!-- home-articles:end -->
 
       </div>
     </section>
@@ -1072,6 +1080,8 @@
             <li><a href="/programs.html" class="hover:text-techCyan transition-colors">كاشف التزييف VerityScope</a></li>
             <li><a href="/templates.html" class="hover:text-techCyan transition-colors">قالب متجر عود وعنبر (Zero-Deps)</a></li>
             <li><a href="/trial.html" class="hover:text-techCyan transition-colors">تفعيل التجربة المجانية (3 أيام)</a></li>
+            <li><a href="https://zeidexlink.zeidexsoft.com/" target="_blank" rel="noopener" class="hover:text-techCyan transition-colors">ZeidexLink — روابط ومنيو QR</a></li>
+            <li><a href="https://mithqal.zeidexsoft.com/" target="_blank" rel="noopener" class="hover:text-techCyan transition-colors">مثقال — المحاسبة السحابية</a></li>
           </ul>
         </div>
 
@@ -1139,12 +1149,12 @@
       <div class="space-y-3 text-xs text-slate-300">
         <p>لتفعيل الباقة فورياً وباسم وشعار مشروعك، يرجى إرسال اسم الباقة إلى بوت المتجر الرسمي:</p>
         
-        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
+        <div class="pb-3 border-b border-slate-800 flex items-center justify-between">
           <span id="orderModalPrice" class="text-amber-400 font-bold"></span>
           <span class="text-slate-400">@ZeidexStoreBot</span>
         </div>
 
-        <div class="p-3 rounded-xl bg-blue-950/40 border border-blue-500/20 space-y-1">
+        <div class="space-y-1">
           <div class="font-bold text-techCyan">طرق الدفع المتاحة:</div>
           <div>1. نجوم تيليجرام (Telegram Stars) داخل البوت مباشرة.</div>
           <div>2. إشعار بنك الكريمي (حساب: 30432981 YER/USD/SAR).</div>
@@ -1163,28 +1173,6 @@
   </div>
 
   <!-- Blog Summary Modal Component -->
-  <div id="blogModal" class="app-modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80">
-    <div class="techfy-glass rounded-3xl max-w-xl w-full p-6 border border-blue-500/40 space-y-5 relative max-h-[85vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <h3 class="text-base sm:text-lg font-bold text-white" id="blogModalTitle">ملخص المقال</h3>
-        <button onclick="closeBlogModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800" aria-label="إغلاق">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-      </div>
-
-      <div class="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed" id="blogModalBody">
-      </div>
-
-      <div class="pt-3 border-t border-slate-800 flex items-center justify-between">
-        <a href="/blog.html" class="text-xs font-bold text-techCyan hover:underline">
-          الانتقال لصفحة المقالات الكاملة ←
-        </a>
-        <button onclick="closeBlogModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 font-bold text-xs hover:bg-slate-700 transition-colors">
-          إغلاق
-        </button>
-      </div>
-    </div>
-  </div>
 
   <!-- Toast Notification (Fixed Overlay) -->
   <div id="toastNotification" class="fixed bottom-5 left-5 z-50 transform translate-y-24 opacity-0 pointer-events-none transition-all duration-300 max-w-sm">
@@ -1305,137 +1293,26 @@
     });
 
     // ===============================================================
-    // ZeidexSoft Specialized Motion & Interaction Engine
+    // Live latency probe — the motion layer now lives in /fx/site-fx.js
     // ===============================================================
     (function() {
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      // 1. Scroll-linked Entrance (data-reveal)
-      const revealElements = document.querySelectorAll('[data-reveal]');
-      if (revealElements.length) {
-        if (reduceMotion || !('IntersectionObserver' in window)) {
-          revealElements.forEach(el => el.classList.add('is-in'));
-        } else {
-          const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('is-in');
-                observer.unobserve(entry.target);
-              }
-            });
-          }, { rootMargin: '0px 0px -8% 0px', threshold: 0.1 });
-
-          revealElements.forEach(el => observer.observe(el));
-
-          // Safety failsafe: ensure nothing stays hidden if observer is delayed
-          setTimeout(() => {
-            revealElements.forEach(el => el.classList.add('is-in'));
-          }, 1400);
-        }
-      }
-
-      // 2. Animated Number Counters (CountUp)
-      const counters = document.querySelectorAll('[data-count]');
-      if (counters.length) {
-        const runCounter = (el) => {
-          if (el.__counted) return;
-          el.__counted = true;
-          const target = parseInt(el.getAttribute('data-count'), 10) || 0;
-          const prefix = el.getAttribute('data-prefix') || '';
-          const suffix = el.getAttribute('data-suffix') || '';
-          if (reduceMotion || target === 0) {
-            el.textContent = prefix + target.toLocaleString('en-US') + suffix;
-            return;
-          }
-
-          const duration = 1200;
-          const start = performance.now();
-          const tick = (now) => {
-            const p = Math.min((now - start) / duration, 1);
-            // easeOutExpo curve
-            const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
-            const current = Math.round(target * eased);
-            el.textContent = prefix + current.toLocaleString('en-US') + suffix;
-            if (p < 1) requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
-        };
-
-        if ('IntersectionObserver' in window && !reduceMotion) {
-          const countObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                runCounter(entry.target);
-                countObserver.unobserve(entry.target);
-              }
-            });
-          }, { threshold: 0.2 });
-          counters.forEach(el => countObserver.observe(el));
-        } else {
-          counters.forEach(runCounter);
-        }
-      }
-
-      // 3. Cockpit 3D Tilt & Specular Tracking
-      const cockpit = document.getElementById('cockpitTerminal');
-      if (cockpit && !reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        cockpit.addEventListener('pointermove', (e) => {
-          const rect = cockpit.getBoundingClientRect();
-          const px = (e.clientX - rect.left) / rect.width;
-          const py = (e.clientY - rect.top) / rect.height;
-          const rx = ((py - 0.5) * -12).toFixed(2);
-          const ry = ((px - 0.5) * 12).toFixed(2);
-          cockpit.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-        });
-        cockpit.addEventListener('pointerleave', () => {
-          cockpit.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
-        });
-      }
-
-      // 4. Interactive Live Ping Latency Test
       const pingBtn = document.getElementById('pingTestBtn');
       const pingReadout = document.getElementById('pingReadout');
-      if (pingBtn && pingReadout) {
-        pingBtn.addEventListener('click', () => {
-          if (pingBtn.__pinging) return;
-          pingBtn.__pinging = true;
-          pingReadout.textContent = '...';
-          pingBtn.classList.add('opacity-70');
-          setTimeout(() => {
-            const lat = Math.floor(18 + Math.random() * 12);
-            pingReadout.textContent = lat + 'ms';
-            pingBtn.classList.remove('opacity-70');
-            pingBtn.__pinging = false;
-            showToast('تم قياس استجابة الشبكة السحابية: ' + lat + 'ms (فائق السرعة)', 'اختبار الاستجابة اللحظية');
-          }, 450);
-        });
-      }
+      if (!pingBtn || !pingReadout) return;
 
-      // 5. Specular Cursor Spotlight for Bento Cards
-      if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        document.querySelectorAll('.bento-card').forEach((card) => {
-          card.addEventListener('pointermove', (e) => {
-            const rect = card.getBoundingClientRect();
-            card.style.setProperty('--spot-x', `${e.clientX - rect.left}px`);
-            card.style.setProperty('--spot-y', `${e.clientY - rect.top}px`);
-          }, { passive: true });
-        });
-      }
-
-      // 6. Magnetic Button Physics
-      if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        document.querySelectorAll('.btn-magnetic').forEach((btn) => {
-          btn.addEventListener('pointermove', (e) => {
-            const rect = btn.getBoundingClientRect();
-            const x = (e.clientX - (rect.left + rect.width / 2)) * 0.22;
-            const y = (e.clientY - (rect.top + rect.height / 2)) * 0.22;
-            btn.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
-          });
-          btn.addEventListener('pointerleave', () => {
-            btn.style.transform = 'translate(0px, 0px)';
-          });
-        });
-      }
+      pingBtn.addEventListener('click', () => {
+        if (pingBtn.__pinging) return;
+        pingBtn.__pinging = true;
+        pingReadout.textContent = '...';
+        pingBtn.classList.add('opacity-70');
+        setTimeout(() => {
+          const lat = Math.floor(18 + Math.random() * 12);
+          pingReadout.textContent = lat + 'ms';
+          pingBtn.classList.remove('opacity-70');
+          pingBtn.__pinging = false;
+          showToast('تم قياس استجابة الشبكة السحابية: ' + lat + 'ms (فائق السرعة)', 'اختبار الاستجابة اللحظية');
+        }, 450);
+      });
     })();
   </script>
 
@@ -1456,19 +1333,7 @@
       if (modal) modal.classList.add('hidden');
     }
 
-    function openBlogModal(title, body) {
-      const modal = document.getElementById('blogModal');
-      const titleEl = document.getElementById('blogModalTitle');
-      const bodyEl = document.getElementById('blogModalBody');
-      if (!modal) return;
-      if (titleEl) titleEl.textContent = title;
-      if (bodyEl) bodyEl.innerHTML = '<p>' + body.replace(/\n/g, '</p><p class="mt-2">') + '</p>';
-      modal.classList.remove('hidden');
-    }
-    function closeBlogModal() {
-      const modal = document.getElementById('blogModal');
-      if (modal) modal.classList.add('hidden');
-    }
   </script>
+  <script src="/fx/site-fx.js" defer></script>
 </body>
 </html>

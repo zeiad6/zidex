@@ -93,10 +93,8 @@
     }
     .tech-grid-bg {
       background-image: 
-        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 65%),
-        linear-gradient(to right, rgba(59, 130, 246, 0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
-      background-size: 100% 100%, 32px 32px, 32px 32px;
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 65%);
+      background-size: 100% 100%;
     }
     .bento-card {
       background: rgba(11, 18, 33, 0.78);
@@ -121,6 +119,7 @@
       }
     }
   </script>
+  <link rel="stylesheet" href="/fx/site-fx.css">
 </head>
 <body class="bg-themeDark text-slate-100 font-sans antialiased relative min-h-screen selection:bg-techBlue/30 selection:text-blue-300 tech-grid-bg overflow-x-hidden flex flex-col justify-between">
 
@@ -173,7 +172,7 @@
         </a>
 
         <!-- Status Indicator (Desktop only) -->
-        <div class="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
+        <div class="hidden min-[1720px]:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
           <span class="font-mono text-[11px]">Edge Global: Online (TLS 1.3)</span>
         </div>
@@ -183,7 +182,7 @@
       <nav class="hidden lg:flex items-center gap-5 xl:gap-6 text-sm font-semibold">
         <a href="/" class="py-1.5 text-slate-300 hover:text-white transition-colors">الرئيسية</a>
         <a href="/bots.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">باقات البوتات</a>
-        <a href="/programs.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">الأنظمة السيادية</a>
+        <a href="/programs.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">البرامج والتطبيقات</a>
         <a href="/templates.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">قوالب المتاجر</a>
         <a href="/blog.html" class="relative py-1.5 text-techCyan font-bold transition-colors after:absolute after:bottom-0 after:inset-x-0 after:h-0.5 after:bg-techCyan after:rounded-full">المدونة المعرفية</a>
         <a href="/trial.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">التجربة والدفع</a>
@@ -217,7 +216,7 @@
     <div id="mobileMenu" class="hidden lg:hidden px-4 pt-3 pb-6 space-y-2 techfy-glass border-t border-white/10 transition-all duration-300">
       <a href="/" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">الرئيسية</a>
       <a href="/bots.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">باقات البوتات</a>
-      <a href="/programs.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">الأنظمة السيادية</a>
+      <a href="/programs.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">البرامج والتطبيقات</a>
       <a href="/templates.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">قوالب المتاجر</a>
       <a href="/blog.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-techCyan/10 text-techCyan border border-techCyan/20">المدونة المعرفية</a>
       <a href="/trial.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">التجربة والدفع</a>
@@ -236,7 +235,7 @@
 
     <section class="pt-8 pb-6 border-b border-white/10 w-full max-w-full">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-semibold text-techCyan">
+        <div class="fx-pill inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-semibold text-techCyan">
           <span>المدونة المعرفية الهندسية</span>
           <span class="w-1.5 h-1.5 rounded-full bg-techCyan animate-pulse"></span>
           <span class="font-mono">Engineering & Security</span>
@@ -254,434 +253,298 @@
     <section class="py-10 flex-1 w-full max-w-full">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  DevOps &amp; CI/CD
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+        <!-- articles:start (generated by scripts/build-articles.mjs) -->
+        <div class="prog-grid">
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/craft-of-selfteaching.html" tabindex="-1" aria-hidden="true">
+              <img src="/fx/posts/craft-of-selfteaching.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-11-12"><span>12 نوفمبر 2026 · 4 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  الدليل العملي الشامل: تشغيل وتثبيت CI/CD محلياً دون أخطاء
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  تشغيل خطوط الأنابيب محلياً عبر act و Docker في Linux و Windows و Termux/PRoot مع حلول أشهر 7 أخطاء شائعة.
-                </p>
+              <h3 class="prog-title"><a href="/blog/craft-of-selfteaching.html">فن التعلّم الذاتي: دورة Python كاملة بالعربية — 26 دفتراً و30 فيديو مجاناً</a></h3>
+              <p class="prog-desc">نسخة عربية وإنجليزية محدّثة من كتاب The Craft of Self-Teaching: 13 فصلاً على Python 3.12+، دفاتر Jupyter تعمل على Colab، 24 تحدياً بحلولها، و30 فيديو شارحاً تشاهدها هنا مباشرة.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/craft-of-selfteaching.html" aria-label="قراءة: فن التعلّم الذاتي: دورة Python كاملة بالعربية — 26 دفتراً و30 فيديو مجاناً"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('الدليل العملي الشامل: تشغيل وتثبيت CI/CD محلياً دون أخطاء', 'تشغيل خطوط الأنابيب محلياً عبر act و Docker في Linux و Windows و Termux/PRoot مع حلول أشهر 7 أخطاء شائعة.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  أنظمة مالية سيادية
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/local-cicd-guide.html" tabindex="-1" aria-hidden="true">
+              <img src="/img/local-cicd-cover.png" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-10-29"><span>29 أكتوبر 2026 · 7 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  نظام يُسر (Yusr): المنظومة المحاسبية والمالية المستقلة
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  دفتر أستاذ مشفّر بسلسلة SHA-256 لمنع التلاعب بالسجلات المالية للجمعيات ولجان الزكاة، مع ذكاء اصطناعي محلي وفوترة ZATCA.
-                </p>
+              <h3 class="prog-title"><a href="/blog/local-cicd-guide.html">الدليل العملي الشامل: تشغيل وتثبيت CI/CD محلياً على Linux و Windows و Termux دون أخطاء</a></h3>
+              <p class="prog-desc">كيف تشغل وتبني خطوط الأنابيب CI/CD محلياً على جهازك باستخدام act و Docker في بيئات Windows و Linux و Termux/PRoot: تثبيت سليم، إعداد .actrc، إدارة الأسرار، وحلول قطعية لأشهر 7 أخطاء شائعة.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/local-cicd-guide.html" aria-label="قراءة: الدليل العملي الشامل: تشغيل وتثبيت CI/CD محلياً على Linux و Windows و Termux دون أخطاء"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('نظام يُسر (Yusr): المنظومة المحاسبية والمالية المستقلة', 'دفتر أستاذ مشفّر بسلسلة SHA-256 لمنع التلاعب بالسجلات المالية للجمعيات ولجان الزكاة، مع ذكاء اصطناعي محلي وفوترة ZATCA.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  أندرويد والوسائط
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/yusr.html" tabindex="-1" aria-hidden="true">
+              <img src="/img/screen-dashboard.png" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-10-29"><span>29 أكتوبر 2026 · 2 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  Zeidex Convert: محول ملفات محلي واستخراج الصور الحية
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  استخراج مقاطع الفيديو من صور الحركة في سامسونج وجوجل وآبل إلى MP4، رفع دقة الصور وضغط الوسائط دون إنترنت.
-                </p>
+              <h3 class="prog-title"><a href="/blog/yusr.html">نظام يُسر (Yusr): المنظومة المحاسبية والمالية المستقلة للمنظمات غير الربحية والأوقاف</a></h3>
+              <p class="prog-desc">نظام سيادي مكتمل لإدارة أموال وصناديق الجمعيات الخيرية ولجان الزكاة: دفتر أستاذ غير قابل للتلاعب بسلسلة كتل SHA-256، مستشار ذكي محلي، فوترة ZATCA، وتثبيت ذاتي يعمل دون إنترنت 100%.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/yusr.html" aria-label="قراءة: نظام يُسر (Yusr): المنظومة المحاسبية والمالية المستقلة للمنظمات غير الربحية والأوقاف"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('Zeidex Convert: محول ملفات محلي واستخراج الصور الحية', 'استخراج مقاطع الفيديو من صور الحركة في سامسونج وجوجل وآبل إلى MP4، رفع دقة الصور وضغط الوسائط دون إنترنت.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  أدوات التطوير
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/zeidex-convert-android.html" tabindex="-1" aria-hidden="true">
+              <img src="/img/zeidex-convert-android-cover.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-10-22"><span>22 أكتوبر 2026 · 3 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  تثبيت CloudCLI وربط OpenCode و Codex و Claude Code
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  دليل متكامل لتهيئة بيئة سطر الأوامر، ربط أدوات التطوير بالذكاء الاصطناعي، واستخدام بروتوكول MCP بأمان.
-                </p>
+              <h3 class="prog-title"><a href="/blog/zeidex-convert-android.html">Zeidex Convert للأندرويد: محوّل ملفات محلي شامل، استخراج الصور الحية، وتحسين جودة الوسائط</a></h3>
+              <p class="prog-desc">تطبيق أندرويد مستقل يعمل 100% دون إنترنت: استخراج فيديو الصور الحية (Pixel و Samsung و Apple Live Photo) إلى MP4، تحسين دقة وجودة الفيديو والصور، ضغط الملفات وحفظها تلقائياً في ذاكرة الهاتف.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/zeidex-convert-android.html" aria-label="قراءة: Zeidex Convert للأندرويد: محوّل ملفات محلي شامل، استخراج الصور الحية، وتحسين جودة الوسائط"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('تثبيت CloudCLI وربط OpenCode و Codex و Claude Code', 'دليل متكامل لتهيئة بيئة سطر الأوامر، ربط أدوات التطوير بالذكاء الاصطناعي، واستخدام بروتوكول MCP بأمان.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  تحديثات الأنظمة
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/archive-1-0-6.html" tabindex="-1" aria-hidden="true">
+              <img src="/img/archive-1.0.6-dashboard.webp" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-10-04"><span>4 أكتوبر 2026 · 2 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  أرشيف 1.0.6: أمان أعلى، ترقية آمنة، ومثبّت بهوية Zeidex
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  مميزات الإصدار 1.0.6 من نظام الأرشفة: دعم التشفير المحسن، قاعدة بيانات SQLite محلية، ومزامنة آمنة.
-                </p>
+              <h3 class="prog-title"><a href="/blog/archive-1-0-6.html">أرشيف 1.0.6: أمان أعلى، ترقية آمنة، ومثبّت بهوية Zeidex</a></h3>
+              <p class="prog-desc">تحديث أمني وإصلاحات ومزايا جديدة لنظام الأرشفة الإلكترونية: روابط تحميل من ثلاثة مصادر، وخطوات ترقية من 1.0.0 تحافظ على بياناتك كما هي.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/archive-1-0-6.html" aria-label="قراءة: أرشيف 1.0.6: أمان أعلى، ترقية آمنة، ومثبّت بهوية Zeidex"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('أرشيف 1.0.6: أمان أعلى، ترقية آمنة، ومثبّت بهوية Zeidex', 'مميزات الإصدار 1.0.6 من نظام الأرشفة: دعم التشفير المحسن، قاعدة بيانات SQLite محلية، ومزامنة آمنة.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  أنظمة مؤسسية
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/ai-fake-detector-android.html" tabindex="-1" aria-hidden="true">
+              <img src="/img/verityscope-cover.png" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-10-02"><span>2 أكتوبر 2026 · 4 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  أرشيف برو EDMS: نظام إدارة الوثائق الإلكترونية
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  بحث نصي كامل داخل المستندات المصورة، تصنيف شجري مرن، وصلاحيات وصول متدرجة مع دعم العمل الشبكي.
-                </p>
+              <h3 class="prog-title"><a href="/blog/ai-fake-detector-android.html">VerityScope v0.4.0 — كاشف التزييف العميق بالذكاء الاصطناعي</a></h3>
+              <p class="prog-desc">تطبيق أندرويد يكشف التزييف العميق في الصور والفيديو والنصوص محلياً بـ 5 نماذج AI ودمج log-odds وفحص بيانات المصدر — v0.4.0 يضيف الفحص الذكي، ووضع عدم الاتصال، وتقرير PDF جنائياً، وحزمة APK واحدة لكل الأجهزة.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/ai-fake-detector-android.html" aria-label="قراءة: VerityScope v0.4.0 — كاشف التزييف العميق بالذكاء الاصطناعي"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('أرشيف برو EDMS: نظام إدارة الوثائق الإلكترونية', 'بحث نصي كامل داخل المستندات المصورة، تصنيف شجري مرن، وصلاحيات وصول متدرجة مع دعم العمل الشبكي.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  Linux &amp; AI
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/edms-archive-android.html" tabindex="-1" aria-hidden="true">
+              <img src="/fx/posts/edms-archive-android.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-09-30"><span>30 سبتمبر 2026 · 2 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  تثبيت Google Antigravity على Ubuntu: من الصفر لبيئة عمل
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  دليل عملي لتثبيت وتشغيل وكيل Antigravity على سيرفرات أوبنتو، إعداد الصلاحيات، وربط أدوات فحص وتعديل الأكواد.
-                </p>
+              <h3 class="prog-title"><a href="/blog/edms-archive-android.html">عميل أرشيف برو على أندرويد — نفس النظام على جوالك</a></h3>
+              <p class="prog-desc">عميل أندرويد أصلي لنظام أرشيف برو: يعمل كاملاً على الجهاز بقاعدة بيانات وملفات محلية، أو يتصل بالنسخة المكتبية عبر بوابة HTTPS بشهادة مثبّتة. القاعدة والنسخ الاحتياطي وكلمات المرور تنتقل في الاتجاهين بلا تحويل.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/edms-archive-android.html" aria-label="قراءة: عميل أرشيف برو على أندرويد — نفس النظام على جوالك"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('تثبيت Google Antigravity على Ubuntu: من الصفر لبيئة عمل', 'دليل عملي لتثبيت وتشغيل وكيل Antigravity على سيرفرات أوبنتو، إعداد الصلاحيات، وربط أدوات فحص وتعديل الأكواد.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  هندسة الويب
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/cloudcli-setup-guide.html" tabindex="-1" aria-hidden="true">
+              <img src="/fx/posts/cloudcli-setup-guide.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-09-28"><span>28 سبتمبر 2026 · 13 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  أدوات بناء موقع من الصفر: ما استخدمته مع OpenCode فعلاً
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  الأدوات التقنية الفعلية المستخدمة في بناء مواقع ومنصات فائقة السرعة مع Vite و Tailwind و Cloudflare Workers.
-                </p>
+              <h3 class="prog-title"><a href="/blog/cloudcli-setup-guide.html">الدليل الشامل: تثبيت CloudCLI وربط OpenCode و Codex و Claude Code به</a></h3>
+              <p class="prog-desc">CloudCLI محوراً لثلاثة وكلاء برمجة: تثبيته، وربط Claude Code و Codex و OpenCode به، ثم المهارات والوكلاء وسيرفرات MCP والإضافات — موثّق من بيئة حقيقية تعمل على arm64 داخل PRoot.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/cloudcli-setup-guide.html" aria-label="قراءة: الدليل الشامل: تثبيت CloudCLI وربط OpenCode و Codex و Claude Code به"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('أدوات بناء موقع من الصفر: ما استخدمته مع OpenCode فعلاً', 'الأدوات التقنية الفعلية المستخدمة في بناء مواقع ومنصات فائقة السرعة مع Vite و Tailwind و Cloudflare Workers.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  تطبيقات الجوال
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/edms-archive-pro.html" tabindex="-1" aria-hidden="true">
+              <img src="/fx/posts/edms-archive-pro.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-09-27"><span>27 سبتمبر 2026 · 6 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  عميل أرشيف برو على أندرويد — نفس النظام على جوالك
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  كيف تنقل قاعدة بيانات الأرشفة وكلمات المرور والمستندات بين الهاتف والكمبيوتر باتجاهين بلا تحويل صيغ.
-                </p>
+              <h3 class="prog-title"><a href="/blog/edms-archive-pro.html">أرشيف برو EDMS: نظام إدارة الوثائق الإلكترونية</a></h3>
+              <p class="prog-desc">نظام أرشفة إلكترونية يعمل كخادم مركزي: بحث نصي كامل، إصدارات غير قابلة للاستبدال، سير عمل واعتمادات، توقيع Ed25519، DLP، واحتجاز قانوني — مع تحميل مجاني.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/edms-archive-pro.html" aria-label="قراءة: أرشيف برو EDMS: نظام إدارة الوثائق الإلكترونية"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('عميل أرشيف برو على أندرويد — نفس النظام على جوالك', 'كيف تنقل قاعدة بيانات الأرشفة وكلمات المرور والمستندات بين الهاتف والكمبيوتر باتجاهين بلا تحويل صيغ.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  ذكاء اصطناعي وأمان
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/google-antigravity-on-ubuntu.html" tabindex="-1" aria-hidden="true">
+              <img src="/fx/posts/google-antigravity-on-ubuntu.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-09-27"><span>27 سبتمبر 2026 · 5 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  VerityScope v0.4.0 — كاشف التزييف العميق بالـ AI
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  تحليل علمي لكيفية تشغيل 5 نماذج ذكاء اصطناعي محلياً على الهاتف لكشف التزييف وتوليد الصور والنصوص.
-                </p>
+              <h3 class="prog-title"><a href="/blog/google-antigravity-on-ubuntu.html">تثبيت Google Antigravity على Ubuntu: من الصفر إلى بيئة عمل</a></h3>
+              <p class="prog-desc">خمس خطوات لتحويل أوبونتو إلى بيئة تطوير متكاملة لـ Google Antigravity — مع الخادم الخلفي، وواجهة الويب، و Python SDK، وأوامر التشغيل اليومية.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/google-antigravity-on-ubuntu.html" aria-label="قراءة: تثبيت Google Antigravity على Ubuntu: من الصفر إلى بيئة عمل"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('VerityScope v0.4.0 — كاشف التزييف العميق بالـ AI', 'تحليل علمي لكيفية تشغيل 5 نماذج ذكاء اصطناعي محلياً على الهاتف لكشف التزييف وتوليد الصور والنصوص.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  Linux &amp; Termux
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/opencode-tooling-guide.html" tabindex="-1" aria-hidden="true">
+              <img src="/fx/posts/opencode-tooling-guide.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-09-27"><span>27 سبتمبر 2026 · 6 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  تشغيل Docker على أندرويد عبر Termux — دليلك العملي
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  كيفية تهيئة الحاويات والخدمات وقواعد البيانات على جوالك مباشرة باستخدام Termux و QEMU أو بروتوكول PRoot.
-                </p>
+              <h3 class="prog-title"><a href="/blog/opencode-tooling-guide.html">أدوات بناء موقع من الصفر: ما استخدمته مع OpenCode فعلاً</a></h3>
+              <p class="prog-desc">ثمانية وكلاء وأربع مهارات وثمانية سيرفرات MCP — شرح آلية كل واحدة، ومتى استدعيتها، والأخطاء التي كلّفتني وقتاً. مع جدول يصلح كمادة مرجعية.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/opencode-tooling-guide.html" aria-label="قراءة: أدوات بناء موقع من الصفر: ما استخدمته مع OpenCode فعلاً"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('تشغيل Docker على أندرويد عبر Termux — دليلك العملي', 'كيفية تهيئة الحاويات والخدمات وقواعد البيانات على جوالك مباشرة باستخدام Termux و QEMU أو بروتوكول PRoot.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  صناعة المحتوى
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/docker-on-android-termux.html" tabindex="-1" aria-hidden="true">
+              <img src="/fx/posts/docker-on-android-termux.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-09-27"><span>27 سبتمبر 2026 · 5 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  أول 30 ثانية: كيف يقرر المشاهد إكمال الفيديو أم التخطي
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  هندسة الخطاف (Hook) البصري والصوتي في فيديوهات التيك توك التقنية لتحقيق أعلى معدل احتفاظ.
-                </p>
+              <h3 class="prog-title"><a href="/blog/docker-on-android-termux.html">تشغيل Docker على أندرويد عبر Termux — دليلك العملي</a></h3>
+              <p class="prog-desc">دليل مُجرَّب لتشغيل محرّك Docker كاملاً على هاتف أندرويد بدون روت، عبر آلة افتراضية Alpine خفيفة داخل Termux. كل أمر مع زر نسخ مباشر.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/docker-on-android-termux.html" aria-label="قراءة: تشغيل Docker على أندرويد عبر Termux — دليلك العملي"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('أول 30 ثانية: كيف يقرر المشاهد إكمال الفيديو أم التخطي', 'هندسة الخطاف (Hook) البصري والصوتي في فيديوهات التيك توك التقنية لتحقيق أعلى معدل احتفاظ.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  خوارزميات التيك توك
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/first-30-seconds.html" tabindex="-1" aria-hidden="true">
+              <img src="/fx/posts/first-30-seconds.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">صناعة المحتوى</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-09-18"><span>18 سبتمبر 2026 · 3 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  كيف يوزّع تيك توك الفيديوهات في عام 2026
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  تحليل سلوك خوارزمية توصية الفيديو لعام 2026، تأثير المشاركات وإعادة النشر ومعدل إكمال الفيديو.
-                </p>
+              <h3 class="prog-title"><a href="/blog/first-30-seconds.html">أول 30 ثانية: كيف تقرر المشاهد يكمل أم يتخطى</a></h3>
+              <p class="prog-desc">الفيديو القصير لا يُحسم في أول ٣٠ ثانية فقط، بل في أول إطارين. دليل عملي لبناء خطاف يوقف التمرير دون أن يكون صاخباً.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/first-30-seconds.html" aria-label="قراءة: أول 30 ثانية: كيف تقرر المشاهد يكمل أم يتخطى"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('كيف يوزّع تيك توك الفيديوهات في عام 2026', 'تحليل سلوك خوارزمية توصية الفيديو لعام 2026، تأثير المشاركات وإعادة النشر ومعدل إكمال الفيديو.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  تصميم UI/UX
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/tiktok-algorithm-2026.html" tabindex="-1" aria-hidden="true">
+              <img src="/fx/posts/tiktok-algorithm-2026.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تيك توك</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-09-12"><span>12 سبتمبر 2026 · 2 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  الوضع الليلي الذي لا يرهق العين ولا يقتل التباين
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  قواعد اختيار درجات السواد والرمادي (#060913)، ضبط التوهج الزجاجي وتجنب التباين الفاقع في الشاشات الحديثة.
-                </p>
+              <h3 class="prog-title"><a href="/blog/tiktok-algorithm-2026.html">كيف يوزّع تيك توك الفيديوهات في 2026</a></h3>
+              <p class="prog-desc">النظام لم يعد يوزّع على المتابعين أولاً. شرح مبسّط لمراحل التوزيع الأربع، ولماذا فيديو قد ينفجر بلا متابعين إطلاقاً.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/tiktok-algorithm-2026.html" aria-label="قراءة: كيف يوزّع تيك توك الفيديوهات في 2026"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('الوضع الليلي الذي لا يرهق العين ولا يقتل التباين', 'قواعد اختيار درجات السواد والرمادي (#060913)، ضبط التوهج الزجاجي وتجنب التباين الفاقع في الشاشات الحديثة.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  التسويق الرقمي
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/dark-mode-that-works.html" tabindex="-1" aria-hidden="true">
+              <img src="/fx/posts/dark-mode-that-works.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تصميم</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-09-05"><span>5 سبتمبر 2026 · 2 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  صفحة الروابط (Link Hub) التي تحوّل الزائر إلى عميل
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  كيف تصمم صفحة بايو ذكية توجه الزوار مباشرة للبوتات والمتاجر والبرامج دون تشتيت وبأعلى معدل نقر.
-                </p>
+              <h3 class="prog-title"><a href="/blog/dark-mode-that-works.html">الوضع الليلي الذي لا يقتل العين</a></h3>
+              <p class="prog-desc">أغلب تطبيقات الوضع الليلي تفشل باستخدام أسود نقي وأبيض نقي. هنا الأرقام الصحيحة، وقواعد التباين، ودور الـ tokens — ولماذا هي الحل.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/dark-mode-that-works.html" aria-label="قراءة: الوضع الليلي الذي لا يقتل العين"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('صفحة الروابط (Link Hub) التي تحوّل الزائر إلى عميل', 'كيف تصمم صفحة بايو ذكية توجه الزوار مباشرة للبوتات والمتاجر والبرامج دون تشتيت وبأعلى معدل نقر.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  أداء الويب
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/link-hub-that-converts.html" tabindex="-1" aria-hidden="true">
+              <img src="/fx/posts/link-hub-that-converts.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">نمو</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-08-27"><span>27 أغسطس 2026 · 2 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  أداء الصفحات على الجوال: ما الذي يُقاس فعلاً؟
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  شرح مقاييس Core Web Vitals الفعلية (LCP و INP و CLS) وكيفية تحقيق درجة 100% في Lighthouse على الهواتف.
-                </p>
+              <h3 class="prog-title"><a href="/blog/link-hub-that-converts.html">صفحة روابط تحوّل الزائر إلى متابع</a></h3>
+              <p class="prog-desc">صفحة الروابط ليست قائمة روابط. هي واجهة. ترتيب الروابط، وسرعة الفتح، وقياس الضغط — ثلاثة قرارات تفصل بين صفحة تعمل وأخرى مجرد جدول.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/link-hub-that-converts.html" aria-label="قراءة: صفحة روابط تحوّل الزائر إلى متابع"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('أداء الصفحات على الجوال: ما الذي يُقاس فعلاً؟', 'شرح مقاييس Core Web Vitals الفعلية (LCP و INP و CLS) وكيفية تحقيق درجة 100% في Lighthouse على الهواتف.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-blue-500/40 transition-all">
-            <div class="space-y-3.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 font-bold font-mono">
-                  الهوية والبراند
-                </span>
-                <span class="text-slate-400 font-mono text-[11px]">7 دقائق قراءة</span>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/mobile-first-performance.html" tabindex="-1" aria-hidden="true">
+              <img src="/fx/posts/mobile-first-performance.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تقنية</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-08-19"><span>19 أغسطس 2026 · 2 د</span></time>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  هوية بصرية تُبنى مرة واحدة وتعمل لسنوات
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-2">
-                  بناء هوية تقنية راسخة تعتمد على رموز بسيطة، خطوط ثابتة وتدرجات متناسقة تترك أثراً دائماً لدى المتابع.
-                </p>
+              <h3 class="prog-title"><a href="/blog/mobile-first-performance.html">أداء الصفحات على الجوال: ما الذي يُقاس فعلاً</a></h3>
+              <p class="prog-desc">LCP وحده لا يكفي. مؤشرات الأداء الحقيقية التي تحسّن التحويل على شبكة بطيئة، وكيف نقيسها على جهاز متوسط، لا على حاسوب سريع.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/mobile-first-performance.html" aria-label="قراءة: أداء الصفحات على الجوال: ما الذي يُقاس فعلاً"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between">
-              <button onclick="openBlogModal('هوية بصرية تُبنى مرة واحدة وتعمل لسنوات', 'بناء هوية تقنية راسخة تعتمد على رموز بسيطة، خطوط ثابتة وتدرجات متناسقة تترك أثراً دائماً لدى المتابع.')" class="text-xs font-bold text-techCyan hover:text-white transition-colors">
-                قراءة المقال الكامل ←
-              </button>
+          </article>
+          <article class="prog-card post-card">
+            <a class="prog-thumb" href="/blog/consistent-visual-identity.html" tabindex="-1" aria-hidden="true">
+              <img src="/fx/posts/consistent-visual-identity.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تصميم</span>
+                <time class="prog-dl prog-dl--direct" datetime="2026-08-08"><span>8 أغسطس 2026 · 2 د</span></time>
+              </div>
+              <h3 class="prog-title"><a href="/blog/consistent-visual-identity.html">هوية بصرية تُبنى مرة واحدة وتعمل لسنوات</a></h3>
+              <p class="prog-desc">أغلب الحسابات تموت بصرياً ليس لأن المحتوى سيّئ، بل لأنها تغيّر ألوانها كل شهر. نظام من أربعة عناصر يكفي لبناء هوية ثابتة.</p>
+              <div class="prog-actions">
+                <a class="prog-download" href="/blog/consistent-visual-identity.html" aria-label="قراءة: هوية بصرية تُبنى مرة واحدة وتعمل لسنوات"><span>قراءة المقال</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6l-6 6 6 6"/></svg></a>
+              </div>
             </div>
-          </div>
+          </article>
         </div>
+        <!-- articles:end -->
 
       </div>
     </section>
@@ -727,6 +590,8 @@
             <li><a href="/programs.html" class="hover:text-techCyan transition-colors">كاشف التزييف VerityScope</a></li>
             <li><a href="/templates.html" class="hover:text-techCyan transition-colors">قالب متجر عود وعنبر (Zero-Deps)</a></li>
             <li><a href="/trial.html" class="hover:text-techCyan transition-colors">تفعيل التجربة المجانية (3 أيام)</a></li>
+            <li><a href="https://zeidexlink.zeidexsoft.com/" target="_blank" rel="noopener" class="hover:text-techCyan transition-colors">ZeidexLink — روابط ومنيو QR</a></li>
+            <li><a href="https://mithqal.zeidexsoft.com/" target="_blank" rel="noopener" class="hover:text-techCyan transition-colors">مثقال — المحاسبة السحابية</a></li>
           </ul>
         </div>
 
@@ -782,38 +647,6 @@
   </div>
 
   <!-- Blog Reading Modal -->
-  <div id="blogModal" class="app-modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-    <div class="techfy-glass rounded-3xl max-w-2xl w-full p-6 sm:p-8 border border-blue-500/40 shadow-glow-md space-y-5 relative max-h-[85vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <h3 class="text-base sm:text-lg font-bold text-white" id="blogModalTitle">المقال</h3>
-        <button onclick="closeBlogModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800" aria-label="إغلاق">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-      </div>
-
-      <div class="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed font-sans" id="blogModalBody">
-      </div>
-
-      <div class="pt-4 border-t border-slate-800 flex items-center justify-end">
-        <button onclick="closeBlogModal()" class="px-5 py-2.5 rounded-xl bg-slate-800 text-slate-300 font-bold text-xs hover:bg-slate-700 transition-colors">
-          إغلاق النافذة
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast Notification (Fixed Overlay) -->
-  <div id="toastNotification" class="fixed bottom-5 left-5 z-50 transform translate-y-24 opacity-0 pointer-events-none transition-all duration-300 max-w-sm">
-    <div class="techfy-glass rounded-2xl p-4 border border-techCyan/40 shadow-glow-cyan flex items-center gap-3">
-      <div class="w-8 h-8 rounded-xl bg-techCyan/20 text-techCyan flex items-center justify-center shrink-0">
-        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-      </div>
-      <div class="min-w-0 flex-1">
-        <div class="text-xs font-bold text-white" id="toastTitle">تمت العملية بنجاح!</div>
-        <div class="text-[11px] text-slate-300 truncate" id="toastMessage">تم نسخ البيانات إلى الحافظة.</div>
-      </div>
-    </div>
-  </div>
   <script>
     // Safe DOM helpers
     function showToast(message, title = 'تمت العملية بنجاح!') {
@@ -889,20 +722,6 @@
     });
   </script>
 
-  <script>
-    function openBlogModal(title, body) {
-      const modal = document.getElementById('blogModal');
-      const titleEl = document.getElementById('blogModalTitle');
-      const bodyEl = document.getElementById('blogModalBody');
-      if (!modal) return;
-      if (titleEl) titleEl.textContent = title;
-      if (bodyEl) bodyEl.innerHTML = '<p>' + body.replace(/\n/g, '</p><p class="mt-2">') + '</p>';
-      modal.classList.remove('hidden');
-    }
-    function closeBlogModal() {
-      const modal = document.getElementById('blogModal');
-      if (modal) modal.classList.add('hidden');
-    }
-  </script>
+  <script src="/fx/site-fx.js" defer></script>
 </body>
 </html>

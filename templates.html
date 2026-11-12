@@ -93,10 +93,8 @@
     }
     .tech-grid-bg {
       background-image: 
-        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 65%),
-        linear-gradient(to right, rgba(59, 130, 246, 0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
-      background-size: 100% 100%, 32px 32px, 32px 32px;
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 65%);
+      background-size: 100% 100%;
     }
     .bento-card {
       background: rgba(11, 18, 33, 0.78);
@@ -121,6 +119,7 @@
       }
     }
   </script>
+  <link rel="stylesheet" href="/fx/site-fx.css">
 </head>
 <body class="bg-themeDark text-slate-100 font-sans antialiased relative min-h-screen selection:bg-techBlue/30 selection:text-blue-300 tech-grid-bg overflow-x-hidden flex flex-col justify-between">
 
@@ -173,7 +172,7 @@
         </a>
 
         <!-- Status Indicator (Desktop only) -->
-        <div class="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
+        <div class="hidden min-[1720px]:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
           <span class="font-mono text-[11px]">Edge Global: Online (TLS 1.3)</span>
         </div>
@@ -183,7 +182,7 @@
       <nav class="hidden lg:flex items-center gap-5 xl:gap-6 text-sm font-semibold">
         <a href="/" class="py-1.5 text-slate-300 hover:text-white transition-colors">الرئيسية</a>
         <a href="/bots.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">باقات البوتات</a>
-        <a href="/programs.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">الأنظمة السيادية</a>
+        <a href="/programs.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">البرامج والتطبيقات</a>
         <a href="/templates.html" class="relative py-1.5 text-techCyan font-bold transition-colors after:absolute after:bottom-0 after:inset-x-0 after:h-0.5 after:bg-techCyan after:rounded-full">قوالب المتاجر</a>
         <a href="/blog.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">المدونة المعرفية</a>
         <a href="/trial.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">التجربة والدفع</a>
@@ -217,7 +216,7 @@
     <div id="mobileMenu" class="hidden lg:hidden px-4 pt-3 pb-6 space-y-2 techfy-glass border-t border-white/10 transition-all duration-300">
       <a href="/" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">الرئيسية</a>
       <a href="/bots.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">باقات البوتات</a>
-      <a href="/programs.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">الأنظمة السيادية</a>
+      <a href="/programs.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">البرامج والتطبيقات</a>
       <a href="/templates.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-techCyan/10 text-techCyan border border-techCyan/20">قوالب المتاجر</a>
       <a href="/blog.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">المدونة المعرفية</a>
       <a href="/trial.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">التجربة والدفع</a>
@@ -236,7 +235,7 @@
 
     <section class="pt-8 pb-6 border-b border-white/10 w-full max-w-full">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-xs font-semibold text-purple-400">
+        <div class="fx-pill inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-xs font-semibold text-purple-400">
           <span>معمارية صفر تبعيات</span>
           <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span>
           <span class="font-mono">Zero-Dependencies • &lt; 300ms</span>
@@ -254,309 +253,161 @@
     <section class="py-10 flex-1 w-full max-w-full">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-purple-500/40 transition-all">
-            <div class="space-y-4">
-              <div class="flex items-center justify-between">
-                <span class="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold font-mono">
-                  Luxury Fragrance
-                </span>
-                <span class="font-mono text-xs font-bold text-amber-400">7,000 ⭐ نجمة ⭐</span>
+        <div class="prog-grid">
+          <article class="prog-card tpl-card">
+            <a class="prog-thumb" href="/templates/oud-amber/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+              <img src="/fx/templates/oud-amber.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">Luxury Fragrance</span>
+                <span class="prog-dl prog-dl--direct"><span>7,000 نجمة</span></span>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">
-                  عود وعنبر
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1.5">
-                  قالب متجر كامل لبيع العود والعطور والهدايا: هوية ذهبية ملكية، بطاقات منتج فنية، سلة محفوظة تُكمل بعد إغلاق المتصفح، وطلب فوري عبر تيليجرام وواتساب.
-                </p>
-              </div>
-
-              <div class="p-3 rounded-xl bg-slate-900/60 border border-white/5 space-y-1.5 text-xs text-slate-300">
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">السرعة:</span>
-                  <span class="text-emerald-400 font-mono">&lt; 300ms</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">البنية:</span>
-                  <span class="text-techCyan font-mono">2 Files Only (HTML/JS)</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">السداد:</span>
-                  <span class="text-amber-400 font-mono">Stars + الكريمي + WhatsApp</span>
-                </div>
+              <h3 class="prog-title">عود وعنبر</h3>
+              <p class="prog-desc">قالب متجر كامل لبيع العود والعطور والهدايا: هوية ذهبية ملكية، بطاقات منتج فنية، سلة محفوظة تُكمل بعد إغلاق المتصفح، وطلب فوري عبر تيليجرام وواتساب.</p>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>السرعة: <span dir="ltr">&lt; 300ms</span></span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>البنية: <span dir="ltr">2 Files Only (HTML/JS)</span></span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>السداد: <span dir="ltr">Stars + الكريمي + WhatsApp</span></span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('عود وعنبر', '7,000 ⭐ نجمة ⭐')">طلب القالب</button>
+                <a class="prog-more" href="/templates/oud-amber/" target="_blank" rel="noopener noreferrer" title="معاينة حية لمتجر عود وعنبر">معاينة حية</a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between gap-3">
-              <button onclick="previewTemplate('عود وعنبر')" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition-colors">
-                معاينة حية للمتجر
-              </button>
-              <button onclick="openOrderModal('عود وعنبر', '7,000 ⭐ نجمة ⭐')" class="flex-1 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white transition-all shadow-glow-sm">
-                طلب القالب
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-purple-500/40 transition-all">
-            <div class="space-y-4">
-              <div class="flex items-center justify-between">
-                <span class="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold font-mono">
-                  Electronics &amp; Tech
-                </span>
-                <span class="font-mono text-xs font-bold text-amber-400">5,600 ⭐ نجمة ⭐</span>
+          </article>
+          <article class="prog-card tpl-card">
+            <a class="prog-thumb" href="/templates/smart-zone/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+              <img src="/fx/templates/smart-zone.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">Electronics &amp; Tech</span>
+                <span class="prog-dl prog-dl--direct"><span>5,600 نجمة</span></span>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">
-                  سمارت زون
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1.5">
-                  قالب متجر إلكترونيات بهوية تقنية داكنة: رقاقات مواصفات فنية، ترتيب المنتجات حسب السعر، عدّادات تفاعلية، وبطاقات عريضة مبنية لعرض الأجهزة بثقة.
-                </p>
-              </div>
-
-              <div class="p-3 rounded-xl bg-slate-900/60 border border-white/5 space-y-1.5 text-xs text-slate-300">
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">السرعة:</span>
-                  <span class="text-emerald-400 font-mono">&lt; 300ms</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">البنية:</span>
-                  <span class="text-techCyan font-mono">2 Files Only (HTML/JS)</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">السداد:</span>
-                  <span class="text-amber-400 font-mono">Stars + الكريمي + WhatsApp</span>
-                </div>
+              <h3 class="prog-title">سمارت زون</h3>
+              <p class="prog-desc">قالب متجر إلكترونيات بهوية تقنية داكنة: رقاقات مواصفات فنية، ترتيب المنتجات حسب السعر، عدّادات تفاعلية، وبطاقات عريضة مبنية لعرض الأجهزة بثقة.</p>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>السرعة: <span dir="ltr">&lt; 300ms</span></span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>البنية: <span dir="ltr">2 Files Only (HTML/JS)</span></span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>السداد: <span dir="ltr">Stars + الكريمي + WhatsApp</span></span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('سمارت زون', '5,600 ⭐ نجمة ⭐')">طلب القالب</button>
+                <a class="prog-more" href="/templates/smart-zone/" target="_blank" rel="noopener noreferrer" title="معاينة حية لمتجر سمارت زون">معاينة حية</a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between gap-3">
-              <button onclick="previewTemplate('سمارت زون')" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition-colors">
-                معاينة حية للمتجر
-              </button>
-              <button onclick="openOrderModal('سمارت زون', '5,600 ⭐ نجمة ⭐')" class="flex-1 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white transition-all shadow-glow-sm">
-                طلب القالب
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-purple-500/40 transition-all">
-            <div class="space-y-4">
-              <div class="flex items-center justify-between">
-                <span class="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold font-mono">
-                  Dates &amp; Coffee
-                </span>
-                <span class="font-mono text-xs font-bold text-amber-400">4,600 ⭐ نجمة ⭐</span>
+          </article>
+          <article class="prog-card tpl-card">
+            <a class="prog-thumb" href="/templates/durra/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+              <img src="/fx/templates/durra.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">Dates &amp; Coffee</span>
+                <span class="prog-dl prog-dl--direct"><span>4,600 نجمة</span></span>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">
-                  دُرّة
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1.5">
-                  تصميم مخصص للمنتجات الغذائية والضيافة والتمور الفاخرة: استعراض الأحجام والوزن، طلب فوري مع احتساب تكلفة التوصيل وملاحظات العميل.
-                </p>
-              </div>
-
-              <div class="p-3 rounded-xl bg-slate-900/60 border border-white/5 space-y-1.5 text-xs text-slate-300">
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">السرعة:</span>
-                  <span class="text-emerald-400 font-mono">&lt; 300ms</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">البنية:</span>
-                  <span class="text-techCyan font-mono">2 Files Only (HTML/JS)</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">السداد:</span>
-                  <span class="text-amber-400 font-mono">Stars + الكريمي + WhatsApp</span>
-                </div>
+              <h3 class="prog-title">دُرّة</h3>
+              <p class="prog-desc">تصميم مخصص للمنتجات الغذائية والضيافة والتمور الفاخرة: استعراض الأحجام والوزن، طلب فوري مع احتساب تكلفة التوصيل وملاحظات العميل.</p>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>السرعة: <span dir="ltr">&lt; 300ms</span></span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>البنية: <span dir="ltr">2 Files Only (HTML/JS)</span></span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>السداد: <span dir="ltr">Stars + الكريمي + WhatsApp</span></span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('دُرّة', '4,600 ⭐ نجمة ⭐')">طلب القالب</button>
+                <a class="prog-more" href="/templates/durra/" target="_blank" rel="noopener noreferrer" title="معاينة حية لمتجر دُرّة">معاينة حية</a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between gap-3">
-              <button onclick="previewTemplate('دُرّة')" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition-colors">
-                معاينة حية للمتجر
-              </button>
-              <button onclick="openOrderModal('دُرّة', '4,600 ⭐ نجمة ⭐')" class="flex-1 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white transition-all shadow-glow-sm">
-                طلب القالب
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-purple-500/40 transition-all">
-            <div class="space-y-4">
-              <div class="flex items-center justify-between">
-                <span class="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold font-mono">
-                  Bots &amp; Digital Assets
-                </span>
-                <span class="font-mono text-xs font-bold text-amber-400">5,200 ⭐ نجمة ⭐</span>
+          </article>
+          <article class="prog-card tpl-card">
+            <a class="prog-thumb" href="/templates/bot-bazaar/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+              <img src="/fx/templates/bot-bazaar.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">Bots &amp; Digital Assets</span>
+                <span class="prog-dl prog-dl--direct"><span>5,200 نجمة</span></span>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">
-                  بوت بازار
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1.5">
-                  قالب سوق إلكتروني لعرض البوتات والسكربتات وقوالب الويب: استعراض الخصائص، دعم تقييمات العملاء، وزر التجربة الحية لكل منتج.
-                </p>
-              </div>
-
-              <div class="p-3 rounded-xl bg-slate-900/60 border border-white/5 space-y-1.5 text-xs text-slate-300">
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">السرعة:</span>
-                  <span class="text-emerald-400 font-mono">&lt; 300ms</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">البنية:</span>
-                  <span class="text-techCyan font-mono">2 Files Only (HTML/JS)</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">السداد:</span>
-                  <span class="text-amber-400 font-mono">Stars + الكريمي + WhatsApp</span>
-                </div>
+              <h3 class="prog-title">بوت بازار</h3>
+              <p class="prog-desc">قالب سوق إلكتروني لعرض البوتات والسكربتات وقوالب الويب: استعراض الخصائص، دعم تقييمات العملاء، وزر التجربة الحية لكل منتج.</p>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>السرعة: <span dir="ltr">&lt; 300ms</span></span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>البنية: <span dir="ltr">2 Files Only (HTML/JS)</span></span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>السداد: <span dir="ltr">Stars + الكريمي + WhatsApp</span></span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('بوت بازار', '5,200 ⭐ نجمة ⭐')">طلب القالب</button>
+                <a class="prog-more" href="/templates/bot-bazaar/" target="_blank" rel="noopener noreferrer" title="معاينة حية لمتجر بوت بازار">معاينة حية</a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between gap-3">
-              <button onclick="previewTemplate('بوت بازار')" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition-colors">
-                معاينة حية للمتجر
-              </button>
-              <button onclick="openOrderModal('بوت بازار', '5,200 ⭐ نجمة ⭐')" class="flex-1 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white transition-all shadow-glow-sm">
-                طلب القالب
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-purple-500/40 transition-all">
-            <div class="space-y-4">
-              <div class="flex items-center justify-between">
-                <span class="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold font-mono">
-                  Insurance &amp; Security
-                </span>
-                <span class="font-mono text-xs font-bold text-amber-400">4,200 ⭐ نجمة ⭐</span>
+          </article>
+          <article class="prog-card tpl-card">
+            <a class="prog-thumb" href="/templates/aman/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+              <img src="/fx/templates/aman.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">Insurance &amp; Security</span>
+                <span class="prog-dl prog-dl--direct"><span>4,200 نجمة</span></span>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">
-                  أمان
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1.5">
-                  قالب أنيق لتقديم باقات الضمان والتأمين وخدمات الصيانة الدورية مع جداول مقارنة الباقات وتأكيد الطلب الفوري.
-                </p>
-              </div>
-
-              <div class="p-3 rounded-xl bg-slate-900/60 border border-white/5 space-y-1.5 text-xs text-slate-300">
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">السرعة:</span>
-                  <span class="text-emerald-400 font-mono">&lt; 300ms</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">البنية:</span>
-                  <span class="text-techCyan font-mono">2 Files Only (HTML/JS)</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">السداد:</span>
-                  <span class="text-amber-400 font-mono">Stars + الكريمي + WhatsApp</span>
-                </div>
+              <h3 class="prog-title">أمان</h3>
+              <p class="prog-desc">قالب أنيق لتقديم باقات الضمان والتأمين وخدمات الصيانة الدورية مع جداول مقارنة الباقات وتأكيد الطلب الفوري.</p>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>السرعة: <span dir="ltr">&lt; 300ms</span></span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>البنية: <span dir="ltr">2 Files Only (HTML/JS)</span></span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>السداد: <span dir="ltr">Stars + الكريمي + WhatsApp</span></span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('أمان', '4,200 ⭐ نجمة ⭐')">طلب القالب</button>
+                <a class="prog-more" href="/templates/aman/" target="_blank" rel="noopener noreferrer" title="معاينة حية لمتجر أمان">معاينة حية</a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between gap-3">
-              <button onclick="previewTemplate('أمان')" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition-colors">
-                معاينة حية للمتجر
-              </button>
-              <button onclick="openOrderModal('أمان', '4,200 ⭐ نجمة ⭐')" class="flex-1 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white transition-all shadow-glow-sm">
-                طلب القالب
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-purple-500/40 transition-all">
-            <div class="space-y-4">
-              <div class="flex items-center justify-between">
-                <span class="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold font-mono">
-                  Fintech &amp; Cards
-                </span>
-                <span class="font-mono text-xs font-bold text-amber-400">3,600 ⭐ نجمة ⭐</span>
+          </article>
+          <article class="prog-card tpl-card">
+            <a class="prog-thumb" href="/templates/mahfazah/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+              <img src="/fx/templates/mahfazah.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">Fintech &amp; Cards</span>
+                <span class="prog-dl prog-dl--direct"><span>3,600 نجمة</span></span>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">
-                  محفظة
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1.5">
-                  قالب مخصص لمكاتب التحويلات وشحن بطاقات الهدايا والمحافظ الإلكترونية مع شاشات توضيحية لأسعار الصرف وعمولات التحويل.
-                </p>
-              </div>
-
-              <div class="p-3 rounded-xl bg-slate-900/60 border border-white/5 space-y-1.5 text-xs text-slate-300">
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">السرعة:</span>
-                  <span class="text-emerald-400 font-mono">&lt; 300ms</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">البنية:</span>
-                  <span class="text-techCyan font-mono">2 Files Only (HTML/JS)</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">السداد:</span>
-                  <span class="text-amber-400 font-mono">Stars + الكريمي + WhatsApp</span>
-                </div>
+              <h3 class="prog-title">محفظة</h3>
+              <p class="prog-desc">قالب مخصص لمكاتب التحويلات وشحن بطاقات الهدايا والمحافظ الإلكترونية مع شاشات توضيحية لأسعار الصرف وعمولات التحويل.</p>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>السرعة: <span dir="ltr">&lt; 300ms</span></span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>البنية: <span dir="ltr">2 Files Only (HTML/JS)</span></span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>السداد: <span dir="ltr">Stars + الكريمي + WhatsApp</span></span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('محفظة', '3,600 ⭐ نجمة ⭐')">طلب القالب</button>
+                <a class="prog-more" href="/templates/mahfazah/" target="_blank" rel="noopener noreferrer" title="معاينة حية لمتجر محفظة">معاينة حية</a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between gap-3">
-              <button onclick="previewTemplate('محفظة')" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition-colors">
-                معاينة حية للمتجر
-              </button>
-              <button onclick="openOrderModal('محفظة', '3,600 ⭐ نجمة ⭐')" class="flex-1 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white transition-all shadow-glow-sm">
-                طلب القالب
-              </button>
-            </div>
-          </div>
-          <div class="bento-card p-6 flex flex-col justify-between group hover:border-purple-500/40 transition-all">
-            <div class="space-y-4">
-              <div class="flex items-center justify-between">
-                <span class="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-bold font-mono">
-                  Luxury Watches
-                </span>
-                <span class="font-mono text-xs font-bold text-amber-400">8,800 ⭐ نجمة ⭐</span>
+          </article>
+          <article class="prog-card tpl-card">
+            <a class="prog-thumb" href="/templates/chrono/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+              <img src="/fx/templates/chrono.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+            </a>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">Luxury Watches</span>
+                <span class="prog-dl prog-dl--direct"><span>8,800 نجمة</span></span>
               </div>
-
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">
-                  كرونو (Chrono)
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1.5">
-                  الواجهة الأكثر فخامة وتفرداً: معارض صور بانورامية ثلاثية اللمس، فلاتر للماركات العالمية، وخاصية حجز القطع النادرة بعربون فوري.
-                </p>
-              </div>
-
-              <div class="p-3 rounded-xl bg-slate-900/60 border border-white/5 space-y-1.5 text-xs text-slate-300">
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">السرعة:</span>
-                  <span class="text-emerald-400 font-mono">&lt; 300ms</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">البنية:</span>
-                  <span class="text-techCyan font-mono">2 Files Only (HTML/JS)</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-slate-400">السداد:</span>
-                  <span class="text-amber-400 font-mono">Stars + الكريمي + WhatsApp</span>
-                </div>
+              <h3 class="prog-title">كرونو (Chrono)</h3>
+              <p class="prog-desc">الواجهة الأكثر فخامة وتفرداً: معارض صور بانورامية ثلاثية اللمس، فلاتر للماركات العالمية، وخاصية حجز القطع النادرة بعربون فوري.</p>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>السرعة: <span dir="ltr">&lt; 300ms</span></span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>البنية: <span dir="ltr">2 Files Only (HTML/JS)</span></span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>السداد: <span dir="ltr">Stars + الكريمي + WhatsApp</span></span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('كرونو (Chrono)', '8,800 ⭐ نجمة ⭐')">طلب القالب</button>
+                <a class="prog-more" href="/templates/chrono/" target="_blank" rel="noopener noreferrer" title="معاينة حية لمتجر كرونو (Chrono)">معاينة حية</a>
               </div>
             </div>
-
-            <div class="pt-5 mt-4 border-t border-slate-800 flex items-center justify-between gap-3">
-              <button onclick="previewTemplate('كرونو (Chrono)')" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition-colors">
-                معاينة حية للمتجر
-              </button>
-              <button onclick="openOrderModal('كرونو (Chrono)', '8,800 ⭐ نجمة ⭐')" class="flex-1 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white transition-all shadow-glow-sm">
-                طلب القالب
-              </button>
-            </div>
-          </div>
+          </article>
         </div>
 
       </div>
@@ -603,6 +454,8 @@
             <li><a href="/programs.html" class="hover:text-techCyan transition-colors">كاشف التزييف VerityScope</a></li>
             <li><a href="/templates.html" class="hover:text-techCyan transition-colors">قالب متجر عود وعنبر (Zero-Deps)</a></li>
             <li><a href="/trial.html" class="hover:text-techCyan transition-colors">تفعيل التجربة المجانية (3 أيام)</a></li>
+            <li><a href="https://zeidexlink.zeidexsoft.com/" target="_blank" rel="noopener" class="hover:text-techCyan transition-colors">ZeidexLink — روابط ومنيو QR</a></li>
+            <li><a href="https://mithqal.zeidexsoft.com/" target="_blank" rel="noopener" class="hover:text-techCyan transition-colors">مثقال — المحاسبة السحابية</a></li>
           </ul>
         </div>
 
@@ -774,9 +627,6 @@
   </script>
 
   <script>
-    function previewTemplate(name) {
-      showToast('فتح المعاينة التفاعلية لقالب: ' + name, 'المعاينة الحية');
-    }
     function openOrderModal(title, price) {
       const modal = document.getElementById('orderModal');
       const titleEl = document.getElementById('orderModalTitle');
@@ -793,5 +643,6 @@
       if (modal) modal.classList.add('hidden');
     }
   </script>
+  <script src="/fx/site-fx.js" defer></script>
 </body>
 </html>

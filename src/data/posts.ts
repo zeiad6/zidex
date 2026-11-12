@@ -51,6 +51,16 @@ export type Block =
       meta: string
       also?: { href: string; label: string; meta: string }[]
     }
+  /**
+   * One player and a chapter list: picking a chapter loads it into the same
+   * player. Thirty separate <video> elements would mean thirty poster fetches.
+   */
+  | {
+      type: 'videos'
+      lang: 'ar' | 'en'
+      items: { title: string; src: string }[]
+      caption?: string
+    }
   /** Hub-and-spoke architecture diagram: one centre node wired to N nodes below it. */
   | {
       type: 'hub'
@@ -93,6 +103,21 @@ export type Post = PostMeta & { body: Block[] }
 type RawPost = PostMeta
 
 const raw: RawPost[] = [
+  {
+    slug: 'craft-of-selfteaching',
+    title: 'فن التعلّم الذاتي: دورة Python كاملة بالعربية — 26 دفتراً و30 فيديو مجاناً',
+    excerpt:
+      'نسخة عربية وإنجليزية محدّثة من كتاب The Craft of Self-Teaching: 13 فصلاً على Python 3.12+، دفاتر Jupyter تعمل على Colab، 24 تحدياً بحلولها، و30 فيديو شارحاً تشاهدها هنا مباشرة.',
+    category: 'تقنية',
+    date: '2026-11-12',
+    featured: true,
+    cover: 'video',
+    coverFrom: 'from-emerald-600',
+    coverTo: 'to-ink-900',
+    tags: ['Python', 'تعلّم ذاتي', 'Jupyter', 'Colab', 'دورة مجانية', 'مفتوح المصدر'],
+    readMinutes: 4,
+    headings: [{"id":"watch-ar","text":"شاهد الدورة كاملة بالعربية","level":2},{"id":"four-rules","text":"القواعد الأربع للمتعلّم الذاتي","level":2},{"id":"whats-new","text":"ما الذي تضيفه هذه النسخة؟","level":2},{"id":"curriculum","text":"المنهج: ثلاث مراحل وثلاثة عشر فصلاً","level":2},{"id":"start","text":"كيف تبدأ","level":2},{"id":"start-colab","text":"بلا تثبيت: Google Colab","level":3},{"id":"start-local","text":"على جهازك","level":3},{"id":"watch-en","text":"النسخة الإنجليزية من الفيديوهات","level":2},{"id":"video-engine","text":"كيف أُنتجت الفيديوهات","level":2},{"id":"license","text":"الحقوق والمساهمة","level":2}],
+  },
   {
     slug: 'local-cicd-guide',
     title: 'الدليل العملي الشامل: تشغيل وتثبيت CI/CD محلياً على Linux و Windows و Termux دون أخطاء',

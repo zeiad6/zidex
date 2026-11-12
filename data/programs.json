@@ -1,0 +1,934 @@
+{
+  "generated": "2026-11-11",
+  "total": 39926631,
+  "programs": [
+    {
+      "id": 1,
+      "slug": "yusr",
+      "cat": "windows",
+      "badge": "نظام محاسبي سيادي",
+      "platform": "Windows x64 / Linux",
+      "title": "يُسر — نظام المحاسبة وإدارة الأوقاف والجمعيات الخيرية",
+      "desc": "نظام مالي وإداري سيادي متكامل للمنظمات غير الربحية والجمعيات الخيرية ولجان الزكاة والأوقاف: دفتر أستاذ مشفّر بسلسلة SHA-256 لمنع التلاعب، مستشار ذكي محلي (AI Advisor)، دعم فوترة ZATCA المرحلة الثانية، نسخ احتياطي تلقائي، وتوافق شبكي LAN مع عمل مستقل 100% بدون إنترنت.",
+      "items": [
+        "قاعدة بيانات مؤسسية PostgreSQL (PgSQL 18) مدمجة ذاتياً",
+        "دفتر أستاذ مشفّر بسلسلة كتل SHA-256 لمنع التلاعب",
+        "مستشار ذكي محلي يعمل 100% دون اتصال بالإنترنت",
+        "دعم فوترة ZATCA المرحلة الثانية وتوافق شبكي LAN"
+      ],
+      "version": "v0.2.1",
+      "rawVersion": "0.2.1",
+      "released": "2026-10-28",
+      "downloads": 28,
+      "repo": "zeiad6/yusr",
+      "short": "يُسر",
+      "art": "ledger",
+      "accent": "#10b981",
+      "tagline": "دفتر أستاذ مشفّر",
+      "links": [
+        {
+          "href": "https://github.com/zeiad6/yusr/releases/download/v0.2.1/Yusr-Lite_0.2.1_x64_en-US.msi",
+          "host": "GitHub",
+          "size": "255.8 MB",
+          "text": "Windows x64 (MSI 255.8 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/zeiad6/yusr/releases/download/v0.2.1/Yusr_0.2.1_amd64.deb",
+          "host": "GitHub",
+          "size": "7.2 MB",
+          "text": "Linux x64 (DEB 7.2 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "slug": "verityscope",
+      "cat": "android",
+      "badge": "أمن وذكاء اصطناعي",
+      "platform": "Android 8.0+",
+      "title": "VerityScope — كاشف التزييف العميق",
+      "desc": "تطبيق أندرويد يكشف التزييف العميق في الصور والفيديو والنصوص بـ 5 نماذج ذكاء اصطناعي محلية + فحص بيانات المصدر (C2PA, EXIF) — كل شيء على الجهاز، بياناتك لا تغادر. حزمة واحدة شاملة تعمل على كل الأجهزة (arm64-v8a, armeabi-v7a, x86, x86_64).",
+      "items": [
+        "5 نماذج ذكاء اصطناعي عصبية تعمل محلياً على هاتفك",
+        "فحص الصور والفيديوهات والنصوص لكشف التزييف العميق Deepfake",
+        "تحليل بصمات C2PA وبيانات EXIF الوصفية",
+        "حماية كاملة للخصوصية دون رفع أي وسائط للسحاب"
+      ],
+      "version": "v0.4.0",
+      "rawVersion": "0.4.0",
+      "released": null,
+      "downloads": null,
+      "repo": null,
+      "short": "VerityScope",
+      "art": "scan",
+      "accent": "#06b6d4",
+      "tagline": "كشف التزييف محلياً",
+      "links": [
+        {
+          "href": "https://www.mediafire.com/file/38z57gqtgndpioy/VerityScope-v0.4.0-universal.apk/file",
+          "text": "MediaFire (240.1 MB)",
+          "host": "MediaFire",
+          "size": "240.1 MB",
+          "platform": "Android 8.0+",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "zeidex-convert-android",
+      "cat": "android",
+      "badge": "أدوات وسائط فائقة",
+      "platform": "Android 8.0+",
+      "title": "محوّل الملفات Zeidex Convert — أندرويد",
+      "desc": "تطبيق أندرويد محلي 100% لتحويل واستخراج الملفات: استخراج فيديو الصور الحية (Pixel و Samsung و Apple Live Photo)، تحسين جودة الفيديو والصور، ضغط الوسائط، دمج PDF، وتوليد QR — كل شيء على جهازك دون اتصال.",
+      "items": [
+        "استخراج الفيديو من صور Motion Photos و Live Photos إلى MP4",
+        "تعزيز جودة الصور ودقة الوضوح أوفلاين",
+        "دمج وضغط ملفات PDF وتوليد رموز QR سريعة",
+        "صفر إعلانات ولا يتطلب اتصالاً بالإنترنت"
+      ],
+      "version": "v1.2.0",
+      "rawVersion": "1.2.0",
+      "released": null,
+      "downloads": null,
+      "repo": null,
+      "short": "Convert",
+      "art": "device",
+      "accent": "#06b6d4",
+      "tagline": "تحويل بلا إنترنت",
+      "links": [
+        {
+          "href": "https://www.mediafire.com/file/vikc6vaxcd64vyd/zeidex-convert-v1.2.0.apk/file",
+          "text": "MediaFire (10.8 MB)",
+          "host": "MediaFire",
+          "size": "10.8 MB",
+          "platform": "Android 8.0+",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "slug": "edms-archive-pro",
+      "cat": "windows",
+      "badge": "إدارة وأرشفة وثائق",
+      "platform": "Windows x64",
+      "title": "أرشيف برو EDMS",
+      "desc": "نظام إدارة وثائق إلكترونية: بحث نصي كامل، إصدارات غير قابلة للاستبدال، سير عمل، وتوقيع رقمي.",
+      "items": [
+        "فهرسة وبحث نصي كامل OCR للمستندات والملفات الممسوحة",
+        "سجل تعديلات غير قابل للتعديل مع توقيع رقمي",
+        "سير عمل آمن لإدارة المعاملات والموافقات الرسمية",
+        "نسخ احتياطي واستعادة تلقائية مع التشفير الكامل"
+      ],
+      "version": "v1.0.7",
+      "rawVersion": "1.0.7",
+      "released": "2026-10-23",
+      "downloads": 94,
+      "repo": "zeiad6/Edms-archive",
+      "short": "EDMS",
+      "art": "archive",
+      "accent": "#10b981",
+      "tagline": "أرشفة موقّعة",
+      "links": [
+        {
+          "href": "https://github.com/zeiad6/Edms-archive/releases/download/v1.0.7/EDMS-Archive-1.0.7-Setup-x64.exe",
+          "host": "GitHub",
+          "size": "238.7 MB",
+          "text": "Windows x64 (EXE 238.7 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "edms-archive-android",
+      "cat": "android",
+      "badge": "أرشفة جوّال",
+      "platform": "Android 8.0+",
+      "title": "أرشيف برو EDMS — أندرويد",
+      "desc": "عميل أندرويد أصلي لنظام الأرشفة نفسه: يعمل كاملاً على الجهاز بقاعدة بيانات وملفات محلية، أو يتصل بالنسخة المكتبية عبر بوابة HTTPS بشهادة مثبّتة. نقل القاعدة وكلمات المرور والملفات في الاتجاهين بلا تحويل.",
+      "items": [
+        "مسح المستندات بكاميرا الهاتف مع معالجة ذكية للحدود",
+        "مزامنة مشفرة وآمنة مع خادم الأرشيف المكتبي عبر HTTPS",
+        "بحث فوري في الوثائق المحفوظة والمؤرشفة محلياً",
+        "تشفير البيانات الحساسة على ذاكرة الهاتف"
+      ],
+      "version": "v1.0.4",
+      "rawVersion": "1.0.4",
+      "released": "2026-10-26",
+      "downloads": 7,
+      "repo": "zeiad6/Edms-archive-Android",
+      "short": "EDMS Go",
+      "art": "device",
+      "accent": "#06b6d4",
+      "tagline": "أرشيف في جيبك",
+      "links": [
+        {
+          "href": "https://github.com/zeiad6/Edms-archive-Android/releases/download/v1.0.4/EDMS-Android-1.0.4-zeidex.apk",
+          "host": "GitHub",
+          "size": "22.7 MB",
+          "text": "Android APK (APK 22.7 MB)",
+          "platform": "Android 8+",
+          "primary": true
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "slug": "wordcraft",
+      "cat": "microsoft",
+      "badge": "بديل Microsoft Word",
+      "platform": "Windows x64",
+      "title": "WordCraft — بديل ميكروسوفت وورد الاحترافي",
+      "desc": "معالج نصوص متقدم ومفتوح المصدر، إعادة بناء نظيفة لـ Microsoft Word بلغة Rust: تنسيق متقدم، جداول، دعم كامل لملفات DOCX، وتصدير PDF بدون اشتراك أو قيود.",
+      "items": [
+        "معالج نصوص فائق السرعة والخفة مبني بلغة Rust",
+        "دعم كامل وتوافق تام مع ملفات DOCX وتنسيق الجداول",
+        "تصدير فوري إلى مستندات PDF جاهزة للطباعة",
+        "صفر اشتراكات ولا يتطلب تسجيل حساب"
+      ],
+      "version": "v0.17.0",
+      "rawVersion": "0.17.0",
+      "released": "2026-11-09",
+      "downloads": 2793188,
+      "repo": "storytold/wordcraft",
+      "short": "WordCraft",
+      "art": "page",
+      "accent": "#3b82f6",
+      "tagline": "بديل Microsoft Word",
+      "links": [
+        {
+          "href": "https://github.com/storytold/wordcraft/releases/download/v0.17.0/wordcraft-0.17.0-windows-x64.msi",
+          "host": "GitHub",
+          "size": "90.4 MB",
+          "text": "Windows x64 (MSI 90.4 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/storytold/wordcraft/releases/download/v0.17.0/wordcraft-0.17.0-linux-x86_64.deb",
+          "host": "GitHub",
+          "size": "114.3 MB",
+          "text": "Linux x64 (DEB 114.3 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/storytold/wordcraft/releases/download/v0.17.0/wordcraft-0.17.0-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "125.7 MB",
+          "text": "macOS (DMG 125.7 MB)",
+          "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "slug": "gridcraft",
+      "cat": "microsoft",
+      "badge": "بديل Microsoft Excel",
+      "platform": "Windows x64",
+      "title": "GridCraft — جداول البيانات السريعة (بديل إكسيل)",
+      "desc": "جداول بيانات متطورة ومفتوحة المصدر كبديل كامل لـ Microsoft Excel: سرعة فائقة في معالجة مئات آلاف الصفوف، صيغ ودوال حسابية، رسوم بيانية تفاعلية، ودعم صيغ XLSX.",
+      "items": [
+        "معالجة ملايين الصفوف بسرعة البرق بفضل محرك Rust",
+        "دوال ومعادلات رياضية متقدمة ومخططات بيانية تفاعلية",
+        "توافق كامل مع ملفات XLSX و CSV",
+        "واجهة عربية وأجنبية بديهية وخفيفة على الذاكرة"
+      ],
+      "version": "v0.18.0",
+      "rawVersion": "0.18.0",
+      "released": "2026-11-09",
+      "downloads": 2237670,
+      "repo": "storytold/gridcraft",
+      "short": "GridCraft",
+      "art": "sheet",
+      "accent": "#3b82f6",
+      "tagline": "بديل Microsoft Excel",
+      "links": [
+        {
+          "href": "https://github.com/storytold/gridcraft/releases/download/v0.18.0/gridcraft-0.18.0-windows-x64.msi",
+          "host": "GitHub",
+          "size": "39.7 MB",
+          "text": "Windows x64 (MSI 39.7 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/storytold/gridcraft/releases/download/v0.18.0/gridcraft-0.18.0-linux-x86_64.deb",
+          "host": "GitHub",
+          "size": "50.7 MB",
+          "text": "Linux x64 (DEB 50.7 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/storytold/gridcraft/releases/download/v0.18.0/gridcraft-0.18.0-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "82.2 MB",
+          "text": "macOS (DMG 82.2 MB)",
+          "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "slug": "deckcraft",
+      "cat": "microsoft",
+      "badge": "بديل PowerPoint",
+      "platform": "Windows x64",
+      "title": "DeckCraft — العروض التقديمية والشرائح (بديل باوربوينت)",
+      "desc": "تصميم وتقديم العروض التفاعلية كبديل نظيف لـ Microsoft PowerPoint: انتقالات سلسة بمعدل إطارات مرتفع، قوالب عصرية، تصدير PDF وفيديو، ودعم ملفات PPTX بلغة Rust.",
+      "items": [
+        "تصميم عروض وشرائح تقديمية تفاعلية بانتقالات سلسة 60fps",
+        "قوالب عصرية جاهزة للأعمال والتقارير والتعليم",
+        "تصدير العروض إلى PDF وفيديو عالي الدقة",
+        "دعم ملفات PPTX ومشاركة محلية سهلة"
+      ],
+      "version": "v0.17.0",
+      "rawVersion": "0.17.0",
+      "released": "2026-11-09",
+      "downloads": 1822762,
+      "repo": "storytold/deckcraft",
+      "short": "DeckCraft",
+      "art": "slides",
+      "accent": "#3b82f6",
+      "tagline": "بديل PowerPoint",
+      "links": [
+        {
+          "href": "https://github.com/storytold/deckcraft/releases/download/v0.17.0/deckcraft-0.17.0-windows-x64.msi",
+          "host": "GitHub",
+          "size": "79 MB",
+          "text": "Windows x64 (MSI 79 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/storytold/deckcraft/releases/download/v0.17.0/deckcraft-0.17.0-linux-x86_64.deb",
+          "host": "GitHub",
+          "size": "101.2 MB",
+          "text": "Linux x64 (DEB 101.2 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/storytold/deckcraft/releases/download/v0.17.0/deckcraft-0.17.0-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "107.3 MB",
+          "text": "macOS (DMG 107.3 MB)",
+          "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "slug": "photocraft",
+      "cat": "premium",
+      "badge": "بديل Adobe Photoshop",
+      "platform": "Windows x64",
+      "title": "PhotoCraft — محرّر الصور الاحترافي (بديل فوتوشوب)",
+      "desc": "محرّر صور مفتوح المصدر، إعادة بناء نظيفة لـ Adobe Photoshop: طبقات، أقنعة، مرشّحات، أدوات تحديد ذكية، دعم PSD، وتحرير غير متلف — بديل مجاني كامل بلا اشتراك يعمل محلياً.",
+      "items": [
+        "محرر صور متقدم مع طبقات وأقنعة وتعديلات غير هدامة",
+        "أدوات تنقيح احترافية وفلاتر لونية سينمائية",
+        "دعم ملفات PSD و RAW وصيغ الصور الحديثة",
+        "أداء خارق مع استهلاك منخفض جداً للذاكرة"
+      ],
+      "version": "v0.22.0",
+      "rawVersion": "0.22.0",
+      "released": "2026-11-09",
+      "downloads": 4694648,
+      "repo": "storytold/photocraft",
+      "short": "PhotoCraft",
+      "art": "photo",
+      "accent": "#8b5cf6",
+      "tagline": "بديل Adobe Photoshop",
+      "links": [
+        {
+          "href": "https://github.com/storytold/photocraft/releases/download/v0.22.0/photocraft-0.22.0-windows-x64.msi",
+          "host": "GitHub",
+          "size": "111.9 MB",
+          "text": "Windows x64 (MSI 111.9 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/storytold/photocraft/releases/download/v0.22.0/photocraft-0.22.0-linux-x86_64.deb",
+          "host": "GitHub",
+          "size": "132.8 MB",
+          "text": "Linux x64 (DEB 132.8 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/storytold/photocraft/releases/download/v0.22.0/photocraft-0.22.0-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "257.2 MB",
+          "text": "macOS (DMG 257.2 MB)",
+          "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "slug": "artcraft",
+      "cat": "premium",
+      "badge": "الرسم الرقمي للفنانين",
+      "platform": "Windows x64",
+      "title": "ArtCraft — محرّك الإبداع للفنانين والمصممين",
+      "desc": "بيئة إبداع متكاملة للفنانين والمصممين وصنّاع الأفلام: لوحة دقيقة تجمع التصميم والرسم وأدوات الذكاء الاصطناعي في مكان واحد، بتحكم كامل في كل عنصر. تعمل محلياً على جهازك.",
+      "items": [
+        "فرش رسم تحاكي الزيت والألوان المائية والحبر الطبيعي",
+        "دعم كامل لألواح الرسم (Drawing Tablets) وحساسية الضغط",
+        "محرك تلوين سلس ومحاكاة فيزيائية لتوزيع الألوان",
+        "تصدير بدقات فائقة 4K و 8K للمطبوعات الفنية"
+      ],
+      "version": "v0.41.1",
+      "rawVersion": "0.41.1",
+      "released": "2026-11-07",
+      "downloads": 1233726,
+      "repo": "storytold/artcraft",
+      "short": "ArtCraft",
+      "art": "paint",
+      "accent": "#8b5cf6",
+      "tagline": "الرسم الرقمي للفنانين",
+      "links": [
+        {
+          "href": "https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.1/ArtCraft_0.41.1_x64_en-US.msi",
+          "host": "GitHub",
+          "size": "44.9 MB",
+          "text": "Windows x64 (MSI 44.9 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.1/artcraft-0.41.1-linux-x86_64.deb",
+          "host": "GitHub",
+          "size": "47.6 MB",
+          "text": "Linux x64 (DEB 47.6 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/storytold/artcraft/releases/download/artcraft-v0.41.1/ArtCraft_0.41.1_universal.dmg",
+          "host": "GitHub",
+          "size": "90.5 MB",
+          "text": "macOS (DMG 90.5 MB)",
+          "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "slug": "filmcraft",
+      "cat": "premium",
+      "badge": "بديل Adobe Premiere",
+      "platform": "Windows x64",
+      "title": "FilmCraft — محرّر ومونتير الفيديو (بديل بريمير)",
+      "desc": "محرّر ومونتير فيديو احترافي غير خطي (بديل Adobe Premiere Pro): مسارات صوت وفيديو غير محدودة، تصحيح ألوان سينمائي، مؤثرات انتقالية، وتصدير عالي السرعة بلغة Rust.",
+      "items": [
+        "مونتاج فيديو متعدد المسارات (Multi-track Timeline)",
+        "قص ودمج وإضافة مؤثرات وتعديل ألوان سينمائي (Color Grading)",
+        "تصدير سريع مع تسريع عتادي GPU بجودة 4K",
+        "دعم تسجيل الصوت المباشر ومزامنة المقاطع التلقائية"
+      ],
+      "version": "v0.19.0",
+      "rawVersion": "0.19.0",
+      "released": "2026-11-09",
+      "downloads": 2849202,
+      "repo": "storytold/filmcraft",
+      "short": "FilmCraft",
+      "art": "timeline",
+      "accent": "#8b5cf6",
+      "tagline": "بديل Adobe Premiere",
+      "links": [
+        {
+          "href": "https://github.com/storytold/filmcraft/releases/download/v0.19.0/filmcraft-0.19.0-windows-x64.msi",
+          "host": "GitHub",
+          "size": "86.5 MB",
+          "text": "Windows x64 (MSI 86.5 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/storytold/filmcraft/releases/download/v0.19.0/filmcraft-0.19.0-linux-x86_64.deb",
+          "host": "GitHub",
+          "size": "105.1 MB",
+          "text": "Linux x64 (DEB 105.1 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/storytold/filmcraft/releases/download/v0.19.0/filmcraft-0.19.0-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "110.9 MB",
+          "text": "macOS (DMG 110.9 MB)",
+          "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "slug": "vectorcraft",
+      "cat": "premium",
+      "badge": "بديل Adobe Illustrator",
+      "platform": "Windows x64",
+      "title": "VectorCraft — تصميم الرسوميات المتجهية (بديل إليستريتور)",
+      "desc": "استوديو الرسم الشعاعي والمتجهي (بديل Adobe Illustrator): مسارات بيزيه فائقة الدقة، دعم كامل وتصدير لملفات SVG و EPS، وأدوات تصميم شعارات ورسوم توضيحية متقدمة.",
+      "items": [
+        "تصميم رسوميات وشعارات متجهة بدقة لامتناهية (Vector Art)",
+        "أدوات مسار دقيقة ومحاذاة ذكية وشبكات هندسية",
+        "دعم وتصدير ملفات SVG و AI و EPS و PDF",
+        "تحويل الصور النقطية إلى مسارات فيكتور أوتوماتيكياً"
+      ],
+      "version": "v0.23.0",
+      "rawVersion": "0.23.0",
+      "released": "2026-11-09",
+      "downloads": 2711765,
+      "repo": "storytold/vectorcraft",
+      "short": "VectorCraft",
+      "art": "vector",
+      "accent": "#8b5cf6",
+      "tagline": "بديل Adobe Illustrator",
+      "links": [
+        {
+          "href": "https://github.com/storytold/vectorcraft/releases/download/v0.23.0/vectorcraft-0.23.0-windows-x64.msi",
+          "host": "GitHub",
+          "size": "120.9 MB",
+          "text": "Windows x64 (MSI 120.9 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/storytold/vectorcraft/releases/download/v0.23.0/vectorcraft-0.23.0-linux-x86_64.deb",
+          "host": "GitHub",
+          "size": "149 MB",
+          "text": "Linux x64 (DEB 149 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/storytold/vectorcraft/releases/download/v0.23.0/vectorcraft-0.23.0-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "165.9 MB",
+          "text": "macOS (DMG 165.9 MB)",
+          "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "slug": "designcraft",
+      "cat": "premium",
+      "badge": "بديل Adobe InDesign",
+      "platform": "Windows x64",
+      "title": "DesignCraft — تصميم المطبوعات والنشر المكتبي (بديل إن ديزاين)",
+      "desc": "استوديو تنسيق الصفحات والنشر المكتبي (بديل Adobe InDesign): تخطيط شبكي متقن للكتب والمجلات والبروشورات، طباعة رقمية وفصل ألوان CMYK، وتصدير PDF عالي الجودة للطباعة.",
+      "items": [
+        "نشر مكتبي وتصميم صفحات المجلات والكتب والمطبوعات",
+        "دعم متقدم للخطوط العربية والتشكيل وألوان الطباعة CMYK",
+        "إدارة الصفحات الرئيسية والهوامش وعلامات القص",
+        "تصدير PDF مطابق لمعايير المطابع التجارية"
+      ],
+      "version": "v0.19.0",
+      "rawVersion": "0.19.0",
+      "released": "2026-11-09",
+      "downloads": 1905329,
+      "repo": "storytold/designcraft",
+      "short": "DesignCraft",
+      "art": "layout",
+      "accent": "#8b5cf6",
+      "tagline": "بديل Adobe InDesign",
+      "links": [
+        {
+          "href": "https://github.com/storytold/designcraft/releases/download/v0.19.0/designcraft-0.19.0-windows-x64.msi",
+          "host": "GitHub",
+          "size": "94.9 MB",
+          "text": "Windows x64 (MSI 94.9 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/storytold/designcraft/releases/download/v0.19.0/designcraft-0.19.0-linux-x86_64.deb",
+          "host": "GitHub",
+          "size": "120.7 MB",
+          "text": "Linux x64 (DEB 120.7 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/storytold/designcraft/releases/download/v0.19.0/designcraft-0.19.0-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "237 MB",
+          "text": "macOS (DMG 237 MB)",
+          "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "slug": "effectcraft",
+      "cat": "premium",
+      "badge": "بديل After Effects",
+      "platform": "Windows x64",
+      "title": "EffectCraft — الموشن جرافيكس والمؤثرات البصرية (بديل أفتر إفكتس)",
+      "desc": "محرك المؤثرات البصرية والرسوم المتحركة (بديل Adobe After Effects): تحريك الإطارات المفتاحية Keyframes، تركيب طبقات متعددة، ومؤثرات سينمائية بصرية مسرعة عتادياً بلغة Rust.",
+      "items": [
+        "تصميم موشن جرافيكس ومؤثرات بصرية سينمائية (VFX)",
+        "تحريك العناصر ثنائية وثلاثية الأبعاد مع نظام الإطارات المفتاحية",
+        "تركيب المشاهد وتطبيق أقنعة وتأثيرات الإضاءة الحجمية",
+        "معاينة تفاعلية في الوقت الفعلي بأعلى سلاسة"
+      ],
+      "version": "v0.23.1",
+      "rawVersion": "0.23.1",
+      "released": "2026-11-10",
+      "downloads": 2112774,
+      "repo": "storytold/effectcraft",
+      "short": "EffectCraft",
+      "art": "vfx",
+      "accent": "#8b5cf6",
+      "tagline": "بديل After Effects",
+      "links": [
+        {
+          "href": "https://github.com/storytold/effectcraft/releases/download/v0.23.1/effectcraft-0.23.1-windows-x64.msi",
+          "host": "GitHub",
+          "size": "60.9 MB",
+          "text": "Windows x64 (MSI 60.9 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/storytold/effectcraft/releases/download/v0.23.1/effectcraft-0.23.1-linux-x86_64.deb",
+          "host": "GitHub",
+          "size": "79.4 MB",
+          "text": "Linux x64 (DEB 79.4 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/storytold/effectcraft/releases/download/v0.23.1/effectcraft-0.23.1-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "78.3 MB",
+          "text": "macOS (DMG 78.3 MB)",
+          "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "slug": "soundcraft",
+      "cat": "premium",
+      "badge": "بديل Pro Tools / Audition",
+      "platform": "Windows x64",
+      "title": "SoundCraft — الهندسة الصوتية والتوزيع الرقمي (بديل برو تولز)",
+      "desc": "محطة عمل صوت رقمية احترافية DAW (بديل Avid Pro Tools و Adobe Audition): تسجيل ومكساج متعدد المسارات، تحرير موجات الصوت بدقة زمنية متناهية، وماسترنج نقي دون تأخير.",
+      "items": [
+        "تسجيل وهندسة صوتية متعددة المسارات بجودة استوديو احترافي",
+        "تنقية الضوضاء والتشويش عبر خوارزميات ذكية",
+        "مؤثرات صوتية متقدمة (Equalizer, Reverb, Compressor)",
+        "دعم تصدير WAV و FLAC و MP3 بدقات عالية"
+      ],
+      "version": "v0.19.0",
+      "rawVersion": "0.19.0",
+      "released": "2026-11-09",
+      "downloads": 1546215,
+      "repo": "storytold/soundcraft",
+      "short": "SoundCraft",
+      "art": "audio",
+      "accent": "#8b5cf6",
+      "tagline": "بديل Pro Tools / Audition",
+      "links": [
+        {
+          "href": "https://github.com/storytold/soundcraft/releases/download/v0.19.0/soundcraft-0.19.0-windows-x64.msi",
+          "host": "GitHub",
+          "size": "14 MB",
+          "text": "Windows x64 (MSI 14 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/storytold/soundcraft/releases/download/v0.19.0/soundcraft-0.19.0-linux-x86_64.deb",
+          "host": "GitHub",
+          "size": "20.6 MB",
+          "text": "Linux x64 (DEB 20.6 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/storytold/soundcraft/releases/download/v0.19.0/soundcraft-0.19.0-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "29 MB",
+          "text": "macOS (DMG 29 MB)",
+          "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "slug": "lightcraft",
+      "cat": "premium",
+      "badge": "بديل Adobe Lightroom",
+      "platform": "Windows x64",
+      "title": "LightCraft — تحميض ومعالجة صور RAW (بديل لايتروم)",
+      "desc": "معمل تظهير وتعديل ألوان الصور الفوتوغرافية (بديل Adobe Lightroom): تحرير غير متلف لملفات الكاميرا الخام RAW، تدرج لوني سينمائي، تعديل التعريض والتباين، وتنظيم مكتبات الصور.",
+      "items": [
+        "تحميض ومعالجة مكتبات صور RAW للمصورين الفوتوغرافيين",
+        "تعديل التباين والظلال والإضاءات وحرارة الألوان بدقة متناهية",
+        "تطبيق إعدادات مسبقة (Presets) وتعديل دفعات الصور جماعياً",
+        "حفظ وتصدير سريع مع الاحتفاظ بالملف الأصلي دون مساس"
+      ],
+      "version": "v0.20.0",
+      "rawVersion": "0.20.0",
+      "released": "2026-11-09",
+      "downloads": 2420617,
+      "repo": "storytold/lightcraft",
+      "short": "LightCraft",
+      "art": "raw",
+      "accent": "#8b5cf6",
+      "tagline": "بديل Adobe Lightroom",
+      "links": [
+        {
+          "href": "https://github.com/storytold/lightcraft/releases/download/v0.20.0/lightcraft-0.20.0-windows-x64.msi",
+          "host": "GitHub",
+          "size": "95 MB",
+          "text": "Windows x64 (MSI 95 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/storytold/lightcraft/releases/download/v0.20.0/lightcraft-0.20.0-linux-x86_64.deb",
+          "host": "GitHub",
+          "size": "118.3 MB",
+          "text": "Linux x64 (DEB 118.3 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/storytold/lightcraft/releases/download/v0.20.0/lightcraft-0.20.0-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "120.8 MB",
+          "text": "macOS (DMG 120.8 MB)",
+          "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "slug": "figcraft",
+      "cat": "premium",
+      "badge": "بديل Figma (Offline)",
+      "platform": "Windows x64",
+      "title": "FigCraft — تصميم واجهات المستخدم والنماذج الأولية (بديل فيجما)",
+      "desc": "بيئة تصميم تجربة وواجهة المستخدم والنماذج التفاعلية (بديل Figma): مكونات قابلة لإعادة الاستخدام، تخطيط تلقائي Auto-Layout، نماذج أولية تفاعلية، يعمل محلياً بالكامل بلا اتصال وبأعلى درجات الخصوصية.",
+      "items": [
+        "تصميم واجهات وتجارب المستخدم (UI/UX) والنماذج التفاعلية",
+        "أنظمة تصميم ومكونات قابلة لإعادة الاستخدام (Components)",
+        "حفظ وتصدير ملفات التصميم محلياً 100% دون اشتراك سحابي",
+        "تصدير الأكواد والمقاسات للمطورين فورياً"
+      ],
+      "version": "v0.17.0",
+      "rawVersion": "0.17.0",
+      "released": "2026-11-09",
+      "downloads": 1305538,
+      "repo": "storytold/figcraft",
+      "short": "FigCraft",
+      "art": "ui",
+      "accent": "#8b5cf6",
+      "tagline": "بديل Figma (Offline)",
+      "links": [
+        {
+          "href": "https://github.com/storytold/figcraft/releases/download/v0.17.0/figcraft-0.17.0-windows-x64.msi",
+          "host": "GitHub",
+          "size": "77.5 MB",
+          "text": "Windows x64 (MSI 77.5 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/storytold/figcraft/releases/download/v0.17.0/figcraft-0.17.0-linux-x86_64.deb",
+          "host": "GitHub",
+          "size": "98.9 MB",
+          "text": "Linux x64 (DEB 98.9 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/storytold/figcraft/releases/download/v0.17.0/figcraft-0.17.0-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "106.3 MB",
+          "text": "macOS (DMG 106.3 MB)",
+          "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "slug": "pdfcraft",
+      "cat": "premium",
+      "badge": "بديل Adobe Acrobat",
+      "platform": "Windows x64",
+      "title": "PdfCraft — قارئ ومحرّر مستندات PDF الاحترافي (بديل أكروبات)",
+      "desc": "أداة متكاملة لقراءة وتحرير وإدارة ملفات PDF (بديل Adobe Acrobat Pro): دمج الصفحات وتقسيمها، التوقيع الرقمي، التعليقات التوضيحية، وتحويل المستندات بسرعة فائقة وأمان تام.",
+      "items": [
+        "تعديل وإضافة النصوص والصور في مستندات PDF مباشرة",
+        "دمج وتقسيم وحذف وتدوير صفحات المستندات",
+        "تعبئة النماذج التفاعلية وإضافة التوقيع الرقمي المشفر",
+        "ضغط حجم الملفات وتأمينها بكلمات مرور وتشفير AES"
+      ],
+      "version": "v0.20.0",
+      "rawVersion": "0.20.0",
+      "released": "2026-11-09",
+      "downloads": 3871580,
+      "repo": "storytold/pdfcraft",
+      "short": "PdfCraft",
+      "art": "pdf",
+      "accent": "#8b5cf6",
+      "tagline": "بديل Adobe Acrobat",
+      "links": [
+        {
+          "href": "https://github.com/storytold/pdfcraft/releases/download/v0.20.0/pdfcraft-0.20.0-windows-x64.msi",
+          "host": "GitHub",
+          "size": "93.7 MB",
+          "text": "Windows x64 (MSI 93.7 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/storytold/pdfcraft/releases/download/v0.20.0/pdfcraft-0.20.0-linux-x86_64.deb",
+          "host": "GitHub",
+          "size": "114.9 MB",
+          "text": "Linux x64 (DEB 114.9 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/storytold/pdfcraft/releases/download/v0.20.0/pdfcraft-0.20.0-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "127.1 MB",
+          "text": "macOS (DMG 127.1 MB)",
+          "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "slug": "cadcraft",
+      "cat": "premium",
+      "badge": "بديل AutoCAD (CAD 2D/3D)",
+      "platform": "Windows x64",
+      "title": "CadCraft — التصميم الهندسي والمعماري CAD (بديل أوتوكاد)",
+      "desc": "برنامج التصميم بمساعدة الحاسوب والنمذجة الهندسية والمعمارية (بديل AutoCAD): قياسات دقيقة بالميليمتر، طبقات رسم معمارية، دعم ملفات DWG و DXF، وأداء عالي بلغة Rust.",
+      "items": [
+        "رسم وتصميم هندسي ومعماري ثنائي وثلاثي الأبعاد",
+        "دعم كامل لملفات DWG و DXF وتصدير المخططات بدقة قياسية",
+        "أدوات قياس دقيقة وطبقات تنظيمية للمشاريع الكبرى",
+        "خفيف وسريع جداً على مختلف مواصفات الأجهزة"
+      ],
+      "version": "v0.19.0",
+      "rawVersion": "0.19.0",
+      "released": "2026-11-09",
+      "downloads": 1889150,
+      "repo": "storytold/cadcraft",
+      "short": "CadCraft",
+      "art": "cad",
+      "accent": "#8b5cf6",
+      "tagline": "بديل AutoCAD (CAD 2D/3D)",
+      "links": [
+        {
+          "href": "https://github.com/storytold/cadcraft/releases/download/v0.19.0/cadcraft-0.19.0-windows-x64.msi",
+          "host": "GitHub",
+          "size": "56.8 MB",
+          "text": "Windows x64 (MSI 56.8 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/storytold/cadcraft/releases/download/v0.19.0/cadcraft-0.19.0-linux-x86_64.deb",
+          "host": "GitHub",
+          "size": "72.9 MB",
+          "text": "Linux x64 (DEB 72.9 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/storytold/cadcraft/releases/download/v0.19.0/cadcraft-0.19.0-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "80.6 MB",
+          "text": "macOS (DMG 80.6 MB)",
+          "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "slug": "craft-launcher",
+      "cat": "premium",
+      "badge": "المشغل الشامل الموحد",
+      "platform": "Windows x64",
+      "title": "Craft Launcher — المشغّل الموحّد لحزمة البرامج",
+      "desc": "المشغل والمثبّت الموحد لكافة تطبيقات وحزم Craft الإبداعية والمكتبية: تثبيت بضغطة زر، تحديث تلقائي آمن، تشغيل مباشر، وإدارة مركزية لجميع الأدوات على جهازك.",
+      "items": [
+        "لوحة تحكم موحدة لإدارة وتثبيت وإطلاق برامج حزمة Craft الإبداعية",
+        "تحديثات آمنة ومباشرة للبرامج بنقرة زر واحدة",
+        "عزل كامل للبرامج وتشغيل سريع دون استهلاك موارد الخلفية",
+        "دعم التثبيت المستقل والمحمول (Portable) لكافة الأدوات"
+      ],
+      "version": "v0.19.0",
+      "rawVersion": "0.19.0",
+      "released": "2026-11-11",
+      "downloads": 6532338,
+      "repo": "storytold/craft-launcher",
+      "short": "Launcher",
+      "art": "tiles",
+      "accent": "#8b5cf6",
+      "tagline": "المشغل الشامل الموحد",
+      "links": [
+        {
+          "href": "https://github.com/storytold/craft-launcher/releases/download/v0.19.0/artcraft-launcher-0.19.0-windows-x64.msi",
+          "host": "GitHub",
+          "size": "9.7 MB",
+          "text": "Windows x64 (MSI 9.7 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/storytold/craft-launcher/releases/download/v0.19.0/artcraft-launcher-0.19.0-linux-x86_64.deb",
+          "host": "GitHub",
+          "size": "13.3 MB",
+          "text": "Linux x64 (DEB 13.3 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/storytold/craft-launcher/releases/download/v0.19.0/artcraft-launcher-0.19.0-macos-universal.dmg",
+          "host": "GitHub",
+          "size": "20.7 MB",
+          "text": "macOS (DMG 20.7 MB)",
+          "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    }
+  ]
+}

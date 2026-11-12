@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img">
+<defs>
+  <linearGradient id="t15bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#0c1526"/><stop offset="1" stop-color="#05080f"/>
+  </linearGradient>
+  <radialGradient id="t15glow" cx="0.8" cy="0.1" r="0.95">
+    <stop offset="0" stop-color="#8b5cf6" stop-opacity="0.3"/><stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="t15ac" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#ec4899"/><stop offset="1" stop-color="#8b5cf6"/>
+  </linearGradient>
+  <pattern id="t15dots" width="26" height="26" patternUnits="userSpaceOnUse">
+    <circle cx="1.2" cy="1.2" r="1.2" fill="#ffffff" fill-opacity="0.07"/>
+  </pattern>
+  <linearGradient id="t15shade" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.55"/>
+  </linearGradient>
+</defs>
+
+<rect width="640" height="400" fill="url(#t15bg)"/>
+<rect width="640" height="400" fill="url(#t15glow)"/>
+<rect width="640" height="400" fill="url(#t15dots)"/>
+<path d="M0 300L640 180" stroke="#ffffff" stroke-opacity="0.04"/>
+<path d="M0 340L640 220" stroke="#ffffff" stroke-opacity="0.03"/>
+
+<!-- product window -->
+<g transform="translate(252 56)">
+  <rect x="0" y="6" width="352" height="300" rx="18" fill="#000" opacity="0.35"/>
+  <rect width="352" height="300" rx="16" fill="#0a1020" stroke="#ffffff" stroke-opacity="0.09"/>
+  <path d="M0 34h352" stroke="#ffffff" stroke-opacity="0.06"/>
+  <circle cx="18" cy="17" r="3.4" fill="#ff5f57" opacity="0.5"/>
+  <circle cx="31" cy="17" r="3.4" fill="#febc2e" opacity="0.5"/>
+  <circle cx="44" cy="17" r="3.4" fill="#28c840" opacity="0.5"/>
+  <rect x="292" y="12" width="44" height="10" rx="5" fill="#ffffff" fill-opacity="0.06"/>
+  <rect x="0" y="0" width="352" height="300" rx="16" fill="url(#t15shade)" opacity="0.35"/>
+  <g>
+    <rect x="26" y="146" width="8" height="8" rx="4" fill="#8b5cf6" opacity="0.35"/><rect x="41" y="140" width="8" height="20" rx="4" fill="#8b5cf6" opacity="0.45999999999999996"/><rect x="56" y="132" width="8" height="36" rx="4" fill="#8b5cf6" opacity="0.57"/><rect x="71" y="120" width="8" height="60" rx="4" fill="#8b5cf6" opacity="0.6799999999999999"/><rect x="86" y="106" width="8" height="88" rx="4" fill="#8b5cf6" opacity="0.79"/><rect x="101" y="88" width="8" height="124" rx="4" fill="#8b5cf6" opacity="0.35"/><rect x="116" y="72" width="8" height="156" rx="4" fill="#8b5cf6" opacity="0.45999999999999996"/><rect x="131" y="94" width="8" height="112" rx="4" fill="#8b5cf6" opacity="0.57"/><rect x="146" y="110" width="8" height="80" rx="4" fill="#8b5cf6" opacity="0.6799999999999999"/><rect x="161" y="84" width="8" height="132" rx="4" fill="#8b5cf6" opacity="0.79"/><rect x="176" y="66" width="8" height="168" rx="4" fill="#8b5cf6" opacity="0.35"/><rect x="191" y="92" width="8" height="116" rx="4" fill="#8b5cf6" opacity="0.45999999999999996"/><rect x="206" y="114" width="8" height="72" rx="4" fill="#8b5cf6" opacity="0.57"/><rect x="221" y="126" width="8" height="48" rx="4" fill="#8b5cf6" opacity="0.6799999999999999"/><rect x="236" y="106" width="8" height="88" rx="4" fill="#8b5cf6" opacity="0.79"/><rect x="251" y="90" width="8" height="120" rx="4" fill="#8b5cf6" opacity="0.35"/><rect x="266" y="116" width="8" height="68" rx="4" fill="#8b5cf6" opacity="0.45999999999999996"/><rect x="281" y="130" width="8" height="40" rx="4" fill="#8b5cf6" opacity="0.57"/><rect x="296" y="138" width="8" height="24" rx="4" fill="#8b5cf6" opacity="0.6799999999999999"/><rect x="311" y="144" width="8" height="12" rx="4" fill="#8b5cf6" opacity="0.79"/>
+    <rect x="20" y="234" width="312" height="58" rx="8" fill="#fff" opacity=".04"/>
+    <rect x="32" y="248" width="220" height="4" rx="2" fill="#fff" opacity=".1"/>
+      <circle cx="88" cy="250" r="6" fill="#8b5cf6" /><rect x="32" y="264" width="220" height="4" rx="2" fill="#fff" opacity=".1"/>
+      <circle cx="150" cy="266" r="6" fill="#8b5cf6" /><rect x="32" y="280" width="220" height="4" rx="2" fill="#fff" opacity=".1"/>
+      <circle cx="212" cy="282" r="6" fill="#8b5cf6" />
+    <rect x="268" y="246" width="48" height="34" rx="6" fill="#8b5cf6" opacity=".18"/>
+    <rect x="276" y="254" width="32" height="4" rx="2" fill="#8b5cf6" opacity=".7"/>
+    <rect x="276" y="264" width="20" height="4" rx="2" fill="#fff" opacity=".2"/></g>
+</g>
+
+<!-- identity -->
+<g transform="translate(40 244)">
+  <rect x="0" y="4" width="64" height="64" rx="18" fill="#000" opacity="0.4"/>
+  <rect width="64" height="64" rx="18" fill="url(#t15ac)"/>
+  <g transform="translate(16 16) scale(1.333)" fill="none" stroke="#04120e" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/></g>
+</g>
+<text x="118" y="274" font-size="21" fill="#f8fafc" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-weight="700">SoundCraft</text>
+<text x="118" y="294" font-size="9.5" fill="#8ea3bd" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" letter-spacing="1.6">بديل PRO TOOLS / AUDITION</text>
+<g transform="translate(118 304)">
+  <rect width="68" height="21" rx="10.5" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.1"/>
+  <text x="11" y="14.5" font-size="10.5" fill="#cbd5e1" font-family="ui-monospace, Menlo, monospace">v0.19.0</text>
+</g>
+<text x="40" y="352" font-size="9" fill="#64748b" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" letter-spacing="1.4">VERIFIED BUILD · SHA-256</text>
+
+<!-- monogram watermark: legible at any size, no text to turn to mush -->
+<g transform="translate(586 34) scale(0.95)" fill="none" stroke="#f0c674" stroke-opacity="0.28" stroke-width="1.6" stroke-linejoin="round">
+  <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z"/><path d="M7.5 8.5H16.5L7.5 15.5H16.5" stroke-linecap="round"/>
+</g>
+</svg>

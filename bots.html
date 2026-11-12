@@ -93,10 +93,8 @@
     }
     .tech-grid-bg {
       background-image: 
-        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 65%),
-        linear-gradient(to right, rgba(59, 130, 246, 0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
-      background-size: 100% 100%, 32px 32px, 32px 32px;
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 65%);
+      background-size: 100% 100%;
     }
     .bento-card {
       background: rgba(11, 18, 33, 0.78);
@@ -121,6 +119,7 @@
       }
     }
   </script>
+  <link rel="stylesheet" href="/fx/site-fx.css">
 </head>
 <body class="bg-themeDark text-slate-100 font-sans antialiased relative min-h-screen selection:bg-techBlue/30 selection:text-blue-300 tech-grid-bg overflow-x-hidden flex flex-col justify-between">
 
@@ -173,7 +172,7 @@
         </a>
 
         <!-- Status Indicator (Desktop only) -->
-        <div class="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
+        <div class="hidden min-[1720px]:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
           <span class="font-mono text-[11px]">Edge Global: Online (TLS 1.3)</span>
         </div>
@@ -183,7 +182,7 @@
       <nav class="hidden lg:flex items-center gap-5 xl:gap-6 text-sm font-semibold">
         <a href="/" class="py-1.5 text-slate-300 hover:text-white transition-colors">الرئيسية</a>
         <a href="/bots.html" class="relative py-1.5 text-techCyan font-bold transition-colors after:absolute after:bottom-0 after:inset-x-0 after:h-0.5 after:bg-techCyan after:rounded-full">باقات البوتات</a>
-        <a href="/programs.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">الأنظمة السيادية</a>
+        <a href="/programs.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">البرامج والتطبيقات</a>
         <a href="/templates.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">قوالب المتاجر</a>
         <a href="/blog.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">المدونة المعرفية</a>
         <a href="/trial.html" class="py-1.5 text-slate-300 hover:text-white transition-colors">التجربة والدفع</a>
@@ -217,7 +216,7 @@
     <div id="mobileMenu" class="hidden lg:hidden px-4 pt-3 pb-6 space-y-2 techfy-glass border-t border-white/10 transition-all duration-300">
       <a href="/" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">الرئيسية</a>
       <a href="/bots.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-techCyan/10 text-techCyan border border-techCyan/20">باقات البوتات</a>
-      <a href="/programs.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">الأنظمة السيادية</a>
+      <a href="/programs.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">البرامج والتطبيقات</a>
       <a href="/templates.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">قوالب المتاجر</a>
       <a href="/blog.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">المدونة المعرفية</a>
       <a href="/trial.html" class="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800/80 hover:text-techCyan transition-colors">التجربة والدفع</a>
@@ -240,7 +239,7 @@
         
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-3">
           <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-semibold text-techCyan">
+            <div class="fx-pill inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-semibold text-techCyan">
               <span>كتالوج البوتات البرمجية</span>
               <span class="w-1.5 h-1.5 rounded-full bg-techCyan animate-pulse"></span>
               <span class="font-mono">24 باقة نشطة</span>
@@ -299,1676 +298,647 @@
           <span class="font-mono text-[11px] text-techCyan">Zero-Trust • Cloudflare Isolate</span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="botsGrid">
-          
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="bots" data-search="بوت المتجر الذكي — الباقة الأساسية متجر رقمي سريع باسمك: حتى 50 منتجاً، دفع بنجوم تيليجرام أو إشعار الكريمي، تسليم فوري وتنبيه للمشرف. حتى 50 منتجاً رقمياً في أقسام مرتبة دفع بالنجوم أو الكريمي بلا وسيط تسليم تلقائي فوري للملفات والروابط إشعار فوري لكل طلب جديد">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  باقة أساسية
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">1,750 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$24.5)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  بوت المتجر الذكي — الباقة الأساسية
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  متجر رقمي سريع باسمك: حتى 50 منتجاً، دفع بنجوم تيليجرام أو إشعار الكريمي، تسليم فوري وتنبيه للمشرف.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">حتى 50 منتجاً رقمياً في أقسام مرتبة</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">دفع بالنجوم أو الكريمي بلا وسيط</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">تسليم تلقائي فوري للملفات والروابط</span>
-                </div>
-              </div>
-
+        <div class="prog-grid" id="botsGrid">
+          <article class="prog-card bot-card" data-category="bots" data-search="بوت المتجر الذكي — الباقة الأساسية متجر رقمي سريع باسمك: حتى 50 منتجاً، دفع بنجوم تيليجرام أو إشعار الكريمي، تسليم فوري وتنبيه للمشرف. حتى 50 منتجاً رقمياً في أقسام مرتبة دفع بالنجوم أو الكريمي بلا وسيط تسليم تلقائي فوري للملفات والروابط إشعار فوري لكل طلب جديد">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/store-bot-basic.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$24.5</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('بوت المتجر الذكي — الباقة الأساسية', '1,750 ⭐ ⭐ (~$24.5)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('بوت المتجر الذكي — الباقة الأساسية', 'متجر رقمي سريع باسمك: حتى 50 منتجاً، دفع بنجوم تيليجرام أو إشعار الكريمي، تسليم فوري وتنبيه للمشرف.', '1,750 ⭐ ⭐ (~$24.5)', 'حتى 50 منتجاً رقمياً في أقسام مرتبة;;;دفع بالنجوم أو الكريمي بلا وسيط;;;تسليم تلقائي فوري للملفات والروابط;;;إشعار فوري لكل طلب جديد')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">باقة أساسية</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">1,750 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">بوت المتجر الذكي — الباقة الأساسية</h3>
+              <p class="prog-desc">متجر رقمي سريع باسمك: حتى 50 منتجاً، دفع بنجوم تيليجرام أو إشعار الكريمي، تسليم فوري وتنبيه للمشرف.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>حتى 50 منتجاً رقمياً في أقسام مرتبة</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>دفع بالنجوم أو الكريمي بلا وسيط</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>تسليم تلقائي فوري للملفات والروابط</span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('بوت المتجر الذكي — الباقة الأساسية', '1,750 ⭐ ⭐ (~$24.5)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('بوت المتجر الذكي — الباقة الأساسية', 'متجر رقمي سريع باسمك: حتى 50 منتجاً، دفع بنجوم تيليجرام أو إشعار الكريمي، تسليم فوري وتنبيه للمشرف.', '1,750 ⭐ ⭐ (~$24.5)', 'حتى 50 منتجاً رقمياً في أقسام مرتبة;;;دفع بالنجوم أو الكريمي بلا وسيط;;;تسليم تلقائي فوري للملفات والروابط;;;إشعار فوري لكل طلب جديد')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="bots" data-search="بوت المتجر المتكامل — الباقة الاحترافية متجر متقدم لا محدود: منتجات غير محدودة، أكواد خصم، تقارير مبيعات، تكاملات دفع متعددة، ولوحة تحكم كاملة. منتجات وأقسام غير محدودة أكواد وكوبونات خصم تلقائية تصدير تقارير المبيعات CSV لوحة تحكم Telegram Mini App">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  الأكثر طلباً ⭐
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">3,750 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$49.5)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  بوت المتجر المتكامل — الباقة الاحترافية
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  متجر متقدم لا محدود: منتجات غير محدودة، أكواد خصم، تقارير مبيعات، تكاملات دفع متعددة، ولوحة تحكم كاملة.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">منتجات وأقسام غير محدودة</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">أكواد وكوبونات خصم تلقائية</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">تصدير تقارير المبيعات CSV</span>
-                </div>
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="bots" data-search="بوت المتجر المتكامل — الباقة الاحترافية متجر متقدم لا محدود: منتجات غير محدودة، أكواد خصم، تقارير مبيعات، تكاملات دفع متعددة، ولوحة تحكم كاملة. منتجات وأقسام غير محدودة أكواد وكوبونات خصم تلقائية تصدير تقارير المبيعات CSV لوحة تحكم Telegram Mini App">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/store-bot-pro.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$49.5</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('بوت المتجر المتكامل — الباقة الاحترافية', '3,750 ⭐ ⭐ (~$49.5)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('بوت المتجر المتكامل — الباقة الاحترافية', 'متجر متقدم لا محدود: منتجات غير محدودة، أكواد خصم، تقارير مبيعات، تكاملات دفع متعددة، ولوحة تحكم كاملة.', '3,750 ⭐ ⭐ (~$49.5)', 'منتجات وأقسام غير محدودة;;;أكواد وكوبونات خصم تلقائية;;;تصدير تقارير المبيعات CSV;;;لوحة تحكم Telegram Mini App')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">الأكثر طلباً ⭐</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">3,750 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">بوت المتجر المتكامل — الباقة الاحترافية</h3>
+              <p class="prog-desc">متجر متقدم لا محدود: منتجات غير محدودة، أكواد خصم، تقارير مبيعات، تكاملات دفع متعددة، ولوحة تحكم كاملة.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>منتجات وأقسام غير محدودة</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>أكواد وكوبونات خصم تلقائية</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>تصدير تقارير المبيعات CSV</span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('بوت المتجر المتكامل — الباقة الاحترافية', '3,750 ⭐ ⭐ (~$49.5)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('بوت المتجر المتكامل — الباقة الاحترافية', 'متجر متقدم لا محدود: منتجات غير محدودة، أكواد خصم، تقارير مبيعات، تكاملات دفع متعددة، ولوحة تحكم كاملة.', '3,750 ⭐ ⭐ (~$49.5)', 'منتجات وأقسام غير محدودة;;;أكواد وكوبونات خصم تلقائية;;;تصدير تقارير المبيعات CSV;;;لوحة تحكم Telegram Mini App')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="bots" data-search="استضافة وصيانة بوتك السحابية استضافة بوتك على شبكة Cloudflare العالمية، ضمان تشغيل 99.9%، تحديثات أمنية مستمرة ونسخ احتياطي يومي. سرعة استجابة فائقة &amp;lt; 50ms حماية ضد هجمات DDoS والفيض نسخ احتياطي لقاعدة البيانات يومياً">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  استضافة شهرية
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">750 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$9/شهر)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  استضافة وصيانة بوتك السحابية
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  استضافة بوتك على شبكة Cloudflare العالمية، ضمان تشغيل 99.9%، تحديثات أمنية مستمرة ونسخ احتياطي يومي.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">سرعة استجابة فائقة &amp;lt; 50ms</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">حماية ضد هجمات DDoS والفيض</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">نسخ احتياطي لقاعدة البيانات يومياً</span>
-                </div>
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="bots" data-search="استضافة وصيانة بوتك السحابية استضافة بوتك على شبكة Cloudflare العالمية، ضمان تشغيل 99.9%، تحديثات أمنية مستمرة ونسخ احتياطي يومي. سرعة استجابة فائقة &amp;lt; 50ms حماية ضد هجمات DDoS والفيض نسخ احتياطي لقاعدة البيانات يومياً">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/store-bot-hosting.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$9/شهر</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('استضافة وصيانة بوتك السحابية', '750 ⭐ ⭐ (~$9/شهر)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('استضافة وصيانة بوتك السحابية', 'استضافة بوتك على شبكة Cloudflare العالمية، ضمان تشغيل 99.9%، تحديثات أمنية مستمرة ونسخ احتياطي يومي.', '750 ⭐ ⭐ (~$9/شهر)', 'سرعة استجابة فائقة &lt; 50ms;;;حماية ضد هجمات DDoS والفيض;;;نسخ احتياطي لقاعدة البيانات يومياً')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">استضافة شهرية</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">750 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">استضافة وصيانة بوتك السحابية</h3>
+              <p class="prog-desc">استضافة بوتك على شبكة Cloudflare العالمية، ضمان تشغيل 99.9%، تحديثات أمنية مستمرة ونسخ احتياطي يومي.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>حماية ضد هجمات DDoS والفيض</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>نسخ احتياطي لقاعدة البيانات يومياً</span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('استضافة وصيانة بوتك السحابية', '750 ⭐ ⭐ (~$9/شهر)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('استضافة وصيانة بوتك السحابية', 'استضافة بوتك على شبكة Cloudflare العالمية، ضمان تشغيل 99.9%، تحديثات أمنية مستمرة ونسخ احتياطي يومي.', '750 ⭐ ⭐ (~$9/شهر)', 'سرعة استجابة فائقة &lt; 50ms;;;حماية ضد هجمات DDoS والفيض;;;نسخ احتياطي لقاعدة البيانات يومياً')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="types" data-search="بوت المشرف الآلي للمجموعات كبت السبام والإعلانات تلقائياً، كابتشا للأعضاء الجدد، تحذيرات ذكية، وجدولة الرسائل التوجيهية في القنوات والجروبات. ترحيب تفاعلي مع كابتشا مضادة للسبام حظر الروابط الدعائية والحسابات الوهمية تقارير إحصائية كاملة لتفاعل الأعضاء">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  حماية المجموعات
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">1,250 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$17.5)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  بوت المشرف الآلي للمجموعات
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  كبت السبام والإعلانات تلقائياً، كابتشا للأعضاء الجدد، تحذيرات ذكية، وجدولة الرسائل التوجيهية في القنوات والجروبات.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">ترحيب تفاعلي مع كابتشا مضادة للسبام</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">حظر الروابط الدعائية والحسابات الوهمية</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">تقارير إحصائية كاملة لتفاعل الأعضاء</span>
-                </div>
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="types" data-search="بوت المشرف الآلي للمجموعات كبت السبام والإعلانات تلقائياً، كابتشا للأعضاء الجدد، تحذيرات ذكية، وجدولة الرسائل التوجيهية في القنوات والجروبات. ترحيب تفاعلي مع كابتشا مضادة للسبام حظر الروابط الدعائية والحسابات الوهمية تقارير إحصائية كاملة لتفاعل الأعضاء">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/group-bot.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$17.5</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('بوت المشرف الآلي للمجموعات', '1,250 ⭐ ⭐ (~$17.5)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('بوت المشرف الآلي للمجموعات', 'كبت السبام والإعلانات تلقائياً، كابتشا للأعضاء الجدد، تحذيرات ذكية، وجدولة الرسائل التوجيهية في القنوات والجروبات.', '1,250 ⭐ ⭐ (~$17.5)', 'ترحيب تفاعلي مع كابتشا مضادة للسبام;;;حظر الروابط الدعائية والحسابات الوهمية;;;تقارير إحصائية كاملة لتفاعل الأعضاء')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">حماية المجموعات</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">1,250 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">بوت المشرف الآلي للمجموعات</h3>
+              <p class="prog-desc">كبت السبام والإعلانات تلقائياً، كابتشا للأعضاء الجدد، تحذيرات ذكية، وجدولة الرسائل التوجيهية في القنوات والجروبات.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>ترحيب تفاعلي مع كابتشا مضادة للسبام</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>حظر الروابط الدعائية والحسابات الوهمية</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>تقارير إحصائية كاملة لتفاعل الأعضاء</span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('بوت المشرف الآلي للمجموعات', '1,250 ⭐ ⭐ (~$17.5)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('بوت المشرف الآلي للمجموعات', 'كبت السبام والإعلانات تلقائياً، كابتشا للأعضاء الجدد، تحذيرات ذكية، وجدولة الرسائل التوجيهية في القنوات والجروبات.', '1,250 ⭐ ⭐ (~$17.5)', 'ترحيب تفاعلي مع كابتشا مضادة للسبام;;;حظر الروابط الدعائية والحسابات الوهمية;;;تقارير إحصائية كاملة لتفاعل الأعضاء')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="types" data-search="بوت خدمة العملاء الفوري نظام تواصل مباشر بين عملائك وإدارتك عبر واجهة موحدة، مع إمكانية الردود التلقائية وتوزيع الاستفسارات على الفريق. استقبال وإرسال الرسائل باسم متجرك تنظيم التذاكر وحالة كل عميل ردود نموذجية سريعة بضغطة زر">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  خدمة عملاء
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">1,500 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$19.5)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  بوت خدمة العملاء الفوري
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  نظام تواصل مباشر بين عملائك وإدارتك عبر واجهة موحدة، مع إمكانية الردود التلقائية وتوزيع الاستفسارات على الفريق.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">استقبال وإرسال الرسائل باسم متجرك</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">تنظيم التذاكر وحالة كل عميل</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">ردود نموذجية سريعة بضغطة زر</span>
-                </div>
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="types" data-search="بوت خدمة العملاء الفوري نظام تواصل مباشر بين عملائك وإدارتك عبر واجهة موحدة، مع إمكانية الردود التلقائية وتوزيع الاستفسارات على الفريق. استقبال وإرسال الرسائل باسم متجرك تنظيم التذاكر وحالة كل عميل ردود نموذجية سريعة بضغطة زر">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/support-bot.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$19.5</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('بوت خدمة العملاء الفوري', '1,500 ⭐ ⭐ (~$19.5)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('بوت خدمة العملاء الفوري', 'نظام تواصل مباشر بين عملائك وإدارتك عبر واجهة موحدة، مع إمكانية الردود التلقائية وتوزيع الاستفسارات على الفريق.', '1,500 ⭐ ⭐ (~$19.5)', 'استقبال وإرسال الرسائل باسم متجرك;;;تنظيم التذاكر وحالة كل عميل;;;ردود نموذجية سريعة بضغطة زر')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">خدمة عملاء</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">1,500 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">بوت خدمة العملاء الفوري</h3>
+              <p class="prog-desc">نظام تواصل مباشر بين عملائك وإدارتك عبر واجهة موحدة، مع إمكانية الردود التلقائية وتوزيع الاستفسارات على الفريق.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>استقبال وإرسال الرسائل باسم متجرك</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>تنظيم التذاكر وحالة كل عميل</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>ردود نموذجية سريعة بضغطة زر</span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('بوت خدمة العملاء الفوري', '1,500 ⭐ ⭐ (~$19.5)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('بوت خدمة العملاء الفوري', 'نظام تواصل مباشر بين عملائك وإدارتك عبر واجهة موحدة، مع إمكانية الردود التلقائية وتوزيع الاستفسارات على الفريق.', '1,500 ⭐ ⭐ (~$19.5)', 'استقبال وإرسال الرسائل باسم متجرك;;;تنظيم التذاكر وحالة كل عميل;;;ردود نموذجية سريعة بضغطة زر')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="types" data-search="بوت الحجوزات والمواعيد الذكي جدولة وحجز المواعيد للعيادات والخبراء، تأكيد تلقائي بدفع العربون، وإرسال تنبيهات تذكيرية قبل الموعد. تقويم مرن يحدد الساعات والأيام المتاحة تأكيد الحجز فورا بالنجوم أو الكريمي تنبيهات للعميل والموظف بوقت الحجز">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  حجوزات
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">1,750 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$22.5)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  بوت الحجوزات والمواعيد الذكي
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  جدولة وحجز المواعيد للعيادات والخبراء، تأكيد تلقائي بدفع العربون، وإرسال تنبيهات تذكيرية قبل الموعد.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">تقويم مرن يحدد الساعات والأيام المتاحة</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">تأكيد الحجز فورا بالنجوم أو الكريمي</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">تنبيهات للعميل والموظف بوقت الحجز</span>
-                </div>
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="types" data-search="بوت الحجوزات والمواعيد الذكي جدولة وحجز المواعيد للعيادات والخبراء، تأكيد تلقائي بدفع العربون، وإرسال تنبيهات تذكيرية قبل الموعد. تقويم مرن يحدد الساعات والأيام المتاحة تأكيد الحجز فورا بالنجوم أو الكريمي تنبيهات للعميل والموظف بوقت الحجز">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/booking-bot.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$22.5</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('بوت الحجوزات والمواعيد الذكي', '1,750 ⭐ ⭐ (~$22.5)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('بوت الحجوزات والمواعيد الذكي', 'جدولة وحجز المواعيد للعيادات والخبراء، تأكيد تلقائي بدفع العربون، وإرسال تنبيهات تذكيرية قبل الموعد.', '1,750 ⭐ ⭐ (~$22.5)', 'تقويم مرن يحدد الساعات والأيام المتاحة;;;تأكيد الحجز فورا بالنجوم أو الكريمي;;;تنبيهات للعميل والموظف بوقت الحجز')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">حجوزات</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">1,750 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">بوت الحجوزات والمواعيد الذكي</h3>
+              <p class="prog-desc">جدولة وحجز المواعيد للعيادات والخبراء، تأكيد تلقائي بدفع العربون، وإرسال تنبيهات تذكيرية قبل الموعد.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>تقويم مرن يحدد الساعات والأيام المتاحة</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>تأكيد الحجز فورا بالنجوم أو الكريمي</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>تنبيهات للعميل والموظف بوقت الحجز</span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('بوت الحجوزات والمواعيد الذكي', '1,750 ⭐ ⭐ (~$22.5)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('بوت الحجوزات والمواعيد الذكي', 'جدولة وحجز المواعيد للعيادات والخبراء، تأكيد تلقائي بدفع العربون، وإرسال تنبيهات تذكيرية قبل الموعد.', '1,750 ⭐ ⭐ (~$22.5)', 'تقويم مرن يحدد الساعات والأيام المتاحة;;;تأكيد الحجز فورا بالنجوم أو الكريمي;;;تنبيهات للعميل والموظف بوقت الحجز')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="types" data-search="بوت إدارة الاشتراكات والقنوات المدفوعة إدارة انضمام وخروج المشتركين تلقائياً عبر روابط مؤقتة، إرسال تذكيرات التجديد، وإلغاء صلاحية من لم يسدد. توليد روابط دعوة شخصية لمرة واحدة طرد تلقائي للمشترك المنتهي اشتراكه تذكير العميل بالتجديد قبل انتهاء المدة">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  اشتراكات VIP
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">1,500 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$19.5)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  بوت إدارة الاشتراكات والقنوات المدفوعة
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  إدارة انضمام وخروج المشتركين تلقائياً عبر روابط مؤقتة، إرسال تذكيرات التجديد، وإلغاء صلاحية من لم يسدد.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">توليد روابط دعوة شخصية لمرة واحدة</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">طرد تلقائي للمشترك المنتهي اشتراكه</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">تذكير العميل بالتجديد قبل انتهاء المدة</span>
-                </div>
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="types" data-search="بوت إدارة الاشتراكات والقنوات المدفوعة إدارة انضمام وخروج المشتركين تلقائياً عبر روابط مؤقتة، إرسال تذكيرات التجديد، وإلغاء صلاحية من لم يسدد. توليد روابط دعوة شخصية لمرة واحدة طرد تلقائي للمشترك المنتهي اشتراكه تذكير العميل بالتجديد قبل انتهاء المدة">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/subs-bot.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$19.5</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('بوت إدارة الاشتراكات والقنوات المدفوعة', '1,500 ⭐ ⭐ (~$19.5)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('بوت إدارة الاشتراكات والقنوات المدفوعة', 'إدارة انضمام وخروج المشتركين تلقائياً عبر روابط مؤقتة، إرسال تذكيرات التجديد، وإلغاء صلاحية من لم يسدد.', '1,500 ⭐ ⭐ (~$19.5)', 'توليد روابط دعوة شخصية لمرة واحدة;;;طرد تلقائي للمشترك المنتهي اشتراكه;;;تذكير العميل بالتجديد قبل انتهاء المدة')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">اشتراكات VIP</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">1,500 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">بوت إدارة الاشتراكات والقنوات المدفوعة</h3>
+              <p class="prog-desc">إدارة انضمام وخروج المشتركين تلقائياً عبر روابط مؤقتة، إرسال تذكيرات التجديد، وإلغاء صلاحية من لم يسدد.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>توليد روابط دعوة شخصية لمرة واحدة</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>طرد تلقائي للمشترك المنتهي اشتراكه</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>تذكير العميل بالتجديد قبل انتهاء المدة</span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('بوت إدارة الاشتراكات والقنوات المدفوعة', '1,500 ⭐ ⭐ (~$19.5)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('بوت إدارة الاشتراكات والقنوات المدفوعة', 'إدارة انضمام وخروج المشتركين تلقائياً عبر روابط مؤقتة، إرسال تذكيرات التجديد، وإلغاء صلاحية من لم يسدد.', '1,500 ⭐ ⭐ (~$19.5)', 'توليد روابط دعوة شخصية لمرة واحدة;;;طرد تلقائي للمشترك المنتهي اشتراكه;;;تذكير العميل بالتجديد قبل انتهاء المدة')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="types" data-search="بوت المسابقات التفاعلية المطور تنظيم اختبارات ومسابقات مع لوحة صدارة للمشاركين، حساب النقاط تلقائياً، وتوزيع الجوائز والأكواد الرقمية. لوحة صدارة لحظية (Leaderboard) أسئلة متعددة وتوقيت محدد لكل سؤال تسليم أكواد جوائز تلقائية للفائزين">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  تفاعل ومسابقات
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">1,000 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$12.5)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  بوت المسابقات التفاعلية المطور
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  تنظيم اختبارات ومسابقات مع لوحة صدارة للمشاركين، حساب النقاط تلقائياً، وتوزيع الجوائز والأكواد الرقمية.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">لوحة صدارة لحظية (Leaderboard)</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">أسئلة متعددة وتوقيت محدد لكل سؤال</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">تسليم أكواد جوائز تلقائية للفائزين</span>
-                </div>
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="types" data-search="بوت المسابقات التفاعلية المطور تنظيم اختبارات ومسابقات مع لوحة صدارة للمشاركين، حساب النقاط تلقائياً، وتوزيع الجوائز والأكواد الرقمية. لوحة صدارة لحظية (Leaderboard) أسئلة متعددة وتوقيت محدد لكل سؤال تسليم أكواد جوائز تلقائية للفائزين">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/quiz-bot.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$12.5</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('بوت المسابقات التفاعلية المطور', '1,000 ⭐ ⭐ (~$12.5)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('بوت المسابقات التفاعلية المطور', 'تنظيم اختبارات ومسابقات مع لوحة صدارة للمشاركين، حساب النقاط تلقائياً، وتوزيع الجوائز والأكواد الرقمية.', '1,000 ⭐ ⭐ (~$12.5)', 'لوحة صدارة لحظية (Leaderboard);;;أسئلة متعددة وتوقيت محدد لكل سؤال;;;تسليم أكواد جوائز تلقائية للفائزين')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تفاعل ومسابقات</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">1,000 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">بوت المسابقات التفاعلية المطور</h3>
+              <p class="prog-desc">تنظيم اختبارات ومسابقات مع لوحة صدارة للمشاركين، حساب النقاط تلقائياً، وتوزيع الجوائز والأكواد الرقمية.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>لوحة صدارة لحظية (Leaderboard)</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>أسئلة متعددة وتوقيت محدد لكل سؤال</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>تسليم أكواد جوائز تلقائية للفائزين</span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('بوت المسابقات التفاعلية المطور', '1,000 ⭐ ⭐ (~$12.5)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('بوت المسابقات التفاعلية المطور', 'تنظيم اختبارات ومسابقات مع لوحة صدارة للمشاركين، حساب النقاط تلقائياً، وتوزيع الجوائز والأكواد الرقمية.', '1,000 ⭐ ⭐ (~$12.5)', 'لوحة صدارة لحظية (Leaderboard);;;أسئلة متعددة وتوقيت محدد لكل سؤال;;;تسليم أكواد جوائز تلقائية للفائزين')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="types" data-search="بوت المساعد الذكي المتطور AI بوت مساعد مدرب على شات جي بي تي ونماذج كلاود للرد على استفسارات مشروعك ومعالجة النصوص والصور باحترافية. تخصيص شخصية البوت وسياق العمل ذاكرة محادثة وتفاعل طبيعي باللغة العربية إمكانية ربطه بقاعدة معارف منتجاتك">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  ذكاء اصطناعي
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">2,500 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$32.5)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  بوت المساعد الذكي المتطور AI
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  بوت مساعد مدرب على شات جي بي تي ونماذج كلاود للرد على استفسارات مشروعك ومعالجة النصوص والصور باحترافية.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">تخصيص شخصية البوت وسياق العمل</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">ذاكرة محادثة وتفاعل طبيعي باللغة العربية</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">إمكانية ربطه بقاعدة معارف منتجاتك</span>
-                </div>
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="types" data-search="بوت المساعد الذكي المتطور AI بوت مساعد مدرب على شات جي بي تي ونماذج كلاود للرد على استفسارات مشروعك ومعالجة النصوص والصور باحترافية. تخصيص شخصية البوت وسياق العمل ذاكرة محادثة وتفاعل طبيعي باللغة العربية إمكانية ربطه بقاعدة معارف منتجاتك">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/ai-bot.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$32.5</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('بوت المساعد الذكي المتطور AI', '2,500 ⭐ ⭐ (~$32.5)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('بوت المساعد الذكي المتطور AI', 'بوت مساعد مدرب على شات جي بي تي ونماذج كلاود للرد على استفسارات مشروعك ومعالجة النصوص والصور باحترافية.', '2,500 ⭐ ⭐ (~$32.5)', 'تخصيص شخصية البوت وسياق العمل;;;ذاكرة محادثة وتفاعل طبيعي باللغة العربية;;;إمكانية ربطه بقاعدة معارف منتجاتك')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">ذكاء اصطناعي</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">2,500 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">بوت المساعد الذكي المتطور AI</h3>
+              <p class="prog-desc">بوت مساعد مدرب على شات جي بي تي ونماذج كلاود للرد على استفسارات مشروعك ومعالجة النصوص والصور باحترافية.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>تخصيص شخصية البوت وسياق العمل</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>ذاكرة محادثة وتفاعل طبيعي باللغة العربية</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>إمكانية ربطه بقاعدة معارف منتجاتك</span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('بوت المساعد الذكي المتطور AI', '2,500 ⭐ ⭐ (~$32.5)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('بوت المساعد الذكي المتطور AI', 'بوت مساعد مدرب على شات جي بي تي ونماذج كلاود للرد على استفسارات مشروعك ومعالجة النصوص والصور باحترافية.', '2,500 ⭐ ⭐ (~$32.5)', 'تخصيص شخصية البوت وسياق العمل;;;ذاكرة محادثة وتفاعل طبيعي باللغة العربية;;;إمكانية ربطه بقاعدة معارف منتجاتك')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="types" data-search="منصة CRM الموحدة لإدارة وأتمتة البوتات لوحة تحكم مركزية تربط أسطول بوتاتك بالكامل: قاعدة بيانات عملاء موحدة، سجل طلبات متكامل، وحملات إعادة استهداف. إدارة حتى 10 بوتات من مكان واحد تصنيف العملاء وسجلات الدفع الكاملة إرسال رسائل بث جماعية مستهدفة">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  منظومة CRM
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">4,750 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$64.5)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  منصة CRM الموحدة لإدارة وأتمتة البوتات
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  لوحة تحكم مركزية تربط أسطول بوتاتك بالكامل: قاعدة بيانات عملاء موحدة، سجل طلبات متكامل، وحملات إعادة استهداف.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">إدارة حتى 10 بوتات من مكان واحد</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">تصنيف العملاء وسجلات الدفع الكاملة</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">إرسال رسائل بث جماعية مستهدفة</span>
-                </div>
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="types" data-search="منصة CRM الموحدة لإدارة وأتمتة البوتات لوحة تحكم مركزية تربط أسطول بوتاتك بالكامل: قاعدة بيانات عملاء موحدة، سجل طلبات متكامل، وحملات إعادة استهداف. إدارة حتى 10 بوتات من مكان واحد تصنيف العملاء وسجلات الدفع الكاملة إرسال رسائل بث جماعية مستهدفة">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/multibot-crm.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$64.5</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('منصة CRM الموحدة لإدارة وأتمتة البوتات', '4,750 ⭐ ⭐ (~$64.5)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('منصة CRM الموحدة لإدارة وأتمتة البوتات', 'لوحة تحكم مركزية تربط أسطول بوتاتك بالكامل: قاعدة بيانات عملاء موحدة، سجل طلبات متكامل، وحملات إعادة استهداف.', '4,750 ⭐ ⭐ (~$64.5)', 'إدارة حتى 10 بوتات من مكان واحد;;;تصنيف العملاء وسجلات الدفع الكاملة;;;إرسال رسائل بث جماعية مستهدفة')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">منظومة CRM</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">4,750 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">منصة CRM الموحدة لإدارة وأتمتة البوتات</h3>
+              <p class="prog-desc">لوحة تحكم مركزية تربط أسطول بوتاتك بالكامل: قاعدة بيانات عملاء موحدة، سجل طلبات متكامل، وحملات إعادة استهداف.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>إدارة حتى 10 بوتات من مكان واحد</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>تصنيف العملاء وسجلات الدفع الكاملة</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>إرسال رسائل بث جماعية مستهدفة</span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('منصة CRM الموحدة لإدارة وأتمتة البوتات', '4,750 ⭐ ⭐ (~$64.5)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('منصة CRM الموحدة لإدارة وأتمتة البوتات', 'لوحة تحكم مركزية تربط أسطول بوتاتك بالكامل: قاعدة بيانات عملاء موحدة، سجل طلبات متكامل، وحملات إعادة استهداف.', '4,750 ⭐ ⭐ (~$64.5)', 'إدارة حتى 10 بوتات من مكان واحد;;;تصنيف العملاء وسجلات الدفع الكاملة;;;إرسال رسائل بث جماعية مستهدفة')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="types" data-search="محرك الأتمتة والربط الذكي No-Code Engine ربط أحداث البوت بـ Webhooks، جداول Google Sheets، قواعد البيانات الخارجية، وتطبيقات الطرف الثالث بدون أكواد معقدة. مشغلات وسير عمل تلقائي (Triggers) مزامنة الطلبات مباشرة مع أنظمتك دعم إشعارات Webhook مشفرة">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  أتمتة وسير عمل
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">4,250 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$57.5)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  محرك الأتمتة والربط الذكي No-Code Engine
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  ربط أحداث البوت بـ Webhooks، جداول Google Sheets، قواعد البيانات الخارجية، وتطبيقات الطرف الثالث بدون أكواد معقدة.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">مشغلات وسير عمل تلقائي (Triggers)</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">مزامنة الطلبات مباشرة مع أنظمتك</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">دعم إشعارات Webhook مشفرة</span>
-                </div>
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="types" data-search="محرك الأتمتة والربط الذكي No-Code Engine ربط أحداث البوت بـ Webhooks، جداول Google Sheets، قواعد البيانات الخارجية، وتطبيقات الطرف الثالث بدون أكواد معقدة. مشغلات وسير عمل تلقائي (Triggers) مزامنة الطلبات مباشرة مع أنظمتك دعم إشعارات Webhook مشفرة">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/workflow-engine.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$57.5</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('محرك الأتمتة والربط الذكي No-Code Engine', '4,250 ⭐ ⭐ (~$57.5)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('محرك الأتمتة والربط الذكي No-Code Engine', 'ربط أحداث البوت بـ Webhooks، جداول Google Sheets، قواعد البيانات الخارجية، وتطبيقات الطرف الثالث بدون أكواد معقدة.', '4,250 ⭐ ⭐ (~$57.5)', 'مشغلات وسير عمل تلقائي (Triggers);;;مزامنة الطلبات مباشرة مع أنظمتك;;;دعم إشعارات Webhook مشفرة')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">أتمتة وسير عمل</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">4,250 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">محرك الأتمتة والربط الذكي No-Code Engine</h3>
+              <p class="prog-desc">ربط أحداث البوت بـ Webhooks، جداول Google Sheets، قواعد البيانات الخارجية، وتطبيقات الطرف الثالث بدون أكواد معقدة.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>مشغلات وسير عمل تلقائي (Triggers)</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>مزامنة الطلبات مباشرة مع أنظمتك</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>دعم إشعارات Webhook مشفرة</span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('محرك الأتمتة والربط الذكي No-Code Engine', '4,250 ⭐ ⭐ (~$57.5)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('محرك الأتمتة والربط الذكي No-Code Engine', 'ربط أحداث البوت بـ Webhooks، جداول Google Sheets، قواعد البيانات الخارجية، وتطبيقات الطرف الثالث بدون أكواد معقدة.', '4,250 ⭐ ⭐ (~$57.5)', 'مشغلات وسير عمل تلقائي (Triggers);;;مزامنة الطلبات مباشرة مع أنظمتك;;;دعم إشعارات Webhook مشفرة')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="types" data-search="بوت واتساب للأعمال والربط المزدوج منظومة ربط ذكية تعمل عبر واتساب وتيليجرام معاً: استلام الطلبات والاستفسارات وتوجيهها في قنوات موحدة. ردود تلقائية وسلة مشتريات على واتساب مزامنة الكتالوج بين تيليجرام وواتساب دعم إرسال إشعارات الطلب لرقم التاجر">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  واتساب &amp; تيليجرام
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">5,500 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$74.5)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  بوت واتساب للأعمال والربط المزدوج
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  منظومة ربط ذكية تعمل عبر واتساب وتيليجرام معاً: استلام الطلبات والاستفسارات وتوجيهها في قنوات موحدة.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">ردود تلقائية وسلة مشتريات على واتساب</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">مزامنة الكتالوج بين تيليجرام وواتساب</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">دعم إرسال إشعارات الطلب لرقم التاجر</span>
-                </div>
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="types" data-search="بوت واتساب للأعمال والربط المزدوج منظومة ربط ذكية تعمل عبر واتساب وتيليجرام معاً: استلام الطلبات والاستفسارات وتوجيهها في قنوات موحدة. ردود تلقائية وسلة مشتريات على واتساب مزامنة الكتالوج بين تيليجرام وواتساب دعم إرسال إشعارات الطلب لرقم التاجر">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/whatsapp-bot-pro.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$74.5</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('بوت واتساب للأعمال والربط المزدوج', '5,500 ⭐ ⭐ (~$74.5)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('بوت واتساب للأعمال والربط المزدوج', 'منظومة ربط ذكية تعمل عبر واتساب وتيليجرام معاً: استلام الطلبات والاستفسارات وتوجيهها في قنوات موحدة.', '5,500 ⭐ ⭐ (~$74.5)', 'ردود تلقائية وسلة مشتريات على واتساب;;;مزامنة الكتالوج بين تيليجرام وواتساب;;;دعم إرسال إشعارات الطلب لرقم التاجر')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">واتساب &amp; تيليجرام</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">5,500 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">بوت واتساب للأعمال والربط المزدوج</h3>
+              <p class="prog-desc">منظومة ربط ذكية تعمل عبر واتساب وتيليجرام معاً: استلام الطلبات والاستفسارات وتوجيهها في قنوات موحدة.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>ردود تلقائية وسلة مشتريات على واتساب</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>مزامنة الكتالوج بين تيليجرام وواتساب</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>دعم إرسال إشعارات الطلب لرقم التاجر</span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('بوت واتساب للأعمال والربط المزدوج', '5,500 ⭐ ⭐ (~$74.5)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('بوت واتساب للأعمال والربط المزدوج', 'منظومة ربط ذكية تعمل عبر واتساب وتيليجرام معاً: استلام الطلبات والاستفسارات وتوجيهها في قنوات موحدة.', '5,500 ⭐ ⭐ (~$74.5)', 'ردود تلقائية وسلة مشتريات على واتساب;;;مزامنة الكتالوج بين تيليجرام وواتساب;;;دعم إرسال إشعارات الطلب لرقم التاجر')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="apps" data-search="AiFake Pro — ترخيص احترافي مدى الحياة نسخة Pro الكاملة من كاشف التزييف بالذكاء الاصطناعي مع فتح كافة النماذج المحلية والتحليل الجنائي المتقدم. فحص فيديوهات غير محدود تدقيق بصمة C2PA الشاملة ترخيص دائم بدون اشتراكات متكررة">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  تطبيق أندرويد
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">2,250 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$30)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  AiFake Pro — ترخيص احترافي مدى الحياة
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  نسخة Pro الكاملة من كاشف التزييف بالذكاء الاصطناعي مع فتح كافة النماذج المحلية والتحليل الجنائي المتقدم.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">فحص فيديوهات غير محدود</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">تدقيق بصمة C2PA الشاملة</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <svg class="w-3.5 h-3.5 text-techCyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  <span class="truncate">ترخيص دائم بدون اشتراكات متكررة</span>
-                </div>
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="apps" data-search="AiFake Pro — ترخيص احترافي مدى الحياة نسخة Pro الكاملة من كاشف التزييف بالذكاء الاصطناعي مع فتح كافة النماذج المحلية والتحليل الجنائي المتقدم. فحص فيديوهات غير محدود تدقيق بصمة C2PA الشاملة ترخيص دائم بدون اشتراكات متكررة">
+            <div class="prog-thumb">
+              <img src="/fx/apps/verityscope.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$30</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('AiFake Pro — ترخيص احترافي مدى الحياة', '2,250 ⭐ ⭐ (~$30)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('AiFake Pro — ترخيص احترافي مدى الحياة', 'نسخة Pro الكاملة من كاشف التزييف بالذكاء الاصطناعي مع فتح كافة النماذج المحلية والتحليل الجنائي المتقدم.', '2,250 ⭐ ⭐ (~$30)', 'فحص فيديوهات غير محدود;;;تدقيق بصمة C2PA الشاملة;;;ترخيص دائم بدون اشتراكات متكررة')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تطبيق أندرويد</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">2,250 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">AiFake Pro — ترخيص احترافي مدى الحياة</h3>
+              <p class="prog-desc">نسخة Pro الكاملة من كاشف التزييف بالذكاء الاصطناعي مع فتح كافة النماذج المحلية والتحليل الجنائي المتقدم.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <ul class="prog-feats">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>فحص فيديوهات غير محدود</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>تدقيق بصمة C2PA الشاملة</span></li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>ترخيص دائم بدون اشتراكات متكررة</span></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('AiFake Pro — ترخيص احترافي مدى الحياة', '2,250 ⭐ ⭐ (~$30)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('AiFake Pro — ترخيص احترافي مدى الحياة', 'نسخة Pro الكاملة من كاشف التزييف بالذكاء الاصطناعي مع فتح كافة النماذج المحلية والتحليل الجنائي المتقدم.', '2,250 ⭐ ⭐ (~$30)', 'فحص فيديوهات غير محدود;;;تدقيق بصمة C2PA الشاملة;;;ترخيص دائم بدون اشتراكات متكررة')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="channel" data-search="حزمة 50 منشور ترويجي رصيد لنشر 50 رسالة ومنشور ترويجي مجدول عبر بوتات وقنوات متجرك الرقمية مع إحصائيات وصول. ">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  حزمة محتوى
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">125 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$1.5)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  حزمة 50 منشور ترويجي
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  رصيد لنشر 50 رسالة ومنشور ترويجي مجدول عبر بوتات وقنوات متجرك الرقمية مع إحصائيات وصول.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="channel" data-search="حزمة 50 منشور ترويجي رصيد لنشر 50 رسالة ومنشور ترويجي مجدول عبر بوتات وقنوات متجرك الرقمية مع إحصائيات وصول. ">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/post-50.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$1.5</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('حزمة 50 منشور ترويجي', '125 ⭐ ⭐ (~$1.5)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('حزمة 50 منشور ترويجي', 'رصيد لنشر 50 رسالة ومنشور ترويجي مجدول عبر بوتات وقنوات متجرك الرقمية مع إحصائيات وصول.', '125 ⭐ ⭐ (~$1.5)', '')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">حزمة محتوى</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">125 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">حزمة 50 منشور ترويجي</h3>
+              <p class="prog-desc">رصيد لنشر 50 رسالة ومنشور ترويجي مجدول عبر بوتات وقنوات متجرك الرقمية مع إحصائيات وصول.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('حزمة 50 منشور ترويجي', '125 ⭐ ⭐ (~$1.5)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('حزمة 50 منشور ترويجي', 'رصيد لنشر 50 رسالة ومنشور ترويجي مجدول عبر بوتات وقنوات متجرك الرقمية مع إحصائيات وصول.', '125 ⭐ ⭐ (~$1.5)', '')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="channel" data-search="تثبيت شهري في القناة الإعلانية تثبيت منشور متجرك في القناة الرسمية لمدة 30 يوماً متواصلة لجذب عملاء جدد وزيادة التفاعل. ">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  تثبيت ودعم
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">250 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$3)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  تثبيت شهري في القناة الإعلانية
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  تثبيت منشور متجرك في القناة الرسمية لمدة 30 يوماً متواصلة لجذب عملاء جدد وزيادة التفاعل.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="channel" data-search="تثبيت شهري في القناة الإعلانية تثبيت منشور متجرك في القناة الرسمية لمدة 30 يوماً متواصلة لجذب عملاء جدد وزيادة التفاعل. ">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/pin-month.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$3</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('تثبيت شهري في القناة الإعلانية', '250 ⭐ ⭐ (~$3)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('تثبيت شهري في القناة الإعلانية', 'تثبيت منشور متجرك في القناة الرسمية لمدة 30 يوماً متواصلة لجذب عملاء جدد وزيادة التفاعل.', '250 ⭐ ⭐ (~$3)', '')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تثبيت ودعم</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">250 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">تثبيت شهري في القناة الإعلانية</h3>
+              <p class="prog-desc">تثبيت منشور متجرك في القناة الرسمية لمدة 30 يوماً متواصلة لجذب عملاء جدد وزيادة التفاعل.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('تثبيت شهري في القناة الإعلانية', '250 ⭐ ⭐ (~$3)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('تثبيت شهري في القناة الإعلانية', 'تثبيت منشور متجرك في القناة الرسمية لمدة 30 يوماً متواصلة لجذب عملاء جدد وزيادة التفاعل.', '250 ⭐ ⭐ (~$3)', '')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="channel" data-search="أرشيف 5,000 رسالة وطلب توسيع مساحة التخزين السحابي لبوتك لحفظ سجل 5,000 رسالة وطلب بدون حذف تلقائي مع إمكانية البحث والفلترة. ">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  أرشفة ونسخ
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">450 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$6)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  أرشيف 5,000 رسالة وطلب
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  توسيع مساحة التخزين السحابي لبوتك لحفظ سجل 5,000 رسالة وطلب بدون حذف تلقائي مع إمكانية البحث والفلترة.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="channel" data-search="أرشيف 5,000 رسالة وطلب توسيع مساحة التخزين السحابي لبوتك لحفظ سجل 5,000 رسالة وطلب بدون حذف تلقائي مع إمكانية البحث والفلترة. ">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/archive-5k.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$6</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('أرشيف 5,000 رسالة وطلب', '450 ⭐ ⭐ (~$6)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('أرشيف 5,000 رسالة وطلب', 'توسيع مساحة التخزين السحابي لبوتك لحفظ سجل 5,000 رسالة وطلب بدون حذف تلقائي مع إمكانية البحث والفلترة.', '450 ⭐ ⭐ (~$6)', '')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">أرشفة ونسخ</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">450 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">أرشيف 5,000 رسالة وطلب</h3>
+              <p class="prog-desc">توسيع مساحة التخزين السحابي لبوتك لحفظ سجل 5,000 رسالة وطلب بدون حذف تلقائي مع إمكانية البحث والفلترة.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('أرشيف 5,000 رسالة وطلب', '450 ⭐ ⭐ (~$6)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('أرشيف 5,000 رسالة وطلب', 'توسيع مساحة التخزين السحابي لبوتك لحفظ سجل 5,000 رسالة وطلب بدون حذف تلقائي مع إمكانية البحث والفلترة.', '450 ⭐ ⭐ (~$6)', '')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="channel" data-search="لوحة تحكم Pro — اشتراك شهري الوصول الكامل إلى لوحة تحكم الويب المتقدمة لإدارة متجرك، وتعديل المنتجات والأسعار مباشرة من المتصفح. ">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  لوحة تحكم
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">350 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ (~$4.5/شهر)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  لوحة تحكم Pro — اشتراك شهري
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  الوصول الكامل إلى لوحة تحكم الويب المتقدمة لإدارة متجرك، وتعديل المنتجات والأسعار مباشرة من المتصفح.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="channel" data-search="لوحة تحكم Pro — اشتراك شهري الوصول الكامل إلى لوحة تحكم الويب المتقدمة لإدارة متجرك، وتعديل المنتجات والأسعار مباشرة من المتصفح. ">
+            <div class="prog-thumb prog-thumb--icon">
+              <img src="/store/img/products/panel-pro.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">~$4.5/شهر</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('لوحة تحكم Pro — اشتراك شهري', '350 ⭐ ⭐ (~$4.5/شهر)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('لوحة تحكم Pro — اشتراك شهري', 'الوصول الكامل إلى لوحة تحكم الويب المتقدمة لإدارة متجرك، وتعديل المنتجات والأسعار مباشرة من المتصفح.', '350 ⭐ ⭐ (~$4.5/شهر)', '')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">لوحة تحكم</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">350 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">لوحة تحكم Pro — اشتراك شهري</h3>
+              <p class="prog-desc">الوصول الكامل إلى لوحة تحكم الويب المتقدمة لإدارة متجرك، وتعديل المنتجات والأسعار مباشرة من المتصفح.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('لوحة تحكم Pro — اشتراك شهري', '350 ⭐ ⭐ (~$4.5/شهر)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('لوحة تحكم Pro — اشتراك شهري', 'الوصول الكامل إلى لوحة تحكم الويب المتقدمة لإدارة متجرك، وتعديل المنتجات والأسعار مباشرة من المتصفح.', '350 ⭐ ⭐ (~$4.5/شهر)', '')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="sites" data-search="قالب متجر عود وعنبر (Oud &amp; Amber) موقع متجر كامل بهوية ذهبية داكنة لبيع العطور والهدايا، مع سلة تسوق محفوظة وطلب جاهز عبر تيليجرام وواتساب. ">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  متجر عطور فاخر
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">7,000 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ ($99)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  قالب متجر عود وعنبر (Oud &amp; Amber)
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  موقع متجر كامل بهوية ذهبية داكنة لبيع العطور والهدايا، مع سلة تسوق محفوظة وطلب جاهز عبر تيليجرام وواتساب.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="sites" data-search="قالب متجر عود وعنبر (Oud &amp; Amber) موقع متجر كامل بهوية ذهبية داكنة لبيع العطور والهدايا، مع سلة تسوق محفوظة وطلب جاهز عبر تيليجرام وواتساب. ">
+            <div class="prog-thumb">
+              <img src="/fx/templates/oud-amber.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">$99</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('قالب متجر عود وعنبر (Oud & Amber)', '7,000 ⭐ ⭐ ($99)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('قالب متجر عود وعنبر (Oud & Amber)', 'موقع متجر كامل بهوية ذهبية داكنة لبيع العطور والهدايا، مع سلة تسوق محفوظة وطلب جاهز عبر تيليجرام وواتساب.', '7,000 ⭐ ⭐ ($99)', '')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">متجر عطور فاخر</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">7,000 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">قالب متجر عود وعنبر (Oud &amp; Amber)</h3>
+              <p class="prog-desc">موقع متجر كامل بهوية ذهبية داكنة لبيع العطور والهدايا، مع سلة تسوق محفوظة وطلب جاهز عبر تيليجرام وواتساب.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('قالب متجر عود وعنبر (Oud & Amber)', '7,000 ⭐ ⭐ ($99)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('قالب متجر عود وعنبر (Oud & Amber)', 'موقع متجر كامل بهوية ذهبية داكنة لبيع العطور والهدايا، مع سلة تسوق محفوظة وطلب جاهز عبر تيليجرام وواتساب.', '7,000 ⭐ ⭐ ($99)', '')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="sites" data-search="قالب متجر سمارت زون (Smart Zone) قالب متجر إلكترونيات وأجهزة ذكية بهوية تقنية، فلاتر مواصفات، وترتيب حسب الأسعار مع سلة سريعة. ">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  متجر إلكترونيات
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">5,600 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ ($79)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  قالب متجر سمارت زون (Smart Zone)
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  قالب متجر إلكترونيات وأجهزة ذكية بهوية تقنية، فلاتر مواصفات، وترتيب حسب الأسعار مع سلة سريعة.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="sites" data-search="قالب متجر سمارت زون (Smart Zone) قالب متجر إلكترونيات وأجهزة ذكية بهوية تقنية، فلاتر مواصفات، وترتيب حسب الأسعار مع سلة سريعة. ">
+            <div class="prog-thumb">
+              <img src="/fx/templates/smart-zone.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">$79</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('قالب متجر سمارت زون (Smart Zone)', '5,600 ⭐ ⭐ ($79)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('قالب متجر سمارت زون (Smart Zone)', 'قالب متجر إلكترونيات وأجهزة ذكية بهوية تقنية، فلاتر مواصفات، وترتيب حسب الأسعار مع سلة سريعة.', '5,600 ⭐ ⭐ ($79)', '')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">متجر إلكترونيات</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">5,600 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">قالب متجر سمارت زون (Smart Zone)</h3>
+              <p class="prog-desc">قالب متجر إلكترونيات وأجهزة ذكية بهوية تقنية، فلاتر مواصفات، وترتيب حسب الأسعار مع سلة سريعة.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('قالب متجر سمارت زون (Smart Zone)', '5,600 ⭐ ⭐ ($79)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('قالب متجر سمارت زون (Smart Zone)', 'قالب متجر إلكترونيات وأجهزة ذكية بهوية تقنية، فلاتر مواصفات، وترتيب حسب الأسعار مع سلة سريعة.', '5,600 ⭐ ⭐ ($79)', '')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="sites" data-search="قالب متجر دُرّة (Durra Store) قالب مخصص لتجارة التمور والقهوة ومنتجات الضيافة الأصيلة بتصميم دافئ وجذاب وسريع الإنجاز. ">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  تمور وضيافة
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">4,600 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ ($65)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  قالب متجر دُرّة (Durra Store)
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  قالب مخصص لتجارة التمور والقهوة ومنتجات الضيافة الأصيلة بتصميم دافئ وجذاب وسريع الإنجاز.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="sites" data-search="قالب متجر دُرّة (Durra Store) قالب مخصص لتجارة التمور والقهوة ومنتجات الضيافة الأصيلة بتصميم دافئ وجذاب وسريع الإنجاز. ">
+            <div class="prog-thumb">
+              <img src="/fx/templates/durra.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">$65</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('قالب متجر دُرّة (Durra Store)', '4,600 ⭐ ⭐ ($65)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('قالب متجر دُرّة (Durra Store)', 'قالب مخصص لتجارة التمور والقهوة ومنتجات الضيافة الأصيلة بتصميم دافئ وجذاب وسريع الإنجاز.', '4,600 ⭐ ⭐ ($65)', '')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تمور وضيافة</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">4,600 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">قالب متجر دُرّة (Durra Store)</h3>
+              <p class="prog-desc">قالب مخصص لتجارة التمور والقهوة ومنتجات الضيافة الأصيلة بتصميم دافئ وجذاب وسريع الإنجاز.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('قالب متجر دُرّة (Durra Store)', '4,600 ⭐ ⭐ ($65)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('قالب متجر دُرّة (Durra Store)', 'قالب مخصص لتجارة التمور والقهوة ومنتجات الضيافة الأصيلة بتصميم دافئ وجذاب وسريع الإنجاز.', '4,600 ⭐ ⭐ ($65)', '')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="sites" data-search="قالب بوت بازار (Bot Bazaar) سوق متكامل لعرض وبيع البوتات والخدمات البرمجية والأدوات الرقمية مع تسليم تلقائي وتصنيفات مفصلة. ">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  سوق منتجات رقمية
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">5,200 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ ($75)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  قالب بوت بازار (Bot Bazaar)
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  سوق متكامل لعرض وبيع البوتات والخدمات البرمجية والأدوات الرقمية مع تسليم تلقائي وتصنيفات مفصلة.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="sites" data-search="قالب بوت بازار (Bot Bazaar) سوق متكامل لعرض وبيع البوتات والخدمات البرمجية والأدوات الرقمية مع تسليم تلقائي وتصنيفات مفصلة. ">
+            <div class="prog-thumb">
+              <img src="/fx/templates/bot-bazaar.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">$75</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('قالب بوت بازار (Bot Bazaar)', '5,200 ⭐ ⭐ ($75)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('قالب بوت بازار (Bot Bazaar)', 'سوق متكامل لعرض وبيع البوتات والخدمات البرمجية والأدوات الرقمية مع تسليم تلقائي وتصنيفات مفصلة.', '5,200 ⭐ ⭐ ($75)', '')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">سوق منتجات رقمية</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">5,200 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">قالب بوت بازار (Bot Bazaar)</h3>
+              <p class="prog-desc">سوق متكامل لعرض وبيع البوتات والخدمات البرمجية والأدوات الرقمية مع تسليم تلقائي وتصنيفات مفصلة.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('قالب بوت بازار (Bot Bazaar)', '5,200 ⭐ ⭐ ($75)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('قالب بوت بازار (Bot Bazaar)', 'سوق متكامل لعرض وبيع البوتات والخدمات البرمجية والأدوات الرقمية مع تسليم تلقائي وتصنيفات مفصلة.', '5,200 ⭐ ⭐ ($75)', '')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="sites" data-search="قالب متجر أمان (Aman Store) قالب مهيأ لخدمات التأمين، الضمانات، والاشتراكات السنوية مع حاسبة أسعار فورية واستمارة طلب مبسطة. ">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  تأمين وخدمات
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">4,200 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ ($59)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  قالب متجر أمان (Aman Store)
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  قالب مهيأ لخدمات التأمين، الضمانات، والاشتراكات السنوية مع حاسبة أسعار فورية واستمارة طلب مبسطة.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="sites" data-search="قالب متجر أمان (Aman Store) قالب مهيأ لخدمات التأمين، الضمانات، والاشتراكات السنوية مع حاسبة أسعار فورية واستمارة طلب مبسطة. ">
+            <div class="prog-thumb">
+              <img src="/fx/templates/aman.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">$59</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('قالب متجر أمان (Aman Store)', '4,200 ⭐ ⭐ ($59)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('قالب متجر أمان (Aman Store)', 'قالب مهيأ لخدمات التأمين، الضمانات، والاشتراكات السنوية مع حاسبة أسعار فورية واستمارة طلب مبسطة.', '4,200 ⭐ ⭐ ($59)', '')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">تأمين وخدمات</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">4,200 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">قالب متجر أمان (Aman Store)</h3>
+              <p class="prog-desc">قالب مهيأ لخدمات التأمين، الضمانات، والاشتراكات السنوية مع حاسبة أسعار فورية واستمارة طلب مبسطة.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('قالب متجر أمان (Aman Store)', '4,200 ⭐ ⭐ ($59)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('قالب متجر أمان (Aman Store)', 'قالب مهيأ لخدمات التأمين، الضمانات، والاشتراكات السنوية مع حاسبة أسعار فورية واستمارة طلب مبسطة.', '4,200 ⭐ ⭐ ($59)', '')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="sites" data-search="قالب متجر محفظة (Mahfazah) واجهة لخدمات شحن الأرصدة، المحافظ الرقمية وبطاقات الهدايا مع دعم عملات متعددة وتجربة تصفح سريعة. ">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  محفظة رقمية
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">3,600 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ ($49)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  قالب متجر محفظة (Mahfazah)
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  واجهة لخدمات شحن الأرصدة، المحافظ الرقمية وبطاقات الهدايا مع دعم عملات متعددة وتجربة تصفح سريعة.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="sites" data-search="قالب متجر محفظة (Mahfazah) واجهة لخدمات شحن الأرصدة، المحافظ الرقمية وبطاقات الهدايا مع دعم عملات متعددة وتجربة تصفح سريعة. ">
+            <div class="prog-thumb">
+              <img src="/fx/templates/mahfazah.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">$49</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('قالب متجر محفظة (Mahfazah)', '3,600 ⭐ ⭐ ($49)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('قالب متجر محفظة (Mahfazah)', 'واجهة لخدمات شحن الأرصدة، المحافظ الرقمية وبطاقات الهدايا مع دعم عملات متعددة وتجربة تصفح سريعة.', '3,600 ⭐ ⭐ ($49)', '')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">محفظة رقمية</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">3,600 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">قالب متجر محفظة (Mahfazah)</h3>
+              <p class="prog-desc">واجهة لخدمات شحن الأرصدة، المحافظ الرقمية وبطاقات الهدايا مع دعم عملات متعددة وتجربة تصفح سريعة.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('قالب متجر محفظة (Mahfazah)', '3,600 ⭐ ⭐ ($49)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('قالب متجر محفظة (Mahfazah)', 'واجهة لخدمات شحن الأرصدة، المحافظ الرقمية وبطاقات الهدايا مع دعم عملات متعددة وتجربة تصفح سريعة.', '3,600 ⭐ ⭐ ($49)', '')">التفاصيل</button>
+              </div>
             </div>
-          </div>
-          <div class="bot-card bento-card p-5 flex flex-col justify-between group hover:border-cyan-500/40 transition-all" data-category="sites" data-search="قالب متجر كرونو (Chrono Watches) أرقى قوالب التجارة الإلكترونية للساعات والمجوهرات الفاخرة: معارض صور بانورامية، تكبير تفاعلي، وتنسيق ملكي داكن. ">
-            <div class="space-y-3.5">
-              
-              <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-techCyan border border-blue-500/20 text-[11px] font-bold truncate max-w-[170px]">
-                  ساعات فاخرة
-                </span>
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                  <span class="font-bold text-amber-400">8,800 ⭐</span>
-                  <span class="text-slate-400 text-[11px]">⭐ ($129)</span>
-                </div>
-              </div>
-
-              <div>
-                <h3 class="text-base font-bold text-white group-hover:text-techCyan transition-colors leading-snug">
-                  قالب متجر كرونو (Chrono Watches)
-                </h3>
-                <p class="text-slate-300 text-xs leading-relaxed mt-1 line-clamp-2">
-                  أرقى قوالب التجارة الإلكترونية للساعات والمجوهرات الفاخرة: معارض صور بانورامية، تكبير تفاعلي، وتنسيق ملكي داكن.
-                </p>
-              </div>
-
-              <!-- Technical Micro Specs Grid -->
-              <div class="grid grid-cols-2 gap-1.5 p-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-[11px] font-mono text-slate-300">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-slate-400">الاستجابة:</span>
-                  <span class="text-white">&lt;50ms</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-techCyan"></span>
-                  <span class="text-slate-400">التسليم:</span>
-                  <span class="text-techCyan">آلي مشفر</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                  <span class="text-slate-400">الدفع:</span>
-                  <span class="text-amber-400">Stars + كريمي</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  <span class="text-slate-400">الأمان:</span>
-                  <span class="text-indigo-300">TLS 1.3</span>
-                </div>
-              </div>
-
-              <!-- Features Checklist -->
-              <div class="space-y-1.5 text-xs text-slate-300 pt-1">
-                
-              </div>
-
+          </article>
+          <article class="prog-card bot-card" data-category="sites" data-search="قالب متجر كرونو (Chrono Watches) أرقى قوالب التجارة الإلكترونية للساعات والمجوهرات الفاخرة: معارض صور بانورامية، تكبير تفاعلي، وتنسيق ملكي داكن. ">
+            <div class="prog-thumb">
+              <img src="/fx/templates/chrono.svg" alt="" width="640" height="400" loading="lazy" decoding="async">
+              <span class="prog-ver" dir="ltr">$129</span>
             </div>
-
-            <!-- Card Bottom Actions -->
-            <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button onclick="openOrderModal('قالب متجر كرونو (Chrono Watches)', '8,800 ⭐ ⭐ ($129)')" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-all shadow-glow-sm">
-                طلب الباقة الآن
-              </button>
-              <button onclick="openBotDetailsModal('قالب متجر كرونو (Chrono Watches)', 'أرقى قوالب التجارة الإلكترونية للساعات والمجوهرات الفاخرة: معارض صور بانورامية، تكبير تفاعلي، وتنسيق ملكي داكن.', '8,800 ⭐ ⭐ ($129)', '')" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition-colors" title="عرض التفاصيل الكاملة">
-                التفاصيل
-              </button>
+            <div class="prog-body">
+              <div class="prog-meta">
+                <span class="prog-badge">ساعات فاخرة</span>
+                <span class="prog-dl prog-dl--direct"><span dir="ltr">8,800 ⭐</span></span>
+              </div>
+              <h3 class="prog-title">قالب متجر كرونو (Chrono Watches)</h3>
+              <p class="prog-desc">أرقى قوالب التجارة الإلكترونية للساعات والمجوهرات الفاخرة: معارض صور بانورامية، تكبير تفاعلي، وتنسيق ملكي داكن.</p>
+              <ul class="prog-specs">
+                <li><span>الاستجابة</span> <b>&lt;50ms</b></li>
+                <li><span>التسليم</span> <b>آلي مشفر</b></li>
+                <li><span>الدفع</span> <b>Stars + كريمي</b></li>
+                <li><span>الأمان</span> <b>TLS 1.3</b></li>
+              </ul>
+              <div class="prog-actions">
+                <button class="prog-download" type="button" onclick="openOrderModal('قالب متجر كرونو (Chrono Watches)', '8,800 ⭐ ⭐ ($129)')">طلب الباقة الآن</button>
+                <button class="prog-more" type="button" onclick="openBotDetailsModal('قالب متجر كرونو (Chrono Watches)', 'أرقى قوالب التجارة الإلكترونية للساعات والمجوهرات الفاخرة: معارض صور بانورامية، تكبير تفاعلي، وتنسيق ملكي داكن.', '8,800 ⭐ ⭐ ($129)', '')">التفاصيل</button>
+              </div>
             </div>
-          </div>
+          </article>
         </div>
 
         <!-- Empty State -->
@@ -2027,6 +997,8 @@
             <li><a href="/programs.html" class="hover:text-techCyan transition-colors">كاشف التزييف VerityScope</a></li>
             <li><a href="/templates.html" class="hover:text-techCyan transition-colors">قالب متجر عود وعنبر (Zero-Deps)</a></li>
             <li><a href="/trial.html" class="hover:text-techCyan transition-colors">تفعيل التجربة المجانية (3 أيام)</a></li>
+            <li><a href="https://zeidexlink.zeidexsoft.com/" target="_blank" rel="noopener" class="hover:text-techCyan transition-colors">ZeidexLink — روابط ومنيو QR</a></li>
+            <li><a href="https://mithqal.zeidexsoft.com/" target="_blank" rel="noopener" class="hover:text-techCyan transition-colors">مثقال — المحاسبة السحابية</a></li>
           </ul>
         </div>
 
@@ -2345,5 +1317,6 @@
       if (modal) modal.classList.add('hidden');
     }
   </script>
+  <script src="/fx/site-fx.js" defer></script>
 </body>
 </html>

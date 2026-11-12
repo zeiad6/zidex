@@ -400,6 +400,29 @@ export function Prose({ blocks }: { blocks: Post['body'] }) {
               </figure>
             )
 
+          case 'videos':
+            return (
+              <figure key={key} className="not-prose my-8" dir={block.lang === 'ar' ? 'rtl' : 'ltr'}>
+                <video
+                  className="aspect-video w-full border border-app bg-black"
+                  controls
+                  playsInline
+                  preload="metadata"
+                  src={block.items[0]?.src}
+                />
+                <ol className="mt-3 grid gap-1 text-sm sm:grid-cols-2">
+                  {block.items.map((item) => (
+                    <li key={item.src}>
+                      <a className="text-accent hover:underline" href={item.src} target="_blank" rel="noopener noreferrer">
+                        {item.title}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+                {block.caption && <figcaption className="mt-2 text-xs text-subtle">{block.caption}</figcaption>}
+              </figure>
+            )
+
           case 'download': {
             const sources = [block, ...(block.also ?? [])]
             return (

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img">
+<defs>
+  <linearGradient id="t16bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#0c1526"/><stop offset="1" stop-color="#05080f"/>
+  </linearGradient>
+  <radialGradient id="t16glow" cx="0.8" cy="0.1" r="0.95">
+    <stop offset="0" stop-color="#8b5cf6" stop-opacity="0.3"/><stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="t16ac" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#ec4899"/><stop offset="1" stop-color="#8b5cf6"/>
+  </linearGradient>
+  <pattern id="t16dots" width="26" height="26" patternUnits="userSpaceOnUse">
+    <circle cx="1.2" cy="1.2" r="1.2" fill="#ffffff" fill-opacity="0.07"/>
+  </pattern>
+  <linearGradient id="t16shade" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.55"/>
+  </linearGradient>
+</defs>
+
+<rect width="640" height="400" fill="url(#t16bg)"/>
+<rect width="640" height="400" fill="url(#t16glow)"/>
+<rect width="640" height="400" fill="url(#t16dots)"/>
+<path d="M0 300L640 180" stroke="#ffffff" stroke-opacity="0.04"/>
+<path d="M0 340L640 220" stroke="#ffffff" stroke-opacity="0.03"/>
+
+<!-- product window -->
+<g transform="translate(252 56)">
+  <rect x="0" y="6" width="352" height="300" rx="18" fill="#000" opacity="0.35"/>
+  <rect width="352" height="300" rx="16" fill="#0a1020" stroke="#ffffff" stroke-opacity="0.09"/>
+  <path d="M0 34h352" stroke="#ffffff" stroke-opacity="0.06"/>
+  <circle cx="18" cy="17" r="3.4" fill="#ff5f57" opacity="0.5"/>
+  <circle cx="31" cy="17" r="3.4" fill="#febc2e" opacity="0.5"/>
+  <circle cx="44" cy="17" r="3.4" fill="#28c840" opacity="0.5"/>
+  <rect x="292" y="12" width="44" height="10" rx="5" fill="#ffffff" fill-opacity="0.06"/>
+  <rect x="0" y="0" width="352" height="300" rx="16" fill="url(#t16shade)" opacity="0.35"/>
+  <g>
+    <rect x="22" y="46" width="190" height="150" rx="9" fill="#8b5cf6" opacity=".16"/>
+    <circle cx="168" cy="86" r="18" fill="#fff" opacity=".4"/>
+    <path d="M22 172l54-52 40 36 30-24 66 44v4a10 10 0 0 1-10 10H32a10 10 0 0 1-10-10z" fill="#0b1220" opacity=".6"/>
+    <rect x="22" y="210" width="190" height="76" rx="9" fill="#fff" opacity=".04"/>
+    <path d="M34 276c22-6 34-42 52-42s30 26 50 24 28-34 62-40" stroke="#8b5cf6" stroke-width="1.8" fill="none"/>
+    <circle cx="86" cy="234" r="3" fill="#8b5cf6" /><circle cx="136" cy="258" r="3" fill="#8b5cf6" /><rect x="196" y="262" width="4" height="4" rx="0" fill="#8b5cf6" />
+    <rect x="228" y="50" width="100" height="116" rx="9" fill="#fff" opacity=".04"/>
+    <rect x="238" y="64" width="66" height="4" rx="2" fill="#fff" opacity=".16"/>
+      <circle cx="258" cy="66" r="4.5" fill="#8b5cf6" /><rect x="238" y="98" width="66" height="4" rx="2" fill="#fff" opacity=".16"/>
+      <circle cx="274" cy="100" r="4.5" fill="#8b5cf6" /><rect x="238" y="132" width="66" height="4" rx="2" fill="#fff" opacity=".16"/>
+      <circle cx="290" cy="134" r="4.5" fill="#8b5cf6" />
+    <rect x="228" y="180" width="100" height="106" rx="9" fill="#fff" opacity=".04"/>
+    <rect x="240" y="200" width="14" height="70" rx="3" fill="#8b5cf6" opacity="0.18"/><rect x="262" y="200" width="14" height="70" rx="3" fill="#8b5cf6" opacity="0.36"/><rect x="284" y="200" width="14" height="70" rx="3" fill="#8b5cf6" opacity="0.54"/><rect x="306" y="200" width="14" height="70" rx="3" fill="#8b5cf6" opacity="0.72"/></g>
+</g>
+
+<!-- identity -->
+<g transform="translate(40 244)">
+  <rect x="0" y="4" width="64" height="64" rx="18" fill="#000" opacity="0.4"/>
+  <rect width="64" height="64" rx="18" fill="url(#t16ac)"/>
+  <g transform="translate(16 16) scale(1.333)" fill="none" stroke="#04120e" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/></g>
+</g>
+<text x="118" y="274" font-size="21" fill="#f8fafc" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-weight="700">LightCraft</text>
+<text x="118" y="294" font-size="9.5" fill="#8ea3bd" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" letter-spacing="1.6">بديل ADOBE LIGHTROOM</text>
+<g transform="translate(118 304)">
+  <rect width="68" height="21" rx="10.5" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.1"/>
+  <text x="11" y="14.5" font-size="10.5" fill="#cbd5e1" font-family="ui-monospace, Menlo, monospace">v0.20.0</text>
+</g>
+<text x="40" y="352" font-size="9" fill="#64748b" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" letter-spacing="1.4">VERIFIED BUILD · SHA-256</text>
+
+<!-- monogram watermark: legible at any size, no text to turn to mush -->
+<g transform="translate(586 34) scale(0.95)" fill="none" stroke="#f0c674" stroke-opacity="0.28" stroke-width="1.6" stroke-linejoin="round">
+  <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z"/><path d="M7.5 8.5H16.5L7.5 15.5H16.5" stroke-linecap="round"/>
+</g>
+</svg>

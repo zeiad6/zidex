@@ -1,6 +1,6 @@
 // Stage new modular section interfaces into dist and dist_pages
 // Deprecates the old SPA shell and activates the 7 high-density independent interfaces
-import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs'
+import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, readdirSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { execSync } from 'node:child_process'
@@ -16,6 +16,12 @@ const aliases = [
 ]
 
 const targets = ['dist', 'dist_pages']
+
+// Article pages and the blog.html card grid come from src/data/posts.ts. This
+// runs before the copy below so the staged blog.html carries the fresh grid,
+// and after prerender in `npm run build`, whose /blog/<slug>.html it replaces.
+for (const target of targets) mkdirSync(resolve(root, target), { recursive: true })
+execSync('node scripts/build-articles.mjs', { cwd: root, stdio: 'inherit' })
 
 for (const target of targets) {
   const dir = resolve(root, target)
@@ -41,6 +47,16 @@ for (const target of targets) {
   const redirectsSrc = resolve(root, 'public/_redirects')
   if (existsSync(redirectsSrc)) {
     copyFileSync(redirectsSrc, resolve(dir, '_redirects'))
+  }
+
+  // The shared interface + ambient motion layer is referenced by all 7 pages.
+  // Ship it with the staged HTML so dist_pages can be deployed on its own.
+  const fxSrc = resolve(root, 'public/fx')
+  if (existsSync(fxSrc)) {
+    const fxDest = resolve(dir, 'fx')
+    mkdirSync(fxDest, { recursive: true })
+    // fx/apps/*.svg are generated product tiles; the copy must be recursive.
+    cpSync(fxSrc, fxDest, { recursive: true })
   }
 }
 
