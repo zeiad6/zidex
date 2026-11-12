@@ -1,0 +1,147 @@
+/** كتالوج المنتجات — البيانات الوحيدة التي يديرها صاحب المتجر.
+ *  كل نص مرتين (ar/en) والسعر بالريال السعودي. */
+export const PRODUCTS = [
+    {
+        id: 1,
+        kind: 'serum',
+        cat: 'skin',
+        price: 129,
+        old: 159,
+        badge: { ar: 'الأكثر طلباً', en: 'Best seller' },
+        name: { ar: 'سيروم فيتامين C', en: 'Vitamin C Serum' },
+        desc: {
+            ar: 'سيروم نهاري بفيتامين C بتركيز 15% مع حمض الفيروليك. يوحّد لون البشرة ويخفّف آثار البقع مع الاستعمال اليومي.',
+            en: 'A daytime serum with 15% vitamin C and ferulic acid. Evens skin tone and fades dark spots with daily use.',
+        },
+        specs: [
+            { ar: 'فيتامين C 15%', en: '15% vitamin C' },
+            { ar: '30 مل', en: '30 ml' },
+            { ar: 'كل أنواع البشرة', en: 'All skin types' },
+        ],
+        meta: { ar: 'يُستعمل صباحاً قبل المرطّب', en: 'Use in the morning before moisturiser' },
+    },
+    {
+        id: 2,
+        kind: 'cream',
+        cat: 'skin',
+        price: 98,
+        name: { ar: 'كريم مرطّب بالسيراميد', en: 'Ceramide Moisturiser' },
+        desc: {
+            ar: 'كريم يومي بالسيراميد وحمض الهيالورونيك. يرطّب البشرة الجافة ويقوّي حاجزها دون ملمس دهني.',
+            en: 'A daily cream with ceramides and hyaluronic acid. Hydrates dry skin and supports its barrier without a greasy feel.',
+        },
+        specs: [
+            { ar: 'سيراميد', en: 'Ceramides' },
+            { ar: '50 مل', en: '50 ml' },
+            { ar: 'بلا عطر', en: 'Fragrance-free' },
+        ],
+        meta: { ar: 'صباحاً ومساءً', en: 'Morning and evening' },
+    },
+    {
+        id: 3,
+        kind: 'mask',
+        cat: 'skin',
+        price: 64,
+        old: 80,
+        badge: { ar: 'خصم 20%', en: '20% off' },
+        name: { ar: 'ماسك الطين الوردي', en: 'Pink Clay Mask' },
+        desc: {
+            ar: 'ماسك بطين الكاولين الوردي وماء الورد. ينظّف المسام ويمتصّ الزيوت الزائدة في عشر دقائق.',
+            en: 'A mask of pink kaolin clay and rose water. Clears pores and absorbs excess oil in ten minutes.',
+        },
+        specs: [
+            { ar: 'طين الكاولين', en: 'Kaolin clay' },
+            { ar: '75 غ', en: '75 g' },
+            { ar: 'بشرة دهنية ومختلطة', en: 'Oily and combination skin' },
+        ],
+        meta: { ar: 'مرتان في الأسبوع', en: 'Twice a week' },
+    },
+    {
+        id: 4,
+        kind: 'oil',
+        cat: 'hair',
+        price: 115,
+        badge: { ar: 'جديد', en: 'New' },
+        name: { ar: 'زيت الأرغان للشعر', en: 'Argan Hair Oil' },
+        desc: {
+            ar: 'زيت أرغان مغربي معصور على البارد. يلمّع الأطراف الجافة ويقلّل التقصّف، ولا يثقّل الشعر.',
+            en: 'Cold-pressed Moroccan argan oil. Adds shine to dry ends and reduces breakage without weighing hair down.',
+        },
+        specs: [
+            { ar: 'أرغان 100%', en: '100% argan' },
+            { ar: '60 مل', en: '60 ml' },
+            { ar: 'معصور على البارد', en: 'Cold-pressed' },
+        ],
+        meta: { ar: 'قطرتان على الأطراف بعد الغسل', en: 'Two drops on the ends after washing' },
+    },
+    {
+        id: 5,
+        kind: 'shampoo',
+        cat: 'hair',
+        price: 72,
+        name: { ar: 'شامبو بلا سلفات', en: 'Sulfate-free Shampoo' },
+        desc: {
+            ar: 'شامبو لطيف بلا سلفات ولا بارابين، بخلاصة الصبّار. ينظّف فروة الرأس ويحافظ على لون الشعر المصبوغ.',
+            en: 'A gentle shampoo free of sulfates and parabens, with aloe extract. Cleans the scalp and keeps coloured hair from fading.',
+        },
+        specs: [
+            { ar: 'بلا سلفات', en: 'Sulfate-free' },
+            { ar: '300 مل', en: '300 ml' },
+            { ar: 'للشعر المصبوغ', en: 'For coloured hair' },
+        ],
+        meta: { ar: 'للاستعمال اليومي', en: 'For daily use' },
+    },
+    {
+        id: 6,
+        kind: 'mist',
+        cat: 'scent',
+        price: 85,
+        name: { ar: 'معطّر الجسم بماء الورد', en: 'Rose Water Body Mist' },
+        desc: {
+            ar: 'رذاذ خفيف بماء الورد الطائفي والمسك الأبيض. رائحة هادئة تدوم ساعات على الجسم والملابس.',
+            en: 'A light mist of Taif rose water and white musk. A soft scent that lasts for hours on skin and clothes.',
+        },
+        specs: [
+            { ar: 'ورد طائفي', en: 'Taif rose' },
+            { ar: '100 مل', en: '100 ml' },
+            { ar: 'بلا كحول', en: 'Alcohol-free' },
+        ],
+        meta: { ar: 'يُرشّ من مسافة 20 سم', en: 'Spray from 20 cm away' },
+    },
+    {
+        id: 7,
+        kind: 'candle',
+        cat: 'scent',
+        price: 110,
+        name: { ar: 'شمعة العنبر والفانيلا', en: 'Amber & Vanilla Candle' },
+        desc: {
+            ar: 'شمعة من شمع الصويا بفتيل قطني، برائحة العنبر والفانيلا. تحترق 40 ساعة بلا دخان أسود.',
+            en: 'A soy wax candle with a cotton wick, scented with amber and vanilla. Burns for 40 hours with no black smoke.',
+        },
+        specs: [
+            { ar: 'شمع صويا', en: 'Soy wax' },
+            { ar: '220 غ', en: '220 g' },
+            { ar: '40 ساعة احتراق', en: '40-hour burn' },
+        ],
+        meta: { ar: 'قُصّي الفتيل قبل كل إشعال', en: 'Trim the wick before each use' },
+    },
+    {
+        id: 8,
+        kind: 'set',
+        cat: 'skin',
+        price: 249,
+        old: 291,
+        badge: { ar: 'وفّري 42 ر.س', en: 'Save SAR 42' },
+        name: { ar: 'طقم الروتين الكامل', en: 'Full Routine Set' },
+        desc: {
+            ar: 'ثلاثة منتجات في علبة هدية: سيروم فيتامين C، كريم السيراميد، وماسك الطين الوردي. روتين أسبوع كامل.',
+            en: 'Three products in a gift box: the vitamin C serum, the ceramide moisturiser and the pink clay mask. A full week of routine.',
+        },
+        specs: [
+            { ar: '3 منتجات', en: '3 products' },
+            { ar: 'علبة هدية', en: 'Gift box' },
+            { ar: 'بطاقة إهداء', en: 'Gift card' },
+        ],
+        meta: { ar: 'السعر أقل من شراء القطع منفردة', en: 'Costs less than buying each item alone' },
+    },
+];

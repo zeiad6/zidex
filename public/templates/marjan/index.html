@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-i18n="pageTitle">مرجان — متجر العناية والتجميل</title>
+    <meta name="description" content="مرجان: سيرومات وكريمات وزيوت شعر وعطور منزلية بمكوّنات معلنة. توصيل خلال 48 ساعة وطلب عبر تيليجرام أو واتساب." />
+    <meta name="theme-color" content="#b5766a" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'self'" />
+    <meta name="referrer" content="no-referrer" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='10' fill='%23e5484d'/%3E%3Cpath d='M16 7c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z' fill='%23fff'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#main" data-i18n="skip">تخطَّ إلى المنتجات</a>
+    <div class="scene" aria-hidden="true"></div>
+
+    <div class="shell">
+      <aside class="side glass">
+        <a class="brand" href="#main">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z" fill="currentColor" /></svg>
+          </span>
+          <span class="brand-copy"><b data-i18n="brand">مرجان</b><small data-i18n="brandSub">عناية وتجميل</small></span>
+        </a>
+
+        <span class="search-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+          <input type="search" id="search" data-i18n-ph="search" placeholder="ابحث عن منتج…" />
+        </span>
+
+        <p class="side-label" data-i18n="sideMenu">القائمة</p>
+        <nav class="nav" aria-label="القائمة">
+          <a class="on" href="#main"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z" /></svg><span data-i18n="navHome">الرئيسية</span></a>
+          <a href="#products"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7zM9 8a3 3 0 0 1 6 0" /></svg><span data-i18n="navProducts">المنتجات</span></a>
+          <a href="#why"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z" /></svg><span data-i18n="navWhy">لماذا مرجان</span></a>
+          <a href="#how"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h11v9H4zM15 10h3l2 3v3h-5M7.5 18.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM17 18.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" /></svg><span data-i18n="navHow">طريقة الطلب</span></a>
+        </nav>
+
+        <p class="side-label" data-i18n="sideCats">الأقسام</p>
+        <div class="chips" id="chips"></div>
+
+        <div class="side-foot">
+          <a class="btn ghosty sm" id="tg-link" data-i18n="tgLabel" href="#" hidden target="_blank" rel="noopener">تيليجرام</a>
+          <a class="btn ghosty sm" id="wa-link" data-i18n="waLabel" href="#" hidden target="_blank" rel="noopener">واتساب</a>
+        </div>
+      </aside>
+
+      <div class="stage">
+        <header class="top">
+          <div class="greet">
+            <h2 data-i18n="greet">أهلاً بكِ في مرجان</h2>
+            <p data-i18n="greetSub">روتين عناية كامل، يصلك خلال 48 ساعة.</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn glassy" id="lang" type="button" data-i18n="langBtn">English</button>
+            <button class="btn dark cart-btn" id="cart-open" type="button">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8h12l-1 12H7zM9 8a3 3 0 0 1 6 0" /></svg>
+              <span data-i18n="cart">السلة</span>
+              <span class="cart-count" id="cart-count" hidden>0</span>
+            </button>
+          </div>
+        </header>
+
+        <main id="main">
+          <section class="hero">
+            <div class="hero-card coral">
+              <span class="kicker" data-i18n="kicker">عرض الافتتاح</span>
+              <h1 data-i18n="heroTitle">بشرتك تستحق روتيناً <em>واضحاً</em></h1>
+              <p class="hero-lead" data-i18n="heroLead">سيرومات وكريمات وزيوت بمكوّنات معلنة على كل عبوة. اختاري ما يناسبك واطلبي برسالة واحدة.</p>
+              <div class="hero-cta">
+                <a class="btn light" href="#products" data-i18n="heroCta">تصفّحي المنتجات</a>
+                <a class="btn outline" href="#how" data-i18n="heroHow">كيف أطلب؟</a>
+              </div>
+              <div class="ring"><div id="hero-art"></div><span class="ring-label" data-i18n="ringCap">خصم الطلب الأول</span></div>
+            </div>
+
+            <div class="glass routine">
+              <div class="routine-head">
+                <b class="routine-num">03</b>
+                <div><h3 data-i18n="routineTitle">روتين الصباح</h3><p data-i18n="routineSub">ثلاث خطوات، خمس دقائق</p></div>
+              </div>
+              <ol class="routine-list">
+                <li><span class="tick">1</span><div><b data-i18n="routine1">تنظيف</b><small data-i18n="routine1d">غسول لطيف بماء فاتر</small></div></li>
+                <li><span class="tick">2</span><div><b data-i18n="routine2">سيروم</b><small data-i18n="routine2d">ثلاث قطرات على بشرة رطبة</small></div></li>
+                <li><span class="tick">3</span><div><b data-i18n="routine3">ترطيب وحماية</b><small data-i18n="routine3d">كريم نهاري ثم واقي شمس</small></div></li>
+              </ol>
+            </div>
+          </section>
+
+          <section class="stats" aria-label="أرقام المتجر">
+            <div class="stat glass">
+              <span class="stat-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7zM9 8a3 3 0 0 1 6 0" /></svg></span>
+              <b data-count="8">0</b><span data-i18n="stat1">منتجات في الكتالوج</span>
+              <svg class="spark" viewBox="0 0 60 20" aria-hidden="true"><path d="M1 15l8-4 7 3 9-8 8 5 9-7 8 3 9-5" /></svg>
+            </div>
+            <div class="stat glass">
+              <span class="stat-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h11v9H4zM15 10h3l2 3v3h-5" /></svg></span>
+              <b data-count="48">0</b><span data-i18n="stat2">ساعة للتوصيل</span>
+              <svg class="spark" viewBox="0 0 60 20" aria-hidden="true"><path d="M1 12l8 2 7-6 9 4 8-7 9 5 8-3 9 2" /></svg>
+            </div>
+            <div class="stat coral">
+              <span class="stat-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 3-6M4 4v4h4" /></svg></span>
+              <b data-count="14">0</b><span data-i18n="stat3">يوماً للاسترجاع</span>
+              <svg class="spark" viewBox="0 0 60 20" aria-hidden="true"><path d="M1 6l8 5 7-3 9 7 8-4 9 6 8-8 9 4" /></svg>
+            </div>
+            <div class="stat glass">
+              <span class="stat-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z" /></svg></span>
+              <b data-count="3">0</b><span data-i18n="stat4">أقسام: بشرة، شعر، عطور</span>
+              <svg class="spark" viewBox="0 0 60 20" aria-hidden="true"><path d="M1 14l8-6 7 4 9-3 8 5 9-9 8 6 9-4" /></svg>
+            </div>
+          </section>
+
+          <section class="glass panel" id="products">
+            <div class="section-head">
+              <div>
+                <h2 data-i18n="gridTitle">المنتجات</h2>
+                <p data-i18n="gridSub">الأسعار بالريال السعودي وتشمل الضريبة.</p>
+              </div>
+              <div class="tools">
+                <label class="sort-label" for="sort" data-i18n="sortLabel">الترتيب</label>
+                <select id="sort">
+                  <option value="featured" data-i18n="sortFeatured">المختارة</option>
+                  <option value="asc" data-i18n="sortPriceAsc">الأرخص أولاً</option>
+                  <option value="desc" data-i18n="sortPriceDesc">الأغلى أولاً</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid" id="grid"></div>
+            <p class="no-results" id="no-results" hidden data-i18n="noResults">لا يوجد منتج يطابق بحثك. جرّبي كلمة أخرى.</p>
+          </section>
+
+          <section class="section" id="why">
+            <div class="section-head">
+              <div>
+                <h2 data-i18n="whyTitle">لماذا مرجان</h2>
+                <p data-i18n="whyLead">ثلاثة أشياء نلتزم بها في كل طلب.</p>
+              </div>
+            </div>
+            <div class="bento">
+              <article class="feature glass reveal">
+                <div class="ico">01</div>
+                <h3 data-i18n="why1">مكوّنات معلنة</h3>
+                <p data-i18n="why1d">قائمة المكوّنات كاملة على العبوة وفي صفحة المنتج، بنسبة المادة الفعّالة.</p>
+              </article>
+              <article class="feature glass reveal">
+                <div class="ico">02</div>
+                <h3 data-i18n="why2">توصيل خلال 48 ساعة</h3>
+                <p data-i18n="why2d">يُشحن الطلب في يوم تأكيده، مع رقم تتبّع يصلك برسالة.</p>
+              </article>
+              <article class="feature glass reveal">
+                <div class="ico">03</div>
+                <h3 data-i18n="why3">استرجاع خلال 14 يوماً</h3>
+                <p data-i18n="why3d">لم يناسبك المنتج؟ أعيديه مغلقاً خلال 14 يوماً واستردّي المبلغ.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="section" id="how">
+            <div class="section-head">
+              <div>
+                <h2 data-i18n="howTitle">ثلاث خطوات للطلب</h2>
+                <p data-i18n="howLead">لا حساب ولا بطاقة: الطلب رسالة جاهزة تصلنا مباشرة.</p>
+              </div>
+            </div>
+            <div class="steps">
+              <article class="step glass reveal">
+                <h3 data-i18n="step1">اختاري منتجاتك</h3>
+                <p data-i18n="step1d">أضيفي ما تحتاجينه إلى السلة. السلة تُحفظ حتى لو أغلقتِ الصفحة.</p>
+              </article>
+              <article class="step glass reveal">
+                <h3 data-i18n="step2">أرسلي الطلب</h3>
+                <p data-i18n="step2d">زر واحد يرسل ملخّص السلة عبر تيليجرام أو واتساب.</p>
+              </article>
+              <article class="step glass reveal">
+                <h3 data-i18n="step3">استلمي وادفعي</h3>
+                <p data-i18n="step3d">نؤكّد العنوان ونشحن. الدفع عند الاستلام متاح.</p>
+              </article>
+            </div>
+          </section>
+        </main>
+
+        <footer class="site-foot">
+          <small>© <span id="year">2026</span> <span data-i18n="brand">مرجان</span> · <a href="https://zeidexsoft.com/shop">zeidexsoft.com</a></small>
+        </footer>
+      </div>
+    </div>
+
+    <button class="backdrop" id="modal-backdrop" hidden></button>
+    <div class="modal glass" id="modal" role="dialog" aria-modal="true" hidden></div>
+
+    <button class="backdrop" id="cart-backdrop" hidden></button>
+    <aside class="drawer glass" id="cart" role="dialog" aria-modal="true" hidden>
+      <div class="drawer-head">
+        <h2 data-i18n="cartTitle">سلة المشتريات</h2>
+        <button class="icon-btn" id="cart-close" type="button" aria-label="إغلاق">×</button>
+      </div>
+      <div class="cart-lines" id="cart-lines"></div>
+      <p class="cart-empty" id="cart-empty" data-i18n="cartEmpty">سلتك فارغة.</p>
+      <div class="cart-foot" id="cart-foot" hidden>
+        <div class="cart-total" id="cart-total"><span data-i18n="cartTotal">الإجمالي</span><b>0</b></div>
+        <button class="btn coral-btn" id="checkout-tg" type="button" data-i18n="checkoutTg">اطلبي عبر تيليجرام</button>
+        <button class="btn glassy" id="checkout-wa" type="button" data-i18n="checkoutWa">اطلبي عبر واتساب</button>
+        <button class="link-btn" id="cart-clear" type="button" data-i18n="clear">إفراغ السلة</button>
+      </div>
+    </aside>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+    <div class="tpl-frame" aria-hidden="true"></div>
+    <div class="tpl-badge" aria-hidden="true"><b data-i18n="brand">مرجان</b><span data-i18n="tplBadge">قالب ZeidexSoft</span></div>
+  </body>
+</html>

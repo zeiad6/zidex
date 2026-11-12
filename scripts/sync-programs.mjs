@@ -30,7 +30,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
  * they publish one, and the card picks the data up with no UI change.
  */
 const SOURCES = {
-  'edms-archive-pro': { repo: 'zeiad6/Edms-archive', current: '1.0.6' },
+  'edms-archive-pro': { repo: 'zeiad6/Edms-archive', current: '1.0.7' },
   'yusr': { repo: 'zeiad6/yusr', current: '0.2.1' },
   // 'zeidex-convert-android': { repo: 'zeiad6/zeidex-convert-android', current: '1.2.0' },
   // 'edms-archive-android': { repo: 'zeiad6/Edms-archive-Android', current: '1.0.1' },

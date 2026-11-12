@@ -204,6 +204,29 @@ export const TEMPLATES: StoreTemplate[] = [
       { ar: 'صفر تبعيات ورؤوس أمان صارمة', en: 'Zero dependencies and strict security headers' },
     ],
   },
+  {
+    slug: 'marjan',
+    sku: 'site-marjan',
+    name: { ar: 'مرجان', en: 'Marjan' },
+    tagline: { ar: 'متجر عناية وتجميل', en: 'Skincare & beauty store' },
+    description: {
+      ar: 'قالب متجر عناية وتجميل بتخطيط لوحة تحكم زجاجية (Glassy Dashboard): شريط جانبي عائم للأقسام، بطاقة مرجانية متدرّجة بحلقة خصم متحركة، بطاقات أرقام، وبطاقات منتجات زجاجية فوق خلفية دافئة مرسومة بالـCSS. 8 منتجات بعبوات مرسومة بالكود. عربي أولاً بإنجليزية كاملة.',
+      en: 'A skincare and beauty store template laid out as a glassy dashboard: a floating category sidebar, a coral gradient card with an animated discount ring, stat cards, and frosted product cards over a warm CSS-drawn backdrop. 8 products with code-drawn packaging. Arabic-first with full English.',
+    },
+    stars: 6300,
+    usd: 89,
+    demoPath: '/templates/marjan/',
+    repo: 'https://github.com/zeiad6/marjan-store',
+    swatch: 'linear-gradient(140deg,#5f3f36,#f2776b 55%,#f3dfd0)',
+    features: [
+      { ar: '8 منتجات: سيروم، كريم، ماسك، زيت، شامبو، معطّر، شمعة، طقم', en: '8 products: serum, cream, mask, oil, shampoo, mist, candle, set' },
+      { ar: 'تخطيط لوحة تحكم بشريط جانبي زجاجي', en: 'Dashboard layout with a glass sidebar' },
+      { ar: 'عبوات مرسومة بالكود SVG وخلفية بلا صور', en: 'Code-drawn SVG packaging and an image-free backdrop' },
+      { ar: 'بحث وترتيب وأقسام وسلة محفوظة', en: 'Search, sort, categories and a saved cart' },
+      { ar: 'طلب فوري عبر تيليجرام أو واتساب', en: 'Instant ordering via Telegram or WhatsApp' },
+      { ar: 'صفر تبعيات ورؤوس أمان صارمة', en: 'Zero dependencies and strict security headers' },
+    ],
+  },
 ]
 
 export const templateBySlug = (slug: string | undefined): StoreTemplate | undefined =>

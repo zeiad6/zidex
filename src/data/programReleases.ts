@@ -19,17 +19,17 @@ export type ProgramReleaseInfo = {
 
 export const programReleases: Record<string, ProgramReleaseInfo> = {
   "edms-archive-pro": {
-    "baseline": 74,
+    "baseline": 88,
     "versions": [
       {
-        "version": "1.0.7",
-        "date": "2026-10-23",
+        "version": "1.0.6",
+        "date": "2026-10-03",
         "files": [
           {
-            "name": "EDMS-Archive-1.0.7-Setup-x64.exe",
-            "href": "https://github.com/zeiad6/Edms-archive/releases/download/v1.0.7/EDMS-Archive-1.0.7-Setup-x64.exe",
-            "size": "238.7 MB",
-            "downloads": 1
+            "name": "EDMS-Archive-1.0.6-Setup-x64.exe",
+            "href": "https://github.com/zeiad6/Edms-archive/releases/download/v1.0.6/EDMS-Archive-1.0.6-Setup-x64.exe",
+            "size": "238.6 MB",
+            "downloads": 29
           }
         ]
       },
@@ -41,21 +41,21 @@ export const programReleases: Record<string, ProgramReleaseInfo> = {
             "name": "EDMS-Archive-1.0.0-Portable-x64.exe",
             "href": "https://github.com/zeiad6/Edms-archive/releases/download/v1.0.0/EDMS-Archive-1.0.0-Portable-x64.exe",
             "size": "179.6 MB",
-            "downloads": 11
+            "downloads": 13
           },
           {
             "name": "EDMS-Archive-1.0.0-Setup-x64.exe",
             "href": "https://github.com/zeiad6/Edms-archive/releases/download/v1.0.0/EDMS-Archive-1.0.0-Setup-x64.exe",
             "size": "227.8 MB",
-            "downloads": 38
+            "downloads": 40
           }
         ]
       }
     ],
-    "syncedAt": "2026-10-30"
+    "syncedAt": "2026-11-12"
   },
   "yusr": {
-    "baseline": 19,
+    "baseline": 33,
     "versions": [
       {
         "version": "0.2.0",
@@ -65,12 +65,12 @@ export const programReleases: Record<string, ProgramReleaseInfo> = {
             "name": "Yusr_0.2.0_amd64.deb",
             "href": "https://github.com/zeiad6/yusr/releases/download/v0.2.0/Yusr_0.2.0_amd64.deb",
             "size": "7.2 MB",
-            "downloads": 1
+            "downloads": 3
           }
         ]
       }
     ],
-    "syncedAt": "2026-10-30"
+    "syncedAt": "2026-11-12"
   }
 }
 
