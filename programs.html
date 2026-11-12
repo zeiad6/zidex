@@ -248,7 +248,7 @@
               أنظمة مالية وتطبيقات سيادية مشفرة
             </h1>
             <p class="text-slate-400 text-xs sm:text-sm mt-1 max-w-2xl">
-              برمجيات مؤسسية مصممة لضمان السيادة التامة على بياناتك: دفتر أستاذ مشفر بسلسلة كتل SHA-256، قاعدة بيانات PostgreSQL 18 مدمجة، وحزم تثبيت معتمدة وموقعة رقمياً بروابط تحميل مباشرة.
+              برامج تُبقي بياناتك على جهازك: دفتر أستاذ مشفر بسلسلة كتل SHA-256، قاعدة بيانات PostgreSQL 18 مدمجة، وحزم تثبيت موقعة رقمياً بروابط تحميل مباشرة.
             </p>
           </div>
 
@@ -307,7 +307,7 @@
             
             <div class="lg:col-span-7 space-y-4">
               <div class="flex flex-wrap items-center gap-2 text-xs">
-                <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold">النظام المالي السيادي الرائد</span>
+                <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold">نظام محاسبة الجمعيات والأوقاف</span>
                 <span class="font-mono text-slate-400">الإصدار: <!--@yusr-ver-->v0.2.1<!--/@yusr-ver--> • مفتوح المصدر للجمعيات</span>
                 <!-- Yusr Download Counter Badge -->
                 <span class="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold font-mono text-xs flex items-center gap-1.5">
@@ -321,7 +321,7 @@
               </h2>
 
               <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                نظام مالي وإداري سيادي مستقل يضمن عدم التلاعب بالسجلات المالية السابقة عبر ربط القيود بسلسلة كتل تشفيرية SHA-256 متسلسلة، مع قاعدة بيانات PostgreSQL (PgSQL 18) مدمجة ذاتياً تضمن سلامة المعاملات واستقرارها التام، ومستشار ذكي محلي يعمل 100% دون الحاجة لأي اتصال بالإنترنت.
+                نظام محاسبة وإدارة يربط كل قيد بما قبله بتجزئة SHA-256، فيظهر أي تعديل على سجل سابق. قاعدة بيانات PostgreSQL (PgSQL 18) مدمجة في الحزمة، ومستشار ذكي يعمل على الجهاز دون إنترنت.
               </p>
 
               <!-- Technical Specs Matrix -->
@@ -331,7 +331,7 @@
                     <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                     <span>قاعدة بيانات PostgreSQL (PgSQL 18)</span>
                   </div>
-                  <p class="text-[11px] text-slate-400">محرك قواعد بيانات علائقي مؤسسي مدمج ذاتياً داخل الحزمة يضمن عزل المعاملات المصرفية (ACID).</p>
+                  <p class="text-[11px] text-slate-400">قاعدة بيانات علائقية مدمجة في الحزمة، بمعاملات ACID.</p>
                 </div>
 
                 <div class="p-2.5 rounded-xl bg-slate-900/80 border border-white/5 space-y-1">
@@ -339,7 +339,7 @@
                     <span class="w-2 h-2 rounded-full bg-techCyan"></span>
                     <span>دفتر أستاذ مشفر (SHA-256)</span>
                   </div>
-                  <p class="text-[11px] text-slate-400">سلسلة كتل مالية غير قابلة للتعديل أو الحذف الرجعي لضمان النزاهة التامة.</p>
+                  <p class="text-[11px] text-slate-400">سلسلة قيود لا تقبل التعديل أو الحذف بأثر رجعي.</p>
                 </div>
               </div>
 
@@ -398,8 +398,8 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         <div class="flex items-center justify-between text-xs text-slate-400">
-          <span>يتم عرض <strong id="visibleProgCount" class="text-white font-mono">21</strong> برنامج ونظام سيادي</span>
-          <span class="font-mono text-[11px] text-emerald-400">روابط تحميل مباشرة وسريعة</span>
+          <span>عدد البرامج المعروضة: <strong id="visibleProgCount" class="text-white font-mono">21</strong></span>
+          <span class="font-mono text-[11px] text-emerald-400">روابط تحميل مباشرة</span>
         </div>
 
         <div class="prog-grid" id="programsGrid">
@@ -982,8 +982,8 @@
           <div class="w-12 h-12 rounded-2xl bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
           </div>
-          <h3 class="text-base font-bold text-white">لم يتم العثور على أي برنامج مطابق للبحث</h3>
-          <p class="text-slate-400 text-xs">جرب استخدام كلمات بحث أخرى مثل: يُسر، كاشف، وورد، Rust، أندرويد.</p>
+          <h3 class="text-base font-bold text-white">لا يوجد برنامج يطابق بحثك</h3>
+          <p class="text-slate-400 text-xs">جرّب كلمات أخرى مثل: يُسر، كاشف، وورد، Rust، أندرويد.</p>
           <button onclick="resetProgFilters()" class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs">
             إعادة تعيين الفلاتر
           </button>
