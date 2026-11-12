@@ -733,6 +733,8 @@
   /* ------------------------------------------------------------------ *
    * 9. Card spotlight (pointer only)
    * ------------------------------------------------------------------ */
+  var TILT_DEG = 2.5;
+
   function initSpotlight() {
     if (reduceMotion || !finePointer) return;
 
@@ -743,6 +745,13 @@
         var rect = card.getBoundingClientRect();
         card.style.setProperty('--spot-x', event.clientX - rect.left + 'px');
         card.style.setProperty('--spot-y', event.clientY - rect.top + 'px');
+        // Tilt toward the pointer; TILT_DEG is small enough to keep text crisp.
+        card.style.setProperty('--fx-ry', (((event.clientX - rect.left) / rect.width - 0.5) * 2 * TILT_DEG).toFixed(2) + 'deg');
+        card.style.setProperty('--fx-rx', ((0.5 - (event.clientY - rect.top) / rect.height) * 2 * TILT_DEG).toFixed(2) + 'deg');
+      });
+      on(card, 'pointerleave', function () {
+        card.style.removeProperty('--fx-rx');
+        card.style.removeProperty('--fx-ry');
       });
     });
   }
@@ -907,6 +916,45 @@
   }
 
   /* ------------------------------------------------------------------ *
+   * 13. Filter motion
+   *    The catalogue filters toggle .hidden, so cards used to blink in and
+   *    out. Running the same toggle inside a view transition lets the
+   *    surviving cards glide to their new cells. Names exist only for the
+   *    duration: left on, they would also join every page-to-page transition.
+   *    Typing in the search box keeps the page's original, instant handler.
+   * ------------------------------------------------------------------ */
+  var FILTERS = { filterPrograms: '.prog-card', filterBots: '#botsGrid > *' };
+
+  function initFilterMotion() {
+    if (reduceMotion || !document.startViewTransition) return;
+
+    Object.keys(FILTERS).forEach(function (name) {
+      var original = window[name];
+      if (typeof original !== 'function') return;
+
+      window[name] = function () {
+        var self = this;
+        var args = arguments;
+        var cards = document.querySelectorAll(FILTERS[name]);
+        Array.prototype.forEach.call(cards, function (card, index) {
+          card.style.viewTransitionName = 'fx-card-' + index;
+        });
+        root.classList.add('fx-filtering');
+
+        var transition = document.startViewTransition(function () {
+          original.apply(self, args);
+        });
+        transition.finished.catch(function () {}).then(function () {
+          root.classList.remove('fx-filtering');
+          Array.prototype.forEach.call(cards, function (card) {
+            card.style.viewTransitionName = '';
+          });
+        });
+      };
+    });
+  }
+
+  /* ------------------------------------------------------------------ *
    * Boot
    * ------------------------------------------------------------------ */
   function boot() {
@@ -927,6 +975,7 @@
       initCounters,
       initHero,
       initSpotlight,
+      initFilterMotion,
       initScrollUi
     ].forEach(function (module) {
       try {

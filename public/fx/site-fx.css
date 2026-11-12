@@ -2393,6 +2393,63 @@ html.fx-on .post-card .prog-desc {
 }
 
 /* ------------------------------------------------------------------------ *
+ * 7.5 Motion polish
+ * ------------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  /* Anchor links glide, and land below the sticky header instead of under it. */
+  html.fx-on {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+  }
+
+  /* Filter transitions: cards travel to their new cells; the rest of the page
+     must not cross-fade behind them. */
+  html.fx-filtering::view-transition-group(*) {
+    animation-duration: 420ms;
+    animation-timing-function: var(--fx-ease-expo);
+  }
+
+  html.fx-filtering::view-transition-old(root),
+  html.fx-filtering::view-transition-new(root) {
+    animation: none;
+  }
+
+  /* Modals had an entrance but vanished on close. Where discrete transitions
+     are supported the scrim now fades out; elsewhere it closes as before. */
+  .app-modal {
+    transition:
+      opacity 200ms ease,
+      display 200ms allow-discrete;
+  }
+
+  .app-modal.hidden {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  /* Entrances resolve out of a soft blur. Pointer devices only: a blur per
+     revealed element is not worth the fill cost on a phone. */
+  [data-fx-reveal] {
+    filter: blur(6px);
+    transition:
+      opacity 620ms var(--fx-ease-expo),
+      transform 760ms var(--fx-ease-expo),
+      filter 620ms var(--fx-ease-expo);
+  }
+
+  [data-fx-reveal].is-in {
+    filter: none;
+  }
+
+  /* Cards lean toward the pointer; site-fx.js feeds --fx-rx / --fx-ry. */
+  html.fx-on .prog-card:hover,
+  html.fx-on .bento-card:hover {
+    transform: perspective(900px) translateY(-3px) rotateX(var(--fx-rx, 0deg)) rotateY(var(--fx-ry, 0deg));
+  }
+}
+
+/* ------------------------------------------------------------------------ *
  * 8. Reduced motion — content stays, travel goes
  * ------------------------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
