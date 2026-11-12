@@ -2,31 +2,31 @@
  "zeiad6/yusr": {
   "tag": "v0.2.1",
   "published": "2026-10-28",
-  "total": 28,
+  "total": 31,
   "releases": 2,
   "assets": [
    {
     "name": "Yusr-Lite_0.2.1_x64_en-US.msi",
     "mb": 255.8,
-    "dl": 19
+    "dl": 20
    },
    {
     "name": "Yusr_0.2.1_amd64.deb",
     "mb": 7.2,
-    "dl": 7
+    "dl": 8
    }
   ]
  },
  "zeiad6/Edms-archive": {
   "tag": "v1.0.7",
   "published": "2026-10-23",
-  "total": 94,
+  "total": 98,
   "releases": 3,
   "assets": [
    {
     "name": "EDMS-Archive-1.0.7-Setup-x64.exe",
     "mb": 238.7,
-    "dl": 4
+    "dl": 5
    }
   ]
  },
@@ -49,572 +49,605 @@
   ]
  },
  "storytold/wordcraft": {
-  "tag": "v0.17.0",
-  "published": "2026-11-09",
-  "total": 2793188,
-  "releases": 18,
+  "tag": "v0.18.1",
+  "published": "2026-11-12",
+  "total": 2962925,
+  "releases": 20,
   "assets": [
    {
-    "name": "wordcraft-0.17.0-linux-aarch64.deb",
-    "mb": 111.7,
-    "dl": 466
+    "name": "wordcraft-0.18.1-linux-aarch64.deb",
+    "mb": 111.9,
+    "dl": 313
    },
    {
-    "name": "wordcraft-0.17.0-linux-riscv64.deb",
-    "mb": 112.7,
-    "dl": 203
+    "name": "wordcraft-0.18.1-linux-riscv64.deb",
+    "mb": 112.9,
+    "dl": 180
    },
    {
-    "name": "wordcraft-0.17.0-linux-x86_64.deb",
-    "mb": 114.3,
-    "dl": 9973
+    "name": "wordcraft-0.18.1-linux-x86_64.deb",
+    "mb": 114.5,
+    "dl": 5940
    },
    {
-    "name": "wordcraft-0.17.0-macos-universal.dmg",
-    "mb": 125.7,
-    "dl": 26231
+    "name": "wordcraft-0.18.1-macos-universal.dmg",
+    "mb": 126.1,
+    "dl": 14559
    },
    {
-    "name": "wordcraft-0.17.0-windows-arm64.msi",
-    "mb": 87.1,
-    "dl": 555
+    "name": "wordcraft-0.18.1-windows-arm64.msi",
+    "mb": 87.2,
+    "dl": 374
    },
    {
-    "name": "wordcraft-0.17.0-windows-x64.msi",
-    "mb": 90.4,
-    "dl": 58432
+    "name": "wordcraft-0.18.1-windows-x64.msi",
+    "mb": 90.6,
+    "dl": 30121
    }
   ]
  },
  "storytold/gridcraft": {
-  "tag": "v0.18.0",
-  "published": "2026-11-09",
-  "total": 2237670,
-  "releases": 18,
+  "tag": "v0.19.1",
+  "published": "2026-11-12",
+  "total": 2384151,
+  "releases": 20,
   "assets": [
    {
-    "name": "gridcraft-0.18.0-linux-aarch64.deb",
-    "mb": 49.4,
-    "dl": 393
+    "name": "gridcraft-0.19.1-linux-aarch64.deb",
+    "mb": 49.8,
+    "dl": 280
    },
    {
-    "name": "gridcraft-0.18.0-linux-riscv64.deb",
-    "mb": 49.6,
-    "dl": 205
+    "name": "gridcraft-0.19.1-linux-riscv64.deb",
+    "mb": 50,
+    "dl": 186
    },
    {
-    "name": "gridcraft-0.18.0-linux-x86_64.deb",
-    "mb": 50.7,
-    "dl": 7821
+    "name": "gridcraft-0.19.1-linux-x86_64.deb",
+    "mb": 51.2,
+    "dl": 4798
    },
    {
-    "name": "gridcraft-0.18.0-macos-universal.dmg",
-    "mb": 82.2,
-    "dl": 21780
+    "name": "gridcraft-0.19.1-macos-universal.dmg",
+    "mb": 82.6,
+    "dl": 12427
    },
    {
-    "name": "gridcraft-0.18.0-windows-arm64.msi",
-    "mb": 37.5,
-    "dl": 453
+    "name": "gridcraft-0.19.1-windows-arm64.msi",
+    "mb": 37.8,
+    "dl": 317
    },
    {
-    "name": "gridcraft-0.18.0-windows-x64.msi",
-    "mb": 39.7,
-    "dl": 48519
+    "name": "gridcraft-0.19.1-windows-x64.msi",
+    "mb": 40,
+    "dl": 25453
    }
   ]
  },
  "storytold/deckcraft": {
-  "tag": "v0.17.0",
-  "published": "2026-11-09",
-  "total": 1822762,
-  "releases": 17,
+  "tag": "v0.18.1",
+  "published": "2026-11-12",
+  "total": 1947432,
+  "releases": 19,
   "assets": [
    {
-    "name": "deckcraft-0.17.0-linux-aarch64.deb",
-    "mb": 99.1,
-    "dl": 362
+    "name": "deckcraft-0.18.1-linux-aarch64.deb",
+    "mb": 99.3,
+    "dl": 244
    },
    {
-    "name": "deckcraft-0.17.0-linux-riscv64.deb",
-    "mb": 100,
-    "dl": 195
+    "name": "deckcraft-0.18.1-linux-riscv64.deb",
+    "mb": 100.2,
+    "dl": 172
    },
    {
-    "name": "deckcraft-0.17.0-linux-x86_64.deb",
+    "name": "deckcraft-0.18.1-linux-x86_64.deb",
     "mb": 101.2,
-    "dl": 6348
+    "dl": 3870
    },
    {
-    "name": "deckcraft-0.17.0-macos-universal.dmg",
-    "mb": 107.3,
-    "dl": 17490
+    "name": "deckcraft-0.18.1-macos-universal.dmg",
+    "mb": 107.5,
+    "dl": 10154
    },
    {
-    "name": "deckcraft-0.17.0-windows-arm64.msi",
-    "mb": 76.2,
-    "dl": 396
+    "name": "deckcraft-0.18.1-windows-arm64.msi",
+    "mb": 76.3,
+    "dl": 288
    },
    {
-    "name": "deckcraft-0.17.0-windows-x64.msi",
-    "mb": 79,
-    "dl": 40455
+    "name": "deckcraft-0.18.1-windows-x64.msi",
+    "mb": 79.1,
+    "dl": 21273
    }
   ]
  },
  "storytold/photocraft": {
-  "tag": "v0.22.0",
-  "published": "2026-11-09",
-  "total": 4694648,
-  "releases": 25,
+  "tag": "v0.23.1",
+  "published": "2026-11-12",
+  "total": 4916755,
+  "releases": 27,
   "assets": [
    {
-    "name": "photocraft-0.22.0-linux-aarch64.deb",
-    "mb": 128.7,
+    "name": "photocraft-0.23.1-linux-aarch64.deb",
+    "mb": 130.7,
+    "dl": 287
+   },
+   {
+    "name": "photocraft-0.23.1-linux-riscv64.deb",
+    "mb": 132.1,
+    "dl": 186
+   },
+   {
+    "name": "photocraft-0.23.1-linux-x86_64.deb",
+    "mb": 135.1,
+    "dl": 4189
+   },
+   {
+    "name": "photocraft-0.23.1-macos-universal.dmg",
+    "mb": 261.5,
+    "dl": 16267
+   },
+   {
+    "name": "photocraft-0.23.1-windows-arm64.msi",
+    "mb": 106.4,
     "dl": 531
    },
    {
-    "name": "photocraft-0.22.0-linux-riscv64.deb",
-    "mb": 130,
-    "dl": 263
-   },
-   {
-    "name": "photocraft-0.22.0-linux-x86_64.deb",
-    "mb": 132.8,
-    "dl": 8798
-   },
-   {
-    "name": "photocraft-0.22.0-macos-universal.dmg",
-    "mb": 257.2,
-    "dl": 37589
-   },
-   {
-    "name": "photocraft-0.22.0-windows-arm64.msi",
-    "mb": 105.6,
-    "dl": 839
-   },
-   {
-    "name": "photocraft-0.22.0-windows-x64.msi",
-    "mb": 111.9,
-    "dl": 76349
+    "name": "photocraft-0.23.1-windows-x64.msi",
+    "mb": 112.9,
+    "dl": 29960
    }
   ]
  },
  "storytold/artcraft": {
   "tag": "artcraft-v0.41.1",
   "published": "2026-11-07",
-  "total": 1233726,
+  "total": 1251419,
   "releases": 29,
   "assets": [
    {
     "name": "artcraft-0.41.1-linux-aarch64.deb",
     "mb": 48,
-    "dl": 791
+    "dl": 1508
    },
    {
     "name": "artcraft-0.41.1-linux-riscv64.deb",
     "mb": 46.6,
-    "dl": 669
+    "dl": 1351
    },
    {
     "name": "artcraft-0.41.1-linux-x86_64.deb",
     "mb": 47.6,
-    "dl": 2285
+    "dl": 3150
    },
    {
     "name": "ArtCraft_0.41.1_universal.dmg",
     "mb": 90.5,
-    "dl": 9626
+    "dl": 11176
    },
    {
     "name": "ArtCraft_0.41.1_x64-setup.exe",
     "mb": 40,
-    "dl": 11663
+    "dl": 17716
    },
    {
     "name": "ArtCraft_0.41.1_x64_en-US.msi",
     "mb": 44.9,
-    "dl": 26047
+    "dl": 26667
    }
   ]
  },
  "storytold/filmcraft": {
-  "tag": "v0.19.0",
-  "published": "2026-11-09",
-  "total": 2849202,
-  "releases": 21,
+  "tag": "v0.20.1",
+  "published": "2026-11-12",
+  "total": 2998543,
+  "releases": 23,
   "assets": [
    {
-    "name": "filmcraft-0.19.0-linux-aarch64.deb",
-    "mb": 102.8,
-    "dl": 351
+    "name": "filmcraft-0.20.1-linux-aarch64.deb",
+    "mb": 105.8,
+    "dl": 266
    },
    {
-    "name": "filmcraft-0.19.0-linux-riscv64.deb",
-    "mb": 103.5,
-    "dl": 225
+    "name": "filmcraft-0.20.1-linux-riscv64.deb",
+    "mb": 103.7,
+    "dl": 203
    },
    {
-    "name": "filmcraft-0.19.0-linux-x86_64.deb",
-    "mb": 105.1,
-    "dl": 5392
+    "name": "filmcraft-0.20.1-linux-x86_64.deb",
+    "mb": 108.4,
+    "dl": 3246
    },
    {
-    "name": "filmcraft-0.19.0-macos-universal.dmg",
-    "mb": 110.9,
-    "dl": 22052
+    "name": "filmcraft-0.20.1-macos-universal.dmg",
+    "mb": 113.3,
+    "dl": 12253
    },
    {
-    "name": "filmcraft-0.19.0-windows-arm64.msi",
-    "mb": 82.8,
-    "dl": 511
+    "name": "filmcraft-0.20.1-windows-arm64.msi",
+    "mb": 84.9,
+    "dl": 386
    },
    {
-    "name": "filmcraft-0.19.0-windows-x64.msi",
-    "mb": 86.5,
-    "dl": 54864
+    "name": "filmcraft-0.20.1-windows-x64.msi",
+    "mb": 89.1,
+    "dl": 27681
    }
   ]
  },
  "storytold/vectorcraft": {
-  "tag": "v0.23.0",
-  "published": "2026-11-09",
-  "total": 2711765,
-  "releases": 26,
+  "tag": "v0.24.1",
+  "published": "2026-11-12",
+  "total": 2858831,
+  "releases": 28,
   "assets": [
    {
-    "name": "vectorcraft-0.23.0-linux-aarch64.deb",
-    "mb": 144.2,
-    "dl": 342
+    "name": "vectorcraft-0.24.1-linux-aarch64.deb",
+    "mb": 147.8,
+    "dl": 194
    },
    {
-    "name": "vectorcraft-0.23.0-linux-riscv64.deb",
-    "mb": 145.9,
-    "dl": 205
+    "name": "vectorcraft-0.24.1-linux-riscv64.deb",
+    "mb": 149.8,
+    "dl": 142
    },
    {
-    "name": "vectorcraft-0.23.0-linux-x86_64.deb",
-    "mb": 149,
-    "dl": 5538
+    "name": "vectorcraft-0.24.1-linux-x86_64.deb",
+    "mb": 152.8,
+    "dl": 2661
    },
    {
-    "name": "vectorcraft-0.23.0-macos-universal.dmg",
-    "mb": 165.9,
-    "dl": 25622
+    "name": "vectorcraft-0.24.1-macos-universal.dmg",
+    "mb": 170.1,
+    "dl": 11469
    },
    {
-    "name": "vectorcraft-0.23.0-windows-arm64.msi",
-    "mb": 112.8,
-    "dl": 458
+    "name": "vectorcraft-0.24.1-windows-arm64.msi",
+    "mb": 115.5,
+    "dl": 289
    },
    {
-    "name": "vectorcraft-0.23.0-windows-x64.msi",
-    "mb": 120.9,
-    "dl": 52524
+    "name": "vectorcraft-0.24.1-windows-x64.msi",
+    "mb": 124,
+    "dl": 21202
    }
   ]
  },
  "storytold/designcraft": {
-  "tag": "v0.19.0",
-  "published": "2026-11-09",
-  "total": 1905329,
-  "releases": 22,
+  "tag": "v0.20.1",
+  "published": "2026-11-12",
+  "total": 2018330,
+  "releases": 24,
   "assets": [
    {
-    "name": "designcraft-0.19.0-linux-aarch64.deb",
-    "mb": 117.7,
-    "dl": 282
+    "name": "designcraft-0.20.1-linux-aarch64.deb",
+    "mb": 117.8,
+    "dl": 238
    },
    {
-    "name": "designcraft-0.19.0-linux-riscv64.deb",
-    "mb": 118.9,
-    "dl": 192
+    "name": "designcraft-0.20.1-linux-riscv64.deb",
+    "mb": 119.1,
+    "dl": 191
    },
    {
-    "name": "designcraft-0.19.0-linux-x86_64.deb",
-    "mb": 120.7,
-    "dl": 4081
+    "name": "designcraft-0.20.1-linux-x86_64.deb",
+    "mb": 121,
+    "dl": 2536
    },
    {
-    "name": "designcraft-0.19.0-macos-universal.dmg",
-    "mb": 237,
-    "dl": 18524
+    "name": "designcraft-0.20.1-macos-universal.dmg",
+    "mb": 237.6,
+    "dl": 10609
    },
    {
-    "name": "designcraft-0.19.0-windows-arm64.msi",
+    "name": "designcraft-0.20.1-windows-arm64.msi",
     "mb": 90.5,
-    "dl": 354
+    "dl": 286
    },
    {
-    "name": "designcraft-0.19.0-windows-x64.msi",
-    "mb": 94.9,
-    "dl": 36908
+    "name": "designcraft-0.20.1-windows-x64.msi",
+    "mb": 95,
+    "dl": 19479
    }
   ]
  },
  "storytold/effectcraft": {
-  "tag": "v0.23.1",
-  "published": "2026-11-10",
-  "total": 2112774,
-  "releases": 25,
+  "tag": "v0.24.1",
+  "published": "2026-11-12",
+  "total": 2228773,
+  "releases": 27,
   "assets": [
    {
-    "name": "effectcraft-0.23.1-linux-aarch64.deb",
-    "mb": 75.7,
-    "dl": 241
+    "name": "effectcraft-0.24.1-linux-aarch64.deb",
+    "mb": 76.1,
+    "dl": 224
    },
    {
-    "name": "effectcraft-0.23.1-linux-riscv64.deb",
-    "mb": 76.9,
-    "dl": 180
+    "name": "effectcraft-0.24.1-linux-riscv64.deb",
+    "mb": 77.3,
+    "dl": 181
    },
    {
-    "name": "effectcraft-0.23.1-linux-x86_64.deb",
-    "mb": 79.4,
-    "dl": 2583
+    "name": "effectcraft-0.24.1-linux-x86_64.deb",
+    "mb": 79.8,
+    "dl": 2210
    },
    {
-    "name": "effectcraft-0.23.1-macos-universal.dmg",
-    "mb": 78.3,
-    "dl": 11307
+    "name": "effectcraft-0.24.1-macos-universal.dmg",
+    "mb": 78.8,
+    "dl": 9000
    },
    {
-    "name": "effectcraft-0.23.1-windows-arm64.msi",
-    "mb": 54.3,
-    "dl": 312
+    "name": "effectcraft-0.24.1-windows-arm64.msi",
+    "mb": 54.5,
+    "dl": 295
    },
    {
-    "name": "effectcraft-0.23.1-windows-x64.msi",
-    "mb": 60.9,
-    "dl": 27822
+    "name": "effectcraft-0.24.1-windows-x64.msi",
+    "mb": 61.2,
+    "dl": 20139
    }
   ]
  },
  "storytold/soundcraft": {
-  "tag": "v0.19.0",
-  "published": "2026-11-09",
-  "total": 1546215,
-  "releases": 17,
+  "tag": "v0.20.1",
+  "published": "2026-11-12",
+  "total": 1634378,
+  "releases": 19,
   "assets": [
    {
-    "name": "soundcraft-0.19.0-linux-aarch64.deb",
-    "mb": 19.4,
-    "dl": 254
+    "name": "soundcraft-0.20.1-linux-aarch64.deb",
+    "mb": 20.2,
+    "dl": 211
    },
    {
-    "name": "soundcraft-0.19.0-linux-riscv64.deb",
-    "mb": 19.6,
-    "dl": 177
+    "name": "soundcraft-0.20.1-linux-riscv64.deb",
+    "mb": 20.4,
+    "dl": 169
    },
    {
-    "name": "soundcraft-0.19.0-linux-x86_64.deb",
-    "mb": 20.6,
-    "dl": 3476
+    "name": "soundcraft-0.20.1-linux-x86_64.deb",
+    "mb": 21.4,
+    "dl": 2037
    },
    {
-    "name": "soundcraft-0.19.0-macos-universal.dmg",
-    "mb": 29,
-    "dl": 13333
+    "name": "soundcraft-0.20.1-macos-universal.dmg",
+    "mb": 30,
+    "dl": 7221
    },
    {
-    "name": "soundcraft-0.19.0-windows-arm64.msi",
-    "mb": 12.6,
-    "dl": 326
+    "name": "soundcraft-0.20.1-windows-arm64.msi",
+    "mb": 13.1,
+    "dl": 274
    },
    {
-    "name": "soundcraft-0.19.0-windows-x64.msi",
-    "mb": 14,
-    "dl": 33069
+    "name": "soundcraft-0.20.1-windows-x64.msi",
+    "mb": 14.7,
+    "dl": 16588
    }
   ]
  },
  "storytold/lightcraft": {
-  "tag": "v0.20.0",
-  "published": "2026-11-09",
-  "total": 2420617,
-  "releases": 22,
+  "tag": "v0.21.1",
+  "published": "2026-11-12",
+  "total": 2544055,
+  "releases": 24,
   "assets": [
    {
-    "name": "lightcraft-0.20.0-linux-aarch64.deb",
-    "mb": 113.9,
-    "dl": 315
+    "name": "lightcraft-0.21.1-linux-aarch64.deb",
+    "mb": 114.3,
+    "dl": 194
    },
    {
-    "name": "lightcraft-0.20.0-linux-riscv64.deb",
-    "mb": 114.8,
-    "dl": 216
+    "name": "lightcraft-0.21.1-linux-riscv64.deb",
+    "mb": 115.2,
+    "dl": 155
    },
    {
-    "name": "lightcraft-0.20.0-linux-x86_64.deb",
-    "mb": 118.3,
-    "dl": 4826
+    "name": "lightcraft-0.21.1-linux-x86_64.deb",
+    "mb": 118.6,
+    "dl": 2355
    },
    {
-    "name": "lightcraft-0.20.0-macos-universal.dmg",
-    "mb": 120.8,
-    "dl": 22586
+    "name": "lightcraft-0.21.1-macos-universal.dmg",
+    "mb": 121.4,
+    "dl": 9680
    },
    {
-    "name": "lightcraft-0.20.0-windows-arm64.msi",
-    "mb": 90.8,
-    "dl": 439
+    "name": "lightcraft-0.21.1-windows-arm64.msi",
+    "mb": 91.1,
+    "dl": 256
    },
    {
-    "name": "lightcraft-0.20.0-windows-x64.msi",
-    "mb": 95,
-    "dl": 44594
+    "name": "lightcraft-0.21.1-windows-x64.msi",
+    "mb": 95.4,
+    "dl": 17803
    }
   ]
  },
  "storytold/figcraft": {
-  "tag": "v0.17.0",
-  "published": "2026-11-09",
-  "total": 1305538,
-  "releases": 18,
+  "tag": "v0.18.1",
+  "published": "2026-11-12",
+  "total": 1399931,
+  "releases": 20,
   "assets": [
    {
-    "name": "figcraft-0.17.0-linux-aarch64.deb",
+    "name": "figcraft-0.18.1-linux-aarch64.deb",
     "mb": 96.5,
-    "dl": 229
+    "dl": 195
    },
    {
-    "name": "figcraft-0.17.0-linux-riscv64.deb",
-    "mb": 96.9,
-    "dl": 153
+    "name": "figcraft-0.18.1-linux-riscv64.deb",
+    "mb": 97.2,
+    "dl": 130
    },
    {
-    "name": "figcraft-0.17.0-linux-x86_64.deb",
+    "name": "figcraft-0.18.1-linux-x86_64.deb",
     "mb": 98.9,
-    "dl": 3516
+    "dl": 2074
    },
    {
-    "name": "figcraft-0.17.0-macos-universal.dmg",
-    "mb": 106.3,
-    "dl": 14256
+    "name": "figcraft-0.18.1-macos-universal.dmg",
+    "mb": 106.4,
+    "dl": 7968
    },
    {
-    "name": "figcraft-0.17.0-windows-arm64.msi",
-    "mb": 73.9,
-    "dl": 303
+    "name": "figcraft-0.18.1-windows-arm64.msi",
+    "mb": 74,
+    "dl": 188
    },
    {
-    "name": "figcraft-0.17.0-windows-x64.msi",
-    "mb": 77.5,
-    "dl": 32176
+    "name": "figcraft-0.18.1-windows-x64.msi",
+    "mb": 77.6,
+    "dl": 16572
    }
   ]
  },
  "storytold/pdfcraft": {
-  "tag": "v0.20.0",
-  "published": "2026-11-09",
-  "total": 3871580,
-  "releases": 23,
+  "tag": "v0.21.1",
+  "published": "2026-11-12",
+  "total": 4093957,
+  "releases": 25,
   "assets": [
    {
-    "name": "pdfcraft-0.20.0-linux-aarch64.deb",
-    "mb": 111.8,
-    "dl": 479
+    "name": "pdfcraft-0.21.1-linux-aarch64.deb",
+    "mb": 113.6,
+    "dl": 281
    },
    {
-    "name": "pdfcraft-0.20.0-linux-riscv64.deb",
-    "mb": 112.1,
-    "dl": 221
+    "name": "pdfcraft-0.21.1-linux-riscv64.deb",
+    "mb": 114,
+    "dl": 184
    },
    {
-    "name": "pdfcraft-0.20.0-linux-x86_64.deb",
-    "mb": 114.9,
-    "dl": 9834
+    "name": "pdfcraft-0.21.1-linux-x86_64.deb",
+    "mb": 116.8,
+    "dl": 5555
    },
    {
-    "name": "pdfcraft-0.20.0-macos-universal.dmg",
-    "mb": 127.1,
-    "dl": 33077
+    "name": "pdfcraft-0.21.1-macos-universal.dmg",
+    "mb": 129.2,
+    "dl": 16726
    },
    {
-    "name": "pdfcraft-0.20.0-windows-arm64.msi",
-    "mb": 89.2,
-    "dl": 882
+    "name": "pdfcraft-0.21.1-windows-arm64.msi",
+    "mb": 90.6,
+    "dl": 607
    },
    {
-    "name": "pdfcraft-0.20.0-windows-x64.msi",
-    "mb": 93.7,
-    "dl": 79332
+    "name": "pdfcraft-0.21.1-windows-x64.msi",
+    "mb": 95.3,
+    "dl": 37723
    }
   ]
  },
  "storytold/cadcraft": {
-  "tag": "v0.19.0",
-  "published": "2026-11-09",
-  "total": 1889150,
-  "releases": 18,
+  "tag": "v0.20.1",
+  "published": "2026-11-12",
+  "total": 2007974,
+  "releases": 20,
   "assets": [
    {
-    "name": "cadcraft-0.19.0-linux-aarch64.deb",
-    "mb": 70.7,
-    "dl": 329
+    "name": "cadcraft-0.20.1-linux-aarch64.deb",
+    "mb": 70.9,
+    "dl": 245
    },
    {
-    "name": "cadcraft-0.19.0-linux-riscv64.deb",
+    "name": "cadcraft-0.20.1-linux-riscv64.deb",
     "mb": 71.4,
-    "dl": 195
+    "dl": 186
    },
    {
-    "name": "cadcraft-0.19.0-linux-x86_64.deb",
+    "name": "cadcraft-0.20.1-linux-x86_64.deb",
     "mb": 72.9,
-    "dl": 4068
+    "dl": 2497
    },
    {
-    "name": "cadcraft-0.19.0-macos-universal.dmg",
-    "mb": 80.6,
-    "dl": 15005
+    "name": "cadcraft-0.20.1-macos-universal.dmg",
+    "mb": 80.9,
+    "dl": 8676
    },
    {
-    "name": "cadcraft-0.19.0-windows-arm64.msi",
-    "mb": 53.5,
-    "dl": 406
+    "name": "cadcraft-0.20.1-windows-arm64.msi",
+    "mb": 53.6,
+    "dl": 317
    },
    {
-    "name": "cadcraft-0.19.0-windows-x64.msi",
-    "mb": 56.8,
-    "dl": 41750
+    "name": "cadcraft-0.20.1-windows-x64.msi",
+    "mb": 56.7,
+    "dl": 22223
    }
   ]
  },
  "storytold/craft-launcher": {
-  "tag": "v0.19.0",
-  "published": "2026-11-11",
-  "total": 6532338,
-  "releases": 26,
+  "tag": "v0.19.2",
+  "published": "2026-11-12",
+  "total": 6855088,
+  "releases": 28,
   "assets": [
    {
-    "name": "artcraft-launcher-0.19.0-linux-aarch64.deb",
-    "mb": 12.8,
-    "dl": 14
+    "name": "artcraft-launcher-0.19.2-linux-aarch64.deb",
+    "mb": 13,
+    "dl": 340
    },
    {
-    "name": "artcraft-launcher-0.19.0-linux-riscv64.deb",
-    "mb": 13.2,
-    "dl": 10
+    "name": "artcraft-launcher-0.19.2-linux-riscv64.deb",
+    "mb": 13.4,
+    "dl": 165
    },
    {
-    "name": "artcraft-launcher-0.19.0-linux-x86_64.deb",
-    "mb": 13.3,
-    "dl": 441
+    "name": "artcraft-launcher-0.19.2-linux-x86_64.deb",
+    "mb": 13.5,
+    "dl": 6108
    },
    {
-    "name": "artcraft-launcher-0.19.0-macos-universal.dmg",
-    "mb": 20.7,
-    "dl": 1735
+    "name": "artcraft-launcher-0.19.2-macos-universal.dmg",
+    "mb": 20.9,
+    "dl": 23374
    },
    {
-    "name": "artcraft-launcher-0.19.0-windows-arm64.msi",
-    "mb": 9,
-    "dl": 32
+    "name": "artcraft-launcher-0.19.2-windows-arm64.msi",
+    "mb": 9.1,
+    "dl": 399
    },
    {
-    "name": "artcraft-launcher-0.19.0-windows-x64.msi",
-    "mb": 9.7,
-    "dl": 2890
+    "name": "artcraft-launcher-0.19.2-windows-x64.msi",
+    "mb": 9.9,
+    "dl": 60460
+   }
+  ]
+ },
+ "genspark-ai/genoffice": {
+  "tag": "v0.13.18",
+  "published": "2026-11-12",
+  "total": 243727,
+  "releases": 43,
+  "assets": [
+   {
+    "name": "GenOffice-0.13.18-arm64.dmg",
+    "mb": 196,
+    "dl": 272
+   },
+   {
+    "name": "GenOffice-0.13.18.dmg",
+    "mb": 201.4,
+    "dl": 50
+   },
+   {
+    "name": "GenOfficeSetup-v0.13.18-arm64.exe",
+    "mb": 161.1,
+    "dl": 31
+   },
+   {
+    "name": "GenOfficeSetup-v0.13.18-x64.exe",
+    "mb": 157.6,
+    "dl": 902
+   },
+   {
+    "name": "genoffice_0.13.18_amd64.deb",
+    "mb": 154.7,
+    "dl": 102
    }
   ]
  }

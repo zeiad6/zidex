@@ -431,7 +431,7 @@ ${own(p) ? `              <span class="prog-seal">${SEAL}<b>ZEIDEX</b></span>\n`
               <ul class="prog-feats">
                 ${p.items.slice(0, 2).map((i) => `<li>${ICON_CHECK}<span>${esc(i)}</span></li>`).join('\n                ')}
               </ul>
-              <div class="prog-actions">
+${p.released ? `              <p class="prog-date">آخر تحديث: <time datetime="${p.released}" dir="ltr">${p.released}</time></p>\n` : ''}              <div class="prog-actions">
                 <a class="prog-download" href="${esc(primary.href)}" target="_blank" rel="noopener noreferrer" download>
                   ${ICON_DL}<span>تنزيل</span><span class="prog-size" dir="ltr">${esc(sizeLabel)}</span>
                 </a>

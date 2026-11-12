@@ -6,7 +6,8 @@ const REPOS = [
   'storytold/wordcraft', 'storytold/gridcraft', 'storytold/deckcraft', 'storytold/photocraft',
   'storytold/artcraft', 'storytold/filmcraft', 'storytold/vectorcraft', 'storytold/designcraft',
   'storytold/effectcraft', 'storytold/soundcraft', 'storytold/lightcraft', 'storytold/figcraft',
-  'storytold/pdfcraft', 'storytold/cadcraft', 'storytold/craft-launcher'
+  'storytold/pdfcraft', 'storytold/cadcraft', 'storytold/craft-launcher',
+  'genspark-ai/genoffice'
 ]
 
 const gh = (path) => JSON.parse(execFileSync('gh', ['api', path], { encoding: 'utf8', maxBuffer: 1 << 26 }))

@@ -1,6 +1,6 @@
 {
-  "generated": "2026-11-11",
-  "total": 39926631,
+  "generated": "2026-11-12",
+  "total": 42346405,
   "programs": [
     {
       "id": 1,
@@ -19,7 +19,7 @@
       "version": "v0.2.1",
       "rawVersion": "0.2.1",
       "released": "2026-10-28",
-      "downloads": 28,
+      "downloads": 31,
       "repo": "zeiad6/yusr",
       "short": "يُسر",
       "art": "ledger",
@@ -60,7 +60,7 @@
       ],
       "version": "v0.4.0",
       "rawVersion": "0.4.0",
-      "released": null,
+      "released": "2026-10-02",
       "downloads": null,
       "repo": null,
       "short": "VerityScope",
@@ -94,7 +94,7 @@
       ],
       "version": "v1.2.0",
       "rawVersion": "1.2.0",
-      "released": null,
+      "released": "2026-10-22",
       "downloads": null,
       "repo": null,
       "short": "Convert",
@@ -129,7 +129,7 @@
       "version": "v1.0.7",
       "rawVersion": "1.0.7",
       "released": "2026-10-23",
-      "downloads": 94,
+      "downloads": 98,
       "repo": "zeiad6/Edms-archive",
       "short": "EDMS",
       "art": "archive",
@@ -194,10 +194,10 @@
         "تصدير فوري إلى مستندات PDF جاهزة للطباعة",
         "صفر اشتراكات ولا يتطلب تسجيل حساب"
       ],
-      "version": "v0.17.0",
-      "rawVersion": "0.17.0",
-      "released": "2026-11-09",
-      "downloads": 2793188,
+      "version": "v0.18.1",
+      "rawVersion": "0.18.1",
+      "released": "2026-11-12",
+      "downloads": 2962925,
       "repo": "storytold/wordcraft",
       "short": "WordCraft",
       "art": "page",
@@ -205,26 +205,26 @@
       "tagline": "بديل Microsoft Word",
       "links": [
         {
-          "href": "https://github.com/storytold/wordcraft/releases/download/v0.17.0/wordcraft-0.17.0-windows-x64.msi",
+          "href": "https://github.com/storytold/wordcraft/releases/download/v0.18.1/wordcraft-0.18.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "90.4 MB",
-          "text": "Windows x64 (MSI 90.4 MB)",
+          "size": "90.6 MB",
+          "text": "Windows x64 (MSI 90.6 MB)",
           "platform": "Windows 10+",
           "primary": true
         },
         {
-          "href": "https://github.com/storytold/wordcraft/releases/download/v0.17.0/wordcraft-0.17.0-linux-x86_64.deb",
+          "href": "https://github.com/storytold/wordcraft/releases/download/v0.18.1/wordcraft-0.18.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "114.3 MB",
-          "text": "Linux x64 (DEB 114.3 MB)",
+          "size": "114.5 MB",
+          "text": "Linux x64 (DEB 114.5 MB)",
           "platform": "Linux x64",
           "primary": false
         },
         {
-          "href": "https://github.com/storytold/wordcraft/releases/download/v0.17.0/wordcraft-0.17.0-macos-universal.dmg",
+          "href": "https://github.com/storytold/wordcraft/releases/download/v0.18.1/wordcraft-0.18.1-macos-universal.dmg",
           "host": "GitHub",
-          "size": "125.7 MB",
-          "text": "macOS (DMG 125.7 MB)",
+          "size": "126.1 MB",
+          "text": "macOS (DMG 126.1 MB)",
           "platform": "macOS Universal",
           "primary": false
         }
@@ -244,10 +244,10 @@
         "توافق كامل مع ملفات XLSX و CSV",
         "واجهة عربية وأجنبية بديهية وخفيفة على الذاكرة"
       ],
-      "version": "v0.18.0",
-      "rawVersion": "0.18.0",
-      "released": "2026-11-09",
-      "downloads": 2237670,
+      "version": "v0.19.1",
+      "rawVersion": "0.19.1",
+      "released": "2026-11-12",
+      "downloads": 2384151,
       "repo": "storytold/gridcraft",
       "short": "GridCraft",
       "art": "sheet",
@@ -255,26 +255,26 @@
       "tagline": "بديل Microsoft Excel",
       "links": [
         {
-          "href": "https://github.com/storytold/gridcraft/releases/download/v0.18.0/gridcraft-0.18.0-windows-x64.msi",
+          "href": "https://github.com/storytold/gridcraft/releases/download/v0.19.1/gridcraft-0.19.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "39.7 MB",
-          "text": "Windows x64 (MSI 39.7 MB)",
+          "size": "40 MB",
+          "text": "Windows x64 (MSI 40 MB)",
           "platform": "Windows 10+",
           "primary": true
         },
         {
-          "href": "https://github.com/storytold/gridcraft/releases/download/v0.18.0/gridcraft-0.18.0-linux-x86_64.deb",
+          "href": "https://github.com/storytold/gridcraft/releases/download/v0.19.1/gridcraft-0.19.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "50.7 MB",
-          "text": "Linux x64 (DEB 50.7 MB)",
+          "size": "51.2 MB",
+          "text": "Linux x64 (DEB 51.2 MB)",
           "platform": "Linux x64",
           "primary": false
         },
         {
-          "href": "https://github.com/storytold/gridcraft/releases/download/v0.18.0/gridcraft-0.18.0-macos-universal.dmg",
+          "href": "https://github.com/storytold/gridcraft/releases/download/v0.19.1/gridcraft-0.19.1-macos-universal.dmg",
           "host": "GitHub",
-          "size": "82.2 MB",
-          "text": "macOS (DMG 82.2 MB)",
+          "size": "82.6 MB",
+          "text": "macOS (DMG 82.6 MB)",
           "platform": "macOS Universal",
           "primary": false
         }
@@ -294,10 +294,10 @@
         "تصدير العروض إلى PDF وفيديو عالي الدقة",
         "دعم ملفات PPTX ومشاركة محلية سهلة"
       ],
-      "version": "v0.17.0",
-      "rawVersion": "0.17.0",
-      "released": "2026-11-09",
-      "downloads": 1822762,
+      "version": "v0.18.1",
+      "rawVersion": "0.18.1",
+      "released": "2026-11-12",
+      "downloads": 1947432,
       "repo": "storytold/deckcraft",
       "short": "DeckCraft",
       "art": "slides",
@@ -305,15 +305,15 @@
       "tagline": "بديل PowerPoint",
       "links": [
         {
-          "href": "https://github.com/storytold/deckcraft/releases/download/v0.17.0/deckcraft-0.17.0-windows-x64.msi",
+          "href": "https://github.com/storytold/deckcraft/releases/download/v0.18.1/deckcraft-0.18.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "79 MB",
-          "text": "Windows x64 (MSI 79 MB)",
+          "size": "79.1 MB",
+          "text": "Windows x64 (MSI 79.1 MB)",
           "platform": "Windows 10+",
           "primary": true
         },
         {
-          "href": "https://github.com/storytold/deckcraft/releases/download/v0.17.0/deckcraft-0.17.0-linux-x86_64.deb",
+          "href": "https://github.com/storytold/deckcraft/releases/download/v0.18.1/deckcraft-0.18.1-linux-x86_64.deb",
           "host": "GitHub",
           "size": "101.2 MB",
           "text": "Linux x64 (DEB 101.2 MB)",
@@ -321,11 +321,69 @@
           "primary": false
         },
         {
-          "href": "https://github.com/storytold/deckcraft/releases/download/v0.17.0/deckcraft-0.17.0-macos-universal.dmg",
+          "href": "https://github.com/storytold/deckcraft/releases/download/v0.18.1/deckcraft-0.18.1-macos-universal.dmg",
           "host": "GitHub",
-          "size": "107.3 MB",
-          "text": "macOS (DMG 107.3 MB)",
+          "size": "107.5 MB",
+          "text": "macOS (DMG 107.5 MB)",
           "platform": "macOS Universal",
+          "primary": false
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "slug": "genoffice",
+      "cat": "microsoft",
+      "badge": "حزمة مكتبية ذكية AI",
+      "platform": "Windows / macOS / Linux",
+      "title": "GenOffice — حزمة مكتبية مفتوحة المصدر بالذكاء الاصطناعي",
+      "desc": "حزمة مكتبية مجانية ومفتوحة المصدر (Apache-2.0) من Genspark: محررات Docs و Sheets و Slides و PDF و Markdown و HTML مع وكيل ذكاء اصطناعي مدمج، وأداة سطر أوامر genoffice تتيح لـ Claude Code و Codex و Cursor إنشاء وتعديل ملفات ‎.docx و ‎.xlsx و ‎.pptx حقيقية محلياً بمفتاحك الخاص.",
+      "items": [
+        "محررات مستندات وجداول وعروض تقديمية و PDF في تطبيق واحد",
+        "وكيل ذكاء اصطناعي مدمج يعمل بمفتاح API الخاص بك (BYOK)",
+        "أداة genoffice CLI ومهارة للوكلاء البرمجيين لتحرير ملفات Office محلياً",
+        "مفتوح المصدر برخصة Apache-2.0 لأنظمة Windows و macOS و Linux"
+      ],
+      "version": "v0.13.18",
+      "rawVersion": "0.13.18",
+      "released": "2026-11-12",
+      "downloads": 243727,
+      "repo": "genspark-ai/genoffice",
+      "short": "GenOffice",
+      "art": "page",
+      "accent": "#3b82f6",
+      "tagline": "حزمة مكتبية ذكية AI",
+      "links": [
+        {
+          "href": "https://github.com/genspark-ai/genoffice/releases/download/v0.13.18/GenOfficeSetup-v0.13.18-x64.exe",
+          "host": "GitHub",
+          "size": "157.6 MB",
+          "text": "Windows x64 (EXE 157.6 MB)",
+          "platform": "Windows 10+",
+          "primary": true
+        },
+        {
+          "href": "https://github.com/genspark-ai/genoffice/releases/download/v0.13.18/genoffice_0.13.18_amd64.deb",
+          "host": "GitHub",
+          "size": "154.7 MB",
+          "text": "Linux x64 (DEB 154.7 MB)",
+          "platform": "Linux x64",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/genspark-ai/genoffice/releases/download/v0.13.18/GenOffice-0.13.18-arm64.dmg",
+          "host": "GitHub",
+          "size": "196 MB",
+          "text": "macOS Apple Silicon (DMG 196 MB)",
+          "platform": "macOS Apple Silicon",
+          "primary": false
+        },
+        {
+          "href": "https://github.com/genspark-ai/genoffice/releases/download/v0.13.18/GenOffice-0.13.18.dmg",
+          "host": "GitHub",
+          "size": "201.4 MB",
+          "text": "macOS Intel (DMG 201.4 MB)",
+          "platform": "macOS Intel",
           "primary": false
         }
       ]
@@ -344,10 +402,10 @@
         "دعم ملفات PSD و RAW وصيغ الصور الحديثة",
         "أداء خارق مع استهلاك منخفض جداً للذاكرة"
       ],
-      "version": "v0.22.0",
-      "rawVersion": "0.22.0",
-      "released": "2026-11-09",
-      "downloads": 4694648,
+      "version": "v0.23.1",
+      "rawVersion": "0.23.1",
+      "released": "2026-11-12",
+      "downloads": 4916755,
       "repo": "storytold/photocraft",
       "short": "PhotoCraft",
       "art": "photo",
@@ -355,26 +413,26 @@
       "tagline": "بديل Adobe Photoshop",
       "links": [
         {
-          "href": "https://github.com/storytold/photocraft/releases/download/v0.22.0/photocraft-0.22.0-windows-x64.msi",
+          "href": "https://github.com/storytold/photocraft/releases/download/v0.23.1/photocraft-0.23.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "111.9 MB",
-          "text": "Windows x64 (MSI 111.9 MB)",
+          "size": "112.9 MB",
+          "text": "Windows x64 (MSI 112.9 MB)",
           "platform": "Windows 10+",
           "primary": true
         },
         {
-          "href": "https://github.com/storytold/photocraft/releases/download/v0.22.0/photocraft-0.22.0-linux-x86_64.deb",
+          "href": "https://github.com/storytold/photocraft/releases/download/v0.23.1/photocraft-0.23.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "132.8 MB",
-          "text": "Linux x64 (DEB 132.8 MB)",
+          "size": "135.1 MB",
+          "text": "Linux x64 (DEB 135.1 MB)",
           "platform": "Linux x64",
           "primary": false
         },
         {
-          "href": "https://github.com/storytold/photocraft/releases/download/v0.22.0/photocraft-0.22.0-macos-universal.dmg",
+          "href": "https://github.com/storytold/photocraft/releases/download/v0.23.1/photocraft-0.23.1-macos-universal.dmg",
           "host": "GitHub",
-          "size": "257.2 MB",
-          "text": "macOS (DMG 257.2 MB)",
+          "size": "261.5 MB",
+          "text": "macOS (DMG 261.5 MB)",
           "platform": "macOS Universal",
           "primary": false
         }
@@ -397,7 +455,7 @@
       "version": "v0.41.1",
       "rawVersion": "0.41.1",
       "released": "2026-11-07",
-      "downloads": 1233726,
+      "downloads": 1251419,
       "repo": "storytold/artcraft",
       "short": "ArtCraft",
       "art": "paint",
@@ -444,10 +502,10 @@
         "تصدير سريع مع تسريع عتادي GPU بجودة 4K",
         "دعم تسجيل الصوت المباشر ومزامنة المقاطع التلقائية"
       ],
-      "version": "v0.19.0",
-      "rawVersion": "0.19.0",
-      "released": "2026-11-09",
-      "downloads": 2849202,
+      "version": "v0.20.1",
+      "rawVersion": "0.20.1",
+      "released": "2026-11-12",
+      "downloads": 2998543,
       "repo": "storytold/filmcraft",
       "short": "FilmCraft",
       "art": "timeline",
@@ -455,26 +513,26 @@
       "tagline": "بديل Adobe Premiere",
       "links": [
         {
-          "href": "https://github.com/storytold/filmcraft/releases/download/v0.19.0/filmcraft-0.19.0-windows-x64.msi",
+          "href": "https://github.com/storytold/filmcraft/releases/download/v0.20.1/filmcraft-0.20.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "86.5 MB",
-          "text": "Windows x64 (MSI 86.5 MB)",
+          "size": "89.1 MB",
+          "text": "Windows x64 (MSI 89.1 MB)",
           "platform": "Windows 10+",
           "primary": true
         },
         {
-          "href": "https://github.com/storytold/filmcraft/releases/download/v0.19.0/filmcraft-0.19.0-linux-x86_64.deb",
+          "href": "https://github.com/storytold/filmcraft/releases/download/v0.20.1/filmcraft-0.20.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "105.1 MB",
-          "text": "Linux x64 (DEB 105.1 MB)",
+          "size": "108.4 MB",
+          "text": "Linux x64 (DEB 108.4 MB)",
           "platform": "Linux x64",
           "primary": false
         },
         {
-          "href": "https://github.com/storytold/filmcraft/releases/download/v0.19.0/filmcraft-0.19.0-macos-universal.dmg",
+          "href": "https://github.com/storytold/filmcraft/releases/download/v0.20.1/filmcraft-0.20.1-macos-universal.dmg",
           "host": "GitHub",
-          "size": "110.9 MB",
-          "text": "macOS (DMG 110.9 MB)",
+          "size": "113.3 MB",
+          "text": "macOS (DMG 113.3 MB)",
           "platform": "macOS Universal",
           "primary": false
         }
@@ -494,10 +552,10 @@
         "دعم وتصدير ملفات SVG و AI و EPS و PDF",
         "تحويل الصور النقطية إلى مسارات فيكتور أوتوماتيكياً"
       ],
-      "version": "v0.23.0",
-      "rawVersion": "0.23.0",
-      "released": "2026-11-09",
-      "downloads": 2711765,
+      "version": "v0.24.1",
+      "rawVersion": "0.24.1",
+      "released": "2026-11-12",
+      "downloads": 2858831,
       "repo": "storytold/vectorcraft",
       "short": "VectorCraft",
       "art": "vector",
@@ -505,26 +563,26 @@
       "tagline": "بديل Adobe Illustrator",
       "links": [
         {
-          "href": "https://github.com/storytold/vectorcraft/releases/download/v0.23.0/vectorcraft-0.23.0-windows-x64.msi",
+          "href": "https://github.com/storytold/vectorcraft/releases/download/v0.24.1/vectorcraft-0.24.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "120.9 MB",
-          "text": "Windows x64 (MSI 120.9 MB)",
+          "size": "124 MB",
+          "text": "Windows x64 (MSI 124 MB)",
           "platform": "Windows 10+",
           "primary": true
         },
         {
-          "href": "https://github.com/storytold/vectorcraft/releases/download/v0.23.0/vectorcraft-0.23.0-linux-x86_64.deb",
+          "href": "https://github.com/storytold/vectorcraft/releases/download/v0.24.1/vectorcraft-0.24.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "149 MB",
-          "text": "Linux x64 (DEB 149 MB)",
+          "size": "152.8 MB",
+          "text": "Linux x64 (DEB 152.8 MB)",
           "platform": "Linux x64",
           "primary": false
         },
         {
-          "href": "https://github.com/storytold/vectorcraft/releases/download/v0.23.0/vectorcraft-0.23.0-macos-universal.dmg",
+          "href": "https://github.com/storytold/vectorcraft/releases/download/v0.24.1/vectorcraft-0.24.1-macos-universal.dmg",
           "host": "GitHub",
-          "size": "165.9 MB",
-          "text": "macOS (DMG 165.9 MB)",
+          "size": "170.1 MB",
+          "text": "macOS (DMG 170.1 MB)",
           "platform": "macOS Universal",
           "primary": false
         }
@@ -544,10 +602,10 @@
         "إدارة الصفحات الرئيسية والهوامش وعلامات القص",
         "تصدير PDF مطابق لمعايير المطابع التجارية"
       ],
-      "version": "v0.19.0",
-      "rawVersion": "0.19.0",
-      "released": "2026-11-09",
-      "downloads": 1905329,
+      "version": "v0.20.1",
+      "rawVersion": "0.20.1",
+      "released": "2026-11-12",
+      "downloads": 2018330,
       "repo": "storytold/designcraft",
       "short": "DesignCraft",
       "art": "layout",
@@ -555,26 +613,26 @@
       "tagline": "بديل Adobe InDesign",
       "links": [
         {
-          "href": "https://github.com/storytold/designcraft/releases/download/v0.19.0/designcraft-0.19.0-windows-x64.msi",
+          "href": "https://github.com/storytold/designcraft/releases/download/v0.20.1/designcraft-0.20.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "94.9 MB",
-          "text": "Windows x64 (MSI 94.9 MB)",
+          "size": "95 MB",
+          "text": "Windows x64 (MSI 95 MB)",
           "platform": "Windows 10+",
           "primary": true
         },
         {
-          "href": "https://github.com/storytold/designcraft/releases/download/v0.19.0/designcraft-0.19.0-linux-x86_64.deb",
+          "href": "https://github.com/storytold/designcraft/releases/download/v0.20.1/designcraft-0.20.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "120.7 MB",
-          "text": "Linux x64 (DEB 120.7 MB)",
+          "size": "121 MB",
+          "text": "Linux x64 (DEB 121 MB)",
           "platform": "Linux x64",
           "primary": false
         },
         {
-          "href": "https://github.com/storytold/designcraft/releases/download/v0.19.0/designcraft-0.19.0-macos-universal.dmg",
+          "href": "https://github.com/storytold/designcraft/releases/download/v0.20.1/designcraft-0.20.1-macos-universal.dmg",
           "host": "GitHub",
-          "size": "237 MB",
-          "text": "macOS (DMG 237 MB)",
+          "size": "237.6 MB",
+          "text": "macOS (DMG 237.6 MB)",
           "platform": "macOS Universal",
           "primary": false
         }
@@ -594,10 +652,10 @@
         "تركيب المشاهد وتطبيق أقنعة وتأثيرات الإضاءة الحجمية",
         "معاينة تفاعلية في الوقت الفعلي بأعلى سلاسة"
       ],
-      "version": "v0.23.1",
-      "rawVersion": "0.23.1",
-      "released": "2026-11-10",
-      "downloads": 2112774,
+      "version": "v0.24.1",
+      "rawVersion": "0.24.1",
+      "released": "2026-11-12",
+      "downloads": 2228773,
       "repo": "storytold/effectcraft",
       "short": "EffectCraft",
       "art": "vfx",
@@ -605,26 +663,26 @@
       "tagline": "بديل After Effects",
       "links": [
         {
-          "href": "https://github.com/storytold/effectcraft/releases/download/v0.23.1/effectcraft-0.23.1-windows-x64.msi",
+          "href": "https://github.com/storytold/effectcraft/releases/download/v0.24.1/effectcraft-0.24.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "60.9 MB",
-          "text": "Windows x64 (MSI 60.9 MB)",
+          "size": "61.2 MB",
+          "text": "Windows x64 (MSI 61.2 MB)",
           "platform": "Windows 10+",
           "primary": true
         },
         {
-          "href": "https://github.com/storytold/effectcraft/releases/download/v0.23.1/effectcraft-0.23.1-linux-x86_64.deb",
+          "href": "https://github.com/storytold/effectcraft/releases/download/v0.24.1/effectcraft-0.24.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "79.4 MB",
-          "text": "Linux x64 (DEB 79.4 MB)",
+          "size": "79.8 MB",
+          "text": "Linux x64 (DEB 79.8 MB)",
           "platform": "Linux x64",
           "primary": false
         },
         {
-          "href": "https://github.com/storytold/effectcraft/releases/download/v0.23.1/effectcraft-0.23.1-macos-universal.dmg",
+          "href": "https://github.com/storytold/effectcraft/releases/download/v0.24.1/effectcraft-0.24.1-macos-universal.dmg",
           "host": "GitHub",
-          "size": "78.3 MB",
-          "text": "macOS (DMG 78.3 MB)",
+          "size": "78.8 MB",
+          "text": "macOS (DMG 78.8 MB)",
           "platform": "macOS Universal",
           "primary": false
         }
@@ -644,10 +702,10 @@
         "مؤثرات صوتية متقدمة (Equalizer, Reverb, Compressor)",
         "دعم تصدير WAV و FLAC و MP3 بدقات عالية"
       ],
-      "version": "v0.19.0",
-      "rawVersion": "0.19.0",
-      "released": "2026-11-09",
-      "downloads": 1546215,
+      "version": "v0.20.1",
+      "rawVersion": "0.20.1",
+      "released": "2026-11-12",
+      "downloads": 1634378,
       "repo": "storytold/soundcraft",
       "short": "SoundCraft",
       "art": "audio",
@@ -655,26 +713,26 @@
       "tagline": "بديل Pro Tools / Audition",
       "links": [
         {
-          "href": "https://github.com/storytold/soundcraft/releases/download/v0.19.0/soundcraft-0.19.0-windows-x64.msi",
+          "href": "https://github.com/storytold/soundcraft/releases/download/v0.20.1/soundcraft-0.20.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "14 MB",
-          "text": "Windows x64 (MSI 14 MB)",
+          "size": "14.7 MB",
+          "text": "Windows x64 (MSI 14.7 MB)",
           "platform": "Windows 10+",
           "primary": true
         },
         {
-          "href": "https://github.com/storytold/soundcraft/releases/download/v0.19.0/soundcraft-0.19.0-linux-x86_64.deb",
+          "href": "https://github.com/storytold/soundcraft/releases/download/v0.20.1/soundcraft-0.20.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "20.6 MB",
-          "text": "Linux x64 (DEB 20.6 MB)",
+          "size": "21.4 MB",
+          "text": "Linux x64 (DEB 21.4 MB)",
           "platform": "Linux x64",
           "primary": false
         },
         {
-          "href": "https://github.com/storytold/soundcraft/releases/download/v0.19.0/soundcraft-0.19.0-macos-universal.dmg",
+          "href": "https://github.com/storytold/soundcraft/releases/download/v0.20.1/soundcraft-0.20.1-macos-universal.dmg",
           "host": "GitHub",
-          "size": "29 MB",
-          "text": "macOS (DMG 29 MB)",
+          "size": "30 MB",
+          "text": "macOS (DMG 30 MB)",
           "platform": "macOS Universal",
           "primary": false
         }
@@ -694,10 +752,10 @@
         "تطبيق إعدادات مسبقة (Presets) وتعديل دفعات الصور جماعياً",
         "حفظ وتصدير سريع مع الاحتفاظ بالملف الأصلي دون مساس"
       ],
-      "version": "v0.20.0",
-      "rawVersion": "0.20.0",
-      "released": "2026-11-09",
-      "downloads": 2420617,
+      "version": "v0.21.1",
+      "rawVersion": "0.21.1",
+      "released": "2026-11-12",
+      "downloads": 2544055,
       "repo": "storytold/lightcraft",
       "short": "LightCraft",
       "art": "raw",
@@ -705,26 +763,26 @@
       "tagline": "بديل Adobe Lightroom",
       "links": [
         {
-          "href": "https://github.com/storytold/lightcraft/releases/download/v0.20.0/lightcraft-0.20.0-windows-x64.msi",
+          "href": "https://github.com/storytold/lightcraft/releases/download/v0.21.1/lightcraft-0.21.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "95 MB",
-          "text": "Windows x64 (MSI 95 MB)",
+          "size": "95.4 MB",
+          "text": "Windows x64 (MSI 95.4 MB)",
           "platform": "Windows 10+",
           "primary": true
         },
         {
-          "href": "https://github.com/storytold/lightcraft/releases/download/v0.20.0/lightcraft-0.20.0-linux-x86_64.deb",
+          "href": "https://github.com/storytold/lightcraft/releases/download/v0.21.1/lightcraft-0.21.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "118.3 MB",
-          "text": "Linux x64 (DEB 118.3 MB)",
+          "size": "118.6 MB",
+          "text": "Linux x64 (DEB 118.6 MB)",
           "platform": "Linux x64",
           "primary": false
         },
         {
-          "href": "https://github.com/storytold/lightcraft/releases/download/v0.20.0/lightcraft-0.20.0-macos-universal.dmg",
+          "href": "https://github.com/storytold/lightcraft/releases/download/v0.21.1/lightcraft-0.21.1-macos-universal.dmg",
           "host": "GitHub",
-          "size": "120.8 MB",
-          "text": "macOS (DMG 120.8 MB)",
+          "size": "121.4 MB",
+          "text": "macOS (DMG 121.4 MB)",
           "platform": "macOS Universal",
           "primary": false
         }
@@ -744,10 +802,10 @@
         "حفظ وتصدير ملفات التصميم محلياً 100% دون اشتراك سحابي",
         "تصدير الأكواد والمقاسات للمطورين فورياً"
       ],
-      "version": "v0.17.0",
-      "rawVersion": "0.17.0",
-      "released": "2026-11-09",
-      "downloads": 1305538,
+      "version": "v0.18.1",
+      "rawVersion": "0.18.1",
+      "released": "2026-11-12",
+      "downloads": 1399931,
       "repo": "storytold/figcraft",
       "short": "FigCraft",
       "art": "ui",
@@ -755,15 +813,15 @@
       "tagline": "بديل Figma (Offline)",
       "links": [
         {
-          "href": "https://github.com/storytold/figcraft/releases/download/v0.17.0/figcraft-0.17.0-windows-x64.msi",
+          "href": "https://github.com/storytold/figcraft/releases/download/v0.18.1/figcraft-0.18.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "77.5 MB",
-          "text": "Windows x64 (MSI 77.5 MB)",
+          "size": "77.6 MB",
+          "text": "Windows x64 (MSI 77.6 MB)",
           "platform": "Windows 10+",
           "primary": true
         },
         {
-          "href": "https://github.com/storytold/figcraft/releases/download/v0.17.0/figcraft-0.17.0-linux-x86_64.deb",
+          "href": "https://github.com/storytold/figcraft/releases/download/v0.18.1/figcraft-0.18.1-linux-x86_64.deb",
           "host": "GitHub",
           "size": "98.9 MB",
           "text": "Linux x64 (DEB 98.9 MB)",
@@ -771,10 +829,10 @@
           "primary": false
         },
         {
-          "href": "https://github.com/storytold/figcraft/releases/download/v0.17.0/figcraft-0.17.0-macos-universal.dmg",
+          "href": "https://github.com/storytold/figcraft/releases/download/v0.18.1/figcraft-0.18.1-macos-universal.dmg",
           "host": "GitHub",
-          "size": "106.3 MB",
-          "text": "macOS (DMG 106.3 MB)",
+          "size": "106.4 MB",
+          "text": "macOS (DMG 106.4 MB)",
           "platform": "macOS Universal",
           "primary": false
         }
@@ -794,10 +852,10 @@
         "تعبئة النماذج التفاعلية وإضافة التوقيع الرقمي المشفر",
         "ضغط حجم الملفات وتأمينها بكلمات مرور وتشفير AES"
       ],
-      "version": "v0.20.0",
-      "rawVersion": "0.20.0",
-      "released": "2026-11-09",
-      "downloads": 3871580,
+      "version": "v0.21.1",
+      "rawVersion": "0.21.1",
+      "released": "2026-11-12",
+      "downloads": 4093957,
       "repo": "storytold/pdfcraft",
       "short": "PdfCraft",
       "art": "pdf",
@@ -805,26 +863,26 @@
       "tagline": "بديل Adobe Acrobat",
       "links": [
         {
-          "href": "https://github.com/storytold/pdfcraft/releases/download/v0.20.0/pdfcraft-0.20.0-windows-x64.msi",
+          "href": "https://github.com/storytold/pdfcraft/releases/download/v0.21.1/pdfcraft-0.21.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "93.7 MB",
-          "text": "Windows x64 (MSI 93.7 MB)",
+          "size": "95.3 MB",
+          "text": "Windows x64 (MSI 95.3 MB)",
           "platform": "Windows 10+",
           "primary": true
         },
         {
-          "href": "https://github.com/storytold/pdfcraft/releases/download/v0.20.0/pdfcraft-0.20.0-linux-x86_64.deb",
+          "href": "https://github.com/storytold/pdfcraft/releases/download/v0.21.1/pdfcraft-0.21.1-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "114.9 MB",
-          "text": "Linux x64 (DEB 114.9 MB)",
+          "size": "116.8 MB",
+          "text": "Linux x64 (DEB 116.8 MB)",
           "platform": "Linux x64",
           "primary": false
         },
         {
-          "href": "https://github.com/storytold/pdfcraft/releases/download/v0.20.0/pdfcraft-0.20.0-macos-universal.dmg",
+          "href": "https://github.com/storytold/pdfcraft/releases/download/v0.21.1/pdfcraft-0.21.1-macos-universal.dmg",
           "host": "GitHub",
-          "size": "127.1 MB",
-          "text": "macOS (DMG 127.1 MB)",
+          "size": "129.2 MB",
+          "text": "macOS (DMG 129.2 MB)",
           "platform": "macOS Universal",
           "primary": false
         }
@@ -844,10 +902,10 @@
         "أدوات قياس دقيقة وطبقات تنظيمية للمشاريع الكبرى",
         "خفيف وسريع جداً على مختلف مواصفات الأجهزة"
       ],
-      "version": "v0.19.0",
-      "rawVersion": "0.19.0",
-      "released": "2026-11-09",
-      "downloads": 1889150,
+      "version": "v0.20.1",
+      "rawVersion": "0.20.1",
+      "released": "2026-11-12",
+      "downloads": 2007974,
       "repo": "storytold/cadcraft",
       "short": "CadCraft",
       "art": "cad",
@@ -855,15 +913,15 @@
       "tagline": "بديل AutoCAD (CAD 2D/3D)",
       "links": [
         {
-          "href": "https://github.com/storytold/cadcraft/releases/download/v0.19.0/cadcraft-0.19.0-windows-x64.msi",
+          "href": "https://github.com/storytold/cadcraft/releases/download/v0.20.1/cadcraft-0.20.1-windows-x64.msi",
           "host": "GitHub",
-          "size": "56.8 MB",
-          "text": "Windows x64 (MSI 56.8 MB)",
+          "size": "56.7 MB",
+          "text": "Windows x64 (MSI 56.7 MB)",
           "platform": "Windows 10+",
           "primary": true
         },
         {
-          "href": "https://github.com/storytold/cadcraft/releases/download/v0.19.0/cadcraft-0.19.0-linux-x86_64.deb",
+          "href": "https://github.com/storytold/cadcraft/releases/download/v0.20.1/cadcraft-0.20.1-linux-x86_64.deb",
           "host": "GitHub",
           "size": "72.9 MB",
           "text": "Linux x64 (DEB 72.9 MB)",
@@ -871,10 +929,10 @@
           "primary": false
         },
         {
-          "href": "https://github.com/storytold/cadcraft/releases/download/v0.19.0/cadcraft-0.19.0-macos-universal.dmg",
+          "href": "https://github.com/storytold/cadcraft/releases/download/v0.20.1/cadcraft-0.20.1-macos-universal.dmg",
           "host": "GitHub",
-          "size": "80.6 MB",
-          "text": "macOS (DMG 80.6 MB)",
+          "size": "80.9 MB",
+          "text": "macOS (DMG 80.9 MB)",
           "platform": "macOS Universal",
           "primary": false
         }
@@ -894,10 +952,10 @@
         "عزل كامل للبرامج وتشغيل سريع دون استهلاك موارد الخلفية",
         "دعم التثبيت المستقل والمحمول (Portable) لكافة الأدوات"
       ],
-      "version": "v0.19.0",
-      "rawVersion": "0.19.0",
-      "released": "2026-11-11",
-      "downloads": 6532338,
+      "version": "v0.19.2",
+      "rawVersion": "0.19.2",
+      "released": "2026-11-12",
+      "downloads": 6855088,
       "repo": "storytold/craft-launcher",
       "short": "Launcher",
       "art": "tiles",
@@ -905,26 +963,26 @@
       "tagline": "المشغل الشامل الموحد",
       "links": [
         {
-          "href": "https://github.com/storytold/craft-launcher/releases/download/v0.19.0/artcraft-launcher-0.19.0-windows-x64.msi",
+          "href": "https://github.com/storytold/craft-launcher/releases/download/v0.19.2/artcraft-launcher-0.19.2-windows-x64.msi",
           "host": "GitHub",
-          "size": "9.7 MB",
-          "text": "Windows x64 (MSI 9.7 MB)",
+          "size": "9.9 MB",
+          "text": "Windows x64 (MSI 9.9 MB)",
           "platform": "Windows 10+",
           "primary": true
         },
         {
-          "href": "https://github.com/storytold/craft-launcher/releases/download/v0.19.0/artcraft-launcher-0.19.0-linux-x86_64.deb",
+          "href": "https://github.com/storytold/craft-launcher/releases/download/v0.19.2/artcraft-launcher-0.19.2-linux-x86_64.deb",
           "host": "GitHub",
-          "size": "13.3 MB",
-          "text": "Linux x64 (DEB 13.3 MB)",
+          "size": "13.5 MB",
+          "text": "Linux x64 (DEB 13.5 MB)",
           "platform": "Linux x64",
           "primary": false
         },
         {
-          "href": "https://github.com/storytold/craft-launcher/releases/download/v0.19.0/artcraft-launcher-0.19.0-macos-universal.dmg",
+          "href": "https://github.com/storytold/craft-launcher/releases/download/v0.19.2/artcraft-launcher-0.19.2-macos-universal.dmg",
           "host": "GitHub",
-          "size": "20.7 MB",
-          "text": "macOS (DMG 20.7 MB)",
+          "size": "20.9 MB",
+          "text": "macOS (DMG 20.9 MB)",
           "platform": "macOS Universal",
           "primary": false
         }

@@ -76,6 +76,41 @@
       ]
     },
     {
+      "slug": "genoffice",
+      "name": "GenOffice — حزمة مكتبية مفتوحة المصدر بالذكاء الاصطناعي",
+      "name_en": "GenOffice — Open-Source AI Office Suite",
+      "tagline": "حزمة مكتبية مجانية ومفتوحة المصدر (Apache-2.0) من Genspark: محررات Docs و Sheets و Slides و PDF و Markdown و HTML مع وكيل ذكاء اصطناعي مدمج، وأداة genoffice CLI لإنشاء وتعديل ملفات Office محلياً بمفتاحك الخاص.",
+      "tagline_en": "Free, open-source (Apache-2.0) AI office suite by Genspark: Docs, Sheets, Slides, PDF, Markdown and HTML editors with a built-in AI agent, plus a genoffice CLI that creates and edits real Office files locally. Bring your own key.",
+      "version": "0.13.18",
+      "platform": "Windows / macOS / Linux",
+      "kind": "microsoft",
+      "kind_label": "تطبيقات ميكروسوفت (بدائل Office)",
+      "kind_label_en": "Microsoft Office Apps",
+      "page": "https://zeidexsoft.com/programs#programs-microsoft",
+      "downloads": [
+        {
+          "href": "https://github.com/genspark-ai/genoffice/releases/download/v0.13.18/GenOfficeSetup-v0.13.18-x64.exe",
+          "host": "GitHub",
+          "size": "157.6 MB"
+        },
+        {
+          "href": "https://github.com/genspark-ai/genoffice/releases/download/v0.13.18/genoffice_0.13.18_amd64.deb",
+          "host": "GitHub",
+          "size": "154.7 MB"
+        },
+        {
+          "href": "https://github.com/genspark-ai/genoffice/releases/download/v0.13.18/GenOffice-0.13.18-arm64.dmg",
+          "host": "GitHub",
+          "size": "196 MB"
+        },
+        {
+          "href": "https://github.com/genspark-ai/genoffice/releases/download/v0.13.18/GenOffice-0.13.18.dmg",
+          "host": "GitHub",
+          "size": "201.4 MB"
+        }
+      ]
+    },
+    {
       "slug": "photocraft",
       "name": "PhotoCraft — محرّر الصور الاحترافي (بديل فوتوشوب)",
       "name_en": "PhotoCraft — Pro Image Editor",

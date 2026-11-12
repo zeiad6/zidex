@@ -175,6 +175,52 @@ export const programs: Program[] = [
     date: '2026-10-28',
   },
 
+  {
+    slug: 'genoffice',
+    name: 'GenOffice — حزمة مكتبية مفتوحة المصدر بالذكاء الاصطناعي',
+    nameEn: 'GenOffice — Open-Source AI Office Suite',
+    tagline:
+      'حزمة مكتبية مجانية ومفتوحة المصدر (Apache-2.0) من Genspark: محررات Docs و Sheets و Slides و PDF و Markdown و HTML مع وكيل ذكاء اصطناعي مدمج، وأداة genoffice CLI لإنشاء وتعديل ملفات Office محلياً بمفتاحك الخاص.',
+    taglineEn:
+      'Free, open-source (Apache-2.0) AI office suite by Genspark: Docs, Sheets, Slides, PDF, Markdown and HTML editors with a built-in AI agent, plus a genoffice CLI that creates and edits real Office files locally. Bring your own key.',
+    version: '0.13.18',
+    platform: 'Windows / macOS / Linux',
+    kind: 'microsoft',
+    downloads: [
+      {
+        href: 'https://github.com/genspark-ai/genoffice/releases/download/v0.13.18/GenOfficeSetup-v0.13.18-x64.exe',
+        host: 'GitHub',
+        file: 'GenOfficeSetup-v0.13.18-x64.exe',
+        size: '157.6 MB',
+        note: 'Windows x64',
+      },
+      {
+        href: 'https://github.com/genspark-ai/genoffice/releases/download/v0.13.18/genoffice_0.13.18_amd64.deb',
+        host: 'GitHub',
+        file: 'genoffice_0.13.18_amd64.deb',
+        size: '154.7 MB',
+        note: 'Linux x64',
+      },
+      {
+        href: 'https://github.com/genspark-ai/genoffice/releases/download/v0.13.18/GenOffice-0.13.18-arm64.dmg',
+        host: 'GitHub',
+        file: 'GenOffice-0.13.18-arm64.dmg',
+        size: '196 MB',
+        note: 'macOS Apple Silicon',
+      },
+      {
+        href: 'https://github.com/genspark-ai/genoffice/releases/download/v0.13.18/GenOffice-0.13.18.dmg',
+        host: 'GitHub',
+        file: 'GenOffice-0.13.18.dmg',
+        size: '201.4 MB',
+        note: 'macOS Intel',
+      },
+    ],
+    docs: 'https://github.com/genspark-ai/genoffice',
+    glyph: 'doc',
+    date: '2026-11-12',
+  },
+
   /* ------------------------------------------------------------------ *
    * 2. Premium Creative & Pro Suite (حزمة البرامج الإبداعية والاحترافية)
    * ------------------------------------------------------------------ */

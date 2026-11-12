@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 
-const html = fs.readFileSync('programs.html', 'utf8')
-const dataset = JSON.parse(html.match(/const progsDataset = (\[.*?\]);/s)[1])
+// data/programs.json is its own seed: programs.html is generated from it and drops fields (released).
+const dataset = JSON.parse(fs.readFileSync('data/programs.json', 'utf8')).programs
 const gh = JSON.parse(fs.readFileSync('data/gh-releases.json', 'utf8'))
 
 const META = {
@@ -24,7 +24,8 @@ const META = {
   figcraft: { repo: 'storytold/figcraft', short: 'FigCraft', art: 'ui', accent: '#8b5cf6' },
   pdfcraft: { repo: 'storytold/pdfcraft', short: 'PdfCraft', art: 'pdf', accent: '#8b5cf6' },
   cadcraft: { repo: 'storytold/cadcraft', short: 'CadCraft', art: 'cad', accent: '#8b5cf6' },
-  'craft-launcher': { repo: 'storytold/craft-launcher', short: 'Launcher', art: 'tiles', accent: '#8b5cf6' }
+  'craft-launcher': { repo: 'storytold/craft-launcher', short: 'Launcher', art: 'tiles', accent: '#8b5cf6' },
+  genoffice: { repo: 'genspark-ai/genoffice', short: 'GenOffice', art: 'page', accent: '#3b82f6' }
 }
 
 const PLATFORM_LABEL = {
@@ -43,7 +44,7 @@ const out = dataset.map((p) => {
   let rawVersion = p.rawVersion
   let links = p.links
   let downloads = null
-  let released = null
+  let released = p.released ?? null
 
   if (meta.repo) {
     const rel = gh[meta.repo]
@@ -54,16 +55,16 @@ const out = dataset.map((p) => {
     downloads = rel.total
     const base = `https://github.com/${meta.repo}/releases/download/${rel.tag}/`
     links = []
-    const pick = (pattern, label, host = 'GitHub') => {
+    const pick = (pattern, label, platform) => {
       const asset = rel.assets.find((a) => pattern.test(a.name))
       if (!asset) return
       const ext = asset.name.slice(asset.name.lastIndexOf('.'))
       links.push({
         href: base + asset.name,
-        host,
+        host: 'GitHub',
         size: asset.mb + ' MB',
         text: `${label} (${ext.slice(1).toUpperCase()} ${asset.mb} MB)`,
-        platform: PLATFORM_LABEL[ext] || label,
+        platform: platform || PLATFORM_LABEL[ext] || label,
         primary: links.length === 0
       })
     }
@@ -71,6 +72,7 @@ const out = dataset.map((p) => {
     pick(/x64_en-US\.msi$/, 'Windows x64')
     pick(/x64-setup\.exe$/, 'Windows x64')
     pick(/Setup-x64\.exe$/, 'Windows x64')
+    pick(/Setup-v[\d.]+-x64\.exe$/, 'Windows x64')
     pick(/windows-x64-portable\.zip$/, 'Windows محمول')
     pick(/linux-x86_64\.deb$/, 'Linux x64')
     pick(/_amd64\.deb$/, 'Linux x64')
@@ -78,6 +80,8 @@ const out = dataset.map((p) => {
     pick(/app-release\.apk$/, 'Android APK')
     pick(/macos-universal\.dmg$/, 'macOS')
     pick(/universal\.dmg$/, 'macOS')
+    pick(/GenOffice-[\d.]+-arm64\.dmg$/, 'macOS Apple Silicon', 'macOS Apple Silicon')
+    pick(/GenOffice-[\d.]+\.dmg$/, 'macOS Intel', 'macOS Intel')
     // One row per platform keeps the card and the modal from repeating a build.
     links = links.filter((link, i) => links.findIndex((l) => l.platform === link.platform) === i)
     if (!links.length) throw new Error('no assets for ' + meta.repo)
